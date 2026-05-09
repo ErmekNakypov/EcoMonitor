@@ -1,5 +1,11 @@
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isSignedIn = SignInManager.IsSignedIn(User);
+    ApplicationUser? currentUser = isSignedIn ? await UserManager.GetUserAsync(User) : null;
+    var displayName = currentUser?.FullName ?? User.Identity?.Name;
+    var roleNames = currentUser is not null ? await UserManager.GetRolesAsync(currentUser) : new List<string>();
 }
 <!DOCTYPE html>
 <html lang="@currentCulture">
@@ -39,7 +45,7 @@
                             </a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav align-items-sm-center">
+                    <ul class="navbar-nav align-items-sm-center gap-2">
                         <li class="nav-item dropdown">
                             <button type="button" class="lang-toggle dropdown-toggle" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-translate"></i>
@@ -51,6 +57,43 @@
                                 <li><a class="dropdown-item" href="#" data-culture="ky-KG">Кыргызча</a></li>
                             </ul>
                         </li>
+
+                        @if (!isSignedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Sign in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary" asp-controller="Account" asp-action="Register">
+                                    <span>Get started</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <button type="button" class="lang-toggle dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>@displayName</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                    <li>
+                                        <span class="dropdown-item-text small text-muted">
+                                            @(roleNames.Count > 0 ? string.Join(", ", roleNames) : "No roles")
+                                        </span>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right me-2"></i>
+                                                <span>Sign out</span>
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

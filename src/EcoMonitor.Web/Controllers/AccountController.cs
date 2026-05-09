@@ -1,0 +1,140 @@
+using EcoMonitor.Domain.Constants;
+using EcoMonitor.Infrastructure.Identity;
+using EcoMonitor.Web.Models.Account;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EcoMonitor.Web.Controllers;
+
+public class AccountController : Controller
+{
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<AccountController> _logger;
+
+    public AccountController(
+        SignInManager<ApplicationUser> signInManager,
+        UserManager<ApplicationUser> userManager,
+        ILogger<AccountController> logger)
+    {
+        _signInManager = signInManager;
+        _userManager = userManager;
+        _logger = logger;
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Login(string? returnUrl)
+    {
+        return View(new LoginViewModel { ReturnUrl = returnUrl });
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
+
+        if (result.Succeeded)
+        {
+            _logger.LogInformation("User {Email} signed in", model.Email);
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        if (result.IsLockedOut)
+        {
+            ModelState.AddModelError(string.Empty, "Account is temporarily locked. Try again later.");
+        }
+        else if (result.IsNotAllowed)
+        {
+            ModelState.AddModelError(string.Empty, "Sign-in is not allowed for this account.");
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty, "Invalid email or password.");
+        }
+
+        return View(model);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Register(string? returnUrl)
+    {
+        return View(new RegisterViewModel { ReturnUrl = returnUrl });
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var user = new ApplicationUser
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            FullName = model.FullName,
+            PreferredLanguage = "ru",
+            IsActive = true,
+            EmailConfirmed = true
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(user, RoleNames.Citizen);
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            _logger.LogInformation("New citizen registered {Email}", model.Email);
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
+}

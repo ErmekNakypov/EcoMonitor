@@ -247,6 +247,97 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+/* Auth card (login / register / access denied) */
+.auth-card {
+  background-color: var(--brand-card-bg);
+  border: 1px solid var(--brand-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 12px 24px rgba(27, 67, 50, 0.06);
+}
+
+/* Form controls — brand-aware focus */
+.form-control,
+.form-select {
+  border-color: var(--brand-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 0.2rem rgba(116, 198, 157, 0.25);
+}
+
+.form-label {
+  color: var(--brand-text);
+  font-weight: 500;
+}
+
+.form-check-input {
+  border-color: var(--brand-border);
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.form-check-input:focus {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 0.2rem rgba(116, 198, 157, 0.25);
+}
+
+.input-group .password-toggle {
+  border-color: var(--brand-border);
+  color: var(--brand-text-muted);
+  background-color: #FFFFFF;
+}
+
+.input-group .password-toggle:hover,
+.input-group .password-toggle:focus {
+  color: var(--brand-primary);
+  border-color: var(--brand-accent);
+  background-color: #FFFFFF;
+}
+
+/* Validation styling */
+.validation-summary-valid {
+  display: none;
+}
+
+.validation-summary-errors ul {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+
+.field-validation-error {
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+/* Body links */
+a {
+  color: var(--brand-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--brand-primary-hover);
+}
+
+/* Restore Bootstrap defaults inside components that already style links */
+.navbar-brand,
+.dropdown-item,
+.btn,
+.nav-link,
+.footer a {
+  font-weight: inherit;
+}
+
 /* Misc */
 .form-floating > .form-control-plaintext::placeholder,
 .form-floating > .form-control::placeholder {

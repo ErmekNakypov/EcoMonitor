@@ -51,7 +51,7 @@ public class AccountController : Controller
                 return Redirect(model.ReturnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         if (result.IsLockedOut)
@@ -111,7 +111,7 @@ public class AccountController : Controller
                 return Redirect(model.ReturnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         foreach (var error in result.Errors)

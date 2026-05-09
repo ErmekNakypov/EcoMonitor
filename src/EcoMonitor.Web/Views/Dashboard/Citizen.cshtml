@@ -1,0 +1,85 @@
+@model CitizenDashboardViewModel
+@{
+    ViewData["Title"] = "My dashboard";
+
+    string StatusBadgeClass(DumpsiteStatus status) => status switch
+    {
+        DumpsiteStatus.New => "badge-status-new",
+        DumpsiteStatus.InReview => "badge-status-review",
+        DumpsiteStatus.Confirmed => "badge-status-confirmed",
+        DumpsiteStatus.Resolved => "badge-status-resolved",
+        DumpsiteStatus.Rejected => "badge-status-rejected",
+        _ => "badge-status-new"
+    };
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end mb-4">
+            <div>
+                <span class="hero-badge mb-2">
+                    <i class="bi bi-person-heart"></i>
+                    <span>Citizen</span>
+                </span>
+                <h1 class="h2 fw-700 mt-3 mb-1">Your impact</h1>
+                <p class="text-muted mb-0">Welcome back, @Model.FullName</p>
+            </div>
+            <div class="text-muted small mt-3 mt-sm-0">@DateTime.Now.ToString("dddd, d MMMM yyyy")</div>
+        </div>
+
+        <div class="cta-card mb-5">
+            <div class="row align-items-center g-4">
+                <div class="col-md-8">
+                    <span class="hero-badge mb-2">
+                        <i class="bi bi-megaphone"></i>
+                        <span>Take action</span>
+                    </span>
+                    <h2 class="h4 fw-700 mt-3 mb-2">Spotted an unauthorized dumpsite?</h2>
+                    <p class="text-muted mb-0">Snap a photo, drop a pin, and an inspector will follow up. Every report makes Bishkek a little cleaner.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="/Citizen/ReportDumpsite" class="btn btn-primary btn-lg">
+                        <i class="bi bi-camera me-2"></i>
+                        <span>Report now</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-700 mb-0">Your reports</h2>
+                <span class="text-muted small">Latest @Model.RecentReports.Count</span>
+            </div>
+
+            @if (Model.RecentReports.Count == 0)
+            {
+                <div class="text-center py-5">
+                    <div class="feature-icon mx-auto mb-3"><i class="bi bi-clipboard-plus"></i></div>
+                    <h3 class="h6 fw-700 mb-1">No reports yet</h3>
+                    <p class="text-muted small mb-0">When you submit a report, it will show up here so you can track its progress.</p>
+                </div>
+            }
+            else
+            {
+                <div class="report-list">
+                    @foreach (var report in Model.RecentReports)
+                    {
+                        <div class="report-row">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+                                <div class="flex-grow-1">
+                                    <p class="mb-1 fw-500">@report.Description</p>
+                                    <span class="text-muted small">
+                                        @report.CreatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                                        &middot; @report.Latitude.ToString("F4"), @report.Longitude.ToString("F4")
+                                    </span>
+                                </div>
+                                <span class="status-badge @StatusBadgeClass(report.Status)">@report.Status</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>

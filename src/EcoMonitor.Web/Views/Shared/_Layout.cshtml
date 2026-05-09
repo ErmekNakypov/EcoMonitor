@@ -44,6 +44,15 @@
                                 <span>Home</span>
                             </a>
                         </li>
+                        @if (isSignedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Index">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav align-items-sm-center gap-2">
                         <li class="nav-item dropdown">

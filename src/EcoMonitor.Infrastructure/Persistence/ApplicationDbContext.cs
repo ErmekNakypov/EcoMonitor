@@ -1,3 +1,5 @@
+using EcoMonitor.Domain.Common;
+using EcoMonitor.Domain.Entities;
 using EcoMonitor.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -10,6 +12,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
+
+    public DbSet<WasteContainer> WasteContainers => Set<WasteContainer>();
+    public DbSet<DumpsiteReport> DumpsiteReports => Set<DumpsiteReport>();
+    public DbSet<AirQualityReading> AirQualityReadings => Set<AirQualityReading>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -24,5 +30,29 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<IdentityUserToken<Guid>>().ToTable("user_tokens");
 
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        TouchUpdatedAt();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override int SaveChanges()
+    {
+        TouchUpdatedAt();
+        return base.SaveChanges();
+    }
+
+    private void TouchUpdatedAt()
+    {
+        var now = DateTime.UtcNow;
+        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        {
+            if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedAt = now;
+            }
+        }
     }
 }

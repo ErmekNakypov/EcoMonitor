@@ -461,6 +461,106 @@ a:hover {
   color: #4B5563;
 }
 
+/* Role badges (admin user table) */
+.role-badge {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.role-badge-admin {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+.role-badge-inspector {
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.role-badge-citizen {
+  background-color: var(--brand-icon-bg);
+  color: var(--brand-primary-hover);
+}
+
+/* Status pills (active / inactive) */
+.status-pill {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.status-pill-active {
+  background-color: var(--brand-icon-bg);
+  color: var(--brand-primary-hover);
+}
+
+.status-pill-inactive {
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+
+/* Tables — soften the default Bootstrap stripes for our brand */
+.table {
+  --bs-table-hover-bg: var(--brand-icon-bg);
+  margin-bottom: 0;
+}
+
+.table > thead {
+  background-color: var(--brand-bg);
+}
+
+.table > thead th {
+  color: var(--brand-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--brand-border);
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.table > tbody > tr > td {
+  border-color: var(--brand-border);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Form switch — primary green when on (extends checkbox rules) */
+.form-switch .form-check-input {
+  width: 2.4rem;
+  height: 1.25rem;
+}
+
+/* Pagination — brand primary for active page */
+.pagination {
+  --bs-pagination-active-bg: var(--brand-primary);
+  --bs-pagination-active-border-color: var(--brand-primary);
+  --bs-pagination-color: var(--brand-text);
+  --bs-pagination-hover-color: var(--brand-primary-hover);
+  --bs-pagination-hover-bg: var(--brand-icon-bg);
+  --bs-pagination-hover-border-color: var(--brand-border);
+  --bs-pagination-focus-color: var(--brand-primary-hover);
+  --bs-pagination-focus-box-shadow: 0 0 0 0.2rem rgba(116, 198, 157, 0.25);
+  --bs-pagination-border-color: var(--brand-border);
+  gap: 0.25rem;
+}
+
+.pagination .page-link {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
 /* Misc */
 .form-floating > .form-control-plaintext::placeholder,
 .form-floating > .form-control::placeholder {

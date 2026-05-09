@@ -52,6 +52,15 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
+                            @if (User.IsInRole(RoleNames.Administrator))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Users" asp-action="Index">
+                                        <i class="bi bi-people"></i>
+                                        <span>Users</span>
+                                    </a>
+                                </li>
+                            }
                         }
                     </ul>
                     <ul class="navbar-nav align-items-sm-center gap-2">

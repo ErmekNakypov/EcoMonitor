@@ -1,10 +1,16 @@
 @model EditUserViewModel
 @{
     ViewData["Title"] = "Edit user";
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = "Users", Url = Url.Action("Index", "Users", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = Model.Email },
+        new BreadcrumbItem { Label = "Edit" });
 }
 
 <section class="py-5">
     <div class="container" style="max-width: 640px;">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
         <div class="auth-card">
             <span class="hero-badge mb-3">
                 <i class="bi bi-pencil-square"></i>

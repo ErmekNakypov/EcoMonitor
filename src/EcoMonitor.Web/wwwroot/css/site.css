@@ -109,9 +109,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar .nav-link:hover,
-.navbar .nav-link:focus,
+.navbar .nav-link:focus {
+  color: var(--brand-primary) !important;
+}
+
 .navbar .nav-link.active {
   color: var(--brand-primary) !important;
+  background-color: var(--brand-icon-bg);
+  border-radius: 8px;
+}
+
+.navbar-cta {
+  border-radius: 8px;
 }
 
 .lang-toggle {
@@ -811,6 +820,47 @@ a:hover {
   border-radius: 50%;
   border: 2px solid #FFFFFF;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* Clickable table rows (admin lists) */
+tr.clickable-row {
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+tr.clickable-row:hover {
+  background-color: rgba(45, 106, 79, 0.04);
+}
+
+/* Breadcrumbs */
+.breadcrumbs-nav {
+  font-size: 0.875rem;
+}
+
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb-item a {
+  color: var(--brand-text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+  color: var(--brand-text);
+  font-weight: 500;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/";
+  color: #cbd5e1;
 }
 
 /* Empty-state partial */

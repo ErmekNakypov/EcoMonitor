@@ -1,11 +1,30 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@functions {
+    bool IsActive(string? area, string controller, params string[] actions)
+    {
+        var currentArea = ViewContext.RouteData.Values["area"]?.ToString() ?? string.Empty;
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        if (!string.Equals(currentArea, area ?? string.Empty, StringComparison.OrdinalIgnoreCase)) return false;
+        if (!string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase)) return false;
+        if (actions.Length == 0) return true;
+        foreach (var a in actions)
+        {
+            if (string.Equals(currentAction, a, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+        return false;
+    }
+}
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var isSignedIn = SignInManager.IsSignedIn(User);
     ApplicationUser? currentUser = isSignedIn ? await UserManager.GetUserAsync(User) : null;
     var displayName = currentUser?.FullName ?? User.Identity?.Name;
     var roleNames = currentUser is not null ? await UserManager.GetRolesAsync(currentUser) : new List<string>();
+    var isAdmin = isSignedIn && User.IsInRole(RoleNames.Administrator);
+    var isInspector = isSignedIn && User.IsInRole(RoleNames.Inspector);
+    var isCitizen = isSignedIn && User.IsInRole(RoleNames.Citizen);
 }
 <!DOCTYPE html>
 <html lang="@currentCulture">
@@ -31,7 +50,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white shadow-sm sticky-top">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-tree-fill"></i>
@@ -41,72 +60,98 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house"></i>
-                                <span>Home</span>
-                            </a>
-                        </li>
-                        @if (isSignedIn)
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 align-items-md-center gap-md-2">
+                        @if (isAdmin)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Index">
-                                    <i class="bi bi-grid"></i>
-                                    <span>Dashboard</span>
+                                <a class="nav-link @(IsActive(null, "Dashboard") ? "active" : "")" asp-area="" asp-controller="Dashboard" asp-action="Index">
+                                    <i class="bi bi-speedometer2"></i><span>Dashboard</span>
                                 </a>
                             </li>
-                            @if (User.IsInRole(RoleNames.Inspector))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="inspectorMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-clipboard-check"></i>
-                                        <span>Reports</span>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="inspectorMenu">
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="Inspector" asp-action="Queue">
-                                                <i class="bi bi-inboxes me-2"></i>Queue
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="Inspector" asp-action="MyReports">
-                                                <i class="bi bi-clipboard-check me-2"></i>My reports
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            @if (User.IsInRole(RoleNames.Administrator))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-gear"></i>
-                                        <span>Admin</span>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="adminMenu">
-                                        <li>
-                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">
-                                                <i class="bi bi-people me-2"></i>Users
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Containers" asp-action="Index">
-                                                <i class="bi bi-trash3 me-2"></i>Containers
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Containers" asp-action="Map">
-                                                <i class="bi bi-map me-2"></i>Containers map
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-area="" asp-controller="Map" asp-action="Index">
+                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive("Admin", "Containers") ? "active" : "")" asp-area="Admin" asp-controller="Containers" asp-action="Index">
+                                    <i class="bi bi-trash3"></i><span>Containers</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive("Admin", "Users") ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index">
+                                    <i class="bi bi-people"></i><span>Users</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive("Admin", "Reports") ? "active" : "")" asp-area="Admin" asp-controller="Reports" asp-action="Index">
+                                    <i class="bi bi-flag"></i><span>Reports</span>
+                                </a>
+                            </li>
+                        }
+                        else if (isInspector)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i><span>Home</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 navbar-cta" asp-controller="Inspector" asp-action="Queue">
+                                    <i class="bi bi-inboxes"></i><span>Queue</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Inspector", "MyReports") ? "active" : "")" asp-controller="Inspector" asp-action="MyReports">
+                                    <i class="bi bi-clipboard-check"></i><span>My reports</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
+                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
+                        }
+                        else if (isCitizen)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i><span>Home</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
+                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 navbar-cta" asp-controller="Citizen" asp-action="Create">
+                                    <i class="bi bi-plus-circle"></i><span>Report dumpsite</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Citizen", "Reports", "Details") ? "active" : "")" asp-controller="Citizen" asp-action="Reports">
+                                    <i class="bi bi-list-check"></i><span>My reports</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i><span>Home</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
+                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
                         }
                     </ul>
-                    <ul class="navbar-nav align-items-sm-center gap-2">
+
+                    <ul class="navbar-nav align-items-md-center gap-md-2">
                         <li class="nav-item dropdown">
                             <button type="button" class="lang-toggle dropdown-toggle" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-translate"></i>
@@ -174,6 +219,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/forms.js" asp-append-version="true"></script>
+    <script src="~/js/clickable-rows.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <partial name="_Toasts" />
 </body>

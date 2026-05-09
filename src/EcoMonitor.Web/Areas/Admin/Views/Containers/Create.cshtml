@@ -1,10 +1,15 @@
 @model CreateContainerViewModel
 @{
     ViewData["Title"] = "Add container";
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = "Containers", Url = Url.Action("Index", "Containers", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = "Add container" });
 }
 
 <section class="py-5">
     <div class="container">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-plus-circle"></i>

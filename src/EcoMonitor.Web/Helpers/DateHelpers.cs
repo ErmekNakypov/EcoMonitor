@@ -15,12 +15,24 @@ public static class DateHelpers
         var now = DateTime.UtcNow;
         var diff = now - utc;
         if (diff.TotalSeconds < 60) return "just now";
-        if (diff.TotalMinutes < 60) return $"{(int)diff.TotalMinutes} min ago";
-        if (diff.TotalHours < 24) return $"{(int)diff.TotalHours} hours ago";
-        if (diff.TotalDays < 2) return "yesterday";
-        if (diff.TotalDays < 7) return $"{(int)diff.TotalDays} days ago";
-        if (diff.TotalDays < 30) return $"{(int)(diff.TotalDays / 7)} weeks ago";
-        if (diff.TotalDays < 365) return $"{(int)(diff.TotalDays / 30)} months ago";
-        return $"{(int)(diff.TotalDays / 365)} years ago";
+
+        var min = (int)diff.TotalMinutes;
+        if (min < 60) return min == 1 ? "1 minute ago" : $"{min} minutes ago";
+
+        var hr = (int)diff.TotalHours;
+        if (hr < 24) return hr == 1 ? "1 hour ago" : $"{hr} hours ago";
+
+        var d = (int)diff.TotalDays;
+        if (d < 2) return "yesterday";
+        if (d < 7) return $"{d} days ago";
+
+        var w = d / 7;
+        if (d < 30) return w == 1 ? "1 week ago" : $"{w} weeks ago";
+
+        var m = d / 30;
+        if (d < 365) return m == 1 ? "1 month ago" : $"{m} months ago";
+
+        var y = d / 365;
+        return y == 1 ? "1 year ago" : $"{y} years ago";
     }
 }

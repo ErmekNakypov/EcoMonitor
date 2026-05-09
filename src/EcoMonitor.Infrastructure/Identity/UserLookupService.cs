@@ -19,7 +19,7 @@ public class UserLookupService : IUserLookupService
         return await _dbContext.Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .Select(u => new UserSummaryDto(u.Id, u.Email!, u.FullName))
+            .Select(u => new UserSummaryDto(u.Id, u.Email!, u.FullName, u.CreatedAt))
             .FirstOrDefaultAsync(ct);
     }
 
@@ -34,7 +34,7 @@ public class UserLookupService : IUserLookupService
         var users = await _dbContext.Users
             .AsNoTracking()
             .Where(u => ids.Contains(u.Id))
-            .Select(u => new UserSummaryDto(u.Id, u.Email!, u.FullName))
+            .Select(u => new UserSummaryDto(u.Id, u.Email!, u.FullName, u.CreatedAt))
             .ToListAsync(ct);
 
         return users.ToDictionary(u => u.Id);

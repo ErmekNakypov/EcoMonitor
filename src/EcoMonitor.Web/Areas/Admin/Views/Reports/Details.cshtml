@@ -1,0 +1,213 @@
+@model AdminReportViewModel
+@{
+    var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
+    if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
+    ViewData["Title"] = "Report details";
+
+    static string TruncateForBreadcrumb(string text, int max) =>
+        string.IsNullOrEmpty(text) ? "Report" :
+        text.Length > max ? text[..max] + "…" : text;
+
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = "Reports", Url = Url.Action("Index", "Reports", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = TruncateForBreadcrumb(Model.Description, 40) });
+
+    int statusIndex = Model.Status switch
+    {
+        DumpsiteStatus.New => 0,
+        DumpsiteStatus.InReview => 1,
+        DumpsiteStatus.Confirmed => 2,
+        DumpsiteStatus.Rejected => 2,
+        DumpsiteStatus.Resolved => 3,
+        _ => 0
+    };
+
+    string StepClass(int step)
+    {
+        if (Model.Status == DumpsiteStatus.Rejected && step == 2) return "active rejected";
+        if (step < statusIndex) return "done";
+        if (step == statusIndex) return "active";
+        return string.Empty;
+    }
+
+    string Step3Label = Model.Status == DumpsiteStatus.Rejected ? "Rejected" : "Confirmed";
+}
+
+<section class="py-5">
+    <div class="container">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
+
+        <div class="mb-4">
+            <span class="hero-badge mb-2">
+                <i class="bi bi-flag-fill"></i>
+                <span>Report details</span>
+            </span>
+            <div class="mt-3 mb-2">
+                <partial name="_StatusBadge" model="Model.Status" />
+            </div>
+            <h1 class="h3 fw-700 mb-1">@headline</h1>
+            <p class="text-muted small mb-0">
+                Reported by <span class="fw-500">@Model.ReporterFullName</span> (@Model.ReporterEmail)
+                on @DateHelpers.FormatShort(Model.CreatedAt),
+                last updated @DateHelpers.FormatRelative(Model.UpdatedAt)
+            </p>
+        </div>
+
+        <div class="auth-card mb-4">
+            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <div class="status-stepper">
+                <div class="status-step @StepClass(0)">
+                    <span class="status-step-bullet">1</span>
+                    <div class="status-step-label">Submitted</div>
+                </div>
+                <div class="status-step @StepClass(1)">
+                    <span class="status-step-bullet">2</span>
+                    <div class="status-step-label">In review</div>
+                </div>
+                <div class="status-step @StepClass(2)">
+                    <span class="status-step-bullet">3</span>
+                    <div class="status-step-label">@Step3Label</div>
+                </div>
+                <div class="status-step @StepClass(3)">
+                    <span class="status-step-bullet">4</span>
+                    <div class="status-step-label">Resolved</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-7">
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-2">Description</h2>
+                    <p class="mb-0">@Model.Description</p>
+                </div>
+
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-3">Photos (@Model.PhotoPaths.Count)</h2>
+                    @if (Model.PhotoPaths.Count == 0)
+                    {
+                        <p class="text-muted mb-0">No photos attached.</p>
+                    }
+                    else
+                    {
+                        <div class="photo-gallery">
+                            @for (int i = 0; i < Model.PhotoPaths.Count; i++)
+                            {
+                                var path = Model.PhotoPaths[i];
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
+                                    <img src="@path" alt="Report photo @(i + 1)" />
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+
+                @if ((Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected) && !string.IsNullOrWhiteSpace(Model.ResolutionNotes))
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">@(Model.Status == DumpsiteStatus.Rejected ? "Rejection reason" : "Resolution")</h2>
+                        <p class="mb-2">@Model.ResolutionNotes</p>
+                        @if (Model.ResolvedAt.HasValue)
+                        {
+                            <p class="text-muted small mb-0">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</p>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-5">
+                <div class="auth-card mb-3">
+                    <h2 class="h6 fw-700 mb-3">Location</h2>
+                    <div id="details-map"></div>
+                    <dl class="row mt-3 mb-0 small">
+                        <dt class="col-5 text-muted fw-500">Coordinates</dt>
+                        <dd class="col-7 mb-1">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</dd>
+                        <dt class="col-5 text-muted fw-500">Photos</dt>
+                        <dd class="col-7 mb-0">@Model.PhotoPaths.Count attached</dd>
+                    </dl>
+                </div>
+
+                <div class="auth-card mb-3">
+                    <h2 class="h6 fw-700 mb-3">Reporter</h2>
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--brand-primary);"></i>
+                        <div>
+                            <div class="fw-500">@Model.ReporterFullName</div>
+                            <div class="text-muted small mb-1">@Model.ReporterEmail</div>
+                            <div class="text-muted small">Registered @DateHelpers.FormatRelative(Model.ReporterRegisteredAt)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-card mb-3">
+                    <h2 class="h6 fw-700 mb-3">Assigned inspector</h2>
+                    @if (Model.AssignedInspectorId is null)
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-person-dash me-2"></i>Not assigned yet.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-start gap-3">
+                            <i class="bi bi-person-check" style="font-size: 2rem; color: var(--brand-primary);"></i>
+                            <div>
+                                <div class="fw-500">@(Model.AssignedInspectorFullName ?? "(unknown)")</div>
+                                <div class="text-muted small">@Model.AssignedInspectorEmail</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a asp-area="Admin" asp-controller="Reports" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Back to all reports
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="photo-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img id="photo-modal-img" src="" alt="Report photo" class="w-100 rounded" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        (function () {
+            const lat = @Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const lng = @Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            const map = L.map('details-map', {
+                zoomControl: true,
+                scrollWheelZoom: false
+            }).setView([lat, lng], 15);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map);
+
+            const photoModal = document.getElementById('photo-modal');
+            if (photoModal) {
+                photoModal.addEventListener('show.bs.modal', function (event) {
+                    const trigger = event.relatedTarget;
+                    const src = trigger ? trigger.getAttribute('data-photo-src') : null;
+                    if (src) {
+                        document.getElementById('photo-modal-img').setAttribute('src', src);
+                    }
+                });
+            }
+        })();
+    </script>
+}

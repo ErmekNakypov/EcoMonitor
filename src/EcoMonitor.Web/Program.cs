@@ -1,5 +1,6 @@
 using EcoMonitor.Application;
 using EcoMonitor.Infrastructure;
+using EcoMonitor.Infrastructure.Persistence;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -33,6 +34,8 @@ try
     app.UseHttpsRedirection();
     app.UseSerilogRequestLogging();
     app.UseRouting();
+
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapStaticAssets();
@@ -41,6 +44,11 @@ try
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
         .WithStaticAssets();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        await DbInitializer.InitializeAsync(scope.ServiceProvider);
+    }
 
     app.Run();
 }

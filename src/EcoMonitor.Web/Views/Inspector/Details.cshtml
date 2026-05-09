@@ -1,0 +1,294 @@
+@model ReportViewModel
+@{
+    var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
+    if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
+    ViewData["Title"] = headline;
+
+    string StatusBadgeClass(DumpsiteStatus status) => status switch
+    {
+        DumpsiteStatus.New => "badge-status-new",
+        DumpsiteStatus.InReview => "badge-status-review",
+        DumpsiteStatus.Confirmed => "badge-status-confirmed",
+        DumpsiteStatus.Resolved => "badge-status-resolved",
+        DumpsiteStatus.Rejected => "badge-status-rejected",
+        _ => "badge-status-new"
+    };
+
+    int statusIndex = Model.Status switch
+    {
+        DumpsiteStatus.New => 0,
+        DumpsiteStatus.InReview => 1,
+        DumpsiteStatus.Confirmed => 2,
+        DumpsiteStatus.Rejected => 2,
+        DumpsiteStatus.Resolved => 3,
+        _ => 0
+    };
+
+    string StepClass(int step)
+    {
+        if (Model.Status == DumpsiteStatus.Rejected && step == 2) return "active rejected";
+        if (step < statusIndex) return "done";
+        if (step == statusIndex) return "active";
+        return string.Empty;
+    }
+
+    string Step3Label = Model.Status == DumpsiteStatus.Rejected ? "Rejected" : "Confirmed";
+
+    string assignedLabel = Model.AssignedInspectorId is null
+        ? "Unassigned"
+        : Model.IsAssignedToCurrentUser
+            ? "Assigned to you"
+            : $"Assigned to {Model.AssignedInspectorEmail}";
+}
+
+<section class="py-5">
+    <div class="container">
+        <a asp-controller="Inspector" asp-action="Queue" class="d-inline-flex align-items-center text-muted mb-3">
+            <i class="bi bi-arrow-left me-2"></i><span>Back to queue</span>
+        </a>
+
+        @if (TempData["Success"] is string success)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@success
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>@error
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="mb-4">
+            <span class="status-badge @StatusBadgeClass(Model.Status) mb-2">@Model.Status</span>
+            <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
+            <p class="text-muted small mb-0">
+                Reported by <span class="fw-500">@Model.ReporterFullName</span> (@Model.ReporterEmail)
+                on @Model.CreatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                &middot; @assignedLabel
+            </p>
+        </div>
+
+        <div class="auth-card mb-4">
+            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <div class="status-stepper">
+                <div class="status-step @StepClass(0)">
+                    <span class="status-step-bullet">1</span>
+                    <div class="status-step-label">Submitted</div>
+                </div>
+                <div class="status-step @StepClass(1)">
+                    <span class="status-step-bullet">2</span>
+                    <div class="status-step-label">In review</div>
+                </div>
+                <div class="status-step @StepClass(2)">
+                    <span class="status-step-bullet">3</span>
+                    <div class="status-step-label">@Step3Label</div>
+                </div>
+                <div class="status-step @StepClass(3)">
+                    <span class="status-step-bullet">4</span>
+                    <div class="status-step-label">Resolved</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-7">
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-2">Description</h2>
+                    <p class="mb-0">@Model.Description</p>
+                </div>
+
+                @if (Model.PhotoPaths.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Photos (@Model.PhotoPaths.Count)</h2>
+                        <div class="photo-gallery">
+                            @for (int i = 0; i < Model.PhotoPaths.Count; i++)
+                            {
+                                var path = Model.PhotoPaths[i];
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
+                                    <img src="@path" alt="Report photo @(i + 1)" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if ((Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected) && !string.IsNullOrWhiteSpace(Model.ResolutionNotes))
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">@(Model.Status == DumpsiteStatus.Rejected ? "Rejection reason" : "Resolution")</h2>
+                        <p class="mb-2">@Model.ResolutionNotes</p>
+                        @if (Model.ResolvedAt.HasValue)
+                        {
+                            <p class="text-muted small mb-0">Closed on @Model.ResolvedAt.Value.ToLocalTime().ToString("d MMM yyyy, HH:mm")</p>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-5">
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-3">Location</h2>
+                    <div id="details-map"></div>
+                    <p class="text-muted small mb-0 mt-2">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</p>
+                </div>
+
+                <div class="action-panel">
+                    <h2 class="h6 fw-700 mb-3">Actions</h2>
+
+                    @if (Model.CanTake)
+                    {
+                        <form asp-controller="Inspector" asp-action="Take" asp-route-id="@Model.Id" method="post" class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-hand-thumbs-up me-2"></i>Take this report
+                            </button>
+                        </form>
+                    }
+                    else if (Model.CanConfirm || Model.CanReject)
+                    {
+                        <div class="d-grid gap-2">
+                            @if (Model.CanConfirm)
+                            {
+                                <form asp-controller="Inspector" asp-action="Confirm" asp-route-id="@Model.Id" method="post">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="bi bi-check2-circle me-2"></i>Confirm
+                                    </button>
+                                </form>
+                            }
+                            @if (Model.CanReject)
+                            {
+                                <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#reject-modal">
+                                    <i class="bi bi-x-circle me-2"></i>Reject
+                                </button>
+                            }
+                        </div>
+                    }
+                    else if (Model.CanResolve)
+                    {
+                        <button type="button" class="btn btn-primary btn-lg w-100" data-bs-toggle="modal" data-bs-target="#resolve-modal">
+                            <i class="bi bi-check2-all me-2"></i>Mark as resolved
+                        </button>
+                    }
+                    else if (Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected)
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-lock me-2"></i>This report is closed.
+                        </p>
+                    }
+                    else if (Model.AssignedInspectorId is not null && !Model.IsAssignedToCurrentUser)
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-person-check me-2"></i>This report is being handled by @Model.AssignedInspectorEmail.
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model.CanReject)
+{
+    <div class="modal fade" id="reject-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="Reject" asp-route-id="@Model.Id" method="post">
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Reject report</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Tell the citizen and your colleagues why this report is being rejected.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="reject-reason">Reason</label>
+                            <textarea id="reject-reason" name="Reason" rows="4" class="form-control" minlength="10" maxlength="1000" required></textarea>
+                        </div>
+                        <div class="form-text">10–1000 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-x-circle me-2"></i>Reject report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.CanResolve)
+{
+    <div class="modal fade" id="resolve-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="Resolve" asp-route-id="@Model.Id" method="post">
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Mark as resolved</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Describe what was done to resolve this case.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="resolve-notes">Resolution notes</label>
+                            <textarea id="resolve-notes" name="Notes" rows="4" class="form-control" minlength="10" maxlength="1000" required></textarea>
+                        </div>
+                        <div class="form-text">10–1000 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check2-all me-2"></i>Mark resolved
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="photo-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img id="photo-modal-img" src="" alt="Report photo" class="w-100 rounded" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        (function () {
+            const lat = @Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const lng = @Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            const map = L.map('details-map', {
+                zoomControl: true,
+                scrollWheelZoom: false
+            }).setView([lat, lng], 15);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map);
+
+            const photoModal = document.getElementById('photo-modal');
+            if (photoModal) {
+                photoModal.addEventListener('show.bs.modal', function (event) {
+                    const trigger = event.relatedTarget;
+                    const src = trigger ? trigger.getAttribute('data-photo-src') : null;
+                    if (src) {
+                        document.getElementById('photo-modal-img').setAttribute('src', src);
+                    }
+                });
+            }
+        })();
+    </script>
+}

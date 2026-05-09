@@ -53,6 +53,27 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
+                            @if (User.IsInRole(RoleNames.Inspector))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="inspectorMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-clipboard-check"></i>
+                                        <span>Reports</span>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="inspectorMenu">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Inspector" asp-action="Queue">
+                                                <i class="bi bi-inboxes me-2"></i>Queue
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Inspector" asp-action="MyReports">
+                                                <i class="bi bi-clipboard-check me-2"></i>My reports
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
                             @if (User.IsInRole(RoleNames.Administrator))
                             {
                                 <li class="nav-item">

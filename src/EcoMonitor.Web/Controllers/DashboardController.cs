@@ -78,13 +78,22 @@ public class DashboardController : Controller
     {
         var user = (await _userManager.GetUserAsync(User))!;
 
+        var queueSize = await _dbContext.DumpsiteReports
+            .CountAsync(r => r.Status == DumpsiteStatus.New && r.AssignedInspectorId == null);
+
+        var myActive = await _dbContext.DumpsiteReports
+            .CountAsync(r => r.AssignedInspectorId == user.Id
+                && (r.Status == DumpsiteStatus.InReview || r.Status == DumpsiteStatus.Confirmed));
+
+        var myResolved = await _dbContext.DumpsiteReports
+            .CountAsync(r => r.AssignedInspectorId == user.Id && r.Status == DumpsiteStatus.Resolved);
+
         var model = new InspectorDashboardViewModel
         {
             FullName = user.FullName,
-            AssignedReports = await _dbContext.DumpsiteReports
-                .CountAsync(r => r.AssignedInspectorId == user.Id),
-            NewUnassignedReports = await _dbContext.DumpsiteReports
-                .CountAsync(r => r.AssignedInspectorId == null && r.Status == DumpsiteStatus.New)
+            QueueSize = queueSize,
+            MyActiveReports = myActive,
+            MyResolvedReports = myResolved
         };
 
         return View(model);

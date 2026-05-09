@@ -1,0 +1,228 @@
+@model ContainerListViewModel
+@{
+    ViewData["Title"] = "Waste containers";
+
+    string TypePill(ContainerType t) => t switch
+    {
+        ContainerType.General => "type-pill type-general",
+        ContainerType.Plastic => "type-pill type-plastic",
+        ContainerType.Glass => "type-pill type-glass",
+        ContainerType.Paper => "type-pill type-paper",
+        ContainerType.Organic => "type-pill type-organic",
+        _ => "type-pill type-general"
+    };
+
+    string StatusPill(ContainerStatus s) => s switch
+    {
+        ContainerStatus.Active => "status-pill container-status-active",
+        ContainerStatus.Maintenance => "status-pill container-status-maintenance",
+        ContainerStatus.Removed => "status-pill container-status-removed",
+        _ => "status-pill container-status-active"
+    };
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end mb-4">
+            <div>
+                <span class="hero-badge mb-2">
+                    <i class="bi bi-trash3"></i>
+                    <span>Container management</span>
+                </span>
+                <h1 class="h2 fw-700 mt-3 mb-1">Waste containers</h1>
+                <p class="text-muted mb-0">@Model.TotalCount total &middot; page @Model.Page of @Model.TotalPages</p>
+            </div>
+            <div class="mt-3 mt-sm-0 d-flex gap-2">
+                <a asp-area="Admin" asp-controller="Containers" asp-action="Map" class="btn btn-outline-secondary">
+                    <i class="bi bi-map me-2"></i>View on map
+                </a>
+                <a asp-area="Admin" asp-controller="Containers" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Add container
+                </a>
+            </div>
+        </div>
+
+        <form method="get" asp-area="Admin" asp-controller="Containers" asp-action="Index" class="auth-card mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-500" for="search">Search</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                        <input id="search" name="search" value="@Model.SearchQuery" class="form-control" placeholder="Code or address" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-500" for="type">Type</label>
+                    <select id="type" name="type" class="form-select">
+                        <option value="">All types</option>
+                        @foreach (var t in Enum.GetValues<ContainerType>())
+                        {
+                            <option value="@t" selected="@(Model.TypeFilter == t)">@t.GetDisplayName()</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-500" for="status">Status</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="">All statuses</option>
+                        @foreach (var s in Enum.GetValues<ContainerStatus>())
+                        {
+                            <option value="@s" selected="@(Model.StatusFilter == s)">@s.GetDisplayName()</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-secondary w-100" data-no-loading>Apply</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="auth-card p-0 overflow-hidden">
+            @if (Model.Items.Count == 0)
+            {
+                var emptyState = new EmptyStateViewModel
+                {
+                    Icon = "bi-trash3",
+                    Title = "No containers found",
+                    Subtitle = "Try removing filters or add a new container.",
+                    CtaText = "Add your first container",
+                    CtaUrl = Url.Action("Create", "Containers", new { area = "Admin" }),
+                    CtaIcon = "bi-plus-circle"
+                };
+                <partial name="_EmptyState" model="emptyState" />
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Address</th>
+                                <th>Type</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                                <th>Installed</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in Model.Items)
+                            {
+                                var deleteUrl = Url.Action("Delete", "Containers", new { area = "Admin", id = c.Id });
+                                <tr>
+                                    <td class="fw-500">@c.Code</td>
+                                    <td>@c.Address</td>
+                                    <td><span class="@TypePill(c.Type)">@c.Type.GetDisplayName()</span></td>
+                                    <td class="text-muted small">@c.Capacity L</td>
+                                    <td><span class="@StatusPill(c.Status)">@c.Status.GetDisplayName()</span></td>
+                                    <td class="text-muted small">@DateHelpers.FormatRelative(c.InstalledAt)</td>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Containers" asp-action="Edit" asp-route-id="@c.Id">
+                                                        <i class="bi bi-pencil me-2"></i>Edit
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider" /></li>
+                                                <li>
+                                                    <button type="button" class="dropdown-item"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                            data-confirm-url="@deleteUrl"
+                                                            data-confirm-title="Remove container"
+                                                            data-confirm-message="Mark @c.Code as removed? It will stay in the database for history but disappear from the active map."
+                                                            data-confirm-button-class="btn btn-danger"
+                                                            data-confirm-button-text="Remove">
+                                                        <i class="bi bi-trash me-2"></i>Remove
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="mt-4" aria-label="Containers pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(Model.Page <= 1 ? "disabled" : string.Empty)">
+                        <a class="page-link" asp-area="Admin" asp-controller="Containers" asp-action="Index"
+                           asp-route-page="@(Model.Page - 1)"
+                           asp-route-search="@Model.SearchQuery"
+                           asp-route-type="@Model.TypeFilter"
+                           asp-route-status="@Model.StatusFilter">Previous</a>
+                    </li>
+                    @for (int p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <li class="page-item @(p == Model.Page ? "active" : string.Empty)">
+                            <a class="page-link" asp-area="Admin" asp-controller="Containers" asp-action="Index"
+                               asp-route-page="@p"
+                               asp-route-search="@Model.SearchQuery"
+                               asp-route-type="@Model.TypeFilter"
+                               asp-route-status="@Model.StatusFilter">@p</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : string.Empty)">
+                        <a class="page-link" asp-area="Admin" asp-controller="Containers" asp-action="Index"
+                           asp-route-page="@(Model.Page + 1)"
+                           asp-route-search="@Model.SearchQuery"
+                           asp-route-type="@Model.TypeFilter"
+                           asp-route-status="@Model.StatusFilter">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</section>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="confirmForm" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h2 id="confirmTitle" class="h5 fw-700 modal-title mb-0">Confirm</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmMessage">Are you sure?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="confirmButton" class="btn btn-primary">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var modalEl = document.getElementById('confirmModal');
+            if (!modalEl) return;
+            var form = document.getElementById('confirmForm');
+            var titleEl = document.getElementById('confirmTitle');
+            var messageEl = document.getElementById('confirmMessage');
+            var buttonEl = document.getElementById('confirmButton');
+
+            modalEl.addEventListener('show.bs.modal', function (event) {
+                var trigger = event.relatedTarget;
+                if (!trigger) return;
+                form.action = trigger.dataset.confirmUrl || form.action;
+                titleEl.textContent = trigger.dataset.confirmTitle || 'Confirm';
+                messageEl.textContent = trigger.dataset.confirmMessage || 'Are you sure?';
+                buttonEl.textContent = trigger.dataset.confirmButtonText || 'Confirm';
+                buttonEl.className = trigger.dataset.confirmButtonClass || 'btn btn-primary';
+            });
+        })();
+    </script>
+}

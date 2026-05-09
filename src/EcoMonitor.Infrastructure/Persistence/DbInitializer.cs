@@ -51,5 +51,7 @@ public static class DbInitializer
                 }
             }
         }
+
+        await ContainerSeeder.SeedAsync(dbContext);
     }
 }

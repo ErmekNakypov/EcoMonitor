@@ -748,6 +748,71 @@ a:hover {
   border-top: 1px solid var(--brand-border);
 }
 
+/* Container type pills (admin containers list) — share .status-pill base layout */
+.type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.type-general { background: #F3F4F6; color: #374151; }
+.type-plastic { background: #DBEAFE; color: #1D4ED8; }
+.type-glass   { background: #CCFBF1; color: #0F766E; }
+.type-paper   { background: #FFEDD5; color: #9A3412; }
+.type-organic { background: #D1FAE5; color: #15803D; }
+
+/* Container status pills (Active/Maintenance/Removed) */
+.container-status-active      { background: var(--brand-icon-bg); color: var(--brand-primary-hover); }
+.container-status-maintenance { background: #FEF3C7; color: #92400E; }
+.container-status-removed     { background: #E5E7EB; color: #4B5563; }
+
+/* Containers map */
+.map-frame {
+  position: relative;
+}
+
+#containers-map {
+  height: 600px;
+  border-radius: 16px;
+  border: 1px solid var(--brand-border);
+}
+
+.map-legend {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #FFFFFF;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  z-index: 500;
+  min-width: 180px;
+}
+
+.map-legend .legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  font-size: 0.875rem;
+}
+
+.map-legend .legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
 /* Empty-state partial */
 .empty-state .empty-icon {
   width: 96px;

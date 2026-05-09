@@ -40,6 +40,10 @@ try
     {
         options.ModelBinderProviders.Insert(0, new InvariantDoubleModelBinderProvider());
     })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    })
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 

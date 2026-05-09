@@ -29,21 +29,6 @@
             </div>
         </div>
 
-        @if (TempData["Success"] is string success)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>@success
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        @if (TempData["Error"] is string error)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>@error
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-
         <form method="get" asp-area="Admin" asp-controller="Users" asp-action="Index" class="auth-card mb-4">
             <div class="row g-3 align-items-end">
                 <div class="col-md-5">
@@ -71,7 +56,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-secondary w-100">Apply</button>
+                    <button type="submit" class="btn btn-outline-secondary w-100" data-no-loading>Apply</button>
                 </div>
             </div>
         </form>
@@ -79,11 +64,13 @@
         <div class="auth-card p-0 overflow-hidden">
             @if (Model.Users.Count == 0)
             {
-                <div class="text-center py-5">
-                    <div class="feature-icon mx-auto mb-3"><i class="bi bi-search"></i></div>
-                    <h2 class="h6 fw-700 mb-1">No users found</h2>
-                    <p class="text-muted small mb-0">Try removing filters or adding a new user.</p>
-                </div>
+                var emptyState = new EmptyStateViewModel
+                {
+                    Icon = "bi-search",
+                    Title = "No users found",
+                    Subtitle = "Try removing filters or adding a new user."
+                };
+                <partial name="_EmptyState" model="emptyState" />
             }
             else
             {
@@ -102,7 +89,15 @@
                         <tbody>
                             @foreach (var user in Model.Users)
                             {
-                                var roleLabel = user.Roles.FirstOrDefault() ?? "-";
+                                var actionVerb = user.IsActive ? "deactivate" : "activate";
+                                var actionTitle = user.IsActive ? "Deactivate user" : "Activate user";
+                                var actionLabel = user.IsActive ? "Deactivate" : "Activate";
+                                var actionMessage = user.IsActive
+                                    ? $"Are you sure you want to deactivate {user.Email}? They will not be able to sign in."
+                                    : $"Are you sure you want to activate {user.Email}? They will be able to sign in again.";
+                                var actionBtnClass = user.IsActive ? "btn btn-danger" : "btn btn-primary";
+                                var toggleUrl = Url.Action("ToggleActive", "Users", new { area = "Admin", id = user.Id });
+
                                 <tr>
                                     <td class="fw-500">@user.Email</td>
                                     <td>@user.FullName</td>
@@ -129,7 +124,7 @@
                                             <span class="status-pill status-pill-inactive">Inactive</span>
                                         }
                                     </td>
-                                    <td class="text-muted small">@user.CreatedAt.ToLocalTime().ToString("d MMM yyyy")</td>
+                                    <td class="text-muted small">@DateHelpers.FormatShort(user.CreatedAt)</td>
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
@@ -148,18 +143,22 @@
                                                 </li>
                                                 <li><hr class="dropdown-divider" /></li>
                                                 <li>
-                                                    <form asp-area="Admin" asp-controller="Users" asp-action="ToggleActive" asp-route-id="@user.Id" method="post" class="m-0">
-                                                        <button type="submit" class="dropdown-item">
-                                                            @if (user.IsActive)
-                                                            {
-                                                                <i class="bi bi-toggle-off me-2"></i><span>Deactivate</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <i class="bi bi-toggle-on me-2"></i><span>Activate</span>
-                                                            }
-                                                        </button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                            data-confirm-url="@toggleUrl"
+                                                            data-confirm-title="@actionTitle"
+                                                            data-confirm-message="@actionMessage"
+                                                            data-confirm-button-class="@actionBtnClass"
+                                                            data-confirm-button-text="@actionLabel">
+                                                        @if (user.IsActive)
+                                                        {
+                                                            <i class="bi bi-toggle-off me-2"></i><span>Deactivate</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-toggle-on me-2"></i><span>Activate</span>
+                                                        }
+                                                    </button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -205,3 +204,45 @@
         }
     </div>
 </section>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="confirmForm" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h2 id="confirmTitle" class="h5 fw-700 modal-title mb-0">Confirm</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmMessage">Are you sure?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="confirmButton" class="btn btn-primary">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var modalEl = document.getElementById('confirmModal');
+            if (!modalEl) return;
+            var form = document.getElementById('confirmForm');
+            var titleEl = document.getElementById('confirmTitle');
+            var messageEl = document.getElementById('confirmMessage');
+            var buttonEl = document.getElementById('confirmButton');
+
+            modalEl.addEventListener('show.bs.modal', function (event) {
+                var trigger = event.relatedTarget;
+                if (!trigger) return;
+                form.action = trigger.dataset.confirmUrl || form.action;
+                titleEl.textContent = trigger.dataset.confirmTitle || 'Confirm';
+                messageEl.textContent = trigger.dataset.confirmMessage || 'Are you sure?';
+                buttonEl.textContent = trigger.dataset.confirmButtonText || 'Confirm';
+                buttonEl.className = trigger.dataset.confirmButtonClass || 'btn btn-primary';
+            });
+        })();
+    </script>
+}

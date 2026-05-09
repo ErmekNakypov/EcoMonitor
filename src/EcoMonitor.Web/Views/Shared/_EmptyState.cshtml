@@ -1,0 +1,18 @@
+@model EcoMonitor.Web.Models.Shared.EmptyStateViewModel
+
+<div class="empty-state text-center py-5">
+    <div class="empty-icon mb-3">
+        <i class="bi @Model.Icon"></i>
+    </div>
+    <h3 class="h5 fw-700 mb-2">@Model.Title</h3>
+    @if (!string.IsNullOrEmpty(Model.Subtitle))
+    {
+        <p class="text-muted mb-4">@Model.Subtitle</p>
+    }
+    @if (!string.IsNullOrEmpty(Model.CtaText) && !string.IsNullOrEmpty(Model.CtaUrl))
+    {
+        <a href="@Model.CtaUrl" class="btn btn-primary">
+            <i class="bi @(Model.CtaIcon ?? "bi-arrow-right") me-2"></i>@Model.CtaText
+        </a>
+    }
+</div>

@@ -125,7 +125,7 @@ public class CitizenController : Controller
                 uploaded));
 
             _logger.LogInformation("Citizen {Email} submitted report {ReportId}", User.Identity?.Name, reportId);
-            TempData["Success"] = "Report submitted. Thank you for helping keep Bishkek clean.";
+            TempData["SuccessMessage"] = "Report submitted. Thank you for helping keep Bishkek clean.";
             return RedirectToAction(nameof(Reports));
         }
         catch (ValidationException ex)

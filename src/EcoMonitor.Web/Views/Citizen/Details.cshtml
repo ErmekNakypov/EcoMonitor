@@ -4,16 +4,6 @@
     if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
     ViewData["Title"] = headline;
 
-    string StatusBadgeClass(DumpsiteStatus status) => status switch
-    {
-        DumpsiteStatus.New => "badge-status-new",
-        DumpsiteStatus.InReview => "badge-status-review",
-        DumpsiteStatus.Confirmed => "badge-status-confirmed",
-        DumpsiteStatus.Resolved => "badge-status-resolved",
-        DumpsiteStatus.Rejected => "badge-status-rejected",
-        _ => "badge-status-new"
-    };
-
     int statusIndex = Model.Status switch
     {
         DumpsiteStatus.New => 0,
@@ -43,11 +33,13 @@
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
             <div>
-                <span class="status-badge @StatusBadgeClass(Model.Status) mb-2">@Model.Status</span>
+                <div class="mb-2">
+                    <partial name="_StatusBadge" model="Model.Status" />
+                </div>
                 <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
                 <p class="text-muted small mb-0">
-                    Reported @Model.CreatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
-                    &middot; updated @Model.UpdatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                    Reported @DateHelpers.FormatRelative(Model.CreatedAt) (@DateHelpers.FormatShort(Model.CreatedAt))
+                    &middot; updated @DateHelpers.FormatRelative(Model.UpdatedAt)
                 </p>
             </div>
         </div>
@@ -105,7 +97,7 @@
                         {
                             <p class="mb-2">@Model.ResolutionNotes</p>
                         }
-                        <p class="text-muted small mb-0">Resolved on @Model.ResolvedAt.Value.ToLocalTime().ToString("d MMM yyyy")</p>
+                        <p class="text-muted small mb-0">Resolved on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</p>
                     </div>
                 }
             </div>

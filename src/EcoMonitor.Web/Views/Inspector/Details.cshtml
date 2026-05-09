@@ -4,16 +4,6 @@
     if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
     ViewData["Title"] = headline;
 
-    string StatusBadgeClass(DumpsiteStatus status) => status switch
-    {
-        DumpsiteStatus.New => "badge-status-new",
-        DumpsiteStatus.InReview => "badge-status-review",
-        DumpsiteStatus.Confirmed => "badge-status-confirmed",
-        DumpsiteStatus.Resolved => "badge-status-resolved",
-        DumpsiteStatus.Rejected => "badge-status-rejected",
-        _ => "badge-status-new"
-    };
-
     int statusIndex = Model.Status switch
     {
         DumpsiteStatus.New => 0,
@@ -47,27 +37,14 @@
             <i class="bi bi-arrow-left me-2"></i><span>Back to queue</span>
         </a>
 
-        @if (TempData["Success"] is string success)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>@success
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        @if (TempData["Error"] is string error)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>@error
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-
         <div class="mb-4">
-            <span class="status-badge @StatusBadgeClass(Model.Status) mb-2">@Model.Status</span>
+            <div class="mb-2">
+                <partial name="_StatusBadge" model="Model.Status" />
+            </div>
             <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
             <p class="text-muted small mb-0">
                 Reported by <span class="fw-500">@Model.ReporterFullName</span> (@Model.ReporterEmail)
-                on @Model.CreatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                @DateHelpers.FormatRelative(Model.CreatedAt) (@DateHelpers.FormatShort(Model.CreatedAt))
                 &middot; @assignedLabel
             </p>
         </div>
@@ -124,7 +101,7 @@
                         <p class="mb-2">@Model.ResolutionNotes</p>
                         @if (Model.ResolvedAt.HasValue)
                         {
-                            <p class="text-muted small mb-0">Closed on @Model.ResolvedAt.Value.ToLocalTime().ToString("d MMM yyyy, HH:mm")</p>
+                            <p class="text-muted small mb-0">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</p>
                         }
                     </div>
                 }

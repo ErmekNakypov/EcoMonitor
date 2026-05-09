@@ -1,0 +1,50 @@
+@{
+    var success = TempData["SuccessMessage"] as string;
+    var error = TempData["ErrorMessage"] as string;
+    var info = TempData["InfoMessage"] as string;
+}
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+    @if (!string.IsNullOrEmpty(success))
+    {
+        <div class="toast toast-success show" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">@success</div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div class="toast toast-error show" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-exclamation-circle-fill text-danger me-2"></i>
+                <strong class="me-auto">Error</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">@error</div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(info))
+    {
+        <div class="toast toast-info show" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                <strong class="me-auto">Info</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">@info</div>
+        </div>
+    }
+</div>
+
+<script>
+(function() {
+    document.querySelectorAll('.toast').forEach(function (t) {
+        var toast = new bootstrap.Toast(t, { delay: 4000, autohide: true });
+        toast.show();
+    });
+})();
+</script>

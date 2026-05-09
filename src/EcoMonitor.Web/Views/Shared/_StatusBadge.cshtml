@@ -1,0 +1,20 @@
+@model EcoMonitor.Domain.Enums.DumpsiteStatus
+@using EcoMonitor.Domain.Common
+@using EcoMonitor.Domain.Enums
+
+@{
+    var (cls, icon) = Model switch
+    {
+        DumpsiteStatus.New        => ("status-pill status-new", "bi-circle-fill"),
+        DumpsiteStatus.InReview   => ("status-pill status-inreview", "bi-eye-fill"),
+        DumpsiteStatus.Confirmed  => ("status-pill status-confirmed", "bi-check-circle-fill"),
+        DumpsiteStatus.Resolved   => ("status-pill status-resolved", "bi-check2-all"),
+        DumpsiteStatus.Rejected   => ("status-pill status-rejected", "bi-x-circle-fill"),
+        _ => ("status-pill", "bi-circle")
+    };
+}
+
+<span class="@cls">
+    <i class="bi @icon"></i>
+    @Model.GetDisplayName()
+</span>

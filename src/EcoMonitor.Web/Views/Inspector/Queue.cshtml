@@ -1,16 +1,6 @@
 @model QueueListViewModel
 @{
     ViewData["Title"] = "Inspector queue";
-
-    string Relative(DateTime dt)
-    {
-        var span = DateTime.UtcNow - dt.ToUniversalTime();
-        if (span.TotalMinutes < 1) return "just now";
-        if (span.TotalMinutes < 60) return $"{(int)span.TotalMinutes} min ago";
-        if (span.TotalHours < 24) return $"{(int)span.TotalHours} h ago";
-        if (span.TotalDays < 7) return $"{(int)span.TotalDays} d ago";
-        return dt.ToLocalTime().ToString("d MMM yyyy");
-    }
 }
 
 <section class="py-5">
@@ -35,29 +25,16 @@
             </a>
         </div>
 
-        @if (TempData["Success"] is string success)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>@success
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        @if (TempData["Error"] is string error)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>@error
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-
         @if (Model.Items.Count == 0)
         {
-            <div class="auth-card text-center py-5">
-                <div class="feature-icon mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2.25rem;">
-                    <i class="bi bi-check2-circle"></i>
-                </div>
-                <h2 class="h5 fw-700 mb-2">All caught up!</h2>
-                <p class="text-muted mb-0">No new reports right now. Check back soon.</p>
+            var emptyState = new EmptyStateViewModel
+            {
+                Icon = "bi-check2-circle",
+                Title = "All caught up!",
+                Subtitle = "No new reports right now. Check back soon."
+            };
+            <div class="auth-card">
+                <partial name="_EmptyState" model="emptyState" />
             </div>
         }
         else
@@ -83,7 +60,7 @@
                                 <p class="mb-2 fw-500">@item.ShortDescription</p>
                                 <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
                                     <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
-                                    <span><i class="bi bi-clock me-1"></i>Reported @Relative(item.CreatedAt)</span>
+                                    <span><i class="bi bi-clock me-1"></i>Reported @DateHelpers.FormatRelative(item.CreatedAt)</span>
                                 </div>
                             </div>
                             <div class="col-md-3 text-md-end">

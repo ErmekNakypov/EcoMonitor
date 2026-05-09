@@ -113,7 +113,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new TakeReportCommand(id, CurrentUserId()));
-            TempData["Success"] = "Report taken. It is now in your queue.";
+            TempData["SuccessMessage"] = "Report taken. It is now in your queue.";
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -122,7 +122,7 @@ public class InspectorController : Controller
         }
         catch (DomainException ex)
         {
-            TempData["Error"] = ex.Message;
+            TempData["ErrorMessage"] = ex.Message;
             return RedirectToAction(nameof(Queue));
         }
     }
@@ -134,7 +134,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new ConfirmReportCommand(id, CurrentUserId()));
-            TempData["Success"] = "Report confirmed.";
+            TempData["SuccessMessage"] = "Report confirmed.";
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -147,7 +147,7 @@ public class InspectorController : Controller
         }
         catch (DomainException ex)
         {
-            TempData["Error"] = ex.Message;
+            TempData["ErrorMessage"] = ex.Message;
             return RedirectToAction(nameof(Details), new { id });
         }
     }
@@ -158,14 +158,14 @@ public class InspectorController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["Error"] = "Reason must be at least 10 characters.";
+            TempData["ErrorMessage"] = "Reason must be at least 10 characters.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
         try
         {
             await _mediator.Send(new RejectReportCommand(id, CurrentUserId(), model.Reason));
-            TempData["Success"] = "Report rejected.";
+            TempData["SuccessMessage"] = "Report rejected.";
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -178,12 +178,12 @@ public class InspectorController : Controller
         }
         catch (DomainException ex)
         {
-            TempData["Error"] = ex.Message;
+            TempData["ErrorMessage"] = ex.Message;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (ValidationException ex)
         {
-            TempData["Error"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage));
+            TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage));
             return RedirectToAction(nameof(Details), new { id });
         }
     }
@@ -194,14 +194,14 @@ public class InspectorController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["Error"] = "Resolution notes must be at least 10 characters.";
+            TempData["ErrorMessage"] = "Resolution notes must be at least 10 characters.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
         try
         {
             await _mediator.Send(new ResolveReportCommand(id, CurrentUserId(), model.Notes));
-            TempData["Success"] = "Report marked as resolved.";
+            TempData["SuccessMessage"] = "Report marked as resolved.";
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -214,12 +214,12 @@ public class InspectorController : Controller
         }
         catch (DomainException ex)
         {
-            TempData["Error"] = ex.Message;
+            TempData["ErrorMessage"] = ex.Message;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (ValidationException ex)
         {
-            TempData["Error"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage));
+            TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage));
             return RedirectToAction(nameof(Details), new { id });
         }
     }

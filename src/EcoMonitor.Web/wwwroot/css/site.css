@@ -424,42 +424,28 @@ a:hover {
   padding-top: 0;
 }
 
-/* Status badges (dumpsite report status) */
-.status-badge {
-  display: inline-block;
+/* Status pills (unified for all status displays) */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  line-height: 1;
   white-space: nowrap;
 }
 
-.badge-status-new {
-  background-color: #DBEAFE;
-  color: #1D4ED8;
+.status-pill i {
+  font-size: 0.7rem;
 }
 
-.badge-status-review {
-  background-color: #FEF3C7;
-  color: #B45309;
-}
-
-.badge-status-confirmed {
-  background-color: #FFEDD5;
-  color: #C2410C;
-}
-
-.badge-status-resolved {
-  background-color: var(--brand-icon-bg);
-  color: var(--brand-primary-hover);
-}
-
-.badge-status-rejected {
-  background-color: #E5E7EB;
-  color: #4B5563;
-}
+.status-new       { background: #DBEAFE; color: #1E40AF; }
+.status-inreview  { background: #FEF3C7; color: #92400E; }
+.status-confirmed { background: #FED7AA; color: #9A3412; }
+.status-resolved  { background: #D1FAE5; color: #065F46; }
+.status-rejected  { background: #E5E7EB; color: #374151; }
 
 /* Role badges (admin user table) */
 .role-badge {
@@ -487,18 +473,7 @@ a:hover {
   color: var(--brand-primary-hover);
 }
 
-/* Status pills (active / inactive) */
-.status-pill {
-  display: inline-block;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-}
-
+/* User active/inactive pills (admin users table) — share the .status-pill base above */
 .status-pill-active {
   background-color: var(--brand-icon-bg);
   color: var(--brand-primary-hover);
@@ -771,6 +746,36 @@ a:hover {
 
 .modal-footer {
   border-top: 1px solid var(--brand-border);
+}
+
+/* Empty-state partial */
+.empty-state .empty-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--brand-icon-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state .empty-icon i {
+  font-size: 2.5rem;
+  color: var(--brand-primary);
+}
+
+/* Toasts */
+.toast {
+  min-width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.toast-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 /* Misc */

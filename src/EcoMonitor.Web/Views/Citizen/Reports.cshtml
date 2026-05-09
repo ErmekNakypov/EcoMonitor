@@ -1,26 +1,6 @@
 @model ReportListViewModel
 @{
     ViewData["Title"] = "My reports";
-
-    string StatusBadgeClass(DumpsiteStatus status) => status switch
-    {
-        DumpsiteStatus.New => "badge-status-new",
-        DumpsiteStatus.InReview => "badge-status-review",
-        DumpsiteStatus.Confirmed => "badge-status-confirmed",
-        DumpsiteStatus.Resolved => "badge-status-resolved",
-        DumpsiteStatus.Rejected => "badge-status-rejected",
-        _ => "badge-status-new"
-    };
-
-    string Relative(DateTime dt)
-    {
-        var span = DateTime.UtcNow - dt.ToUniversalTime();
-        if (span.TotalMinutes < 1) return "just now";
-        if (span.TotalMinutes < 60) return $"{(int)span.TotalMinutes} min ago";
-        if (span.TotalHours < 24) return $"{(int)span.TotalHours} h ago";
-        if (span.TotalDays < 7) return $"{(int)span.TotalDays} d ago";
-        return dt.ToLocalTime().ToString("d MMM yyyy");
-    }
 }
 
 <section class="py-5">
@@ -41,25 +21,19 @@
             </div>
         </div>
 
-        @if (TempData["Success"] is string success)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>@success
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-
         @if (Model.Reports.Count == 0)
         {
-            <div class="auth-card text-center py-5">
-                <div class="feature-icon mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2.25rem;">
-                    <i class="bi bi-clipboard-plus"></i>
-                </div>
-                <h2 class="h5 fw-700 mb-2">You haven't reported any dumpsites yet</h2>
-                <p class="text-muted mb-4">When you submit your first report, it will appear here so you can track its progress.</p>
-                <a asp-controller="Citizen" asp-action="Create" class="btn btn-primary btn-lg">
-                    <i class="bi bi-plus-circle me-2"></i>Report your first dumpsite
-                </a>
+            var emptyState = new EmptyStateViewModel
+            {
+                Icon = "bi-clipboard-plus",
+                Title = "You haven't reported any dumpsites yet",
+                Subtitle = "When you submit your first report, it will appear here so you can track its progress.",
+                CtaText = "Report your first dumpsite",
+                CtaUrl = Url.Action("Create", "Citizen"),
+                CtaIcon = "bi-plus-circle"
+            };
+            <div class="auth-card">
+                <partial name="_EmptyState" model="emptyState" />
             </div>
         }
         else
@@ -84,8 +58,8 @@
                             <div class="col-md-7">
                                 <p class="mb-2 fw-500">@report.ShortDescription</p>
                                 <div class="d-flex flex-wrap align-items-center gap-2">
-                                    <span class="status-badge @StatusBadgeClass(report.Status)">@report.Status</span>
-                                    <span class="text-muted small">Reported @Relative(report.CreatedAt)</span>
+                                    <partial name="_StatusBadge" model="report.Status" />
+                                    <span class="text-muted small">Reported @DateHelpers.FormatRelative(report.CreatedAt)</span>
                                 </div>
                             </div>
                             <div class="col-md-3 text-md-end">

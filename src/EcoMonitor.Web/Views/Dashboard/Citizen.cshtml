@@ -1,16 +1,6 @@
 @model CitizenDashboardViewModel
 @{
     ViewData["Title"] = "My dashboard";
-
-    string StatusBadgeClass(DumpsiteStatus status) => status switch
-    {
-        DumpsiteStatus.New => "badge-status-new",
-        DumpsiteStatus.InReview => "badge-status-review",
-        DumpsiteStatus.Confirmed => "badge-status-confirmed",
-        DumpsiteStatus.Resolved => "badge-status-resolved",
-        DumpsiteStatus.Rejected => "badge-status-rejected",
-        _ => "badge-status-new"
-    };
 }
 
 <section class="py-5">
@@ -56,11 +46,13 @@
 
             @if (Model.RecentReports.Count == 0)
             {
-                <div class="text-center py-5">
-                    <div class="feature-icon mx-auto mb-3"><i class="bi bi-clipboard-plus"></i></div>
-                    <h3 class="h6 fw-700 mb-1">No reports yet</h3>
-                    <p class="text-muted small mb-0">When you submit a report, it will show up here so you can track its progress.</p>
-                </div>
+                var emptyState = new EmptyStateViewModel
+                {
+                    Icon = "bi-clipboard-plus",
+                    Title = "No reports yet",
+                    Subtitle = "When you submit a report, it will show up here so you can track its progress."
+                };
+                <partial name="_EmptyState" model="emptyState" />
             }
             else
             {
@@ -73,11 +65,11 @@
                                 <div class="flex-grow-1">
                                     <p class="mb-1 fw-500">@report.Description</p>
                                     <span class="text-muted small">
-                                        @report.CreatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                                        @DateHelpers.FormatRelative(report.CreatedAt)
                                         &middot; @report.Latitude.ToString("F4"), @report.Longitude.ToString("F4")
                                     </span>
                                 </div>
-                                <span class="status-badge @StatusBadgeClass(report.Status)">@report.Status</span>
+                                <partial name="_StatusBadge" model="report.Status" />
                             </div>
                         </a>
                     }

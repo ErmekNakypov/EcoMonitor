@@ -152,7 +152,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} created user {UserEmail} with role {Role}",
             User.Identity?.Name, user.Email, model.Role);
 
-        TempData["Success"] = $"User {user.Email} created with role {model.Role}.";
+        TempData["SuccessMessage"] = $"User {user.Email} created with role {model.Role}.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -260,7 +260,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} updated user {UserEmail}; role={Role}, active={IsActive}",
             User.Identity?.Name, user.Email, model.Role, user.IsActive);
 
-        TempData["Success"] = $"User {user.Email} updated.";
+        TempData["SuccessMessage"] = $"User {user.Email} updated.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -314,7 +314,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} reset password for user {UserEmail}",
             User.Identity?.Name, user.Email);
 
-        TempData["Success"] = $"Password reset for {user.Email}.";
+        TempData["SuccessMessage"] = $"Password reset for {user.Email}.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -333,7 +333,7 @@ public class UsersController : Controller
 
         if (user.IsActive && isSelf)
         {
-            TempData["Error"] = "You cannot deactivate your own account.";
+            TempData["ErrorMessage"] = "You cannot deactivate your own account.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -342,7 +342,7 @@ public class UsersController : Controller
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
         {
-            TempData["Error"] = string.Join(' ', result.Errors.Select(e => e.Description));
+            TempData["ErrorMessage"] = string.Join(' ', result.Errors.Select(e => e.Description));
             return RedirectToAction(nameof(Index));
         }
 
@@ -350,7 +350,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} toggled active for user {UserEmail} to {IsActive}",
             User.Identity?.Name, user.Email, user.IsActive);
 
-        TempData["Success"] = user.IsActive
+        TempData["SuccessMessage"] = user.IsActive
             ? $"User {user.Email} activated."
             : $"User {user.Email} deactivated.";
 

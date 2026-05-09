@@ -1,6 +1,9 @@
+using System.Globalization;
 using EcoMonitor.Application;
 using EcoMonitor.Infrastructure;
 using EcoMonitor.Infrastructure.Persistence;
+using EcoMonitor.Web.Infrastructure;
+using Microsoft.AspNetCore.Localization;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -19,7 +22,27 @@ try
         .WriteTo.Console()
         .WriteTo.File("logs/ecomonitor-.log", rollingInterval: RollingInterval.Day));
 
-    builder.Services.AddControllersWithViews();
+    var supportedCultures = new[]
+    {
+        new CultureInfo("ru-RU"),
+        new CultureInfo("en-US"),
+        new CultureInfo("ky-KG")
+    };
+
+    builder.Services.Configure<RequestLocalizationOptions>(options =>
+    {
+        options.DefaultRequestCulture = new RequestCulture("ru-RU");
+        options.SupportedCultures = supportedCultures;
+        options.SupportedUICultures = supportedCultures;
+    });
+
+    builder.Services.AddControllersWithViews(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new InvariantDoubleModelBinderProvider());
+    })
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -34,6 +57,8 @@ try
     app.UseHttpsRedirection();
     app.UseSerilogRequestLogging();
     app.UseRouting();
+
+    app.UseRequestLocalization();
 
     app.UseAuthentication();
     app.UseAuthorization();

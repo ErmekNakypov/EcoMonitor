@@ -1,0 +1,162 @@
+@model ReportDetailsViewModel
+@{
+    var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
+    if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
+    ViewData["Title"] = headline;
+
+    string StatusBadgeClass(DumpsiteStatus status) => status switch
+    {
+        DumpsiteStatus.New => "badge-status-new",
+        DumpsiteStatus.InReview => "badge-status-review",
+        DumpsiteStatus.Confirmed => "badge-status-confirmed",
+        DumpsiteStatus.Resolved => "badge-status-resolved",
+        DumpsiteStatus.Rejected => "badge-status-rejected",
+        _ => "badge-status-new"
+    };
+
+    int statusIndex = Model.Status switch
+    {
+        DumpsiteStatus.New => 0,
+        DumpsiteStatus.InReview => 1,
+        DumpsiteStatus.Confirmed => 2,
+        DumpsiteStatus.Rejected => 2,
+        DumpsiteStatus.Resolved => 3,
+        _ => 0
+    };
+
+    string StepClass(int step)
+    {
+        if (Model.Status == DumpsiteStatus.Rejected && step == 2) return "active rejected";
+        if (step < statusIndex) return "done";
+        if (step == statusIndex) return "active";
+        return string.Empty;
+    }
+
+    string Step3Label = Model.Status == DumpsiteStatus.Rejected ? "Rejected" : "Confirmed";
+}
+
+<section class="py-5">
+    <div class="container">
+        <a asp-controller="Citizen" asp-action="Reports" class="d-inline-flex align-items-center text-muted mb-3">
+            <i class="bi bi-arrow-left me-2"></i><span>Back to my reports</span>
+        </a>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
+            <div>
+                <span class="status-badge @StatusBadgeClass(Model.Status) mb-2">@Model.Status</span>
+                <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
+                <p class="text-muted small mb-0">
+                    Reported @Model.CreatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                    &middot; updated @Model.UpdatedAt.ToLocalTime().ToString("d MMM yyyy, HH:mm")
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-card mb-4">
+            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <div class="status-stepper">
+                <div class="status-step @StepClass(0)">
+                    <span class="status-step-bullet">1</span>
+                    <div class="status-step-label">Submitted</div>
+                </div>
+                <div class="status-step @StepClass(1)">
+                    <span class="status-step-bullet">2</span>
+                    <div class="status-step-label">In review</div>
+                </div>
+                <div class="status-step @StepClass(2)">
+                    <span class="status-step-bullet">3</span>
+                    <div class="status-step-label">@Step3Label</div>
+                </div>
+                <div class="status-step @StepClass(3)">
+                    <span class="status-step-bullet">4</span>
+                    <div class="status-step-label">Resolved</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-7">
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-2">Description</h2>
+                    <p class="mb-0">@Model.Description</p>
+                </div>
+
+                @if (Model.PhotoPaths.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Photos (@Model.PhotoPaths.Count)</h2>
+                        <div class="photo-gallery">
+                            @for (int i = 0; i < Model.PhotoPaths.Count; i++)
+                            {
+                                var path = Model.PhotoPaths[i];
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
+                                    <img src="@path" alt="Report photo @(i + 1)" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Status == DumpsiteStatus.Resolved && Model.ResolvedAt.HasValue)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">Resolution</h2>
+                        @if (!string.IsNullOrWhiteSpace(Model.ResolutionNotes))
+                        {
+                            <p class="mb-2">@Model.ResolutionNotes</p>
+                        }
+                        <p class="text-muted small mb-0">Resolved on @Model.ResolvedAt.Value.ToLocalTime().ToString("d MMM yyyy")</p>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-5">
+                <div class="auth-card">
+                    <h2 class="h6 fw-700 mb-3">Location</h2>
+                    <div id="details-map"></div>
+                    <p class="text-muted small mb-0 mt-2">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="photo-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img id="photo-modal-img" src="" alt="Report photo" class="w-100 rounded" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        (function () {
+            const lat = @Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const lng = @Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            const map = L.map('details-map', {
+                zoomControl: true,
+                scrollWheelZoom: false
+            }).setView([lat, lng], 15);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map);
+
+            const modal = document.getElementById('photo-modal');
+            modal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                const src = trigger ? trigger.getAttribute('data-photo-src') : null;
+                if (src) {
+                    document.getElementById('photo-modal-img').setAttribute('src', src);
+                }
+            });
+        })();
+    </script>
+}

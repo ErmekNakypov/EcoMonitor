@@ -1,8 +1,10 @@
+using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Web.Models.Dashboard;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +17,16 @@ public class DashboardController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
 
-    public DashboardController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+    public DashboardController(
+        UserManager<ApplicationUser> userManager,
+        ApplicationDbContext dbContext,
+        IMediator mediator)
     {
         _userManager = userManager;
         _dbContext = dbContext;
+        _mediator = mediator;
     }
 
     public async Task<IActionResult> Index()
@@ -88,16 +95,13 @@ public class DashboardController : Controller
     {
         var user = (await _userManager.GetUserAsync(User))!;
 
-        var recent = await _dbContext.DumpsiteReports
-            .Where(r => r.ReporterId == user.Id)
-            .OrderByDescending(r => r.CreatedAt)
-            .Take(10)
-            .ToListAsync();
+        var recent = await _mediator.Send(new GetMyReportsQuery(user.Id, Page: 1, PageSize: 5));
 
         var model = new CitizenDashboardViewModel
         {
             FullName = user.FullName,
-            RecentReports = recent
+            RecentReports = recent.Items,
+            TotalReports = recent.TotalCount
         };
 
         return View(model);

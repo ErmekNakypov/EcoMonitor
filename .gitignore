@@ -49,5 +49,9 @@ packages/
 # Local Claude harness state
 .claude/settings.local.json
 
+# User uploads (keep dir, ignore content)
+src/EcoMonitor.Web/wwwroot/uploads/dumpsites/*
+!src/EcoMonitor.Web/wwwroot/uploads/dumpsites/.gitkeep
+
 # Local user secrets / overrides
 appsettings.*.local.json

@@ -561,6 +561,159 @@ a:hover {
   font-weight: 500;
 }
 
+/* Citizen reports — list cards */
+.report-card {
+  background-color: var(--brand-card-bg);
+  border: 1px solid var(--brand-border);
+  border-radius: 18px;
+  padding: 1.25rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.report-card:hover {
+  border-color: var(--brand-accent);
+  box-shadow: 0 12px 24px rgba(27, 67, 50, 0.08);
+  transform: translateY(-2px);
+}
+
+.report-thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.report-thumb-placeholder {
+  background-color: var(--brand-icon-bg);
+  color: var(--brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+/* Status stepper (citizen details) */
+.status-stepper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.status-step {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  padding-top: 0.25rem;
+}
+
+.status-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: calc(50% + 22px);
+  right: calc(-50% + 22px);
+  height: 2px;
+  background-color: var(--brand-border);
+  z-index: 0;
+}
+
+.status-step.done:not(:last-child)::after {
+  background-color: var(--brand-primary);
+}
+
+.status-step-bullet {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 2px solid var(--brand-border);
+  color: var(--brand-text-muted);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.status-step.done .status-step-bullet {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: #FFFFFF;
+}
+
+.status-step.active .status-step-bullet {
+  background-color: var(--brand-icon-bg);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary-hover);
+  box-shadow: 0 0 0 4px rgba(116, 198, 157, 0.25);
+}
+
+.status-step.active.rejected .status-step-bullet {
+  background-color: #FEE2E2;
+  border-color: #DC2626;
+  color: #991B1B;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.18);
+}
+
+.status-step-label {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--brand-text-muted);
+  font-weight: 500;
+}
+
+.status-step.done .status-step-label,
+.status-step.active .status-step-label {
+  color: var(--brand-text);
+}
+
+.status-step.active.rejected .status-step-label {
+  color: #991B1B;
+}
+
+/* Photo gallery */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.photo-gallery .photo-tile {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--brand-border);
+  transition: transform 0.15s ease;
+}
+
+.photo-gallery .photo-tile:hover {
+  transform: scale(1.02);
+  border-color: var(--brand-accent);
+}
+
+.photo-gallery .photo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Maps */
+#dumpsite-map {
+  height: 480px;
+  border-radius: 16px;
+  border: 1px solid var(--brand-border);
+}
+
+#details-map {
+  height: 320px;
+  border-radius: 14px;
+  border: 1px solid var(--brand-border);
+}
+
 /* Misc */
 .form-floating > .form-control-plaintext::placeholder,
 .form-floating > .form-control::placeholder {

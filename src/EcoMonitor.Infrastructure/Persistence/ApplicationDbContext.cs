@@ -1,3 +1,4 @@
+using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Domain.Common;
 using EcoMonitor.Domain.Entities;
 using EcoMonitor.Infrastructure.Identity;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcoMonitor.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {

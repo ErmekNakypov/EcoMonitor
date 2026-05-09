@@ -1,5 +1,7 @@
+using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Infrastructure.Persistence;
+using EcoMonitor.Infrastructure.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,10 @@ public static class DependencyInjection
             options
                 .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 .UseSnakeCaseNamingConvention());
+
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {

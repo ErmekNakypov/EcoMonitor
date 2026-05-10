@@ -29,8 +29,15 @@ public class DumpsiteReportConfiguration : IEntityTypeConfiguration<DumpsiteRepo
                 v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>())
             .Metadata.SetValueComparer(stringListComparer);
 
+        builder.Property(r => r.Source)
+            .HasDefaultValue(EcoMonitor.Domain.Enums.ReportSource.Web);
+
+        builder.Property(r => r.TelegramUserName)
+            .HasMaxLength(200);
+
         builder.HasIndex(r => r.Status);
         builder.HasIndex(r => r.ReporterId);
         builder.HasIndex(r => r.AssignedInspectorId);
+        builder.HasIndex(r => r.TelegramUserId);
     }
 }

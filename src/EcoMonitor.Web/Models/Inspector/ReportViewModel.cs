@@ -10,15 +10,18 @@ public class ReportViewModel
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public IReadOnlyList<string> PhotoPaths { get; set; } = Array.Empty<string>();
-    public Guid ReporterId { get; set; }
-    public string ReporterEmail { get; set; } = string.Empty;
-    public string ReporterFullName { get; set; } = string.Empty;
+    public Guid? ReporterId { get; set; }
+    public string? ReporterEmail { get; set; }
+    public string? ReporterFullName { get; set; }
     public Guid? AssignedInspectorId { get; set; }
     public string? AssignedInspectorEmail { get; set; }
     public string? ResolutionNotes { get; set; }
     public DateTime? ResolvedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public ReportSource Source { get; set; }
+    public string? TelegramUserName { get; set; }
 
     public bool IsAssignedToCurrentUser { get; set; }
     public bool CanTake => Status == DumpsiteStatus.New && AssignedInspectorId is null;

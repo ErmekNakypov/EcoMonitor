@@ -37,7 +37,8 @@ public class GetReportQueueHandler : IRequestHandler<GetReportQueueQuery, Report
                 r.Latitude,
                 r.Longitude,
                 r.PhotoPaths.FirstOrDefault(),
-                r.CreatedAt))
+                r.CreatedAt,
+                r.Source))
             .ToListAsync(cancellationToken);
 
         return new ReportQueueResult(rows, totalCount, page, pageSize, totalPages);

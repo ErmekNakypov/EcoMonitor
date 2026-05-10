@@ -43,12 +43,21 @@
                 <i class="bi bi-flag-fill"></i>
                 <span>Report details</span>
             </span>
-            <div class="mt-3 mb-2">
+            <div class="mt-3 mb-2 d-flex flex-wrap gap-2">
                 <partial name="_StatusBadge" model="Model.Status" />
+                <partial name="_SourceBadge" model="Model.Source" />
             </div>
             <h1 class="h3 fw-700 mb-1">@headline</h1>
             <p class="text-muted small mb-0">
-                Reported by <span class="fw-500">@Model.ReporterFullName</span> (@Model.ReporterEmail)
+                @if (Model.Source == ReportSource.Telegram)
+                {
+                    var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName;
+                    <text>Reported via Telegram by <span class="fw-500">@handle</span></text>
+                }
+                else
+                {
+                    <text>Reported by <span class="fw-500">@(Model.ReporterFullName ?? "(unknown)")</span> (@Model.ReporterEmail)</text>
+                }
                 on @DateHelpers.FormatShort(Model.CreatedAt),
                 last updated @DateHelpers.FormatRelative(Model.UpdatedAt)
             </p>
@@ -130,14 +139,39 @@
 
                 <div class="auth-card mb-3">
                     <h2 class="h6 fw-700 mb-3">Reporter</h2>
-                    <div class="d-flex align-items-start gap-3">
-                        <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--brand-primary);"></i>
-                        <div>
-                            <div class="fw-500">@Model.ReporterFullName</div>
-                            <div class="text-muted small mb-1">@Model.ReporterEmail</div>
-                            <div class="text-muted small">Registered @DateHelpers.FormatRelative(Model.ReporterRegisteredAt)</div>
+                    @if (Model.Source == ReportSource.Telegram)
+                    {
+                        <div class="d-flex align-items-start gap-3">
+                            <i class="bi bi-telegram" style="font-size: 2rem; color: #0088cc;"></i>
+                            <div>
+                                <div class="fw-500">
+                                    @if (string.IsNullOrWhiteSpace(Model.TelegramUserName))
+                                    {
+                                        <text>Telegram user</text>
+                                    }
+                                    else
+                                    {
+                                        <text>@@@Model.TelegramUserName</text>
+                                    }
+                                </div>
+                                <div class="text-muted small">Submitted via the Telegram bot</div>
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-start gap-3">
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--brand-primary);"></i>
+                            <div>
+                                <div class="fw-500">@(Model.ReporterFullName ?? "(unknown)")</div>
+                                <div class="text-muted small mb-1">@Model.ReporterEmail</div>
+                                @if (Model.ReporterRegisteredAt.HasValue)
+                                {
+                                    <div class="text-muted small">Registered @DateHelpers.FormatRelative(Model.ReporterRegisteredAt.Value)</div>
+                                }
+                            </div>
+                        </div>
+                    }
                 </div>
 
                 <div class="auth-card mb-3">

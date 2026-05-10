@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Common.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,20 +46,26 @@ public class GetAllReportsHandler : IRequestHandler<GetAllReportsQuery, AllRepor
                 FirstPhotoPath = r.PhotoPaths.FirstOrDefault(),
                 PhotoCount = r.PhotoPaths.Count,
                 r.CreatedAt,
-                r.UpdatedAt
+                r.UpdatedAt,
+                r.Source,
+                r.TelegramUserName
             })
             .ToListAsync(cancellationToken);
 
-        var userIds = rows.Select(r => r.ReporterId)
+        var userIds = rows
+            .Where(r => r.ReporterId.HasValue)
+            .Select(r => r.ReporterId!.Value)
             .Concat(rows.Where(r => r.AssignedInspectorId.HasValue).Select(r => r.AssignedInspectorId!.Value))
             .Distinct()
             .ToList();
 
-        var users = await _userLookup.GetByIdsAsync(userIds, cancellationToken);
+        IReadOnlyDictionary<Guid, UserSummaryDto> users = userIds.Count > 0
+            ? await _userLookup.GetByIdsAsync(userIds, cancellationToken)
+            : new Dictionary<Guid, UserSummaryDto>();
 
         var items = rows.Select(r =>
         {
-            var reporter = users.GetValueOrDefault(r.ReporterId);
+            var reporter = r.ReporterId.HasValue ? users.GetValueOrDefault(r.ReporterId.Value) : null;
             var inspector = r.AssignedInspectorId.HasValue
                 ? users.GetValueOrDefault(r.AssignedInspectorId.Value)
                 : null;
@@ -68,14 +75,16 @@ public class GetAllReportsHandler : IRequestHandler<GetAllReportsQuery, AllRepor
                 r.Description.Length > 100 ? r.Description.Substring(0, 100) + "…" : r.Description,
                 r.Status,
                 r.ReporterId,
-                reporter?.Email ?? "(unknown)",
-                reporter?.FullName ?? "(unknown)",
+                reporter?.Email,
+                reporter?.FullName,
                 r.AssignedInspectorId,
                 inspector?.Email,
                 r.FirstPhotoPath,
                 r.PhotoCount,
                 r.CreatedAt,
-                r.UpdatedAt);
+                r.UpdatedAt,
+                r.Source,
+                r.TelegramUserName);
         }).ToList();
 
         return new AllReportsResult(items, totalCount, page, pageSize, totalPages);

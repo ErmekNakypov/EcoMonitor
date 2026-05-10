@@ -1,0 +1,15 @@
+@model EcoMonitor.Domain.Enums.ReportSource
+@using EcoMonitor.Domain.Enums
+
+@{
+    var (cls, icon, label) = Model switch
+    {
+        ReportSource.Telegram => ("source-pill source-telegram", "bi-telegram", "via Telegram"),
+        _                     => ("source-pill source-web", "bi-globe2", "via web")
+    };
+}
+
+<span class="@cls">
+    <i class="bi @icon"></i>
+    @label
+</span>

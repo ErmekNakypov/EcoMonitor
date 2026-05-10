@@ -100,6 +100,8 @@ public class InspectorController : Controller
             ResolvedAt = dto.ResolvedAt,
             CreatedAt = dto.CreatedAt,
             UpdatedAt = dto.UpdatedAt,
+            Source = dto.Source,
+            TelegramUserName = dto.TelegramUserName,
             IsAssignedToCurrentUser = dto.AssignedInspectorId == currentId
         };
 

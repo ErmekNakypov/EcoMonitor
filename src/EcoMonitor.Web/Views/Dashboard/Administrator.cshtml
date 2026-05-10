@@ -17,6 +17,48 @@
             <div class="text-muted small mt-3 mt-sm-0">@DateTime.Now.ToString("dddd, d MMMM yyyy")</div>
         </div>
 
+        <section class="analytics-section mb-5">
+            <h2 class="section-title">
+                <i class="bi bi-bar-chart-line"></i>
+                <span>Analytics</span>
+            </h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Reports submitted</h3>
+                            <span class="chart-subtitle">Last 30 days</span>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="chart-reports-by-day"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Reports by status</h3>
+                            <span class="chart-subtitle">All time</span>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="chart-status-breakdown"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Average air quality (US AQI)</h3>
+                            <span class="chart-subtitle">Last 7 days</span>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="chart-aqi-by-day"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <vc:air-quality-summary />
 
         <div class="row g-4 mb-5">
@@ -80,6 +122,12 @@
                     </a>
                 </div>
                 <div class="col-md-3">
+                    <a asp-area="Admin" asp-controller="Telegram" asp-action="Index" class="quick-link">
+                        <i class="bi bi-telegram"></i>
+                        <span>Telegram bot</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
                     <a asp-area="Admin" asp-controller="Diagnostics" asp-action="Index" class="quick-link">
                         <i class="bi bi-tools"></i>
                         <span>Diagnostics</span>
@@ -89,3 +137,195 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        (function initAnalytics() {
+            if (typeof Chart === 'undefined') {
+                setTimeout(initAnalytics, 200);
+                return;
+            }
+
+            var BRAND_PRIMARY = '#2D6A4F';
+            var BRAND_ACCENT = '#74C69D';
+            var TEXT_MUTED = '#6C757D';
+
+            function formatDayLabel(isoDate) {
+                var d = new Date(isoDate + 'T00:00:00Z');
+                return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+            }
+
+            function showEmpty(canvasId, message) {
+                var canvas = document.getElementById(canvasId);
+                if (!canvas) return;
+                var parent = canvas.parentElement;
+                canvas.remove();
+                var empty = document.createElement('div');
+                empty.className = 'chart-empty';
+                empty.textContent = message;
+                parent.appendChild(empty);
+            }
+
+            fetch('/Admin/Analytics/Data', { credentials: 'same-origin' })
+                .then(function (r) {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.json();
+                })
+                .then(function (data) {
+                    renderReportsByDay(data.reportsByDay || []);
+                    renderStatusBreakdown(data.statusBreakdown || []);
+                    renderAqiByDay(data.aqiByDay || []);
+                })
+                .catch(function (err) {
+                    console.error('Analytics load failed', err);
+                    showEmpty('chart-reports-by-day', 'Failed to load analytics data.');
+                    showEmpty('chart-status-breakdown', 'Failed to load analytics data.');
+                    showEmpty('chart-aqi-by-day', 'Failed to load analytics data.');
+                });
+
+            function renderReportsByDay(rows) {
+                var canvas = document.getElementById('chart-reports-by-day');
+                if (!canvas) return;
+                var labels = rows.map(function (r) { return formatDayLabel(r.date); });
+                var values = rows.map(function (r) { return r.count; });
+
+                new Chart(canvas.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Reports',
+                            data: values,
+                            borderColor: BRAND_PRIMARY,
+                            backgroundColor: 'rgba(45, 106, 79, 0.12)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 2,
+                            pointHoverRadius: 5,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0, color: TEXT_MUTED },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: { color: TEXT_MUTED, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderStatusBreakdown(rows) {
+                var canvas = document.getElementById('chart-status-breakdown');
+                if (!canvas) return;
+
+                if (rows.length === 0) {
+                    showEmpty('chart-status-breakdown', 'No reports submitted yet.');
+                    return;
+                }
+
+                var labels = rows.map(function (r) { return r.statusName; });
+                var values = rows.map(function (r) { return r.count; });
+                var colors = rows.map(function (r) { return r.colorHex; });
+
+                new Chart(canvas.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: colors,
+                            borderColor: '#FFFFFF',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '62%',
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { color: TEXT_MUTED, boxWidth: 12, padding: 12 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderAqiByDay(rows) {
+                var canvas = document.getElementById('chart-aqi-by-day');
+                if (!canvas) return;
+
+                var hasAny = rows.some(function (r) { return r.avgAqiUs !== null && r.avgAqiUs !== undefined; });
+                if (!hasAny) {
+                    showEmpty('chart-aqi-by-day', 'No air quality readings in the last 7 days.');
+                    return;
+                }
+
+                var labels = rows.map(function (r) { return formatDayLabel(r.date); });
+                var aqi = rows.map(function (r) { return r.avgAqiUs; });
+                var stations = rows.map(function (r) { return r.stationCount; });
+
+                new Chart(canvas.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Avg US AQI',
+                            data: aqi,
+                            borderColor: BRAND_ACCENT,
+                            backgroundColor: 'rgba(116, 198, 157, 0.18)',
+                            tension: 0.3,
+                            fill: true,
+                            spanGaps: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    afterLabel: function (ctx) {
+                                        var s = stations[ctx.dataIndex];
+                                        return s + (s === 1 ? ' station reporting' : ' stations reporting');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: TEXT_MUTED },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: { color: TEXT_MUTED },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
+}

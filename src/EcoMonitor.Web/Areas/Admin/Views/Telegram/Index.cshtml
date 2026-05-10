@@ -1,0 +1,141 @@
+@model TelegramStatusViewModel
+@{
+    ViewData["Title"] = "Telegram bot";
+
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = "Telegram bot" });
+
+    var statusClass = (Model.IsConfigured, Model.IsConnected) switch
+    {
+        (false, _)    => "status-pill status-rejected",
+        (true, true)  => "status-pill status-resolved",
+        (true, false) => "status-pill status-rejected"
+    };
+
+    var statusIcon = Model.IsConnected ? "bi-check-circle-fill" : "bi-x-circle-fill";
+    var statusText = !Model.IsConfigured
+        ? "Not configured"
+        : Model.IsConnected ? "Connected" : "Disconnected";
+}
+
+<section class="py-5">
+    <div class="container">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end mb-4">
+            <div>
+                <span class="hero-badge mb-2">
+                    <i class="bi bi-telegram"></i>
+                    <span>Telegram bot</span>
+                </span>
+                <h1 class="h2 fw-700 mt-3 mb-1">Bot status</h1>
+                <p class="text-muted mb-0">Health and usage of the citizen reporting bot.</p>
+            </div>
+        </div>
+
+        <div class="auth-card mb-4">
+            <div class="d-flex flex-wrap align-items-center gap-3">
+                <span class="@statusClass"><i class="bi @statusIcon"></i>@statusText</span>
+                @if (!string.IsNullOrWhiteSpace(Model.BotUsername))
+                {
+                    <a href="https://t.me/@Model.BotUsername" target="_blank" rel="noopener" class="fw-500">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>@@@Model.BotUsername
+                    </a>
+                }
+                @if (Model.BotId.HasValue)
+                {
+                    <span class="text-muted small">ID: @Model.BotId</span>
+                }
+            </div>
+            @if (!Model.IsConfigured)
+            {
+                <p class="text-muted small mb-0 mt-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Set <code>Telegram:BotToken</code> in user-secrets (development) or environment variables (production) to enable the bot.
+                </p>
+            }
+            else if (!Model.IsConnected && !string.IsNullOrEmpty(Model.ConnectionError))
+            {
+                <p class="text-danger small mb-0 mt-3">
+                    <i class="bi bi-exclamation-triangle me-1"></i>@Model.ConnectionError
+                </p>
+            }
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Reports via Telegram</span>
+                        <i class="bi bi-flag-fill stat-icon"></i>
+                    </div>
+                    <div class="stat-value">@Model.TotalTelegramReports</div>
+                    <span class="text-muted small">Total submitted from the bot</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Unique reporters</span>
+                        <i class="bi bi-people stat-icon"></i>
+                    </div>
+                    <div class="stat-value">@Model.UniqueTelegramUsers</div>
+                    <span class="text-muted small">Distinct Telegram user IDs</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card p-0 overflow-hidden">
+            <div class="p-4 pb-0">
+                <h2 class="h6 fw-700 mb-1">Recent users</h2>
+                <p class="text-muted small mb-3">Last 10 conversations, most recent first.</p>
+            </div>
+            @if (Model.RecentUsers.Count == 0)
+            {
+                <div class="p-4 pt-0">
+                    <p class="text-muted mb-0">No bot conversations yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Telegram user</th>
+                                <th>ID</th>
+                                <th>Last interaction</th>
+                                <th class="text-end">Reports submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var u in Model.RecentUsers)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(u.UserName))
+                                        {
+                                            <span class="fw-500">@@@u.UserName</span>
+                                        }
+                                        else if (!string.IsNullOrWhiteSpace(u.FirstName))
+                                        {
+                                            <span class="fw-500">@u.FirstName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">(no handle)</span>
+                                        }
+                                    </td>
+                                    <td class="text-muted small">@u.TelegramUserId</td>
+                                    <td class="text-muted small">@DateHelpers.FormatRelative(u.LastInteractionAt)</td>
+                                    <td class="text-end">@u.TotalReports</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>

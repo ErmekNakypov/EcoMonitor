@@ -1,6 +1,8 @@
 @model CitizenDashboardViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     ViewData["Title"] = "My dashboard";
+    var botUsername = Configuration["Telegram:BotUsername"];
 }
 
 <section class="py-5">
@@ -36,6 +38,14 @@
                     </a>
                 </div>
             </div>
+            @if (!string.IsNullOrWhiteSpace(botUsername))
+            {
+                <p class="text-muted small mb-0 mt-3">
+                    <i class="bi bi-telegram me-1" style="color: #0088cc;"></i>
+                    You can also report on the go via Telegram:
+                    <a href="https://t.me/@botUsername" target="_blank" rel="noopener">@@@botUsername</a>
+                </p>
+            }
         </div>
 
         <div class="auth-card">

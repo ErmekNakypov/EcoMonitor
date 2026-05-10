@@ -1,3 +1,4 @@
+using EcoMonitor.Domain.Enums;
 using MediatR;
 
 namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportQueue;
@@ -17,4 +18,5 @@ public sealed record QueueItemDto(
     double Latitude,
     double Longitude,
     string? FirstPhotoPath,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    ReportSource Source);

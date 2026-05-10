@@ -67,8 +67,25 @@
                                     <td><partial name="_StatusBadge" model="r.Status" /></td>
                                     <td class="fw-500">@r.ShortDescription</td>
                                     <td>
-                                        <div>@r.ReporterFullName</div>
-                                        <div class="text-muted small">@r.ReporterEmail</div>
+                                        @if (r.Source == ReportSource.Telegram)
+                                        {
+                                            <div class="fw-500">
+                                                @if (string.IsNullOrWhiteSpace(r.TelegramUserName))
+                                                {
+                                                    <text>Telegram user</text>
+                                                }
+                                                else
+                                                {
+                                                    <text>@@@r.TelegramUserName</text>
+                                                }
+                                            </div>
+                                            <div><partial name="_SourceBadge" model="r.Source" /></div>
+                                        }
+                                        else
+                                        {
+                                            <div>@(r.ReporterFullName ?? "(unknown)")</div>
+                                            <div class="text-muted small">@r.ReporterEmail</div>
+                                        }
                                     </td>
                                     <td class="text-muted small">@(r.AssignedInspectorEmail ?? "—")</td>
                                     <td class="text-center text-muted small">

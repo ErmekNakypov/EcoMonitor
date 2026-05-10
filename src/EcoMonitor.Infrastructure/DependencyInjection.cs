@@ -4,6 +4,7 @@ using EcoMonitor.Infrastructure.Containers;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Infrastructure.Storage;
+using EcoMonitor.Infrastructure.Telegram;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -87,7 +88,11 @@ public static class DependencyInjection
         services.AddScoped<IAirQualityIngestionRunner, AirQualityIngestionRunner>();
         services.AddScoped<IContainerImportService, OsmContainerImporter>();
 
+        services.AddSingleton<BotLocalizer>();
+        services.AddScoped<ITelegramDialogService, TelegramDialogService>();
+
         services.AddHostedService<AirQualityIngestionService>();
+        services.AddHostedService<TelegramBotHostedService>();
 
         return services;
     }

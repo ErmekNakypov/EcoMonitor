@@ -12,12 +12,14 @@ public sealed record InspectorReportDto(
     double Latitude,
     double Longitude,
     IReadOnlyList<string> PhotoPaths,
-    Guid ReporterId,
-    string ReporterEmail,
-    string ReporterFullName,
+    Guid? ReporterId,
+    string? ReporterEmail,
+    string? ReporterFullName,
     Guid? AssignedInspectorId,
     string? AssignedInspectorEmail,
     string? ResolutionNotes,
     DateTime? ResolvedAt,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    ReportSource Source,
+    string? TelegramUserName);

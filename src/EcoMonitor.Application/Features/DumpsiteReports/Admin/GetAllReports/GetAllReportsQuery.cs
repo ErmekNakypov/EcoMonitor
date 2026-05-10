@@ -17,12 +17,14 @@ public sealed record AllReportsItemDto(
     Guid Id,
     string ShortDescription,
     DumpsiteStatus Status,
-    Guid ReporterId,
-    string ReporterEmail,
-    string ReporterFullName,
+    Guid? ReporterId,
+    string? ReporterEmail,
+    string? ReporterFullName,
     Guid? AssignedInspectorId,
     string? AssignedInspectorEmail,
     string? FirstPhotoPath,
     int PhotoCount,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    ReportSource Source,
+    string? TelegramUserName);

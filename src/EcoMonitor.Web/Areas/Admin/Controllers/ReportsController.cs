@@ -66,7 +66,9 @@ public class ReportsController : Controller
             ResolutionNotes = dto.ResolutionNotes,
             ResolvedAt = dto.ResolvedAt,
             CreatedAt = dto.CreatedAt,
-            UpdatedAt = dto.UpdatedAt
+            UpdatedAt = dto.UpdatedAt,
+            Source = dto.Source,
+            TelegramUserName = dto.TelegramUserName
         };
 
         return View(model);

@@ -10,10 +10,10 @@ public class AdminReportViewModel
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public IReadOnlyList<string> PhotoPaths { get; set; } = Array.Empty<string>();
-    public Guid ReporterId { get; set; }
-    public string ReporterEmail { get; set; } = string.Empty;
-    public string ReporterFullName { get; set; } = string.Empty;
-    public DateTime ReporterRegisteredAt { get; set; }
+    public Guid? ReporterId { get; set; }
+    public string? ReporterEmail { get; set; }
+    public string? ReporterFullName { get; set; }
+    public DateTime? ReporterRegisteredAt { get; set; }
     public Guid? AssignedInspectorId { get; set; }
     public string? AssignedInspectorEmail { get; set; }
     public string? AssignedInspectorFullName { get; set; }
@@ -21,4 +21,7 @@ public class AdminReportViewModel
     public DateTime? ResolvedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public ReportSource Source { get; set; }
+    public string? TelegramUserName { get; set; }
 }

@@ -65,6 +65,7 @@
                                 <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
                                     <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
                                     <span><i class="bi bi-clock me-1"></i>Reported @DateHelpers.FormatRelative(item.CreatedAt)</span>
+                                    <partial name="_SourceBadge" model="item.Source" />
                                 </div>
                             </div>
                             <div class="col-md-3 text-md-end">

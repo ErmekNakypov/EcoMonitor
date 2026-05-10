@@ -198,7 +198,7 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("photo_paths");
 
-                    b.Property<Guid>("ReporterId")
+                    b.Property<Guid?>("ReporterId")
                         .HasColumnType("uuid")
                         .HasColumnName("reporter_id");
 
@@ -211,9 +211,24 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("resolved_at");
 
+                    b.Property<int>("Source")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("source");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasColumnName("status");
+
+                    b.Property<long?>("TelegramUserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("telegram_user_id");
+
+                    b.Property<string>("TelegramUserName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("telegram_user_name");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -231,7 +246,83 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                     b.HasIndex("Status")
                         .HasDatabaseName("ix_dumpsite_reports_status");
 
+                    b.HasIndex("TelegramUserId")
+                        .HasDatabaseName("ix_dumpsite_reports_telegram_user_id");
+
                     b.ToTable("dumpsite_reports", (string)null);
+                });
+
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.TelegramUserSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("DraftDescription")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("draft_description");
+
+                    b.Property<double?>("DraftLatitude")
+                        .HasColumnType("double precision")
+                        .HasColumnName("draft_latitude");
+
+                    b.Property<double?>("DraftLongitude")
+                        .HasColumnType("double precision")
+                        .HasColumnName("draft_longitude");
+
+                    b.Property<string>("DraftPhotoFileIds")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("draft_photo_file_ids");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)")
+                        .HasDefaultValue("ru")
+                        .HasColumnName("language");
+
+                    b.Property<DateTime>("LastInteractionAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_interaction_at");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer")
+                        .HasColumnName("state");
+
+                    b.Property<long>("TelegramUserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("telegram_user_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("user_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_telegram_user_sessions");
+
+                    b.HasIndex("TelegramUserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_telegram_user_sessions_telegram_user_id");
+
+                    b.ToTable("telegram_user_sessions", (string)null);
                 });
 
             modelBuilder.Entity("EcoMonitor.Domain.Entities.WasteContainer", b =>

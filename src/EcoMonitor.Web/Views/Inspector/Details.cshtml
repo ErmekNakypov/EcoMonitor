@@ -41,12 +41,21 @@
         <partial name="_Breadcrumbs" model="breadcrumbs" />
 
         <div class="mb-4">
-            <div class="mb-2">
+            <div class="mb-2 d-flex flex-wrap gap-2">
                 <partial name="_StatusBadge" model="Model.Status" />
+                <partial name="_SourceBadge" model="Model.Source" />
             </div>
             <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
             <p class="text-muted small mb-0">
-                Reported by <span class="fw-500">@Model.ReporterFullName</span> (@Model.ReporterEmail)
+                @if (Model.Source == ReportSource.Telegram)
+                {
+                    var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName;
+                    <text>Reported via Telegram by <span class="fw-500">@handle</span></text>
+                }
+                else
+                {
+                    <text>Reported by <span class="fw-500">@(Model.ReporterFullName ?? "(unknown)")</span> (@Model.ReporterEmail)</text>
+                }
                 @DateHelpers.FormatRelative(Model.CreatedAt) (@DateHelpers.FormatShort(Model.CreatedAt))
                 &middot; @assignedLabel
             </p>

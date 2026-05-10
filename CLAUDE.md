@@ -14,6 +14,7 @@ Bachelor thesis project at KSTU named after I. Razzakov, Software Engineering pr
 - Leaflet via CDN for maps
 - Bootstrap 5 via CDN for UI
 - Localization via .resx resource files: ru-RU (default), en-US, ky-KG
+- Telegram.Bot for the citizen-facing reporting bot (long polling)
 
 ## Architecture
 Clean Architecture in a Modular Monolith.
@@ -36,8 +37,16 @@ Clean Architecture in a Modular Monolith.
 PostgreSQL connection string for development:
 Host=localhost;Port=5432;Database=ecomonitor;Username=ecomonitor_app;Password=devpassword123
 
+## Telegram bot
+Citizens can submit dumpsite reports through a Telegram bot in addition to the web UI.
+The bot runs as a hosted background service using long polling, no webhook required.
+- Bot token in `Telegram:BotToken` (user-secrets in development).
+- Bot public username in `Telegram:BotUsername` (appsettings, not a secret).
+- Telegram-submitted reports land in the same `dumpsite_reports` table; `Source = Telegram`,
+  `ReporterId` is null, and `TelegramUserId`/`TelegramUserName` identify the submitter.
+- Conversation state is persisted in `telegram_user_sessions` so the dialog survives restarts.
+
 ## Out of scope for MVP
-- Telegram bot (removed entirely from project scope, must not appear anywhere)
 - Email notifications (deferred to later phase)
 - Real sensor integration (later phase, hardware not yet procured)
 - Component and deployment diagrams (later thesis review)

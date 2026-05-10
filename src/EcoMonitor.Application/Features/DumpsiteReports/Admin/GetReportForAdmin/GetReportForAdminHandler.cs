@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Common.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,14 +27,15 @@ public class GetReportForAdminHandler : IRequestHandler<GetReportForAdminQuery, 
             return null;
         }
 
-        var ids = new List<Guid> { report.ReporterId };
-        if (report.AssignedInspectorId.HasValue)
-        {
-            ids.Add(report.AssignedInspectorId.Value);
-        }
+        var ids = new List<Guid>();
+        if (report.ReporterId.HasValue) ids.Add(report.ReporterId.Value);
+        if (report.AssignedInspectorId.HasValue) ids.Add(report.AssignedInspectorId.Value);
 
-        var users = await _userLookup.GetByIdsAsync(ids, cancellationToken);
-        var reporter = users.GetValueOrDefault(report.ReporterId);
+        IReadOnlyDictionary<Guid, UserSummaryDto> users = ids.Count > 0
+            ? await _userLookup.GetByIdsAsync(ids, cancellationToken)
+            : new Dictionary<Guid, UserSummaryDto>();
+
+        var reporter = report.ReporterId.HasValue ? users.GetValueOrDefault(report.ReporterId.Value) : null;
         var inspector = report.AssignedInspectorId.HasValue
             ? users.GetValueOrDefault(report.AssignedInspectorId.Value)
             : null;
@@ -46,15 +48,17 @@ public class GetReportForAdminHandler : IRequestHandler<GetReportForAdminQuery, 
             report.Longitude,
             report.PhotoPaths,
             report.ReporterId,
-            reporter?.Email ?? "(unknown)",
-            reporter?.FullName ?? "(unknown)",
-            reporter?.RegisteredAt ?? report.CreatedAt,
+            reporter?.Email,
+            reporter?.FullName,
+            reporter?.RegisteredAt,
             report.AssignedInspectorId,
             inspector?.Email,
             inspector?.FullName,
             report.ResolutionNotes,
             report.ResolvedAt,
             report.CreatedAt,
-            report.UpdatedAt);
+            report.UpdatedAt,
+            report.Source,
+            report.TelegramUserName);
     }
 }

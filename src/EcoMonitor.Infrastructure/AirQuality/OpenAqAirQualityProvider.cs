@@ -56,14 +56,14 @@ public sealed class OpenAqAirQualityProvider : IAirQualityProvider
             return Array.Empty<ProviderStationReading>();
         }
 
-        var nearest = locationsResp.Results
+        var candidates = locationsResp.Results
             .OrderBy(r => r.Distance ?? double.MaxValue)
-            .Take(10)
+            .Take(50)
             .ToList();
 
         var readings = new List<ProviderStationReading>();
 
-        foreach (var loc in nearest)
+        foreach (var loc in candidates)
         {
             try
             {
@@ -145,11 +145,14 @@ public sealed class OpenAqAirQualityProvider : IAirQualityProvider
             }
         }
 
-        _logger.LogInformation(
-            "OpenAQ fetched {Count} station readings out of {Total} nearby locations",
-            readings.Count, nearest.Count);
+        var freshnessCutoff = DateTime.UtcNow - TimeSpan.FromDays(7);
+        var freshReadings = readings.Where(r => r.MeasuredAt >= freshnessCutoff).ToList();
 
-        return readings;
+        _logger.LogInformation(
+            "OpenAQ: {Total} candidate locations, {Fetched} with data, {Fresh} fresh (within last 7 days)",
+            candidates.Count, readings.Count, freshReadings.Count);
+
+        return freshReadings;
     }
 
     private sealed class OpenAqLocationsResponse

@@ -8,6 +8,6 @@ public interface IAirQualityIngestionRunner
 public sealed record IngestionResult(
     string Provider,
     int StationsTouched,
-    int ReadingsInserted,
+    int ReadingsSaved,
     int DuplicatesSkipped,
     string? Error);

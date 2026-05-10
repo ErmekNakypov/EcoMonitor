@@ -1,4 +1,6 @@
+using EcoMonitor.Application.Features.AirQuality.Queries.GetStationsForMap;
 using EcoMonitor.Application.Features.WasteContainers.Queries.GetContainersForMap;
+using EcoMonitor.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,5 +24,42 @@ public class MapDataController : ControllerBase
     {
         var points = await _mediator.Send(new GetContainersForMapQuery());
         return Ok(points);
+    }
+
+    [HttpGet("air-quality")]
+    public async Task<IActionResult> AirQuality()
+    {
+        var data = await _mediator.Send(new GetStationsForMapQuery());
+
+        var result = data.Select(s =>
+        {
+            var freshness = FreshnessHelper.Classify(s.MeasuredAt);
+            var aqi = AqiHelper.ClassifyPm25(s.Pm25);
+            var color = freshness == ReadingFreshness.VeryStale
+                ? "#9CA3AF"
+                : AqiHelper.GetColorHex(aqi);
+
+            return new
+            {
+                id = s.Id,
+                name = s.Name,
+                providerName = s.ProviderName,
+                latitude = s.Latitude,
+                longitude = s.Longitude,
+                pm25 = s.Pm25,
+                pm10 = s.Pm10,
+                temperature = s.Temperature,
+                humidity = s.Humidity,
+                pressure = s.Pressure,
+                measuredAt = s.MeasuredAt,
+                measuredRelative = s.MeasuredAt.HasValue ? DateHelpers.FormatRelative(s.MeasuredAt.Value) : "no data",
+                aqiLabel = AqiHelper.GetLabel(aqi),
+                color,
+                isStale = freshness == ReadingFreshness.Stale || freshness == ReadingFreshness.VeryStale,
+                isVeryStale = freshness == ReadingFreshness.VeryStale
+            };
+        });
+
+        return Ok(result);
     }
 }

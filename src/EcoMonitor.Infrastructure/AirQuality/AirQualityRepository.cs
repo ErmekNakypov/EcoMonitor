@@ -69,15 +69,43 @@ public sealed class AirQualityRepository : IAirQualityRepository
         return existing;
     }
 
-    public async Task SaveReadingsAsync(IEnumerable<AirQualityReading> readings, CancellationToken ct = default)
+    public async Task<int> SaveReadingsAsync(IEnumerable<AirQualityReading> readings, CancellationToken ct = default)
     {
         var list = readings.ToList();
         if (list.Count == 0)
         {
-            return;
+            return 0;
         }
 
-        _dbContext.AirQualityReadings.AddRange(list);
+        var inserted = new List<AirQualityReading>(list.Count);
+        foreach (var byStation in list.GroupBy(r => r.StationId))
+        {
+            var stationId = byStation.Key;
+            var batch = byStation.ToList();
+            var timestamps = batch.Select(r => r.MeasuredAt).Distinct().ToList();
+
+            var existingTimestamps = await _dbContext.AirQualityReadings
+                .Where(r => r.StationId == stationId && timestamps.Contains(r.MeasuredAt))
+                .Select(r => r.MeasuredAt)
+                .ToListAsync(ct);
+
+            var existingSet = new HashSet<DateTime>(existingTimestamps);
+
+            foreach (var reading in batch)
+            {
+                if (existingSet.Contains(reading.MeasuredAt))
+                {
+                    continue;
+                }
+                inserted.Add(reading);
+                existingSet.Add(reading.MeasuredAt);
+            }
+        }
+
+        if (inserted.Count > 0)
+        {
+            _dbContext.AirQualityReadings.AddRange(inserted);
+        }
 
         var maxByStation = list
             .GroupBy(r => r.StationId)
@@ -99,7 +127,17 @@ public sealed class AirQualityRepository : IAirQualityRepository
 
         await _dbContext.SaveChangesAsync(ct);
 
-        _cache.Remove(LatestCacheKey);
+        if (inserted.Count > 0)
+        {
+            _cache.Remove(LatestCacheKey);
+        }
+
+        var skipped = list.Count - inserted.Count;
+        _logger.LogInformation(
+            "SaveReadings: inserted {Inserted}, skipped {Skipped} duplicates",
+            inserted.Count, skipped);
+
+        return inserted.Count;
     }
 
     public async Task<IReadOnlyList<StationWithLatestReadingDto>> GetAllStationsWithLatestReadingsAsync(CancellationToken ct = default)

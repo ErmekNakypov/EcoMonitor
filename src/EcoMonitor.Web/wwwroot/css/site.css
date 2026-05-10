@@ -863,6 +863,58 @@ tr.clickable-row:hover {
   color: #cbd5e1;
 }
 
+/* Air quality */
+#city-map {
+  height: 600px;
+  border-radius: 16px;
+  border: 1px solid var(--brand-border);
+}
+
+.aqi-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.aqi-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.aqi-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.aqi-pill .range {
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+.air-summary-card {
+  background-color: var(--brand-card-bg);
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+}
+
+.station-stale {
+  opacity: 0.6;
+}
+
 /* Empty-state partial */
 .empty-state .empty-icon {
   width: 96px;

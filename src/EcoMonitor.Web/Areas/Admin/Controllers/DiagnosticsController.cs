@@ -27,7 +27,7 @@ public class DiagnosticsController : Controller
         var result = await _runner.RunOnceAsync();
         if (result.Error is null)
         {
-            TempData["SuccessMessage"] = $"Ingestion ok: {result.ReadingsSaved} readings saved from {result.Provider}.";
+            TempData["SuccessMessage"] = $"Ingestion ok ({result.Provider}): {result.ReadingsInserted} new readings, {result.DuplicatesSkipped} duplicates skipped across {result.StationsTouched} stations.";
         }
         else
         {

@@ -27,7 +27,7 @@ public sealed class AirQualityIngestionRunner : IAirQualityIngestionRunner
             var readings = await _provider.FetchCurrentReadingsAsync(ct);
             if (readings.Count == 0)
             {
-                return new IngestionResult(_provider.Name, 0, 0, "Provider returned no data");
+                return new IngestionResult(_provider.Name, 0, 0, 0, "Provider returned no data");
             }
 
             var dbReadings = new List<AirQualityReading>(readings.Count);
@@ -52,15 +52,19 @@ public sealed class AirQualityIngestionRunner : IAirQualityIngestionRunner
                 });
             }
 
-            await _repository.SaveReadingsAsync(dbReadings, ct);
+            var inserted = await _repository.SaveReadingsAsync(dbReadings, ct);
+            var skipped = dbReadings.Count - inserted;
 
-            _logger.LogInformation("Ingestion completed: {Count} readings from {Provider}", dbReadings.Count, _provider.Name);
-            return new IngestionResult(_provider.Name, readings.Count, dbReadings.Count, null);
+            _logger.LogInformation(
+                "Ingestion completed: {Inserted} new readings, {Skipped} duplicates skipped from {Provider}",
+                inserted, skipped, _provider.Name);
+
+            return new IngestionResult(_provider.Name, readings.Count, inserted, skipped, null);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ingestion failed");
-            return new IngestionResult(_provider.Name, 0, 0, ex.Message);
+            return new IngestionResult(_provider.Name, 0, 0, 0, ex.Message);
         }
     }
 }

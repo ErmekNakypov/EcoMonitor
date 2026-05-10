@@ -1,0 +1,226 @@
+@model EmailDiagnosticsViewModel
+@{
+    ViewData["Title"] = "Email diagnostics";
+
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = "Email diagnostics" });
+
+    string StatusPill(EmailStatus s) => s switch
+    {
+        EmailStatus.Sent    => "status-pill status-resolved",
+        EmailStatus.Pending => "status-pill status-new",
+        EmailStatus.Failed  => "status-pill status-rejected",
+        EmailStatus.Skipped => "status-pill status-rejected",
+        _ => "status-pill"
+    };
+
+    var configClass = Model.IsConfigured ? "status-pill status-resolved" : "status-pill status-rejected";
+    var configIcon  = Model.IsConfigured ? "bi-check-circle-fill" : "bi-x-circle-fill";
+    var configText  = Model.IsConfigured ? "SMTP configured" : "SMTP not configured";
+}
+
+<section class="py-5">
+    <div class="container">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end mb-4">
+            <div>
+                <span class="hero-badge mb-2">
+                    <i class="bi bi-envelope-paper"></i>
+                    <span>Email diagnostics</span>
+                </span>
+                <h1 class="h2 fw-700 mt-3 mb-1">Outbound email</h1>
+                <p class="text-muted mb-0">Configuration, queue activity, and recent messages.</p>
+            </div>
+        </div>
+
+        <div class="auth-card mb-4">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                <span class="@configClass"><i class="bi @configIcon"></i>@configText</span>
+            </div>
+            <dl class="row mb-0 small">
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">Host</dt>
+                <dd class="col-sm-9 col-md-10 mb-1">@(string.IsNullOrEmpty(Model.Host) ? "(not set)" : Model.Host):@Model.Port @(Model.UseSsl ? "(SSL)" : "")</dd>
+
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">Username</dt>
+                <dd class="col-sm-9 col-md-10 mb-1">@(string.IsNullOrEmpty(Model.Username) ? "(not set)" : Model.Username)</dd>
+
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">Password</dt>
+                <dd class="col-sm-9 col-md-10 mb-1">@Model.MaskedPassword</dd>
+
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">From</dt>
+                <dd class="col-sm-9 col-md-10 mb-1">@Model.FromName &lt;@Model.FromAddress&gt;</dd>
+
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">Retries</dt>
+                <dd class="col-sm-9 col-md-10 mb-0">@Model.MaxRetryAttempts attempts, @Model.RetryDelayMinutes-minute base delay (linear backoff)</dd>
+            </dl>
+            @if (!Model.IsConfigured)
+            {
+                <p class="text-muted small mb-0 mt-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Set <code>Email:Host</code>, <code>Email:Username</code>, and <code>Email:Password</code> in user-secrets (development) or environment variables (production).
+                </p>
+            }
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Pending (7d)</span>
+                        <i class="bi bi-hourglass-split stat-icon"></i>
+                    </div>
+                    <div class="stat-value">@Model.PendingCount7d</div>
+                    <span class="text-muted small">Waiting to send</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Sent (7d)</span>
+                        <i class="bi bi-check2-circle stat-icon"></i>
+                    </div>
+                    <div class="stat-value">@Model.SentCount7d</div>
+                    <span class="text-muted small">Successfully delivered</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Failed (7d)</span>
+                        <i class="bi bi-x-circle stat-icon"></i>
+                    </div>
+                    <div class="stat-value">@Model.FailedCount7d</div>
+                    <span class="text-muted small">Max retries exceeded</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Failed (all time)</span>
+                        <i class="bi bi-archive stat-icon"></i>
+                    </div>
+                    <div class="stat-value">@Model.FailedTotal</div>
+                    <span class="text-muted small">Across the whole table</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card mb-4">
+            <h2 class="h6 fw-700 mb-3">Actions</h2>
+            <form asp-area="Admin" asp-controller="Email" asp-action="SendTest" method="post" class="row g-2 align-items-end mb-3">
+                <div class="col-sm-6">
+                    <label class="form-label fw-500" for="toAddress">Send test email</label>
+                    <input id="toAddress" name="toAddress" type="email" class="form-control" placeholder="recipient@example.com" required />
+                </div>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-send me-2"></i>Queue test
+                    </button>
+                </div>
+            </form>
+
+            @if (Model.FailedTotal > 0)
+            {
+                <button type="button" class="btn btn-outline-secondary"
+                        data-bs-toggle="modal" data-bs-target="#confirmRetryModal">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Retry failed messages
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-outline-secondary" disabled>
+                    <i class="bi bi-arrow-clockwise me-2"></i>No failed messages to retry
+                </button>
+            }
+        </div>
+
+        <div class="auth-card p-0 overflow-hidden">
+            <div class="p-4 pb-0">
+                <h2 class="h6 fw-700 mb-1">Recent messages</h2>
+                <p class="text-muted small mb-3">Last 50 entries, newest first.</p>
+            </div>
+            @if (Model.Recent.Count == 0)
+            {
+                <div class="p-4 pt-0">
+                    <p class="text-muted mb-0">No emails recorded yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Subject</th>
+                                <th>To</th>
+                                <th>Template</th>
+                                <th class="text-center">Attempts</th>
+                                <th>Created</th>
+                                <th>Sent / Next retry</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model.Recent)
+                            {
+                                <tr>
+                                    <td><span class="@StatusPill(m.Status)">@m.Status</span></td>
+                                    <td class="fw-500">@m.Subject</td>
+                                    <td class="text-muted small">@m.ToAddress</td>
+                                    <td class="text-muted small">@m.TemplateName</td>
+                                    <td class="text-center">@m.AttemptCount</td>
+                                    <td class="text-muted small">@DateHelpers.FormatRelative(m.CreatedAt)</td>
+                                    <td class="text-muted small">
+                                        @if (m.SentAt.HasValue)
+                                        {
+                                            <text>Sent @DateHelpers.FormatRelative(m.SentAt.Value)</text>
+                                        }
+                                        else if (m.NextAttemptAt.HasValue)
+                                        {
+                                            <text>Retry @DateHelpers.FormatRelative(m.NextAttemptAt.Value)</text>
+                                        }
+                                        else
+                                        {
+                                            <span>—</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(m.LastError))
+                                        {
+                                            <div class="text-danger small mt-1" title="@m.LastError">
+                                                <i class="bi bi-exclamation-triangle me-1"></i>@(m.LastError.Length > 60 ? m.LastError[..60] + "…" : m.LastError)
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="confirmRetryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-area="Admin" asp-controller="Email" asp-action="RetryFailed" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h2 class="h5 fw-700 modal-title mb-0">Retry failed messages</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Re-queue all <strong>@Model.FailedTotal</strong> failed message(s)? Their attempt counters will be reset.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Retry all
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

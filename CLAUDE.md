@@ -46,8 +46,18 @@ The bot runs as a hosted background service using long polling, no webhook requi
   `ReporterId` is null, and `TelegramUserId`/`TelegramUserName` identify the submitter.
 - Conversation state is persisted in `telegram_user_sessions` so the dialog survives restarts.
 
+## Email notifications
+Web-submitted reports trigger transactional emails to the citizen reporter on
+status changes (created, confirmed, rejected, resolved).
+- Bodies are Razor templates under `Views/EmailTemplates/` rendered to HTML.
+- Outbound mail is queued in the `email_messages` table; an `EmailSenderHostedService`
+  background worker drains the queue with linear-backoff retry.
+- SMTP is delivered via `System.Net.Mail.SmtpClient` (suppressed `SYSLIB0014`); credentials
+  in `Email:*` configuration (user-secrets/env vars in non-dev).
+- Telegram-submitted reports skip email (no address). Web reports without a reporter
+  email are also skipped.
+
 ## Out of scope for MVP
-- Email notifications (deferred to later phase)
 - Real sensor integration (later phase, hardware not yet procured)
 - Component and deployment diagrams (later thesis review)
 

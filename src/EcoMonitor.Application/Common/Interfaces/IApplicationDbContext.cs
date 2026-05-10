@@ -10,6 +10,7 @@ public interface IApplicationDbContext
     DbSet<AirQualityReading> AirQualityReadings { get; }
     DbSet<AirQualityStation> AirQualityStations { get; }
     DbSet<TelegramUserSession> TelegramUserSessions { get; }
+    DbSet<EmailMessage> EmailMessages { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

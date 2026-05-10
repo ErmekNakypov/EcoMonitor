@@ -1,0 +1,32 @@
+@model ReportResolvedEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Dumpsite resolved";
+    var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+    var notesText = string.IsNullOrWhiteSpace(Model.Notes) ? "(no additional notes)" : Model.Notes;
+}
+<h2 style="margin:0 0 16px 0;color:#065F46;font-size:20px;">Great news — the dumpsite has been resolved!</h2>
+<p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.ReporterName,</p>
+<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
+    Inspector <strong>@Model.InspectorName</strong> has marked the dumpsite as cleaned up. Thank you for taking the time to report it — you've made Bishkek a little cleaner.
+</p>
+<div style="background:#D1FAE5;border-left:4px solid #10B981;padding:12px 16px;margin:16px 0;font-size:14px;color:#064E3B;line-height:1.6;">
+    <strong style="display:block;margin-bottom:4px;">Inspector notes</strong>
+    @notesText
+</div>
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#F9FAFB;border-radius:8px;padding:16px;margin:16px 0;">
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Reference ID</td>
+        <td style="padding:8px 0;font-size:14px;font-weight:700;text-align:right;">@refId</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Resolved</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">@Model.ResolvedAt.ToString("MMM d, yyyy HH:mm")</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Status</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">
+            <span style="background:#D1FAE5;color:#065F46;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;">Resolved</span>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,34 @@
+@model ReportRejectedEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Report could not be confirmed";
+    var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+    var reasonText = string.IsNullOrWhiteSpace(Model.Reason) ? "(no reason provided)" : Model.Reason;
+}
+<h2 style="margin:0 0 16px 0;color:#1F2937;font-size:20px;">Your report could not be confirmed</h2>
+<p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.ReporterName,</p>
+<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
+    After reviewing your report, inspector <strong>@Model.InspectorName</strong> was not able to confirm it. The reason given was:
+</p>
+<div style="background:#F9FAFB;border-left:4px solid #9CA3AF;padding:12px 16px;margin:16px 0;font-size:14px;color:#374151;line-height:1.6;">
+    @reasonText
+</div>
+<p style="margin:16px 0 16px 0;font-size:15px;line-height:1.6;">
+    If you believe this is a mistake, you are welcome to submit a new report with additional details — clearer photos, a more precise location, or extra context can all help.
+</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#F9FAFB;border-radius:8px;padding:16px;margin:16px 0;">
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Reference ID</td>
+        <td style="padding:8px 0;font-size:14px;font-weight:700;text-align:right;">@refId</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Reviewed</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">@Model.RejectedAt.ToString("MMM d, yyyy HH:mm")</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Status</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">
+            <span style="background:#E5E7EB;color:#374151;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;">Rejected</span>
+        </td>
+    </tr>
+</table>

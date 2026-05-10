@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Features.Notifications;
 using EcoMonitor.Domain.Entities;
 using EcoMonitor.Domain.Enums;
 using MediatR;
@@ -10,15 +11,18 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IFileStorageService _fileStorage;
+    private readonly IReportNotificationService _notifications;
     private readonly ILogger<SubmitDumpsiteReportHandler> _logger;
 
     public SubmitDumpsiteReportHandler(
         IApplicationDbContext dbContext,
         IFileStorageService fileStorage,
+        IReportNotificationService notifications,
         ILogger<SubmitDumpsiteReportHandler> logger)
     {
         _dbContext = dbContext;
         _fileStorage = fileStorage;
+        _notifications = notifications;
         _logger = logger;
     }
 
@@ -47,6 +51,15 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         _logger.LogInformation(
             "Dumpsite report {ReportId} submitted by {ReporterId} with {PhotoCount} photo(s)",
             report.Id, request.ReporterId, savedPaths.Count);
+
+        try
+        {
+            await _notifications.NotifyReportCreatedAsync(report.Id, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to enqueue creation email for report {ReportId}", report.Id);
+        }
 
         return report.Id;
     }

@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<AirQualityReading> AirQualityReadings => Set<AirQualityReading>();
     public DbSet<AirQualityStation> AirQualityStations => Set<AirQualityStation>();
     public DbSet<TelegramUserSession> TelegramUserSessions => Set<TelegramUserSession>();
+    public DbSet<EmailMessage> EmailMessages => Set<EmailMessage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

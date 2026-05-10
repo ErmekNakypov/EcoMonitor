@@ -1,6 +1,9 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.Notifications;
 using EcoMonitor.Infrastructure.AirQuality;
 using EcoMonitor.Infrastructure.Containers;
+using EcoMonitor.Infrastructure.Email;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Infrastructure.Storage;
@@ -91,8 +94,15 @@ public static class DependencyInjection
         services.AddSingleton<BotLocalizer>();
         services.AddScoped<ITelegramDialogService, TelegramDialogService>();
 
+        services.Configure<EmailOptions>(configuration.GetSection("Email"));
+        services.AddScoped<IEmailSender, SmtpEmailSender>();
+        services.AddScoped<IEmailQueue, DbEmailQueue>();
+        services.AddScoped<IRazorViewRenderer, RazorViewRenderer>();
+        services.AddScoped<IReportNotificationService, EmailReportNotificationService>();
+
         services.AddHostedService<AirQualityIngestionService>();
         services.AddHostedService<TelegramBotHostedService>();
+        services.AddHostedService<EmailSenderHostedService>();
 
         return services;
     }

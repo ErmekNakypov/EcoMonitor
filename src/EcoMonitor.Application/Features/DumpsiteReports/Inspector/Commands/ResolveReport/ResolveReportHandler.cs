@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Exceptions;
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Features.Notifications;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,16 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.Res
 public class ResolveReportHandler : IRequestHandler<ResolveReportCommand, Unit>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IReportNotificationService _notifications;
     private readonly ILogger<ResolveReportHandler> _logger;
 
-    public ResolveReportHandler(IApplicationDbContext dbContext, ILogger<ResolveReportHandler> logger)
+    public ResolveReportHandler(
+        IApplicationDbContext dbContext,
+        IReportNotificationService notifications,
+        ILogger<ResolveReportHandler> logger)
     {
         _dbContext = dbContext;
+        _notifications = notifications;
         _logger = logger;
     }
 
@@ -45,6 +51,16 @@ public class ResolveReportHandler : IRequestHandler<ResolveReportCommand, Unit>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Inspector {InspectorId} resolved report {ReportId}", request.InspectorId, report.Id);
+
+        try
+        {
+            await _notifications.NotifyReportResolvedAsync(report.Id, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to enqueue resolution email for report {ReportId}", report.Id);
+        }
+
         return Unit.Value;
     }
 }

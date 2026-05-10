@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Exceptions;
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Features.Notifications;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,16 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.Rej
 public class RejectReportHandler : IRequestHandler<RejectReportCommand, Unit>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IReportNotificationService _notifications;
     private readonly ILogger<RejectReportHandler> _logger;
 
-    public RejectReportHandler(IApplicationDbContext dbContext, ILogger<RejectReportHandler> logger)
+    public RejectReportHandler(
+        IApplicationDbContext dbContext,
+        IReportNotificationService notifications,
+        ILogger<RejectReportHandler> logger)
     {
         _dbContext = dbContext;
+        _notifications = notifications;
         _logger = logger;
     }
 
@@ -45,6 +51,16 @@ public class RejectReportHandler : IRequestHandler<RejectReportCommand, Unit>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Inspector {InspectorId} rejected report {ReportId}", request.InspectorId, report.Id);
+
+        try
+        {
+            await _notifications.NotifyReportRejectedAsync(report.Id, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to enqueue rejection email for report {ReportId}", report.Id);
+        }
+
         return Unit.Value;
     }
 }

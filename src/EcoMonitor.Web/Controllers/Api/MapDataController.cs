@@ -1,5 +1,8 @@
 using EcoMonitor.Application.Features.AirQuality.Queries.GetStationsForMap;
+using EcoMonitor.Application.Features.DumpsiteReports.Public;
 using EcoMonitor.Application.Features.WasteContainers.Queries.GetContainersForMap;
+using EcoMonitor.Domain.Common;
+using EcoMonitor.Domain.Enums;
 using EcoMonitor.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -61,6 +64,34 @@ public class MapDataController : ControllerBase
                 isStale = freshness == ReadingFreshness.Stale || freshness == ReadingFreshness.VeryStale,
                 isVeryStale = freshness == ReadingFreshness.VeryStale
             };
+        });
+
+        return Ok(result);
+    }
+
+    [HttpGet("dumpsites")]
+    public async Task<IActionResult> Dumpsites()
+    {
+        var data = await _mediator.Send(new GetPublicDumpsitesQuery());
+
+        var result = data.Select(d => new
+        {
+            id = d.Id,
+            shortDescription = d.ShortDescription,
+            status = d.Status.ToString(),
+            statusLabel = d.Status.GetDisplayName(),
+            latitude = d.Latitude,
+            longitude = d.Longitude,
+            createdAt = d.CreatedAt,
+            createdRelative = DateHelpers.FormatRelative(d.CreatedAt),
+            resolvedAt = d.ResolvedAt,
+            photoCount = d.PhotoCount,
+            color = d.Status switch
+            {
+                DumpsiteStatus.Confirmed => "#EF4444",
+                DumpsiteStatus.Resolved => "#10B981",
+                _ => "#9CA3AF"
+            }
         });
 
         return Ok(result);

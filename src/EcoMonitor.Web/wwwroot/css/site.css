@@ -863,11 +863,119 @@ tr.clickable-row:hover {
   color: #cbd5e1;
 }
 
-/* Air quality */
+/* Air quality / unified city map */
 #city-map {
-  height: 600px;
+  height: 700px;
   border-radius: 16px;
   border: 1px solid var(--brand-border);
+}
+
+.map-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--brand-primary);
+  background: transparent;
+  color: var(--brand-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.filter-pill:hover {
+  background: rgba(45, 106, 79, 0.05);
+}
+
+.filter-pill.active {
+  background: var(--brand-primary);
+  color: #FFFFFF;
+}
+
+.filter-pill.active:hover {
+  background: var(--brand-primary-hover);
+}
+
+.filter-count {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.filter-pill:not(.active) .filter-count {
+  background: rgba(45, 106, 79, 0.1);
+}
+
+.dumpsite-marker {
+  background: transparent;
+  border: none;
+}
+
+.dumpsite-pin {
+  width: 28px;
+  height: 28px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border: 2px solid #FFFFFF;
+}
+
+.dumpsite-pin i {
+  transform: rotate(45deg);
+  color: #FFFFFF;
+  font-size: 12px;
+}
+
+.map-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid var(--brand-border);
+}
+
+.legend-title {
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: var(--brand-text);
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.map-stat-card {
+  background: #FFFFFF;
+  border: 1px solid var(--brand-border);
+  border-left-width: 4px;
+  border-left-style: solid;
+  border-left-color: var(--brand-primary);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  height: 100%;
+}
+
+.map-stat-card[data-accent] {
+  border-left-color: var(--accent, var(--brand-primary));
 }
 
 .aqi-dot {

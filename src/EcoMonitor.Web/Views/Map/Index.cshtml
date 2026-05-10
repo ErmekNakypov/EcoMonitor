@@ -1,15 +1,9 @@
 @{
     ViewData["Title"] = "City map";
 
-    var legend = new (AqiLevel Level, string Range)[]
-    {
-        (AqiLevel.Good, "0–12"),
-        (AqiLevel.Moderate, "12–35"),
-        (AqiLevel.UnhealthyForSensitive, "35–55"),
-        (AqiLevel.Unhealthy, "55–150"),
-        (AqiLevel.VeryUnhealthy, "150–250"),
-        (AqiLevel.Hazardous, "250+")
-    };
+    var isCitizen = User.IsInRole(RoleNames.Citizen);
+    var isInspector = User.IsInRole(RoleNames.Inspector);
+    var isAdmin = User.IsInRole(RoleNames.Administrator);
 }
 
 <section class="py-5">
@@ -17,91 +11,168 @@
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-geo-alt-fill"></i>
-                <span>Air quality</span>
+                <span>City overview</span>
             </span>
-            <h1 class="h2 fw-700 mt-3 mb-1">Bishkek air quality</h1>
-            <p class="text-muted mb-1">Real-time air quality monitoring across the city</p>
-            <p class="text-muted small mb-0">Data from Clarity sensor network via OpenAQ. Updates automatically every minute.</p>
+            <h1 class="h2 fw-700 mt-3 mb-1">Bishkek environmental map</h1>
+            <p class="text-muted mb-1">Air quality, waste containers, and active dumpsite reports — all in one view.</p>
+            <p class="text-muted small mb-0">
+                Data sources: <a href="https://openaq.org" target="_blank" rel="noopener">OpenAQ</a>,
+                <a href="https://www.iqair.com" target="_blank" rel="noopener">IQAir AirVisual</a>.
+            </p>
         </div>
 
-        <div class="aqi-legend mb-4">
-            @foreach (var item in legend)
-            {
-                var color = AqiHelper.GetColorHex(item.Level);
-                var darkText = item.Level == AqiLevel.Moderate;
-                <span class="aqi-pill" style="background:@color; color:@(darkText ? "#78350F" : "#fff")">
-                    <span>@AqiHelper.GetLabel(item.Level)</span>
-                    <span class="range">@item.Range</span>
-                </span>
-            }
+        <div class="map-filters mb-3">
+            <button id="toggle-air" type="button" class="filter-pill active">
+                <i class="bi bi-wind"></i>
+                <span>Air quality</span>
+                <span class="filter-count" id="air-count">0</span>
+            </button>
+            <button id="toggle-containers" type="button" class="filter-pill active">
+                <i class="bi bi-trash3"></i>
+                <span>Containers</span>
+                <span class="filter-count" id="container-count">0</span>
+            </button>
+            <button id="toggle-dumpsites" type="button" class="filter-pill active">
+                <i class="bi bi-flag-fill"></i>
+                <span>Reports</span>
+                <span class="filter-count" id="dumpsite-count">0</span>
+            </button>
+            <button id="refresh-static" type="button" class="filter-pill ms-auto" title="Reload containers and reports">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span>Refresh</span>
+            </button>
         </div>
 
         <div id="city-map"></div>
 
-        <div class="row g-4 mt-1">
-            <div class="col-md-6">
-                <div class="auth-card">
-                    <h2 class="h6 fw-700 mb-3">Stations</h2>
-                    <div class="table-responsive">
-                        <table id="stations-table" class="table align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Station</th>
-                                    <th>AQI</th>
-                                    <th>PM2.5</th>
-                                    <th>Updated</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td colspan="4" class="text-muted small">Loading…</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+        <div class="map-legend-grid mt-3">
+            <div class="legend-section">
+                <div class="legend-title">Air quality (AQI US)</div>
+                <div class="legend-items">
+                    <span class="aqi-pill" style="background:#10B981">Good 0–50</span>
+                    <span class="aqi-pill" style="background:#FCD34D;color:#78350F">Moderate 51–100</span>
+                    <span class="aqi-pill" style="background:#FB923C">USG 101–150</span>
+                    <span class="aqi-pill" style="background:#EF4444">Unhealthy 151–200</span>
+                    <span class="aqi-pill" style="background:#A855F7">Very unhealthy 201–300</span>
+                    <span class="aqi-pill" style="background:#7F1D1D">Hazardous 300+</span>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="auth-card">
-                    <h2 class="h6 fw-700 mb-3">Right now</h2>
-                    <div class="d-flex align-items-baseline gap-2 mb-1">
-                        <span id="avgAqi" class="display-5 fw-800">—</span>
-                        <span class="text-muted small">AQI US (average)</span>
-                    </div>
-                    <p class="text-muted small mb-3">
-                        <span id="activeStations">—</span> stations active in the last 24 hours
-                    </p>
-                    <div class="d-flex flex-column gap-2 small">
-                        <div>
-                            <span class="text-muted">Worst:</span>
-                            <a id="worstStation" href="#" class="ms-1">—</a>
-                        </div>
-                        <div>
-                            <span class="text-muted">Best:</span>
-                            <a id="bestStation" href="#" class="ms-1">—</a>
-                        </div>
-                    </div>
+            <div class="legend-section">
+                <div class="legend-title">Container types</div>
+                <div class="legend-items">
+                    <span class="aqi-pill" style="background:#6B7280">General</span>
+                    <span class="aqi-pill" style="background:#3B82F6">Plastic</span>
+                    <span class="aqi-pill" style="background:#14B8A6">Glass</span>
+                    <span class="aqi-pill" style="background:#D97706">Paper</span>
+                    <span class="aqi-pill" style="background:#16A34A">Organic</span>
+                </div>
+            </div>
+            <div class="legend-section">
+                <div class="legend-title">Dumpsite status</div>
+                <div class="legend-items">
+                    <span class="aqi-pill" style="background:#EF4444">Confirmed (active)</span>
+                    <span class="aqi-pill" style="background:#10B981">Resolved</span>
                 </div>
             </div>
         </div>
 
-        <p class="text-muted small mt-4 mb-0">
-            Data sources: <a href="https://openaq.org" target="_blank" rel="noopener">OpenAQ</a>,
-            <a href="https://www.iqair.com" target="_blank" rel="noopener">IQAir AirVisual</a>.
-            Licensed under their respective terms.
-        </p>
+        <div class="row g-3 mt-3">
+            <div class="col-md-4">
+                <div class="map-stat-card" style="border-left-color:#2D6A4F">
+                    <div class="text-muted text-uppercase small fw-600">Air quality</div>
+                    <div class="d-flex align-items-baseline gap-2 mt-2">
+                        <span id="stat-air" class="display-6 fw-800">—</span>
+                        <span class="text-muted small">AQI US average</span>
+                    </div>
+                    <div class="text-muted small mt-2">
+                        <span id="stat-air-stations">0</span> stations active in the last 24 hours
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="map-stat-card" style="border-left-color:#3B82F6">
+                    <div class="text-muted text-uppercase small fw-600">Waste network</div>
+                    <div class="d-flex align-items-baseline gap-2 mt-2">
+                        <span id="stat-containers" class="display-6 fw-800">—</span>
+                        <span class="text-muted small">active containers</span>
+                    </div>
+                    <div class="text-muted small mt-2">
+                        @if (isAdmin)
+                        {
+                            <a asp-area="Admin" asp-controller="Containers" asp-action="Index">View list</a>
+                        }
+                        else
+                        {
+                            <span>across the city</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="map-stat-card" style="border-left-color:#EF4444">
+                    <div class="text-muted text-uppercase small fw-600">Active reports</div>
+                    <div class="d-flex align-items-baseline gap-2 mt-2">
+                        <span id="stat-confirmed" class="display-6 fw-800">—</span>
+                        <span class="text-muted small">confirmed</span>
+                        <span class="text-muted small">·</span>
+                        <span id="stat-resolved" class="fw-700">—</span>
+                        <span class="text-muted small">resolved</span>
+                    </div>
+                    <div class="text-muted small mt-2">
+                        @if (isCitizen)
+                        {
+                            <a asp-controller="Citizen" asp-action="Create"><i class="bi bi-plus-circle me-1"></i>Report a dumpsite</a>
+                        }
+                        else if (isInspector)
+                        {
+                            <a asp-controller="Inspector" asp-action="Queue"><i class="bi bi-inboxes me-1"></i>Inspector queue</a>
+                        }
+                        else if (isAdmin)
+                        {
+                            <a asp-area="Admin" asp-controller="Reports" asp-action="Index">All reports</a>
+                        }
+                        else
+                        {
+                            <span>visible to citizens once confirmed</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 @section Scripts {
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@@1.5.3/dist/leaflet.markercluster.js"></script>
     <script>
         (function () {
-            const map = L.map('city-map').setView([42.8746, 74.5698], 12);
+            const map = L.map('city-map', {
+                center: [42.8746, 74.5698],
+                zoom: 12,
+                scrollWheelZoom: true
+            });
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap',
                 maxZoom: 18
             }).addTo(map);
 
-            let markers = [];
+            const airLayer = L.layerGroup();
+            const containerLayer = L.markerClusterGroup({ maxClusterRadius: 50, disableClusteringAtZoom: 16 });
+            const dumpsiteLayer = L.layerGroup();
+
+            airLayer.addTo(map);
+            containerLayer.addTo(map);
+            dumpsiteLayer.addTo(map);
+
+            const containerColors = {
+                General: '#6B7280',
+                Plastic: '#3B82F6',
+                Glass:   '#14B8A6',
+                Paper:   '#D97706',
+                Organic: '#16A34A'
+            };
 
             function escapeHtml(s) {
                 return String(s ?? '')
@@ -109,102 +180,161 @@
                     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
             }
 
-            function aqiBadge(s) {
-                if (s.aqiUs == null) return '<em class="text-muted">No AQI</em>';
-                return '<strong>' + Math.round(s.aqiUs) + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff;font-weight:600">' + escapeHtml(s.aqiLabel) + '</span>';
+            function setText(id, value) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
             }
 
-            function updateSidebarStats(data) {
-                const fresh = data.filter(d => !d.isVeryStale && d.aqiUs != null);
-                const avgEl = document.getElementById('avgAqi');
-                const activeEl = document.getElementById('activeStations');
-
-                if (fresh.length > 0) {
-                    const avg = fresh.reduce((sum, d) => sum + d.aqiUs, 0) / fresh.length;
-                    avgEl.textContent = Math.round(avg);
-                    activeEl.textContent = fresh.length;
-
-                    const worst = fresh.reduce((a, b) => a.aqiUs > b.aqiUs ? a : b);
-                    const best = fresh.reduce((a, b) => a.aqiUs < b.aqiUs ? a : b);
-
-                    const worstEl = document.getElementById('worstStation');
-                    worstEl.textContent = worst.name + ' (AQI ' + Math.round(worst.aqiUs) + ')';
-                    worstEl.setAttribute('href', '/Air/Station/' + worst.id);
-
-                    const bestEl = document.getElementById('bestStation');
-                    bestEl.textContent = best.name + ' (AQI ' + Math.round(best.aqiUs) + ')';
-                    bestEl.setAttribute('href', '/Air/Station/' + best.id);
-                } else {
-                    avgEl.textContent = '—';
-                    activeEl.textContent = '0';
-                }
-
-                const tbody = document.querySelector('#stations-table tbody');
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="text-muted small">No stations found.</td></tr>';
-                    return;
-                }
-                tbody.innerHTML = data.map(s => {
-                    const aqiText = s.aqiUs != null ? Math.round(s.aqiUs) : 'n/a';
-                    const pmText = s.pm25 != null ? s.pm25.toFixed(1) : '—';
-                    const stale = s.isStale ? ' station-stale' : '';
-                    return '<tr class="' + stale.trim() + '">' +
-                        '<td><a href="/Air/Station/' + s.id + '">' + escapeHtml(s.name) + '</a></td>' +
-                        '<td><span class="aqi-dot" style="background:' + s.color + '"></span> ' + aqiText + '</td>' +
-                        '<td class="text-muted small">' + pmText + '</td>' +
-                        '<td class="text-muted small">' + escapeHtml(s.measuredRelative) + '</td>' +
-                    '</tr>';
-                }).join('');
-            }
-
-            async function loadStations() {
+            async function loadAirQuality() {
                 try {
                     const r = await fetch('/api/map/air-quality');
                     if (!r.ok) return;
                     const data = await r.json();
 
-                    markers.forEach(m => map.removeLayer(m));
-                    markers = [];
-
+                    airLayer.clearLayers();
                     data.forEach(s => {
                         const marker = L.circleMarker([s.latitude, s.longitude], {
                             radius: 14,
-                            color: '#fff',
-                            weight: 2,
+                            color: '#fff', weight: 2,
                             fillColor: s.color,
                             fillOpacity: s.isStale ? 0.45 : 0.9
-                        }).addTo(map);
-
+                        });
+                        const aqiPart = s.aqiUs != null
+                            ? '<strong>AQI ' + Math.round(s.aqiUs) + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff">' + escapeHtml(s.aqiLabel) + '</span>'
+                            : '<em class="text-muted">No AQI</em>';
+                        const pmPart = s.pm25 != null
+                            ? '<div class="text-muted small">PM2.5: ' + s.pm25.toFixed(1) + ' µg/m³</div>'
+                            : '';
                         const stalePart = s.isStale
                             ? '<div class="text-warning small mt-1"><i class="bi bi-exclamation-triangle"></i> Last seen ' + escapeHtml(s.measuredRelative) + '</div>'
-                            : '';
-
-                        const pmLine = s.pm25 != null
-                            ? '<div class="small">PM2.5: <strong>' + s.pm25.toFixed(1) + '</strong> µg/m³</div>'
                             : '';
 
                         marker.bindPopup(
                             '<div style="min-width:220px">' +
                                 '<div class="fw-700 mb-1">' + escapeHtml(s.name) + '</div>' +
                                 (s.providerName ? '<div class="text-muted small mb-2">' + escapeHtml(s.providerName) + '</div>' : '') +
-                                '<div>AQI US: ' + aqiBadge(s) + '</div>' +
-                                pmLine +
+                                '<div>' + aqiPart + '</div>' +
+                                pmPart +
                                 '<div class="text-muted small mt-1">' + escapeHtml(s.measuredRelative) + '</div>' +
                                 stalePart +
                                 '<div class="mt-2"><a href="/Air/Station/' + s.id + '" class="btn btn-sm btn-outline-primary">Details</a></div>' +
                             '</div>'
                         );
-                        markers.push(marker);
+                        airLayer.addLayer(marker);
                     });
 
-                    updateSidebarStats(data);
-                } catch (e) {
-                    console.warn('Failed to load stations', e);
-                }
+                    setText('air-count', data.length);
+
+                    const fresh = data.filter(d => !d.isVeryStale && d.aqiUs != null);
+                    if (fresh.length > 0) {
+                        const avg = fresh.reduce((sum, d) => sum + d.aqiUs, 0) / fresh.length;
+                        setText('stat-air', Math.round(avg));
+                        setText('stat-air-stations', fresh.length);
+                    } else {
+                        setText('stat-air', '—');
+                        setText('stat-air-stations', '0');
+                    }
+                } catch (e) { console.warn('air-quality fetch failed', e); }
             }
 
-            loadStations();
-            setInterval(loadStations, 60000);
+            async function loadContainers() {
+                try {
+                    const r = await fetch('/api/map/containers');
+                    if (!r.ok) return;
+                    const data = await r.json();
+
+                    containerLayer.clearLayers();
+                    data.forEach(c => {
+                        const fill = containerColors[c.type] || '#9CA3AF';
+                        const marker = L.circleMarker([c.latitude, c.longitude], {
+                            radius: 7,
+                            color: '#fff', weight: 1,
+                            fillColor: fill,
+                            fillOpacity: 0.9
+                        });
+                        marker.bindPopup(
+                            '<div style="min-width:200px">' +
+                                '<div class="fw-700">' + escapeHtml(c.code) + '</div>' +
+                                '<div class="text-muted small mb-2">' + escapeHtml(c.address) + '</div>' +
+                                '<div><span class="badge" style="background:' + fill + ';color:#fff">' + escapeHtml(c.type) + '</span> ' + c.capacity + ' L</div>' +
+                                '<div class="text-muted small mt-1">' + escapeHtml(c.status) + '</div>' +
+                            '</div>'
+                        );
+                        containerLayer.addLayer(marker);
+                    });
+
+                    setText('container-count', data.length);
+                    setText('stat-containers', data.length);
+                } catch (e) { console.warn('containers fetch failed', e); }
+            }
+
+            async function loadDumpsites() {
+                try {
+                    const r = await fetch('/api/map/dumpsites');
+                    if (!r.ok) return;
+                    const data = await r.json();
+
+                    dumpsiteLayer.clearLayers();
+                    data.forEach(d => {
+                        const html = '<div class="dumpsite-pin" style="background:' + d.color + '"><i class="bi bi-flag-fill"></i></div>';
+                        const icon = L.divIcon({
+                            html: html,
+                            className: 'dumpsite-marker',
+                            iconSize: [28, 28],
+                            iconAnchor: [14, 28]
+                        });
+                        const marker = L.marker([d.latitude, d.longitude], { icon: icon });
+                        const photoText = d.photoCount + ' photo' + (d.photoCount === 1 ? '' : 's');
+                        marker.bindPopup(
+                            '<div style="min-width:240px">' +
+                                '<span class="badge" style="background:' + d.color + ';color:#fff">' + escapeHtml(d.statusLabel) + '</span>' +
+                                '<div class="fw-700 mt-2">' + escapeHtml(d.shortDescription) + '</div>' +
+                                '<div class="text-muted small mt-1">Reported ' + escapeHtml(d.createdRelative) + '</div>' +
+                                '<div class="text-muted small">' + photoText + '</div>' +
+                            '</div>'
+                        );
+                        dumpsiteLayer.addLayer(marker);
+                    });
+
+                    setText('dumpsite-count', data.length);
+
+                    const confirmed = data.filter(d => d.status === 'Confirmed').length;
+                    const resolved = data.filter(d => d.status === 'Resolved').length;
+                    setText('stat-confirmed', confirmed);
+                    setText('stat-resolved', resolved);
+                } catch (e) { console.warn('dumpsites fetch failed', e); }
+            }
+
+            function setupToggle(toggleId, layer) {
+                const btn = document.getElementById(toggleId);
+                if (!btn) return;
+                btn.addEventListener('click', () => {
+                    const isActive = btn.classList.toggle('active');
+                    if (isActive) {
+                        map.addLayer(layer);
+                    } else {
+                        map.removeLayer(layer);
+                    }
+                });
+            }
+            setupToggle('toggle-air', airLayer);
+            setupToggle('toggle-containers', containerLayer);
+            setupToggle('toggle-dumpsites', dumpsiteLayer);
+
+            const refreshBtn = document.getElementById('refresh-static');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    loadContainers();
+                    loadDumpsites();
+                });
+            }
+
+            Promise.all([loadAirQuality(), loadContainers(), loadDumpsites()]);
+            setInterval(loadAirQuality, 60000);
+            setInterval(() => {
+                loadContainers();
+                loadDumpsites();
+            }, 5 * 60 * 1000);
         })();
     </script>
 }

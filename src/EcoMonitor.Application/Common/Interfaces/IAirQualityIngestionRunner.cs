@@ -6,8 +6,9 @@ public interface IAirQualityIngestionRunner
 }
 
 public sealed record IngestionResult(
-    string Provider,
-    int StationsTouched,
-    int ReadingsSaved,
+    int TotalReadingsSaved,
     int DuplicatesSkipped,
+    IReadOnlyList<ProviderRunResult> ProviderResults,
     string? Error);
+
+public sealed record ProviderRunResult(string ProviderName, int Saved, string? Error);

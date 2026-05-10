@@ -21,4 +21,5 @@ public sealed record ProviderStationReading(
     double? Temperature,
     double? Humidity,
     double? Pressure,
+    double? AqiUs,
     DateTime MeasuredAt);

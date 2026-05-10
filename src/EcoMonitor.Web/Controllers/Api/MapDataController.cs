@@ -34,10 +34,12 @@ public class MapDataController : ControllerBase
         var result = data.Select(s =>
         {
             var freshness = FreshnessHelper.Classify(s.MeasuredAt);
-            var aqi = AqiHelper.ClassifyPm25(s.Pm25);
+            var aqiLevel = s.AqiUs.HasValue
+                ? AqiHelper.ClassifyAqiUs(s.AqiUs)
+                : AqiHelper.ClassifyPm25(s.Pm25);
             var color = freshness == ReadingFreshness.VeryStale
                 ? "#9CA3AF"
-                : AqiHelper.GetColorHex(aqi);
+                : AqiHelper.GetColorHex(aqiLevel);
 
             return new
             {
@@ -51,9 +53,10 @@ public class MapDataController : ControllerBase
                 temperature = s.Temperature,
                 humidity = s.Humidity,
                 pressure = s.Pressure,
+                aqiUs = s.AqiUs,
                 measuredAt = s.MeasuredAt,
                 measuredRelative = s.MeasuredAt.HasValue ? DateHelpers.FormatRelative(s.MeasuredAt.Value) : "no data",
-                aqiLabel = AqiHelper.GetLabel(aqi),
+                aqiLabel = AqiHelper.GetLabel(aqiLevel),
                 color,
                 isStale = freshness == ReadingFreshness.Stale || freshness == ReadingFreshness.VeryStale,
                 isVeryStale = freshness == ReadingFreshness.VeryStale

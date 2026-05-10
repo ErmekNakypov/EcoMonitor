@@ -47,12 +47,13 @@
                             <thead>
                                 <tr>
                                     <th>Station</th>
+                                    <th>AQI</th>
                                     <th>PM2.5</th>
                                     <th>Updated</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td colspan="3" class="text-muted small">Loading…</td></tr>
+                                <tr><td colspan="4" class="text-muted small">Loading…</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -62,8 +63,8 @@
                 <div class="auth-card">
                     <h2 class="h6 fw-700 mb-3">Right now</h2>
                     <div class="d-flex align-items-baseline gap-2 mb-1">
-                        <span id="avgPm25" class="display-5 fw-800">—</span>
-                        <span class="text-muted small">µg/m³ PM2.5 average</span>
+                        <span id="avgAqi" class="display-5 fw-800">—</span>
+                        <span class="text-muted small">AQI US (average)</span>
                     </div>
                     <p class="text-muted small mb-3">
                         <span id="activeStations">—</span> stations active in the last 24 hours
@@ -81,6 +82,12 @@
                 </div>
             </div>
         </div>
+
+        <p class="text-muted small mt-4 mb-0">
+            Data sources: <a href="https://openaq.org" target="_blank" rel="noopener">OpenAQ</a>,
+            <a href="https://www.iqair.com" target="_blank" rel="noopener">IQAir AirVisual</a>.
+            Licensed under their respective terms.
+        </p>
     </div>
 </section>
 
@@ -102,31 +109,30 @@
                     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
             }
 
-            function valueDisplay(s) {
-                if (s.pm25 == null) return '<em class="text-muted">No data</em>';
-                const text = s.pm25.toFixed(1) + ' µg/m³';
-                return '<strong>' + text + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff;font-weight:600">' + escapeHtml(s.aqiLabel) + '</span>';
+            function aqiBadge(s) {
+                if (s.aqiUs == null) return '<em class="text-muted">No AQI</em>';
+                return '<strong>' + Math.round(s.aqiUs) + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff;font-weight:600">' + escapeHtml(s.aqiLabel) + '</span>';
             }
 
             function updateSidebarStats(data) {
-                const fresh = data.filter(d => !d.isVeryStale && d.pm25 != null);
-                const avgEl = document.getElementById('avgPm25');
+                const fresh = data.filter(d => !d.isVeryStale && d.aqiUs != null);
+                const avgEl = document.getElementById('avgAqi');
                 const activeEl = document.getElementById('activeStations');
 
                 if (fresh.length > 0) {
-                    const avg = fresh.reduce((sum, d) => sum + d.pm25, 0) / fresh.length;
-                    avgEl.textContent = avg.toFixed(1);
+                    const avg = fresh.reduce((sum, d) => sum + d.aqiUs, 0) / fresh.length;
+                    avgEl.textContent = Math.round(avg);
                     activeEl.textContent = fresh.length;
 
-                    const worst = fresh.reduce((a, b) => a.pm25 > b.pm25 ? a : b);
-                    const best = fresh.reduce((a, b) => a.pm25 < b.pm25 ? a : b);
+                    const worst = fresh.reduce((a, b) => a.aqiUs > b.aqiUs ? a : b);
+                    const best = fresh.reduce((a, b) => a.aqiUs < b.aqiUs ? a : b);
 
                     const worstEl = document.getElementById('worstStation');
-                    worstEl.textContent = worst.name + ' (' + worst.pm25.toFixed(1) + ')';
+                    worstEl.textContent = worst.name + ' (AQI ' + Math.round(worst.aqiUs) + ')';
                     worstEl.setAttribute('href', '/Air/Station/' + worst.id);
 
                     const bestEl = document.getElementById('bestStation');
-                    bestEl.textContent = best.name + ' (' + best.pm25.toFixed(1) + ')';
+                    bestEl.textContent = best.name + ' (AQI ' + Math.round(best.aqiUs) + ')';
                     bestEl.setAttribute('href', '/Air/Station/' + best.id);
                 } else {
                     avgEl.textContent = '—';
@@ -135,15 +141,17 @@
 
                 const tbody = document.querySelector('#stations-table tbody');
                 if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="3" class="text-muted small">No stations found.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-muted small">No stations found.</td></tr>';
                     return;
                 }
                 tbody.innerHTML = data.map(s => {
-                    const pmText = s.pm25 != null ? s.pm25.toFixed(1) : 'n/a';
+                    const aqiText = s.aqiUs != null ? Math.round(s.aqiUs) : 'n/a';
+                    const pmText = s.pm25 != null ? s.pm25.toFixed(1) : '—';
                     const stale = s.isStale ? ' station-stale' : '';
                     return '<tr class="' + stale.trim() + '">' +
                         '<td><a href="/Air/Station/' + s.id + '">' + escapeHtml(s.name) + '</a></td>' +
-                        '<td><span class="aqi-dot" style="background:' + s.color + '"></span> ' + pmText + '</td>' +
+                        '<td><span class="aqi-dot" style="background:' + s.color + '"></span> ' + aqiText + '</td>' +
+                        '<td class="text-muted small">' + pmText + '</td>' +
                         '<td class="text-muted small">' + escapeHtml(s.measuredRelative) + '</td>' +
                     '</tr>';
                 }).join('');
@@ -171,11 +179,16 @@
                             ? '<div class="text-warning small mt-1"><i class="bi bi-exclamation-triangle"></i> Last seen ' + escapeHtml(s.measuredRelative) + '</div>'
                             : '';
 
+                        const pmLine = s.pm25 != null
+                            ? '<div class="small">PM2.5: <strong>' + s.pm25.toFixed(1) + '</strong> µg/m³</div>'
+                            : '';
+
                         marker.bindPopup(
                             '<div style="min-width:220px">' +
                                 '<div class="fw-700 mb-1">' + escapeHtml(s.name) + '</div>' +
                                 (s.providerName ? '<div class="text-muted small mb-2">' + escapeHtml(s.providerName) + '</div>' : '') +
-                                '<div>PM2.5: ' + valueDisplay(s) + '</div>' +
+                                '<div>AQI US: ' + aqiBadge(s) + '</div>' +
+                                pmLine +
                                 '<div class="text-muted small mt-1">' + escapeHtml(s.measuredRelative) + '</div>' +
                                 stalePart +
                                 '<div class="mt-2"><a href="/Air/Station/' + s.id + '" class="btn btn-sm btn-outline-primary">Details</a></div>' +

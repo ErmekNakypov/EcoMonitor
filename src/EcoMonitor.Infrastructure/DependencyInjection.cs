@@ -67,7 +67,15 @@ public static class DependencyInjection
             client.Timeout = TimeSpan.FromSeconds(15);
         });
 
+        services.AddHttpClient("iqair", client =>
+        {
+            client.BaseAddress = new Uri("https://api.airvisual.com/");
+            client.DefaultRequestHeaders.Add("User-Agent", "EcoMonitor/1.0");
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
+
         services.AddScoped<IAirQualityProvider, OpenAqAirQualityProvider>();
+        services.AddScoped<IAirQualityProvider, IqAirAirQualityProvider>();
         services.AddScoped<IAirQualityRepository, AirQualityRepository>();
         services.AddScoped<IAirQualityIngestionRunner, AirQualityIngestionRunner>();
 

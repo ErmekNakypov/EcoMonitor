@@ -22,15 +22,15 @@ public class AirQualitySummaryViewComponent : ViewComponent
         var fresh = stations
             .Where(s => s.MeasuredAt.HasValue
                 && (DateTime.UtcNow - s.MeasuredAt.Value) < TimeSpan.FromHours(24)
-                && s.Pm25.HasValue)
+                && s.AqiUs.HasValue)
             .ToList();
 
-        double? avgPm25 = fresh.Count > 0 ? fresh.Average(s => s.Pm25!.Value) : null;
+        double? avgAqi = fresh.Count > 0 ? fresh.Average(s => s.AqiUs!.Value) : null;
 
         var vm = new AirQualitySummaryViewModel
         {
-            AveragePm25 = avgPm25,
-            AqiLevel = AqiHelper.ClassifyPm25(avgPm25),
+            AverageAqiUs = avgAqi,
+            AqiLevel = AqiHelper.ClassifyAqiUs(avgAqi),
             ActiveStations = fresh.Count,
             TotalStations = stations.Count
         };

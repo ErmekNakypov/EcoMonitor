@@ -13,6 +13,7 @@ public class AirQualityReading : BaseEntity
     public double? Temperature { get; set; }
     public double? Humidity { get; set; }
     public double? Pressure { get; set; }
+    public double? AqiUs { get; set; }
     public DateTime MeasuredAt { get; set; }
     public AirQualitySource Source { get; set; }
 }

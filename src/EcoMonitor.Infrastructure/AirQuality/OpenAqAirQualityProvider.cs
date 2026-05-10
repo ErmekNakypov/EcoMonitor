@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Common.Utils;
 using EcoMonitor.Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -128,6 +129,7 @@ public sealed class OpenAqAirQualityProvider : IAirQualityProvider
                     Temperature: temperature,
                     Humidity: humidity,
                     Pressure: pressure,
+                    AqiUs: EpaAqiCalculator.Pm25ToAqi(pm25),
                     MeasuredAt: measuredAt.Value));
             }
             catch (HttpRequestException ex)

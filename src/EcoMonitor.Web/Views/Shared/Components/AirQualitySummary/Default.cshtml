@@ -13,8 +13,8 @@
         <div>
             <div class="text-muted text-uppercase small fw-600">Air quality right now</div>
             <div class="d-flex align-items-baseline gap-2 mt-2">
-                <span class="display-5 fw-800">@(Model.AveragePm25?.ToString("0.0", CultureInfo.InvariantCulture) ?? "—")</span>
-                <span class="text-muted small">µg/m³ PM2.5 avg</span>
+                <span class="display-5 fw-800">@(Model.AverageAqiUs.HasValue ? Math.Round(Model.AverageAqiUs.Value).ToString("0", CultureInfo.InvariantCulture) : "—")</span>
+                <span class="text-muted small">AQI US (average)</span>
             </div>
             <span class="aqi-pill mt-2" style="background:@color; color:@(darkText ? "#78350F" : "#fff")">@label</span>
         </div>

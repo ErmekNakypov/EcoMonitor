@@ -166,6 +166,7 @@ public sealed class AirQualityRepository : IAirQualityRepository
                 latest != null ? latest.Temperature : null,
                 latest != null ? latest.Humidity : null,
                 latest != null ? latest.Pressure : null,
+                latest != null ? latest.AqiUs : null,
                 latest != null ? (DateTime?)latest.MeasuredAt : null,
                 s.Source)
         ).ToListAsync(ct);
@@ -197,6 +198,7 @@ public sealed class AirQualityRepository : IAirQualityRepository
                 latest != null ? latest.Temperature : null,
                 latest != null ? latest.Humidity : null,
                 latest != null ? latest.Pressure : null,
+                latest != null ? latest.AqiUs : null,
                 latest != null ? (DateTime?)latest.MeasuredAt : null)
         ).FirstOrDefaultAsync(ct);
 

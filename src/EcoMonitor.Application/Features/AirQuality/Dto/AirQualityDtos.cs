@@ -14,6 +14,7 @@ public sealed record StationWithLatestReadingDto(
     double? Temperature,
     double? Humidity,
     double? Pressure,
+    double? AqiUs,
     DateTime? MeasuredAt,
     AirQualitySource Source);
 
@@ -31,4 +32,5 @@ public sealed record StationDetailsDto(
     double? Temperature,
     double? Humidity,
     double? Pressure,
+    double? AqiUs,
     DateTime? MeasuredAt);

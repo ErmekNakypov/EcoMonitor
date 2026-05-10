@@ -13,6 +13,18 @@ public enum AqiLevel
 
 public static class AqiHelper
 {
+    public static AqiLevel ClassifyAqiUs(double? aqi)
+    {
+        if (aqi is null) return AqiLevel.Unknown;
+        var a = aqi.Value;
+        if (a <= 50) return AqiLevel.Good;
+        if (a <= 100) return AqiLevel.Moderate;
+        if (a <= 150) return AqiLevel.UnhealthyForSensitive;
+        if (a <= 200) return AqiLevel.Unhealthy;
+        if (a <= 300) return AqiLevel.VeryUnhealthy;
+        return AqiLevel.Hazardous;
+    }
+
     public static AqiLevel ClassifyPm25(double? pm25)
     {
         if (pm25 is null) return AqiLevel.Unknown;

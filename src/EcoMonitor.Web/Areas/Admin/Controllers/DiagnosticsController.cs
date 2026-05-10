@@ -27,7 +27,19 @@ public class DiagnosticsController : Controller
         var result = await _runner.RunOnceAsync();
         if (result.Error is null)
         {
-            TempData["SuccessMessage"] = $"Ingestion ok: {result.ReadingsSaved} new readings ({result.DuplicatesSkipped} duplicates skipped) from {result.Provider}.";
+            var breakdown = string.Join(" + ",
+                result.ProviderResults
+                    .Where(p => p.Saved > 0)
+                    .Select(p => $"{p.Saved} {p.ProviderName}"));
+            if (string.IsNullOrEmpty(breakdown)) breakdown = "no providers contributed";
+
+            var failed = result.ProviderResults.Where(p => p.Error is not null).ToList();
+            var failedSuffix = failed.Count == 0
+                ? string.Empty
+                : $" Failed: {string.Join(", ", failed.Select(p => $"{p.ProviderName} ({p.Error})"))}";
+
+            TempData["SuccessMessage"] =
+                $"Ingestion ok: {result.TotalReadingsSaved} new readings ({breakdown}, {result.DuplicatesSkipped} duplicates skipped).{failedSuffix}";
         }
         else
         {

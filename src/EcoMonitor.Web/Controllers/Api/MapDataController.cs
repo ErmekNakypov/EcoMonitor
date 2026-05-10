@@ -49,6 +49,7 @@ public class MapDataController : ControllerBase
                 id = s.Id,
                 name = s.Name,
                 providerName = s.ProviderName,
+                source = s.Source.ToString(),
                 latitude = s.Latitude,
                 longitude = s.Longitude,
                 pm25 = s.Pm25,

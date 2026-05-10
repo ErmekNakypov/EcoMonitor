@@ -57,8 +57,22 @@ status changes (created, confirmed, rejected, resolved).
 - Telegram-submitted reports skip email (no address). Web reports without a reporter
   email are also skipped.
 
+## IoT devices (own sensors)
+Admins can register IoT sensor devices and issue long-lived JWT tokens; devices
+push readings to `POST /api/v1/sensors/readings`.
+- JWT bearer is added as a *second* auth scheme (`DeviceJwt`); cookies remain
+  the default for the web UI. Both run in parallel.
+- Tokens are issued once at device creation (or via "regenerate"); only a
+  SHA-256 hash is stored in `iot_devices.token_hash`.
+- Authorization for device endpoints uses the `DeviceOnly` policy (requires
+  the `DeviceJwt` scheme + `type=device` claim).
+- Each ingested reading lives in `air_quality_readings` linked to an
+  `air_quality_stations` row with `Source = OwnSensor`. The same map view
+  shows pulled-from-providers and pushed-from-devices stations side by side.
+- A Python mock script under `tools/sensor-mock/` simulates an ESP32 client
+  for demos.
+
 ## Out of scope for MVP
-- Real sensor integration (later phase, hardware not yet procured)
 - Component and deployment diagrams (later thesis review)
 
 ## Working language

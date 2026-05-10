@@ -2,6 +2,7 @@ using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
 using EcoMonitor.Application.Features.Notifications;
 using EcoMonitor.Infrastructure.AirQuality;
+using EcoMonitor.Infrastructure.Auth;
 using EcoMonitor.Infrastructure.Containers;
 using EcoMonitor.Infrastructure.Email;
 using EcoMonitor.Infrastructure.Identity;
@@ -99,6 +100,8 @@ public static class DependencyInjection
         services.AddScoped<IEmailQueue, DbEmailQueue>();
         services.AddScoped<IRazorViewRenderer, RazorViewRenderer>();
         services.AddScoped<IReportNotificationService, EmailReportNotificationService>();
+
+        services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
         services.AddHostedService<AirQualityIngestionService>();
         services.AddHostedService<TelegramBotHostedService>();

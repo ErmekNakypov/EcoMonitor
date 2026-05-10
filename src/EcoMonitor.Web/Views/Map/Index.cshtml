@@ -21,7 +21,7 @@
             </p>
         </div>
 
-        <div class="map-filters mb-3">
+        <div class="map-filters mb-1">
             <button id="toggle-air" type="button" class="filter-pill active">
                 <i class="bi bi-wind"></i>
                 <span>Air quality</span>
@@ -42,6 +42,20 @@
                 <span>Refresh</span>
             </button>
         </div>
+        <div class="map-subfilters mb-3">
+            <button id="toggle-openaq" type="button" class="subfilter-pill active">
+                <span>● OpenAQ</span>
+                <span class="filter-count" id="openaq-count">0</span>
+            </button>
+            <button id="toggle-iqair" type="button" class="subfilter-pill active">
+                <span>■ IQAir</span>
+                <span class="filter-count" id="iqair-count">0</span>
+            </button>
+            <button id="toggle-own" type="button" class="subfilter-pill active">
+                <span>★ Own sensors</span>
+                <span class="filter-count" id="own-count">0</span>
+            </button>
+        </div>
 
         <div id="city-map"></div>
 
@@ -55,6 +69,14 @@
                     <span class="aqi-pill" style="background:#EF4444">Unhealthy 151–200</span>
                     <span class="aqi-pill" style="background:#A855F7">Very unhealthy 201–300</span>
                     <span class="aqi-pill" style="background:#7F1D1D">Hazardous 300+</span>
+                </div>
+            </div>
+            <div class="legend-section">
+                <div class="legend-title">Source markers</div>
+                <div class="legend-items">
+                    <span class="aqi-pill" style="background:#9CA3AF;color:white">● OpenAQ</span>
+                    <span class="aqi-pill" style="background:#9CA3AF;color:white">■ IQAir</span>
+                    <span class="aqi-pill" style="background:transparent;color:var(--brand-primary,#2D6A4F);border:2px solid var(--brand-primary,#2D6A4F)">★ Own sensors</span>
                 </div>
             </div>
             <div class="legend-section">
@@ -75,6 +97,12 @@
                 </div>
             </div>
         </div>
+
+        <p class="text-muted small mt-3 mb-0">
+            <i class="bi bi-info-circle me-1"></i>
+            Stations data: <strong>OpenAQ</strong> (web pull), <strong>IQAir</strong> (web pull),
+            <strong>Own sensors</strong> (push). Real-time data from registered IoT devices.
+        </p>
 
         <div class="row g-3 mt-3">
             <div class="col-md-4">
@@ -158,11 +186,26 @@
                 maxZoom: 18
             }).addTo(map);
 
-            const airLayer = L.layerGroup();
+            // Per-source air layers so the sub-filters can toggle independently.
+            const airOpenAqLayer = L.layerGroup();
+            const airIqAirLayer  = L.layerGroup();
+            const airOwnLayer    = L.layerGroup();
+            const airSubLayers = {
+                openaq: airOpenAqLayer,
+                iqair:  airIqAirLayer,
+                own:    airOwnLayer
+            };
+            // Sub-pill state. Parent "Air quality" pill controls whether *any* of
+            // these are shown; sub-pills control individual visibility within that.
+            const subActive = { openaq: true, iqair: true, own: true };
+            let airParentActive = true;
+
             const containerLayer = L.markerClusterGroup({ maxClusterRadius: 50, disableClusteringAtZoom: 16 });
             const dumpsiteLayer = L.layerGroup();
 
-            airLayer.addTo(map);
+            airOpenAqLayer.addTo(map);
+            airIqAirLayer.addTo(map);
+            airOwnLayer.addTo(map);
             containerLayer.addTo(map);
             dumpsiteLayer.addTo(map);
 
@@ -185,20 +228,52 @@
                 if (el) el.textContent = value;
             }
 
+            function classifySource(s) {
+                if (s.source === 'OwnSensor') return 'own';
+                const p = (s.providerName || '').toLowerCase();
+                if (p.startsWith('iqair')) return 'iqair';
+                return 'openaq';
+            }
+
+            function buildAirMarker(s, bucket) {
+                const aqiText = s.aqiUs != null ? Math.round(s.aqiUs) : '?';
+                if (bucket === 'own') {
+                    const html = '<div class="air-marker air-marker-star" title="Own sensor">★</div>';
+                    const icon = L.divIcon({ html: html, className: 'air-marker-wrapper', iconSize: [28, 28], iconAnchor: [14, 14] });
+                    return L.marker([s.latitude, s.longitude], { icon: icon });
+                }
+                if (bucket === 'iqair') {
+                    const html = '<div class="air-marker air-marker-square" style="background:' + s.color
+                        + (s.isStale ? ';opacity:0.6' : '') + '">' + aqiText + '</div>';
+                    const icon = L.divIcon({ html: html, className: 'air-marker-wrapper', iconSize: [28, 28], iconAnchor: [14, 14] });
+                    return L.marker([s.latitude, s.longitude], { icon: icon });
+                }
+                // OpenAQ (and anything else External) — circle marker, current behaviour.
+                return L.circleMarker([s.latitude, s.longitude], {
+                    radius: 14,
+                    color: '#fff', weight: 2,
+                    fillColor: s.color,
+                    fillOpacity: s.isStale ? 0.45 : 0.9
+                });
+            }
+
             async function loadAirQuality() {
                 try {
                     const r = await fetch('/api/map/air-quality');
                     if (!r.ok) return;
                     const data = await r.json();
 
-                    airLayer.clearLayers();
+                    airOpenAqLayer.clearLayers();
+                    airIqAirLayer.clearLayers();
+                    airOwnLayer.clearLayers();
+
+                    const counts = { openaq: 0, iqair: 0, own: 0 };
+
                     data.forEach(s => {
-                        const marker = L.circleMarker([s.latitude, s.longitude], {
-                            radius: 14,
-                            color: '#fff', weight: 2,
-                            fillColor: s.color,
-                            fillOpacity: s.isStale ? 0.45 : 0.9
-                        });
+                        const bucket = classifySource(s);
+                        counts[bucket]++;
+                        const marker = buildAirMarker(s, bucket);
+
                         const aqiPart = s.aqiUs != null
                             ? '<strong>AQI ' + Math.round(s.aqiUs) + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff">' + escapeHtml(s.aqiLabel) + '</span>'
                             : '<em class="text-muted">No AQI</em>';
@@ -220,10 +295,13 @@
                                 '<div class="mt-2"><a href="/Air/Station/' + s.id + '" class="btn btn-sm btn-outline-primary">Details</a></div>' +
                             '</div>'
                         );
-                        airLayer.addLayer(marker);
+                        airSubLayers[bucket].addLayer(marker);
                     });
 
                     setText('air-count', data.length);
+                    setText('openaq-count', counts.openaq);
+                    setText('iqair-count', counts.iqair);
+                    setText('own-count', counts.own);
 
                     const fresh = data.filter(d => !d.isVeryStale && d.aqiUs != null);
                     if (fresh.length > 0) {
@@ -317,9 +395,57 @@
                     }
                 });
             }
-            setupToggle('toggle-air', airLayer);
             setupToggle('toggle-containers', containerLayer);
             setupToggle('toggle-dumpsites', dumpsiteLayer);
+
+            // Air-quality parent + per-source sub-pill orchestration.
+            const subBtns = {
+                openaq: document.getElementById('toggle-openaq'),
+                iqair:  document.getElementById('toggle-iqair'),
+                own:    document.getElementById('toggle-own')
+            };
+
+            function applyAirVisibility() {
+                Object.keys(airSubLayers).forEach(key => {
+                    const shouldShow = airParentActive && subActive[key];
+                    if (shouldShow) {
+                        map.addLayer(airSubLayers[key]);
+                    } else {
+                        map.removeLayer(airSubLayers[key]);
+                    }
+                    const btn = subBtns[key];
+                    if (btn) {
+                        btn.classList.toggle('active', subActive[key]);
+                        btn.classList.toggle('parent-off', !airParentActive);
+                    }
+                });
+            }
+
+            const airParentBtn = document.getElementById('toggle-air');
+            if (airParentBtn) {
+                airParentBtn.addEventListener('click', () => {
+                    airParentActive = airParentBtn.classList.toggle('active');
+                    applyAirVisibility();
+                });
+            }
+
+            Object.keys(subBtns).forEach(key => {
+                const btn = subBtns[key];
+                if (!btn) return;
+                btn.addEventListener('click', () => {
+                    if (!airParentActive) {
+                        // Enable parent first, then enable this sub.
+                        airParentActive = true;
+                        if (airParentBtn) airParentBtn.classList.add('active');
+                        Object.keys(subActive).forEach(k => subActive[k] = (k === key));
+                    } else {
+                        subActive[key] = !subActive[key];
+                    }
+                    applyAirVisibility();
+                });
+            });
+
+            applyAirVisibility();
 
             const refreshBtn = document.getElementById('refresh-static');
             if (refreshBtn) {

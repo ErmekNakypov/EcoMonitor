@@ -1,9 +1,12 @@
 using System.Globalization;
+using System.Text;
 using EcoMonitor.Application;
 using EcoMonitor.Infrastructure;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Web.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -49,6 +52,41 @@ try
 
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration);
+
+    // JWT bearer is added as a *named* scheme alongside the existing Identity cookie
+    // scheme. The default authenticate/challenge scheme stays the cookie scheme set
+    // up by AddIdentity inside AddInfrastructure. Browser users continue to log in
+    // via cookies; only endpoints with [Authorize(Policy = "DeviceOnly")] use JWT.
+    var jwtSecret = builder.Configuration["Jwt:SecretKey"]
+        ?? "dev-fallback-secret-do-not-use-in-prod-this-is-only-for-development-32-chars-min";
+
+    builder.Services.AddAuthentication()
+        .AddJwtBearer("DeviceJwt", options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                ValidateLifetime = false,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("DeviceOnly", policy =>
+        {
+            policy.AuthenticationSchemes = new List<string> { "DeviceJwt" };
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("type", "device");
+        });
+    });
 
     var app = builder.Build();
 

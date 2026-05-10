@@ -940,6 +940,92 @@ tr.clickable-row:hover {
   border: none;
 }
 
+/* Air-quality markers — shape encodes data source */
+.air-marker-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.air-marker {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 11px;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.air-marker-square {
+  border-radius: 4px;
+}
+
+.air-marker-star {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  border: 3px solid var(--brand-primary, #2D6A4F);
+  background-color: transparent;
+  color: var(--brand-primary, #2D6A4F);
+  font-size: 18px;
+  box-shadow: none;
+}
+
+/* Source sub-filters under the "Air quality" pill */
+.map-subfilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0 0.5rem;
+}
+
+.subfilter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--brand-border);
+  background: #FFFFFF;
+  color: var(--brand-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.subfilter-pill:hover {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+.subfilter-pill.active {
+  background: var(--brand-icon-bg);
+  color: var(--brand-primary-hover);
+  border-color: var(--brand-primary);
+}
+
+.subfilter-pill.parent-off {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.subfilter-pill .filter-count {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--brand-text-muted);
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.subfilter-pill.active .filter-count {
+  background: var(--brand-primary);
+  color: #FFFFFF;
+}
+
 .dumpsite-pin {
   width: 28px;
   height: 28px;

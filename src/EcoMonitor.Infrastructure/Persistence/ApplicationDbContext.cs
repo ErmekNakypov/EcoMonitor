@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<AirQualityStation> AirQualityStations => Set<AirQualityStation>();
     public DbSet<TelegramUserSession> TelegramUserSessions => Set<TelegramUserSession>();
     public DbSet<EmailMessage> EmailMessages => Set<EmailMessage>();
+    public DbSet<IotDevice> IotDevices => Set<IotDevice>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

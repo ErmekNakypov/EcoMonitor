@@ -11,6 +11,7 @@ public interface IApplicationDbContext
     DbSet<AirQualityStation> AirQualityStations { get; }
     DbSet<TelegramUserSession> TelegramUserSessions { get; }
     DbSet<EmailMessage> EmailMessages { get; }
+    DbSet<IotDevice> IotDevices { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

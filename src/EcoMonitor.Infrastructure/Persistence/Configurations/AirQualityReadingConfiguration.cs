@@ -8,7 +8,14 @@ public class AirQualityReadingConfiguration : IEntityTypeConfiguration<AirQualit
 {
     public void Configure(EntityTypeBuilder<AirQualityReading> builder)
     {
-        builder.HasIndex(r => new { r.StationId, r.MeasuredAt });
+        builder.HasOne<AirQualityStation>()
+            .WithMany()
+            .HasForeignKey(r => r.StationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(r => new { r.StationId, r.MeasuredAt })
+            .IsDescending(false, true);
+
         builder.HasIndex(r => r.MeasuredAt);
     }
 }

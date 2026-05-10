@@ -55,3 +55,4 @@ src/EcoMonitor.Web/wwwroot/uploads/dumpsites/*
 
 # Local user secrets / overrides
 appsettings.*.local.json
+**/appsettings.Development.json

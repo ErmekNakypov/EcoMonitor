@@ -17,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<WasteContainer> WasteContainers => Set<WasteContainer>();
     public DbSet<DumpsiteReport> DumpsiteReports => Set<DumpsiteReport>();
     public DbSet<AirQualityReading> AirQualityReadings => Set<AirQualityReading>();
+    public DbSet<AirQualityStation> AirQualityStations => Set<AirQualityStation>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

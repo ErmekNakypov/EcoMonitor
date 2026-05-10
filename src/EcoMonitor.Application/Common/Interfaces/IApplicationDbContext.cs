@@ -8,6 +8,7 @@ public interface IApplicationDbContext
     DbSet<DumpsiteReport> DumpsiteReports { get; }
     DbSet<WasteContainer> WasteContainers { get; }
     DbSet<AirQualityReading> AirQualityReadings { get; }
+    DbSet<AirQualityStation> AirQualityStations { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

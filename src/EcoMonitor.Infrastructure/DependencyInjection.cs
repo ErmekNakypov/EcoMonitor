@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Infrastructure.AirQuality;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Infrastructure.Storage;
@@ -56,6 +57,21 @@ public static class DependencyInjection
             options.Cookie.SameSite = SameSiteMode.Lax;
             options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
         });
+
+        services.AddMemoryCache();
+
+        services.AddHttpClient("openaq", client =>
+        {
+            client.BaseAddress = new Uri("https://api.openaq.org/");
+            client.DefaultRequestHeaders.Add("User-Agent", "EcoMonitor/1.0");
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
+
+        services.AddScoped<IAirQualityProvider, OpenAqAirQualityProvider>();
+        services.AddScoped<IAirQualityRepository, AirQualityRepository>();
+        services.AddScoped<IAirQualityIngestionRunner, AirQualityIngestionRunner>();
+
+        services.AddHostedService<AirQualityIngestionService>();
 
         return services;
     }

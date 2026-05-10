@@ -1,0 +1,1401 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-05-10T16:32:41Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 668003386,
+  "lat": 42.8730861,
+  "lon": 74.6230388,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1228122269,
+  "lat": 42.8849386,
+  "lon": 74.5235110,
+  "tags": {
+    "amenity": "recycling"
+  }
+},
+{
+  "type": "node",
+  "id": 1247391002,
+  "lat": 42.8717857,
+  "lon": 74.5745800,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1247391661,
+  "lat": 42.8790083,
+  "lon": 74.6230891,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1247393402,
+  "lat": 42.8777941,
+  "lon": 74.6202023,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1300848758,
+  "lat": 42.8807495,
+  "lon": 74.5366547,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1701036734,
+  "lat": 42.8318782,
+  "lon": 74.6103913,
+  "tags": {
+    "amenity": "recycling"
+  }
+},
+{
+  "type": "node",
+  "id": 1746577149,
+  "lat": 42.8772050,
+  "lon": 74.6247432,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1791225079,
+  "lat": 42.8320590,
+  "lon": 74.6192771,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1791267768,
+  "lat": 42.8322477,
+  "lon": 74.6189661,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 1915582683,
+  "lat": 42.8520632,
+  "lon": 74.5417226,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2037794553,
+  "lat": 42.8380966,
+  "lon": 74.6013337,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2037794557,
+  "lat": 42.8387082,
+  "lon": 74.6017869,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2037794583,
+  "lat": 42.8396603,
+  "lon": 74.6014905,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2037794586,
+  "lat": 42.8400363,
+  "lon": 74.6006443,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2176978416,
+  "lat": 42.8753768,
+  "lon": 74.6907688,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2176978417,
+  "lat": 42.8769916,
+  "lon": 74.6934822,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2176978418,
+  "lat": 42.8780382,
+  "lon": 74.6905649,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2178076564,
+  "lat": 42.8783841,
+  "lon": 74.6962162,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2178076565,
+  "lat": 42.8768401,
+  "lon": 74.6923778,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2330758955,
+  "lat": 42.8572706,
+  "lon": 74.5876780,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2330778019,
+  "lat": 42.8460896,
+  "lon": 74.6018163,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2358278610,
+  "lat": 42.8756313,
+  "lon": 74.6891867,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2384943283,
+  "lat": 42.8808053,
+  "lon": 74.6199005,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 2384943285,
+  "lat": 42.8820603,
+  "lon": 74.6183903,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 3270679958,
+  "lat": 42.8364505,
+  "lon": 74.6040284,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 3270679959,
+  "lat": 42.8384311,
+  "lon": 74.6024485,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 3306223876,
+  "lat": 42.8606823,
+  "lon": 74.5522957,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 3306223877,
+  "lat": 42.8638079,
+  "lon": 74.5542368,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 3385467849,
+  "lat": 42.8727312,
+  "lon": 74.6961848,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 4105364789,
+  "lat": 42.8450905,
+  "lon": 74.6146450,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 4105385324,
+  "lat": 42.8486087,
+  "lon": 74.6144116,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 4323289390,
+  "lat": 42.8642175,
+  "lon": 74.6274724,
+  "tags": {
+    "amenity": "recycling",
+    "name": "ОсОО \"Фер-Таш\"",
+    "phone": "0312533444"
+  }
+},
+{
+  "type": "node",
+  "id": 4323302690,
+  "lat": 42.8642013,
+  "lon": 74.6274544,
+  "tags": {
+    "amenity": "recycling",
+    "name": "ОсОО \"Фер-Таш\"",
+    "phone": "0312466803"
+  }
+},
+{
+  "type": "node",
+  "id": 4386718089,
+  "lat": 42.8764826,
+  "lon": 74.6959270,
+  "tags": {
+    "amenity": "waste_basket",
+    "operator": "жилые дома Зеленая 1;1а"
+  }
+},
+{
+  "type": "node",
+  "id": 4750228072,
+  "lat": 42.8731895,
+  "lon": 74.6937341,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 5116490439,
+  "lat": 42.8784012,
+  "lon": 74.6955458,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6315441258,
+  "lat": 42.8301553,
+  "lon": 74.6049153,
+  "tags": {
+    "amenity": "recycling",
+    "name": "Мусорные баки",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 9738271586,
+  "lat": 42.8760483,
+  "lon": 74.6356955,
+  "tags": {
+    "amenity": "recycling",
+    "covered": "no",
+    "opening_hours": "24/7",
+    "recycling:plastic_bottles": "yes",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 9914420418,
+  "lat": 42.8779315,
+  "lon": 74.5989736,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 9914458317,
+  "lat": 42.8793801,
+  "lon": 74.6001461,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 9931190421,
+  "lat": 42.8793443,
+  "lon": 74.6004830,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10092612708,
+  "lat": 42.8392724,
+  "lon": 74.6342383,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 10092612712,
+  "lat": 42.8392593,
+  "lon": 74.6347368,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10092652371,
+  "lat": 42.8392400,
+  "lon": 74.6354907,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 10092652394,
+  "lat": 42.8412326,
+  "lon": 74.6349125,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 10092652520,
+  "lat": 42.8392661,
+  "lon": 74.6344436,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10121789886,
+  "lat": 42.8762837,
+  "lon": 74.6053605,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10238004079,
+  "lat": 42.8777512,
+  "lon": 74.5797685,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10238004080,
+  "lat": 42.8777561,
+  "lon": 74.5796371,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10238004081,
+  "lat": 42.8776913,
+  "lon": 74.5797649,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10238004082,
+  "lat": 42.8776962,
+  "lon": 74.5796353,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10238004083,
+  "lat": 42.8775071,
+  "lon": 74.5797538,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10238004084,
+  "lat": 42.8775110,
+  "lon": 74.5796297,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857231,
+  "lat": 42.8857294,
+  "lon": 74.5749221,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857248,
+  "lat": 42.8855518,
+  "lon": 74.5754988,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857250,
+  "lat": 42.8853435,
+  "lon": 74.5755718,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857258,
+  "lat": 42.8860144,
+  "lon": 74.5752338,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857262,
+  "lat": 42.8858456,
+  "lon": 74.5752999,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857269,
+  "lat": 42.8865611,
+  "lon": 74.5751382,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857270,
+  "lat": 42.8862880,
+  "lon": 74.5754906,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857272,
+  "lat": 42.8862956,
+  "lon": 74.5755357,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857274,
+  "lat": 42.8864963,
+  "lon": 74.5756541,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857276,
+  "lat": 42.8864887,
+  "lon": 74.5756090,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857390,
+  "lat": 42.8853693,
+  "lon": 74.5744265,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10539857392,
+  "lat": 42.8855673,
+  "lon": 74.5747011,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952069,
+  "lat": 42.8799620,
+  "lon": 74.6024691,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952071,
+  "lat": 42.8799580,
+  "lon": 74.6024401,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952072,
+  "lat": 42.8799600,
+  "lon": 74.6023914,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952074,
+  "lat": 42.8799670,
+  "lon": 74.6023635,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952075,
+  "lat": 42.8800454,
+  "lon": 74.6025641,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952077,
+  "lat": 42.8800250,
+  "lon": 74.6025543,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952078,
+  "lat": 42.8800242,
+  "lon": 74.6022863,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952080,
+  "lat": 42.8800060,
+  "lon": 74.6023023,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952081,
+  "lat": 42.8801107,
+  "lon": 74.6025569,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952083,
+  "lat": 42.8801278,
+  "lon": 74.6025387,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952084,
+  "lat": 42.8801640,
+  "lon": 74.6024952,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952086,
+  "lat": 42.8801717,
+  "lon": 74.6024676,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952087,
+  "lat": 42.8801709,
+  "lon": 74.6023979,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952089,
+  "lat": 42.8801659,
+  "lon": 74.6023692,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952090,
+  "lat": 42.8801201,
+  "lon": 74.6022973,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952092,
+  "lat": 42.8801017,
+  "lon": 74.6022820,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952094,
+  "lat": 42.8800987,
+  "lon": 74.6021919,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952095,
+  "lat": 42.8800840,
+  "lon": 74.6021037,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573952097,
+  "lat": 42.8800768,
+  "lon": 74.6020759,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962618,
+  "lat": 42.8797033,
+  "lon": 74.6021585,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962619,
+  "lat": 42.8796822,
+  "lon": 74.6021646,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962621,
+  "lat": 42.8798380,
+  "lon": 74.6022852,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962622,
+  "lat": 42.8798432,
+  "lon": 74.6022565,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962624,
+  "lat": 42.8798123,
+  "lon": 74.6023385,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962626,
+  "lat": 42.8797695,
+  "lon": 74.6024193,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962627,
+  "lat": 42.8797840,
+  "lon": 74.6023974,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962633,
+  "lat": 42.8798194,
+  "lon": 74.6025483,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962635,
+  "lat": 42.8798098,
+  "lon": 74.6025218,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962636,
+  "lat": 42.8797638,
+  "lon": 74.6026100,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962638,
+  "lat": 42.8797671,
+  "lon": 74.6025808,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962649,
+  "lat": 42.8800730,
+  "lon": 74.6027806,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962651,
+  "lat": 42.8800888,
+  "lon": 74.6027603,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962652,
+  "lat": 42.8801164,
+  "lon": 74.6027165,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962654,
+  "lat": 42.8801240,
+  "lon": 74.6026889,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962700,
+  "lat": 42.8803856,
+  "lon": 74.6025210,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962702,
+  "lat": 42.8804072,
+  "lon": 74.6025197,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962703,
+  "lat": 42.8803309,
+  "lon": 74.6025574,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962705,
+  "lat": 42.8803448,
+  "lon": 74.6025348,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962706,
+  "lat": 42.8803219,
+  "lon": 74.6026011,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10573962707,
+  "lat": 42.8803224,
+  "lon": 74.6026306,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084034,
+  "lat": 42.8788043,
+  "lon": 74.6033156,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084065,
+  "lat": 42.8840488,
+  "lon": 74.6072120,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084067,
+  "lat": 42.8836902,
+  "lon": 74.6072562,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084069,
+  "lat": 42.8835015,
+  "lon": 74.6071825,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084071,
+  "lat": 42.8833462,
+  "lon": 74.6072334,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084073,
+  "lat": 42.8831919,
+  "lon": 74.6071623,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084075,
+  "lat": 42.8827311,
+  "lon": 74.6071302,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084077,
+  "lat": 42.8825846,
+  "lon": 74.6071918,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084079,
+  "lat": 42.8823989,
+  "lon": 74.6071154,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084081,
+  "lat": 42.8821552,
+  "lon": 74.6071047,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084094,
+  "lat": 42.8817405,
+  "lon": 74.6070805,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084096,
+  "lat": 42.8815946,
+  "lon": 74.6071255,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084098,
+  "lat": 42.8812688,
+  "lon": 74.6071060,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084100,
+  "lat": 42.8810236,
+  "lon": 74.6070772,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084102,
+  "lat": 42.8808349,
+  "lon": 74.6070083,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084120,
+  "lat": 42.8804870,
+  "lon": 74.6069721,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084122,
+  "lat": 42.8801313,
+  "lon": 74.6069520,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10583084125,
+  "lat": 42.8798151,
+  "lon": 74.6069352,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848497,
+  "lat": 42.8820990,
+  "lon": 74.5883124,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848506,
+  "lat": 42.8820935,
+  "lon": 74.5884150,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848516,
+  "lat": 42.8822493,
+  "lon": 74.5884270,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848523,
+  "lat": 42.8822548,
+  "lon": 74.5883249,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848531,
+  "lat": 42.8823161,
+  "lon": 74.5883365,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848540,
+  "lat": 42.8823107,
+  "lon": 74.5884391,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848550,
+  "lat": 42.8824665,
+  "lon": 74.5884512,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848556,
+  "lat": 42.8824719,
+  "lon": 74.5883491,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848560,
+  "lat": 42.8826757,
+  "lon": 74.5884710,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848561,
+  "lat": 42.8826812,
+  "lon": 74.5883688,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848562,
+  "lat": 42.8825254,
+  "lon": 74.5883563,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10597848563,
+  "lat": 42.8825199,
+  "lon": 74.5884589,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10605455607,
+  "lat": 42.8813435,
+  "lon": 74.5856845,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10605455611,
+  "lat": 42.8811708,
+  "lon": 74.5856921,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10605455612,
+  "lat": 42.8812133,
+  "lon": 74.5856693,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10605455676,
+  "lat": 42.8810816,
+  "lon": 74.5883767,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 11111258952,
+  "lat": 42.8815289,
+  "lon": 74.5868778,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 11391401904,
+  "lat": 42.8744860,
+  "lon": 74.6042101,
+  "tags": {
+    "amenity": "recycling",
+    "recycling:plastic_bottles": "yes",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 11391401906,
+  "lat": 42.8779921,
+  "lon": 74.6109223,
+  "tags": {
+    "amenity": "recycling",
+    "recycling:plastic_bottles": "yes",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 11492259302,
+  "lat": 42.8339223,
+  "lon": 74.6215251,
+  "tags": {
+    "amenity": "recycling",
+    "recycling:plastic_bottles": "yes",
+    "recycling_type": "container"
+  }
+},
+{
+  "type": "node",
+  "id": 11597454694,
+  "lat": 42.8745528,
+  "lon": 74.5897382,
+  "tags": {
+    "access": "private",
+    "amenity": "recycling",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 11896796670,
+  "lat": 42.8519056,
+  "lon": 74.5433356,
+  "tags": {
+    "amenity": "recycling",
+    "name": "Кара-металл алуу борбору",
+    "name:ru": "Пункт приёма чёрного металла",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 11898101169,
+  "lat": 42.8519726,
+  "lon": 74.5488662,
+  "tags": {
+    "amenity": "recycling",
+    "name": "Чёрный Металл",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 11898109469,
+  "lat": 42.8518897,
+  "lon": 74.5521098,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 11898113269,
+  "lat": 42.8518563,
+  "lon": 74.5532951,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 13173739220,
+  "lat": 42.8772934,
+  "lon": 74.5865163,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13752041887,
+  "lat": 42.8743202,
+  "lon": 74.5843575,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+}
+
+  ]
+}

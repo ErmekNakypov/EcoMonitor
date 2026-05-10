@@ -11,10 +11,14 @@ namespace EcoMonitor.Web.Areas.Admin.Controllers;
 public class DiagnosticsController : Controller
 {
     private readonly IAirQualityIngestionRunner _runner;
+    private readonly IContainerImportService _containerImporter;
 
-    public DiagnosticsController(IAirQualityIngestionRunner runner)
+    public DiagnosticsController(
+        IAirQualityIngestionRunner runner,
+        IContainerImportService containerImporter)
     {
         _runner = runner;
+        _containerImporter = containerImporter;
     }
 
     [HttpGet("")]
@@ -44,6 +48,25 @@ public class DiagnosticsController : Controller
         else
         {
             TempData["ErrorMessage"] = $"Ingestion problem: {result.Error}";
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("ImportContainers")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ImportContainers()
+    {
+        var result = await _containerImporter.ImportFromOsmAsync();
+        if (result.Error is null)
+        {
+            var sourceLabel = result.Source == "live" ? "live OSM" : "bundled snapshot";
+            TempData["SuccessMessage"] =
+                $"OSM import complete (source: {sourceLabel}): {result.Created} created, {result.Updated} updated, {result.Skipped} skipped (out of {result.TotalFetched} fetched).";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = $"Import failed: {result.Error}";
         }
 
         return RedirectToAction(nameof(Index));

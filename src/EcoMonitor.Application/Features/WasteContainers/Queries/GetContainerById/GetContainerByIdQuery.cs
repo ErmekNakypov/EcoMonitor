@@ -16,4 +16,6 @@ public sealed record ContainerDetailsDto(
     int Capacity,
     DateTime InstalledAt,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    bool IsImported,
+    long? OsmId);

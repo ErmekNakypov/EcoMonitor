@@ -16,8 +16,25 @@
                 <i class="bi bi-pencil-square"></i>
                 <span>Edit container</span>
             </span>
-            <h1 class="h2 fw-700 mt-3 mb-1">Edit @Model.Code</h1>
+            <h1 class="h2 fw-700 mt-3 mb-1">
+                Edit @Model.Code
+                @if (Model.IsImported)
+                {
+                    <span class="role-badge role-badge-inspector ms-2" title="Imported from OpenStreetMap">
+                        <i class="bi bi-cloud-download me-1"></i>Imported from OSM
+                    </span>
+                }
+            </h1>
             <p class="text-muted mb-0">Update the container's details, status, or move its pin.</p>
+            @if (Model.IsImported && Model.OsmId.HasValue)
+            {
+                <p class="text-muted small mt-2 mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Linked to OpenStreetMap node
+                    <a href="https://www.openstreetmap.org/node/@Model.OsmId" target="_blank" rel="noopener">#@Model.OsmId</a>.
+                    Editing is allowed but may be overwritten on next import.
+                </p>
+            }
         </div>
 
         <form asp-area="Admin" asp-controller="Containers" asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>

@@ -39,4 +39,7 @@ public class EditContainerViewModel
     [DataType(DataType.Date)]
     [Display(Name = "Installed at")]
     public DateTime InstalledAt { get; set; }
+
+    public bool IsImported { get; set; }
+    public long? OsmId { get; set; }
 }

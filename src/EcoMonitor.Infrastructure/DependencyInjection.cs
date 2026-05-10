@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Infrastructure.AirQuality;
+using EcoMonitor.Infrastructure.Containers;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Infrastructure.Storage;
@@ -74,10 +75,17 @@ public static class DependencyInjection
             client.Timeout = TimeSpan.FromSeconds(15);
         });
 
+        services.AddHttpClient("overpass", client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("EcoMonitor/1.0 (academic project)");
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
+
         services.AddScoped<IAirQualityProvider, OpenAqAirQualityProvider>();
         services.AddScoped<IAirQualityProvider, IqAirAirQualityProvider>();
         services.AddScoped<IAirQualityRepository, AirQualityRepository>();
         services.AddScoped<IAirQualityIngestionRunner, AirQualityIngestionRunner>();
+        services.AddScoped<IContainerImportService, OsmContainerImporter>();
 
         services.AddHostedService<AirQualityIngestionService>();
 

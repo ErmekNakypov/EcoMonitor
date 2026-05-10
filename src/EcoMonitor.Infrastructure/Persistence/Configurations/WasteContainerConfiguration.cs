@@ -18,5 +18,9 @@ public class WasteContainerConfiguration : IEntityTypeConfiguration<WasteContain
 
         builder.HasIndex(c => c.Code).IsUnique();
         builder.HasIndex(c => c.Status);
+
+        builder.HasIndex(c => c.OsmId)
+            .IsUnique()
+            .HasFilter("osm_id IS NOT NULL");
     }
 }

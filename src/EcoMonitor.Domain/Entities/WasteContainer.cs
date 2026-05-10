@@ -13,4 +13,6 @@ public class WasteContainer : BaseEntity
     public int Capacity { get; set; }
     public ContainerStatus Status { get; set; } = ContainerStatus.Active;
     public DateTime InstalledAt { get; set; }
+    public long? OsmId { get; set; }
+    public bool IsImported { get; set; }
 }

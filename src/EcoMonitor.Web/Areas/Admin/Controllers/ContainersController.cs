@@ -121,7 +121,9 @@ public class ContainersController : Controller
             Type = details.Type,
             Capacity = details.Capacity,
             Status = details.Status,
-            InstalledAt = details.InstalledAt
+            InstalledAt = details.InstalledAt,
+            IsImported = details.IsImported,
+            OsmId = details.OsmId
         };
 
         return View(model);

@@ -29,7 +29,9 @@ public class GetContainerByIdHandler : IRequestHandler<GetContainerByIdQuery, Co
                 c.Capacity,
                 c.InstalledAt,
                 c.CreatedAt,
-                c.UpdatedAt))
+                c.UpdatedAt,
+                c.IsImported,
+                c.OsmId))
             .FirstOrDefaultAsync(cancellationToken);
 
         return container;

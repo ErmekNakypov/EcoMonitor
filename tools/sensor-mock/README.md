@@ -1,42 +1,63 @@
-# sensor-mock
+# EcoMonitor Sensor Mock
 
-Tiny Python script that pretends to be an ESP32 air-quality sensor and pushes
-randomised readings to the EcoMonitor `/api/v1/sensors/readings` endpoint.
+Simulates ESP32 air-quality sensors posting to the EcoMonitor API.
+Multi-device support: one config file, one process, all devices run concurrently.
 
-Use it to demo the IoT pipeline without procuring real hardware.
+## Setup
 
-## Requirements
+1. Register devices in the admin panel at `/Admin/Devices` and copy each
+   device token (shown once after creation).
+2. Copy the config template:
 
-- Python 3.9+
-- A registered IoT device in EcoMonitor (Admin → IoT devices → Register
-  device). Copy the JWT shown on the "Token issued" page — it is shown only
-  once.
+   ```bash
+   cp sensors.json.example sensors.json
+   ```
 
-## Run
+3. Edit `sensors.json`: paste each device's id and token, adjust baseline
+   values if you want different AQI levels per device.
+
+## Run (foreground, see live output)
 
 ```bash
-export ECOMONITOR_URL=http://localhost:5108     # base URL of the running app
-export DEVICE_ID=ESP32-A7F3B2                    # device code shown in the admin UI
-export DEVICE_TOKEN=eyJhbGciOi...                # JWT from the Token Issued page
-export INTERVAL_SECONDS=30                       # optional; default 30s
-
 python3 sensor_mock.py
 ```
 
-The script POSTs every `INTERVAL_SECONDS` and prints `OK` / `FAIL` per request.
+Press Ctrl+C to stop. All devices stop together.
 
-## Generated values
+## Run (background)
 
-Readings are uniform-random within plausible Bishkek ranges:
+The first time, make the wrappers executable:
 
-| Field         | Range       |
-| ------------- | ----------- |
-| `pm25`        | 8 – 45 µg/m³ |
-| `pm10`        | 15 – 80 µg/m³ |
-| `temperature` | 12 – 22 °C |
-| `humidity`    | 40 – 85 % |
-| `pressure`    | 1005 – 1025 hPa |
-| `measuredAt`  | now (UTC, ISO 8601) |
+```bash
+chmod +x start.sh stop.sh
+```
+
+Then:
+
+```bash
+./start.sh        # starts in background, logs to mock.log, pid in mock.pid
+tail -f mock.log  # follow logs
+./stop.sh         # stop
+```
+
+## Config
+
+Edit `sensors.json`. Each device entry has:
+
+- `deviceId` — matches the admin-registered device id (`ESP32-XXXXXX`)
+- `token` — JWT shown on the device's "Token issued" page
+- `name` — display label in logs (any string)
+- `baselinePm25`, `baselineTemperature`, `baselineHumidity`,
+  `baselinePressure` — readings jitter randomly around these baselines
+  (±15% on PM, ±2°C on temperature, ±5% on humidity, ±3 hPa on pressure)
+
+Baseline values let you simulate different AQI conditions per device.
+Higher `baselinePm25` produces a redder marker on the map.
+
+Top-level config keys:
+
+- `baseUrl` — EcoMonitor base URL (defaults to `http://localhost:5108`)
+- `intervalSeconds` — how often each device posts (defaults to `30`)
 
 ## Notes
 
@@ -46,3 +67,8 @@ Readings are uniform-random within plausible Bishkek ranges:
   `{"error":"Device not found or not active"}`.
 - The same `(deviceId, measuredAt)` tuple is idempotent server-side — replays
   return success without duplicating the reading.
+
+## Security
+
+`sensors.json` contains real device tokens and is gitignored.
+Never commit it.

@@ -2,6 +2,7 @@ using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Domain.Common;
 using EcoMonitor.Domain.Entities;
 using EcoMonitor.Infrastructure.Identity;
+using EcoMonitor.Infrastructure.Persistence.Conversions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,27 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<IdentityUserToken<Guid>>().ToTable("user_tokens");
 
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        // Force every DateTime/DateTime? property through UTC converters so
+        // Npgsql's `timestamp with time zone` requirement is satisfied
+        // regardless of where the value originated (form, JSON, code).
+        var dateTimeConverter = new UtcDateTimeConverter();
+        var nullableDateTimeConverter = new NullableUtcDateTimeConverter();
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTime))
+                {
+                    property.SetValueConverter(dateTimeConverter);
+                }
+                else if (property.ClrType == typeof(DateTime?))
+                {
+                    property.SetValueConverter(nullableDateTimeConverter);
+                }
+            }
+        }
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

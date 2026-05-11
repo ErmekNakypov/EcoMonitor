@@ -35,4 +35,30 @@ public static class DateHelpers
         var y = d / 365;
         return y == 1 ? "1 year ago" : $"{y} years ago";
     }
+
+    // For fields that represent a calendar date rather than a moment in time
+    // (e.g. WasteContainer.InstalledAt sourced from <input type="date">).
+    // FormatRelative would lie about these — "17 hours ago" for something
+    // that happened "today" — because the value is midnight UTC.
+    public static string FormatDate(DateTime dateTime, CultureInfo? culture = null)
+    {
+        culture ??= CultureInfo.CurrentCulture;
+        var today = DateTime.UtcNow.Date;
+        var date = dateTime.Date;
+
+        if (date == today) return "Today";
+        if (date == today.AddDays(-1)) return "Yesterday";
+        if (date == today.AddDays(1)) return "Tomorrow";
+
+        var diff = (today - date).Days;
+        if (diff > 0 && diff <= 7)
+        {
+            return diff == 1 ? "1 day ago" : $"{diff} days ago";
+        }
+
+        return date.ToString("MMM d, yyyy", culture);
+    }
+
+    public static string FormatDate(DateTime? dateTime, CultureInfo? culture = null) =>
+        dateTime.HasValue ? FormatDate(dateTime.Value, culture) : "—";
 }

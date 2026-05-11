@@ -1,0 +1,24 @@
+{
+  "baseUrl": "http://localhost:5108",
+  "intervalSeconds": 30,
+  "devices": [
+    {
+      "deviceId": "ESP32-XXXXXX",
+      "name": "Sensor at Chuy Avenue",
+      "token": "eyJhbGciOiJI...REPLACE-WITH-REAL-TOKEN",
+      "baselinePm25": 22,
+      "baselineTemperature": 18,
+      "baselineHumidity": 55,
+      "baselinePressure": 1015
+    },
+    {
+      "deviceId": "ESP32-YYYYYY",
+      "name": "Sensor at Manas Avenue",
+      "token": "eyJhbGciOiJI...REPLACE-WITH-REAL-TOKEN",
+      "baselinePm25": 35,
+      "baselineTemperature": 17,
+      "baselineHumidity": 60,
+      "baselinePressure": 1014
+    }
+  ]
+}

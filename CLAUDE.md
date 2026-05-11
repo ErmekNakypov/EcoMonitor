@@ -37,6 +37,25 @@ Clean Architecture in a Modular Monolith.
 PostgreSQL connection string for development:
 Host=localhost;Port=5432;Database=ecomonitor;Username=ecomonitor_app;Password=devpassword123
 
+## Dumpsite lifecycle (multi-stage cleanup workflow)
+A dumpsite report passes through three roles and seven possible states:
+`New → InReview → Confirmed → CleanupInProgress → AwaitingVerification → Resolved`
+(plus `Rejected` as a dead-end from `InReview`).
+
+- **Citizen** submits via web or Telegram.
+- **Inspector** takes the report (`InReview`), then either rejects it or
+  confirms with at least one inspection photo + optional observations. After
+  confirmation the report appears on the public map AND in the cleanup queue.
+- **CleanupCrew** (own role) takes from the queue (no state change), starts
+  cleanup with before-photos (`CleanupInProgress`), then marks done with
+  after-photos + notes (`AwaitingVerification`).
+- **Inspector** (any inspector, not necessarily the original assignee)
+  verifies the cleanup (`Resolved`) or sends it back to the crew for rework
+  (back to `CleanupInProgress`, feedback appended to `cleanup_notes`).
+
+Status numeric values are frozen — never reorder the `DumpsiteStatus` enum.
+New states append at the end.
+
 ## Telegram bot
 Citizens can submit dumpsite reports through a Telegram bot in addition to the web UI.
 The bot runs as a hosted background service using long polling, no webhook required.

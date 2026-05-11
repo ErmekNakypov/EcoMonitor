@@ -18,4 +18,17 @@ public class DumpsiteReport : BaseEntity
     public ReportSource Source { get; set; } = ReportSource.Web;
     public long? TelegramUserId { get; set; }
     public string? TelegramUserName { get; set; }
+
+    // Inspector confirmation
+    public string? InspectorObservations { get; set; }
+
+    // Cleanup crew
+    public Guid? CleanupCrewId { get; set; }
+    public DateTime? CleanupStartedAt { get; set; }
+    public DateTime? CleanupCompletedAt { get; set; }
+    public string? CleanupNotes { get; set; }
+
+    // Final verification by (possibly different) inspector
+    public DateTime? VerifiedAt { get; set; }
+    public Guid? VerifiedByInspectorId { get; set; }
 }

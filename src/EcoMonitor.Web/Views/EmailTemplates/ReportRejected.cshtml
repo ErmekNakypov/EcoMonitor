@@ -1,6 +1,5 @@
 @model ReportRejectedEmailModel
 @{
-    Layout = "_Layout";
     ViewBag.Title = "Report could not be confirmed";
     var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
     var reasonText = string.IsNullOrWhiteSpace(Model.Reason) ? "(no reason provided)" : Model.Reason;

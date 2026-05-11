@@ -14,12 +14,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace EcoMonitor.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
             options
@@ -33,11 +37,26 @@ public static class DependencyInjection
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
-            options.Password.RequiredLength = 8;
-            options.Password.RequireDigit = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireNonAlphanumeric = false;
+            if (environment.IsDevelopment())
+            {
+                // Loose policy for fast local development. Production gets the
+                // strict policy in the else branch below.
+                options.Password.RequiredLength = 1;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredUniqueChars = 1;
+            }
+            else
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredUniqueChars = 4;
+            }
 
             options.User.RequireUniqueEmail = true;
 
@@ -94,12 +113,15 @@ public static class DependencyInjection
 
         services.AddSingleton<BotLocalizer>();
         services.AddScoped<ITelegramDialogService, TelegramDialogService>();
+        services.AddScoped<ITelegramNotificationService, TelegramReportNotificationService>();
 
         services.Configure<EmailOptions>(configuration.GetSection("Email"));
         services.AddScoped<IEmailSender, SmtpEmailSender>();
         services.AddScoped<IEmailQueue, DbEmailQueue>();
         services.AddScoped<IRazorViewRenderer, RazorViewRenderer>();
         services.AddScoped<IReportNotificationService, EmailReportNotificationService>();
+        services.AddScoped<IRoleNotificationService, RoleNotificationService>();
+        services.Configure<AppOptions>(configuration.GetSection(AppOptions.Section));
 
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
 

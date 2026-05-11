@@ -1,6 +1,5 @@
 @model ReportResolvedEmailModel
 @{
-    Layout = "_Layout";
     ViewBag.Title = "Dumpsite resolved";
     var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
     var notesText = string.IsNullOrWhiteSpace(Model.Notes) ? "(no additional notes)" : Model.Notes;

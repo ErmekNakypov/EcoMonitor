@@ -1,0 +1,243 @@
+@model CleanupReportDto
+@{
+    ViewData["Title"] = "Cleanup details";
+    var currentUserId = (Guid)ViewData["CurrentUserId"]!;
+    var isMine = Model.CleanupCrewId == currentUserId;
+
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home", new { area = "" }) },
+        new BreadcrumbItem { Label = "My cleanups", Url = Url.Action("MyReports", "Reports", new { area = "CleanupCrew" }) },
+        new BreadcrumbItem { Label = "Report" });
+
+    var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
+}
+
+<section class="py-5">
+    <div class="container">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
+
+        <div class="mb-4">
+            <div class="mb-2"><partial name="_StatusBadge" model="Model.Status" /></div>
+            <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-7">
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-2">Description from citizen</h2>
+                    <p class="mb-0">@Model.Description</p>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.InspectorObservations))
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">Inspector observations</h2>
+                        <p class="mb-0">@Model.InspectorObservations</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.CleanupNotes))
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">Cleanup notes</h2>
+                        <p class="mb-0" style="white-space: pre-wrap;">@Model.CleanupNotes</p>
+                    </div>
+                }
+
+                @if (Model.CitizenPhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Citizen photos (@Model.CitizenPhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.CitizenPhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Citizen photo" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.InspectionPhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Inspector verification photos (@Model.InspectionPhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.InspectionPhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Inspector photo" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.CleanupBeforePhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Before cleanup (@Model.CleanupBeforePhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.CleanupBeforePhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Before cleanup" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.CleanupAfterPhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">After cleanup (@Model.CleanupAfterPhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.CleanupAfterPhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="After cleanup" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-5">
+                <div class="auth-card mb-4">
+                    <h2 class="h6 fw-700 mb-3">Location</h2>
+                    <p class="text-muted small mb-0">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</p>
+                </div>
+
+                <div class="action-panel">
+                    <h2 class="h6 fw-700 mb-3">Actions</h2>
+
+                    @if (Model.Status == DumpsiteStatus.Confirmed && Model.CleanupCrewId is null)
+                    {
+                        <form asp-area="CleanupCrew" asp-controller="Reports" asp-action="Take" asp-route-id="@Model.Id" method="post" class="d-grid">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-hand-thumbs-up me-2"></i>Take this report
+                            </button>
+                        </form>
+                    }
+                    else if (Model.Status == DumpsiteStatus.Confirmed && isMine)
+                    {
+                        <button type="button" class="btn btn-primary btn-lg w-100"
+                                data-bs-toggle="modal" data-bs-target="#startModal">
+                            <i class="bi bi-play-circle me-2"></i>Start cleanup
+                        </button>
+                    }
+                    else if (Model.Status == DumpsiteStatus.CleanupInProgress && isMine)
+                    {
+                        <button type="button" class="btn btn-primary btn-lg w-100"
+                                data-bs-toggle="modal" data-bs-target="#completeModal">
+                            <i class="bi bi-check2-all me-2"></i>Mark cleanup done
+                        </button>
+                    }
+                    else if (Model.Status == DumpsiteStatus.AwaitingVerification)
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-hourglass-split me-2"></i>Waiting for an inspector to verify the cleanup.
+                        </p>
+                    }
+                    else if (Model.CleanupCrewId is not null && !isMine)
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-person-check me-2"></i>This report is being handled by another cleanup crew member.
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model.Status == DumpsiteStatus.Confirmed && isMine)
+{
+    <div class="modal fade" id="startModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-area="CleanupCrew" asp-controller="Reports" asp-action="StartCleanup" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Start cleanup</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Upload one or more "before" photos to document the site condition.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="beforePhotos">Before photos</label>
+                            <input id="beforePhotos" name="BeforePhotos" type="file" class="form-control" multiple accept="image/*" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-play-circle me-2"></i>Start
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Status == DumpsiteStatus.CleanupInProgress && isMine)
+{
+    <div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-area="CleanupCrew" asp-controller="Reports" asp-action="CompleteCleanup" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Mark cleanup done</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Upload "after" photos and leave a short note for the inspector.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="afterPhotos">After photos</label>
+                            <input id="afterPhotos" name="AfterPhotos" type="file" class="form-control" multiple accept="image/*" required />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="notes">Notes (optional)</label>
+                            <textarea id="notes" name="Notes" rows="3" class="form-control" maxlength="1000" placeholder="What did you do? Any issues?"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check2-all me-2"></i>Submit for verification
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="photo-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img id="photo-modal-img" src="" alt="Photo" class="w-100 rounded" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var photoModal = document.getElementById('photo-modal');
+            if (!photoModal) return;
+            photoModal.addEventListener('show.bs.modal', function (e) {
+                var src = e.relatedTarget ? e.relatedTarget.getAttribute('data-photo-src') : null;
+                if (src) document.getElementById('photo-modal-img').setAttribute('src', src);
+            });
+        })();
+    </script>
+}

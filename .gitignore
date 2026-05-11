@@ -52,6 +52,10 @@ packages/
 # User uploads (keep dir, ignore content)
 src/EcoMonitor.Web/wwwroot/uploads/dumpsites/*
 !src/EcoMonitor.Web/wwwroot/uploads/dumpsites/.gitkeep
+src/EcoMonitor.Web/wwwroot/uploads/inspections/*
+!src/EcoMonitor.Web/wwwroot/uploads/inspections/.gitkeep
+src/EcoMonitor.Web/wwwroot/uploads/cleanup/*
+!src/EcoMonitor.Web/wwwroot/uploads/cleanup/.gitkeep
 
 # Local user secrets / overrides
 appsettings.*.local.json

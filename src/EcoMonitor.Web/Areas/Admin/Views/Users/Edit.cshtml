@@ -43,9 +43,10 @@
                 <div class="mb-3">
                     <label asp-for="Role" class="form-label fw-500"></label>
                     <select asp-for="Role" class="form-select form-select-lg">
-                        <option value="@RoleNames.Administrator">Administrator</option>
-                        <option value="@RoleNames.Inspector">Inspector</option>
-                        <option value="@RoleNames.Citizen">Citizen</option>
+                        @foreach (var role in Model.AvailableRoles)
+                        {
+                            <option value="@role" selected="@(role == Model.Role)">@role</option>
+                        }
                     </select>
                     <span asp-validation-for="Role" class="text-danger small"></span>
                 </div>

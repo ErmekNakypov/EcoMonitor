@@ -25,3 +25,29 @@ public sealed record ReportResolvedEmailModel(
     string InspectorName,
     string Notes,
     DateTime ResolvedAt);
+
+public sealed record CleanupStartedEmailModel(
+    string ReporterName,
+    Guid ReportId,
+    DateTime StartedAt);
+
+public sealed record CleanupCompletedEmailModel(
+    string ReporterName,
+    Guid ReportId,
+    DateTime CompletedAt,
+    string CleanupNotes);
+
+public sealed record InspectorNewAssignmentEmailModel(
+    string InspectorName,
+    Guid ReportId,
+    string ReportDescription,
+    DateTime ReportedAt,
+    string ReportUrl);
+
+public sealed record CleanupCrewNewTaskEmailModel(
+    string CrewName,
+    Guid ReportId,
+    string ReportDescription,
+    double Latitude,
+    double Longitude,
+    string ReportUrl);

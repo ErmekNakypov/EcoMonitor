@@ -24,4 +24,6 @@ public class EditUserViewModel
     public bool IsActive { get; set; }
 
     public string CurrentRole { get; set; } = string.Empty;
+
+    public IReadOnlyList<string> AvailableRoles { get; set; } = Array.Empty<string>();
 }

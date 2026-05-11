@@ -156,6 +156,7 @@
                                 <th>Status</th>
                                 <th>Subject</th>
                                 <th>To</th>
+                                <th>Role</th>
                                 <th>Template</th>
                                 <th class="text-center">Attempts</th>
                                 <th>Created</th>
@@ -169,6 +170,7 @@
                                     <td><span class="@StatusPill(m.Status)">@m.Status</span></td>
                                     <td class="fw-500">@m.Subject</td>
                                     <td class="text-muted small">@m.ToAddress</td>
+                                    <td class="text-muted small">@(m.RecipientRole ?? "—")</td>
                                     <td class="text-muted small">@m.TemplateName</td>
                                     <td class="text-center">@m.AttemptCount</td>
                                     <td class="text-muted small">@DateHelpers.FormatRelative(m.CreatedAt)</td>

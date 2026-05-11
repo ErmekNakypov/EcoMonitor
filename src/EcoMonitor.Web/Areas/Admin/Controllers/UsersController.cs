@@ -15,9 +15,6 @@ public class UsersController : Controller
 {
     private const int PageSize = 20;
 
-    private static readonly string[] AllowedRoles =
-        { RoleNames.Administrator, RoleNames.Inspector, RoleNames.Citizen };
-
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ILogger<UsersController> _logger;
@@ -30,6 +27,16 @@ public class UsersController : Controller
         _userManager = userManager;
         _roleManager = roleManager;
         _logger = logger;
+    }
+
+    private async Task<IReadOnlyList<string>> GetAvailableRolesAsync()
+    {
+        var names = await _roleManager.Roles
+            .Select(r => r.Name)
+            .Where(n => n != null)
+            .OrderBy(n => n)
+            .ToListAsync();
+        return names!.Cast<string>().ToList();
     }
 
     [HttpGet]
@@ -100,22 +107,26 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        return View(new CreateUserViewModel());
+        return View(new CreateUserViewModel
+        {
+            AvailableRoles = await GetAvailableRolesAsync()
+        });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateUserViewModel model)
     {
-        if (!AllowedRoles.Contains(model.Role))
+        if (string.IsNullOrWhiteSpace(model.Role) || !await _roleManager.RoleExistsAsync(model.Role))
         {
             ModelState.AddModelError(nameof(model.Role), "Invalid role.");
         }
 
         if (!ModelState.IsValid)
         {
+            model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
 
@@ -123,6 +134,7 @@ public class UsersController : Controller
         if (existing is not null)
         {
             ModelState.AddModelError(nameof(model.Email), "A user with this email already exists.");
+            model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
 
@@ -143,6 +155,7 @@ public class UsersController : Controller
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+            model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
 
@@ -175,7 +188,8 @@ public class UsersController : Controller
             FullName = user.FullName,
             Role = currentRole,
             CurrentRole = currentRole,
-            IsActive = user.IsActive
+            IsActive = user.IsActive,
+            AvailableRoles = await GetAvailableRolesAsync()
         };
 
         return View(model);
@@ -190,13 +204,14 @@ public class UsersController : Controller
             return BadRequest();
         }
 
-        if (!AllowedRoles.Contains(model.Role))
+        if (string.IsNullOrWhiteSpace(model.Role) || !await _roleManager.RoleExistsAsync(model.Role))
         {
             ModelState.AddModelError(nameof(model.Role), "Invalid role.");
         }
 
         if (!ModelState.IsValid)
         {
+            model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
 
@@ -222,6 +237,7 @@ public class UsersController : Controller
             {
                 ModelState.AddModelError(nameof(model.Role), "Cannot remove the last administrator.");
                 model.CurrentRole = currentRole ?? string.Empty;
+                model.AvailableRoles = await GetAvailableRolesAsync();
                 return View(model);
             }
         }
@@ -230,6 +246,7 @@ public class UsersController : Controller
         {
             ModelState.AddModelError(nameof(model.IsActive), "You cannot deactivate your own account.");
             model.CurrentRole = currentRole ?? string.Empty;
+            model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
 
@@ -244,6 +261,7 @@ public class UsersController : Controller
                 ModelState.AddModelError(string.Empty, error.Description);
             }
             model.CurrentRole = currentRole ?? string.Empty;
+            model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
 

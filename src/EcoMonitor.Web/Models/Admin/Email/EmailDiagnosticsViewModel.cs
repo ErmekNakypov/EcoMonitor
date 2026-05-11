@@ -35,4 +35,5 @@ public class RecentEmailViewModel
     public DateTime? SentAt { get; set; }
     public DateTime? NextAttemptAt { get; set; }
     public string? LastError { get; set; }
+    public string? RecipientRole { get; set; }
 }

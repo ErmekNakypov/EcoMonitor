@@ -1,0 +1,33 @@
+@model CleanupCompletedEmailModel
+@{
+    ViewBag.Title = "Cleanup completed";
+    var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+}
+<h2 style="margin:0 0 16px 0;color:#1F2937;font-size:20px;">Cleanup completed — awaiting verification</h2>
+<p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.ReporterName,</p>
+<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
+    The cleanup crew finished work on site. An inspector will visit shortly to verify the result, after which we'll send you a final confirmation.
+</p>
+@if (!string.IsNullOrWhiteSpace(Model.CleanupNotes))
+{
+    <div style="background:#F9FAFB;border-left:4px solid #6366F1;padding:12px 16px;margin:16px 0;font-size:14px;color:#3730A3;line-height:1.6;">
+        <strong style="display:block;margin-bottom:4px;">Cleanup crew notes</strong>
+        @Model.CleanupNotes
+    </div>
+}
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#F9FAFB;border-radius:8px;padding:16px;margin:16px 0;">
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Reference ID</td>
+        <td style="padding:8px 0;font-size:14px;font-weight:700;text-align:right;">@refId</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Completed</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">@Model.CompletedAt.ToString("MMM d, yyyy HH:mm")</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Status</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">
+            <span style="background:#FAE8FF;color:#6B21A8;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;">Awaiting verification</span>
+        </td>
+    </tr>
+</table>

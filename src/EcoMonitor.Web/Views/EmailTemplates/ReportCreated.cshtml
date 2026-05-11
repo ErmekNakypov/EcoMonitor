@@ -1,6 +1,5 @@
 @model ReportCreatedEmailModel
 @{
-    Layout = "_Layout";
     ViewBag.Title = "Report received";
     var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
 }

@@ -164,6 +164,93 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                     b.ToTable("air_quality_stations", (string)null);
                 });
 
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteCleanupPhoto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("file_path");
+
+                    b.Property<Guid>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("report_id");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UploadedByUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("uploaded_by_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_dumpsite_cleanup_photos");
+
+                    b.HasIndex("ReportId")
+                        .HasDatabaseName("ix_dumpsite_cleanup_photos_report_id");
+
+                    b.HasIndex("ReportId", "Type")
+                        .HasDatabaseName("ix_dumpsite_cleanup_photos_report_id_type");
+
+                    b.ToTable("dumpsite_cleanup_photos", (string)null);
+                });
+
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteInspectionPhoto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("file_path");
+
+                    b.Property<Guid>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("report_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("uploaded_at");
+
+                    b.Property<Guid>("UploadedByInspectorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("uploaded_by_inspector_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_dumpsite_inspection_photos");
+
+                    b.HasIndex("ReportId")
+                        .HasDatabaseName("ix_dumpsite_inspection_photos_report_id");
+
+                    b.ToTable("dumpsite_inspection_photos", (string)null);
+                });
+
             modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteReport", b =>
                 {
                     b.Property<Guid>("Id")
@@ -175,6 +262,23 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("assigned_inspector_id");
 
+                    b.Property<DateTime?>("CleanupCompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("cleanup_completed_at");
+
+                    b.Property<Guid?>("CleanupCrewId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cleanup_crew_id");
+
+                    b.Property<string>("CleanupNotes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("cleanup_notes");
+
+                    b.Property<DateTime?>("CleanupStartedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("cleanup_started_at");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -184,6 +288,11 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("description");
+
+                    b.Property<string>("InspectorObservations")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("inspector_observations");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("double precision")
@@ -234,11 +343,22 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("verified_at");
+
+                    b.Property<Guid?>("VerifiedByInspectorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("verified_by_inspector_id");
+
                     b.HasKey("Id")
                         .HasName("pk_dumpsite_reports");
 
                     b.HasIndex("AssignedInspectorId")
                         .HasDatabaseName("ix_dumpsite_reports_assigned_inspector_id");
+
+                    b.HasIndex("CleanupCrewId")
+                        .HasDatabaseName("ix_dumpsite_reports_cleanup_crew_id");
 
                     b.HasIndex("ReporterId")
                         .HasDatabaseName("ix_dumpsite_reports_reporter_id");

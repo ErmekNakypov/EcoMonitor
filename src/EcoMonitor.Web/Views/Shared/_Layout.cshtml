@@ -25,6 +25,7 @@
     var isAdmin = isSignedIn && User.IsInRole(RoleNames.Administrator);
     var isInspector = isSignedIn && User.IsInRole(RoleNames.Inspector);
     var isCitizen = isSignedIn && User.IsInRole(RoleNames.Citizen);
+    var isCleanupCrew = isSignedIn && User.IsInRole(RoleNames.CleanupCrew);
 }
 <!DOCTYPE html>
 <html lang="@currentCulture">
@@ -145,6 +146,36 @@
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Inspector", "MyReports") ? "active" : "")" asp-controller="Inspector" asp-action="MyReports">
                                     <i class="bi bi-clipboard-check"></i><span>My reports</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Inspector", "Verification") ? "active" : "")" asp-controller="Inspector" asp-action="Verification">
+                                    <i class="bi bi-shield-check"></i><span>Verification</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
+                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
+                        }
+                        else if (isCleanupCrew)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i><span>Home</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 navbar-cta"
+                                   asp-area="CleanupCrew" asp-controller="Reports" asp-action="Queue">
+                                    <i class="bi bi-bucket"></i><span>Cleanup queue</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive("CleanupCrew", "Reports", "MyReports") ? "active" : "")"
+                                   asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports">
+                                    <i class="bi bi-clipboard-check"></i><span>My cleanups</span>
                                 </a>
                             </li>
                             <li class="nav-item">

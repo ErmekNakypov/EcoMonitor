@@ -34,23 +34,25 @@ public class ResolveReportHandler : IRequestHandler<ResolveReportCommand, Unit>
             throw new NotFoundException($"Report {request.ReportId} not found.");
         }
 
-        if (report.AssignedInspectorId != request.InspectorId)
+        if (report.Status != DumpsiteStatus.AwaitingVerification)
         {
-            throw new ForbiddenException("You are not the assigned inspector for this report.");
+            throw new DomainException("Only reports awaiting verification can be marked as resolved.");
         }
 
-        if (report.Status != DumpsiteStatus.Confirmed)
-        {
-            throw new DomainException("Only confirmed reports can be marked as resolved.");
-        }
+        // Verifying inspector may differ from the originally assigned inspector
+        // (spec: "the verifying inspector may or may not be the original assigned inspector").
 
         report.Status = DumpsiteStatus.Resolved;
         report.ResolutionNotes = request.Notes;
         report.ResolvedAt = DateTime.UtcNow;
+        report.VerifiedAt = DateTime.UtcNow;
+        report.VerifiedByInspectorId = request.InspectorId;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Inspector {InspectorId} resolved report {ReportId}", request.InspectorId, report.Id);
+        _logger.LogInformation(
+            "Inspector {InspectorId} verified+resolved report {ReportId}",
+            request.InspectorId, report.Id);
 
         try
         {

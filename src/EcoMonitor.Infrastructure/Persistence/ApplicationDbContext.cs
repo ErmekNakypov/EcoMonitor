@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<TelegramUserSession> TelegramUserSessions => Set<TelegramUserSession>();
     public DbSet<EmailMessage> EmailMessages => Set<EmailMessage>();
     public DbSet<IotDevice> IotDevices => Set<IotDevice>();
+    public DbSet<DumpsiteInspectionPhoto> DumpsiteInspectionPhotos => Set<DumpsiteInspectionPhoto>();
+    public DbSet<DumpsiteCleanupPhoto> DumpsiteCleanupPhotos => Set<DumpsiteCleanupPhoto>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

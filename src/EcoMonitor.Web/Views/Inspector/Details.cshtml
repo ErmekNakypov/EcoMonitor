@@ -9,13 +9,16 @@
         new BreadcrumbItem { Label = "Queue", Url = Url.Action("Queue", "Inspector") },
         new BreadcrumbItem { Label = headline });
 
+    // 5-stage stepper: Submitted, In review, Confirmed, Cleanup, Resolved
     int statusIndex = Model.Status switch
     {
         DumpsiteStatus.New => 0,
         DumpsiteStatus.InReview => 1,
         DumpsiteStatus.Confirmed => 2,
+        DumpsiteStatus.CleanupInProgress => 3,
+        DumpsiteStatus.AwaitingVerification => 3,
+        DumpsiteStatus.Resolved => 4,
         DumpsiteStatus.Rejected => 2,
-        DumpsiteStatus.Resolved => 3,
         _ => 0
     };
 
@@ -78,6 +81,10 @@
                 </div>
                 <div class="status-step @StepClass(3)">
                     <span class="status-step-bullet">4</span>
+                    <div class="status-step-label">Cleanup</div>
+                </div>
+                <div class="status-step @StepClass(4)">
+                    <span class="status-step-bullet">5</span>
                     <div class="status-step-label">Resolved</div>
                 </div>
             </div>
@@ -90,19 +97,80 @@
                     <p class="mb-0">@Model.Description</p>
                 </div>
 
+                @if (!string.IsNullOrWhiteSpace(Model.InspectorObservations))
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">Inspector observations</h2>
+                        <p class="mb-0">@Model.InspectorObservations</p>
+                    </div>
+                }
+
                 @if (Model.PhotoPaths.Count > 0)
                 {
                     <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-3">Photos (@Model.PhotoPaths.Count)</h2>
+                        <h2 class="h6 fw-700 mb-3">Citizen photos (@Model.PhotoPaths.Count)</h2>
                         <div class="photo-gallery">
                             @for (int i = 0; i < Model.PhotoPaths.Count; i++)
                             {
                                 var path = Model.PhotoPaths[i];
                                 <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                    <img src="@path" alt="Report photo @(i + 1)" />
+                                    <img src="@path" alt="Citizen photo @(i + 1)" />
                                 </a>
                             }
                         </div>
+                    </div>
+                }
+
+                @if (Model.InspectionPhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Inspector verification photos (@Model.InspectionPhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.InspectionPhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Inspector photo" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.CleanupBeforePhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">Before cleanup (@Model.CleanupBeforePhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.CleanupBeforePhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Before cleanup" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.CleanupAfterPhotos.Count > 0)
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-3">After cleanup (@Model.CleanupAfterPhotos.Count)</h2>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.CleanupAfterPhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="After cleanup" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.CleanupNotes))
+                {
+                    <div class="auth-card mb-4">
+                        <h2 class="h6 fw-700 mb-2">Cleanup crew notes</h2>
+                        <p class="mb-0" style="white-space: pre-wrap;">@Model.CleanupNotes</p>
                     </div>
                 }
 
@@ -142,11 +210,10 @@
                         <div class="d-grid gap-2">
                             @if (Model.CanConfirm)
                             {
-                                <form asp-controller="Inspector" asp-action="Confirm" asp-route-id="@Model.Id" method="post">
-                                    <button type="submit" class="btn btn-primary btn-lg w-100">
-                                        <i class="bi bi-check2-circle me-2"></i>Confirm
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-primary btn-lg w-100"
+                                        data-bs-toggle="modal" data-bs-target="#confirm-modal">
+                                    <i class="bi bi-check2-circle me-2"></i>Confirm with photos
+                                </button>
                             }
                             @if (Model.CanReject)
                             {
@@ -156,11 +223,42 @@
                             }
                         </div>
                     }
-                    else if (Model.CanResolve)
+                    else if (Model.Status == DumpsiteStatus.Confirmed)
                     {
-                        <button type="button" class="btn btn-primary btn-lg w-100" data-bs-toggle="modal" data-bs-target="#resolve-modal">
-                            <i class="bi bi-check2-all me-2"></i>Mark as resolved
-                        </button>
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-info-circle me-2"></i>This report is now in the cleanup queue.
+                            @if (!string.IsNullOrEmpty(Model.CleanupCrewName))
+                            {
+                                <text>Crew member <strong>@Model.CleanupCrewName</strong> has taken it.</text>
+                            }
+                            else
+                            {
+                                <text>A cleanup crew member will pick it up.</text>
+                            }
+                        </p>
+                    }
+                    else if (Model.Status == DumpsiteStatus.CleanupInProgress)
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-hourglass-split me-2"></i>Cleanup in progress.
+                            @if (Model.CleanupStartedAt.HasValue)
+                            {
+                                <text>Started @DateHelpers.FormatRelative(Model.CleanupStartedAt.Value).</text>
+                            }
+                        </p>
+                    }
+                    else if (Model.CanVerify)
+                    {
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary btn-lg w-100"
+                                    data-bs-toggle="modal" data-bs-target="#verify-modal">
+                                <i class="bi bi-check2-all me-2"></i>Verify and close
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-lg"
+                                    data-bs-toggle="modal" data-bs-target="#rework-modal">
+                                <i class="bi bi-arrow-counterclockwise me-2"></i>Send back for rework
+                            </button>
+                        </div>
                     }
                     else if (Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected)
                     {
@@ -179,6 +277,39 @@
         </div>
     </div>
 </section>
+
+@if (Model.CanConfirm)
+{
+    <div class="modal fade" id="confirm-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="Confirm" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Confirm dumpsite</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Upload at least one photo proving the dumpsite exists at the reported location.</p>
+                        <div class="mb-3">
+                            <label class="form-label fw-500" for="confirm-photos">Inspection photos</label>
+                            <input id="confirm-photos" name="Photos" type="file" class="form-control" multiple accept="image/*" required />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="confirm-observations">Observations (optional)</label>
+                            <textarea id="confirm-observations" name="Observations" rows="3" class="form-control" maxlength="1000" placeholder="Estimated volume, type of waste, accessibility, hazards…"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check2-circle me-2"></i>Confirm and send to cleanup queue
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
 
 @if (Model.CanReject)
 {
@@ -210,28 +341,55 @@
     </div>
 }
 
-@if (Model.CanResolve)
+@if (Model.CanVerify)
 {
-    <div class="modal fade" id="resolve-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="verify-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form asp-controller="Inspector" asp-action="Resolve" asp-route-id="@Model.Id" method="post">
                     <div class="modal-header">
-                        <h2 class="h5 fw-700 modal-title mb-0">Mark as resolved</h2>
+                        <h2 class="h5 fw-700 modal-title mb-0">Verify cleanup and close</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="text-muted small">Describe what was done to resolve this case.</p>
+                        <p class="text-muted small">Confirm the cleanup is complete and add a short note for the citizen.</p>
                         <div class="mb-2">
-                            <label class="form-label fw-500" for="resolve-notes">Resolution notes</label>
-                            <textarea id="resolve-notes" name="Notes" rows="4" class="form-control" minlength="10" maxlength="1000" required></textarea>
+                            <label class="form-label fw-500" for="verify-notes">Verification notes</label>
+                            <textarea id="verify-notes" name="Notes" rows="3" class="form-control" minlength="10" maxlength="1000" required></textarea>
                         </div>
                         <div class="form-text">10–1000 characters.</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check2-all me-2"></i>Mark resolved
+                            <i class="bi bi-check2-all me-2"></i>Verify and close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="rework-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="RejectCleanup" asp-route-id="@Model.Id" method="post">
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Send back for rework</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Tell the cleanup crew what needs to be done before this can be closed.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="rework-reason">What needs rework</label>
+                            <textarea id="rework-reason" name="Reason" rows="4" class="form-control" minlength="10" maxlength="1000" required></textarea>
+                        </div>
+                        <div class="form-text">10–1000 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-arrow-counterclockwise me-2"></i>Send back
                         </button>
                     </div>
                 </form>

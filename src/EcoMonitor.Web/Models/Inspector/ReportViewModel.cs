@@ -23,9 +23,20 @@ public class ReportViewModel
     public ReportSource Source { get; set; }
     public string? TelegramUserName { get; set; }
 
+    public string? InspectorObservations { get; set; }
+    public IReadOnlyList<string> InspectionPhotos { get; set; } = Array.Empty<string>();
+    public IReadOnlyList<string> CleanupBeforePhotos { get; set; } = Array.Empty<string>();
+    public IReadOnlyList<string> CleanupAfterPhotos { get; set; } = Array.Empty<string>();
+    public Guid? CleanupCrewId { get; set; }
+    public string? CleanupCrewName { get; set; }
+    public DateTime? CleanupStartedAt { get; set; }
+    public DateTime? CleanupCompletedAt { get; set; }
+    public string? CleanupNotes { get; set; }
+
     public bool IsAssignedToCurrentUser { get; set; }
     public bool CanTake => Status == DumpsiteStatus.New && AssignedInspectorId is null;
     public bool CanConfirm => Status == DumpsiteStatus.InReview && IsAssignedToCurrentUser;
     public bool CanReject => Status == DumpsiteStatus.InReview && IsAssignedToCurrentUser;
-    public bool CanResolve => Status == DumpsiteStatus.Confirmed && IsAssignedToCurrentUser;
+    // Verification step: any inspector can verify, not just the original assignee.
+    public bool CanVerify => Status == DumpsiteStatus.AwaitingVerification;
 }

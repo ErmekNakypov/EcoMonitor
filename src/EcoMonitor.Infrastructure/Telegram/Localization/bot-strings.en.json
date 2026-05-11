@@ -32,5 +32,10 @@
   "error_send_text_not_photo": "Expected text description, not a photo. Describe the dumpsite in words.",
   "error_send_photo_not_text": "Expected a photo. Send a photo or /done if finished.",
   "error_send_location_not_text": "Expected location. Tap the \"Send location\" button.",
-  "info_use_report_to_start": "Use /report to submit a new report."
+  "info_use_report_to_start": "Use /report to submit a new report.",
+  "notif_report_confirmed": "✅ Your report {0} has been confirmed by an inspector and sent to the cleanup crew.",
+  "notif_report_rejected": "❌ Your report {0} was rejected. Check /status for details.",
+  "notif_cleanup_started": "🧹 The cleanup crew has started work on report {0}.",
+  "notif_cleanup_completed": "📸 Cleanup of report {0} is complete. Awaiting inspector verification.",
+  "notif_report_resolved": "🎉 Report {0} is now closed. Thank you for helping keep Bishkek clean!"
 }

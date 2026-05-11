@@ -9,7 +9,7 @@ public class ResetPasswordViewModel
     public string UserEmail { get; set; } = string.Empty;
 
     [Required]
-    [StringLength(100, MinimumLength = 8)]
+    [StringLength(100, ErrorMessage = "Password must be at most 100 characters.")]
     [DataType(DataType.Password)]
     [Display(Name = "New password")]
     public string NewPassword { get; set; } = string.Empty;

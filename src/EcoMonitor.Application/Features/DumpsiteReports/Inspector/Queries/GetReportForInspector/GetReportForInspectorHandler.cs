@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,7 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
         var ids = new List<Guid>();
         if (report.ReporterId.HasValue) ids.Add(report.ReporterId.Value);
         if (report.AssignedInspectorId.HasValue) ids.Add(report.AssignedInspectorId.Value);
+        if (report.CleanupCrewId.HasValue) ids.Add(report.CleanupCrewId.Value);
 
         IReadOnlyDictionary<Guid, UserSummaryDto> users = ids.Count > 0
             ? await _userLookup.GetByIdsAsync(ids, cancellationToken)
@@ -39,6 +41,30 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
         var inspector = report.AssignedInspectorId.HasValue
             ? users.GetValueOrDefault(report.AssignedInspectorId.Value)
             : null;
+        var crew = report.CleanupCrewId.HasValue
+            ? users.GetValueOrDefault(report.CleanupCrewId.Value)
+            : null;
+
+        var inspectionPhotos = await _dbContext.DumpsiteInspectionPhotos
+            .AsNoTracking()
+            .Where(p => p.ReportId == report.Id)
+            .OrderBy(p => p.UploadedAt)
+            .Select(p => p.FilePath)
+            .ToListAsync(cancellationToken);
+
+        var beforePhotos = await _dbContext.DumpsiteCleanupPhotos
+            .AsNoTracking()
+            .Where(p => p.ReportId == report.Id && p.Type == CleanupPhotoType.BeforeCleanup)
+            .OrderBy(p => p.CreatedAt)
+            .Select(p => p.FilePath)
+            .ToListAsync(cancellationToken);
+
+        var afterPhotos = await _dbContext.DumpsiteCleanupPhotos
+            .AsNoTracking()
+            .Where(p => p.ReportId == report.Id && p.Type == CleanupPhotoType.AfterCleanup)
+            .OrderBy(p => p.CreatedAt)
+            .Select(p => p.FilePath)
+            .ToListAsync(cancellationToken);
 
         return new InspectorReportDto(
             report.Id,
@@ -57,6 +83,15 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             report.CreatedAt,
             report.UpdatedAt,
             report.Source,
-            report.TelegramUserName);
+            report.TelegramUserName,
+            report.InspectorObservations,
+            inspectionPhotos,
+            beforePhotos,
+            afterPhotos,
+            report.CleanupCrewId,
+            crew?.FullName,
+            report.CleanupStartedAt,
+            report.CleanupCompletedAt,
+            report.CleanupNotes);
     }
 }

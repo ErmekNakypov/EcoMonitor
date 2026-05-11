@@ -22,4 +22,13 @@ public sealed record InspectorReportDto(
     DateTime CreatedAt,
     DateTime UpdatedAt,
     ReportSource Source,
-    string? TelegramUserName);
+    string? TelegramUserName,
+    string? InspectorObservations,
+    IReadOnlyList<string> InspectionPhotos,
+    IReadOnlyList<string> CleanupBeforePhotos,
+    IReadOnlyList<string> CleanupAfterPhotos,
+    Guid? CleanupCrewId,
+    string? CleanupCrewName,
+    DateTime? CleanupStartedAt,
+    DateTime? CleanupCompletedAt,
+    string? CleanupNotes);

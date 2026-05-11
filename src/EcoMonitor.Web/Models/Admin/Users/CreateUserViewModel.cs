@@ -15,7 +15,7 @@ public class CreateUserViewModel
     public string Email { get; set; } = string.Empty;
 
     [Required]
-    [StringLength(100, MinimumLength = 8)]
+    [StringLength(100, ErrorMessage = "Password must be at most 100 characters.")]
     [DataType(DataType.Password)]
     [Display(Name = "Password")]
     public string Password { get; set; } = string.Empty;
@@ -26,4 +26,6 @@ public class CreateUserViewModel
 
     [Display(Name = "Send welcome email")]
     public bool SendWelcomeEmail { get; set; }
+
+    public IReadOnlyList<string> AvailableRoles { get; set; } = Array.Empty<string>();
 }

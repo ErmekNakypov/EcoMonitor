@@ -16,6 +16,7 @@ public sealed class EmailReportNotificationService : IReportNotificationService
     private readonly IUserLookupService _userLookup;
     private readonly IEmailQueue _queue;
     private readonly IRazorViewRenderer _renderer;
+    private readonly ITelegramNotificationService _telegram;
     private readonly ILogger<EmailReportNotificationService> _logger;
 
     public EmailReportNotificationService(
@@ -23,14 +24,22 @@ public sealed class EmailReportNotificationService : IReportNotificationService
         IUserLookupService userLookup,
         IEmailQueue queue,
         IRazorViewRenderer renderer,
+        ITelegramNotificationService telegram,
         ILogger<EmailReportNotificationService> logger)
     {
         _db = db;
         _userLookup = userLookup;
         _queue = queue;
         _renderer = renderer;
+        _telegram = telegram;
         _logger = logger;
     }
+
+    // Telegram-submitted reports skip the email step inside LoadAsync, so each
+    // notification fans out to *both* channels — the one that doesn't apply
+    // short-circuits internally.
+    private Task FanOutTelegramAsync(Guid reportId, ReportStatusNotification kind, CancellationToken ct) =>
+        _telegram.NotifyAsync(reportId, kind, ct);
 
     public async Task NotifyReportCreatedAsync(Guid reportId, CancellationToken ct = default)
     {
@@ -51,6 +60,8 @@ public sealed class EmailReportNotificationService : IReportNotificationService
 
     public async Task NotifyReportConfirmedAsync(Guid reportId, CancellationToken ct = default)
     {
+        await FanOutTelegramAsync(reportId, ReportStatusNotification.Confirmed, ct);
+
         var ctx = await LoadAsync(reportId, ct);
         if (ctx is null) return;
         var (report, reporter, inspector) = ctx.Value;
@@ -69,6 +80,8 @@ public sealed class EmailReportNotificationService : IReportNotificationService
 
     public async Task NotifyReportRejectedAsync(Guid reportId, CancellationToken ct = default)
     {
+        await FanOutTelegramAsync(reportId, ReportStatusNotification.Rejected, ct);
+
         var ctx = await LoadAsync(reportId, ct);
         if (ctx is null) return;
         var (report, reporter, inspector) = ctx.Value;
@@ -85,8 +98,47 @@ public sealed class EmailReportNotificationService : IReportNotificationService
         await _queue.EnqueueAsync(reporter.Email, reporter.FullName, subject, html, "ReportRejected", report.Id, ct);
     }
 
+    public async Task NotifyCleanupStartedAsync(Guid reportId, CancellationToken ct = default)
+    {
+        await FanOutTelegramAsync(reportId, ReportStatusNotification.CleanupStarted, ct);
+
+        var ctx = await LoadAsync(reportId, ct);
+        if (ctx is null) return;
+        var (report, reporter, _) = ctx.Value;
+
+        var model = new CleanupStartedEmailModel(
+            reporter.FullName,
+            report.Id,
+            report.CleanupStartedAt ?? report.UpdatedAt);
+
+        var html = await _renderer.RenderAsync(TemplateRoot + "CleanupStarted.cshtml", model);
+        var subject = "EcoMonitor: Cleanup is now in progress";
+        await _queue.EnqueueAsync(reporter.Email, reporter.FullName, subject, html, "CleanupStarted", report.Id, ct);
+    }
+
+    public async Task NotifyCleanupCompletedAsync(Guid reportId, CancellationToken ct = default)
+    {
+        await FanOutTelegramAsync(reportId, ReportStatusNotification.CleanupCompleted, ct);
+
+        var ctx = await LoadAsync(reportId, ct);
+        if (ctx is null) return;
+        var (report, reporter, _) = ctx.Value;
+
+        var model = new CleanupCompletedEmailModel(
+            reporter.FullName,
+            report.Id,
+            report.CleanupCompletedAt ?? report.UpdatedAt,
+            report.CleanupNotes ?? string.Empty);
+
+        var html = await _renderer.RenderAsync(TemplateRoot + "CleanupCompleted.cshtml", model);
+        var subject = "EcoMonitor: Cleanup completed, awaiting verification";
+        await _queue.EnqueueAsync(reporter.Email, reporter.FullName, subject, html, "CleanupCompleted", report.Id, ct);
+    }
+
     public async Task NotifyReportResolvedAsync(Guid reportId, CancellationToken ct = default)
     {
+        await FanOutTelegramAsync(reportId, ReportStatusNotification.Resolved, ct);
+
         var ctx = await LoadAsync(reportId, ct);
         if (ctx is null) return;
         var (report, reporter, inspector) = ctx.Value;

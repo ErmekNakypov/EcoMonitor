@@ -12,17 +12,20 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
     private readonly IApplicationDbContext _dbContext;
     private readonly IFileStorageService _fileStorage;
     private readonly IReportNotificationService _notifications;
+    private readonly IRoleNotificationService _roleNotifications;
     private readonly ILogger<SubmitDumpsiteReportHandler> _logger;
 
     public SubmitDumpsiteReportHandler(
         IApplicationDbContext dbContext,
         IFileStorageService fileStorage,
         IReportNotificationService notifications,
+        IRoleNotificationService roleNotifications,
         ILogger<SubmitDumpsiteReportHandler> logger)
     {
         _dbContext = dbContext;
         _fileStorage = fileStorage;
         _notifications = notifications;
+        _roleNotifications = roleNotifications;
         _logger = logger;
     }
 
@@ -59,6 +62,15 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to enqueue creation email for report {ReportId}", report.Id);
+        }
+
+        try
+        {
+            await _roleNotifications.NotifyInspectorsOfNewReportAsync(report.Id, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to notify inspectors of new report {ReportId}", report.Id);
         }
 
         return report.Id;

@@ -1,0 +1,8 @@
+@{
+    // Absolute path required: when the email renderer creates a detached
+    // ActionContext (no controller/area in RouteData), Razor's view-finder
+    // falls back to "~/Views/Shared/_Layout.cshtml" for bare names like
+    // "_Layout". That layout has TagHelpers (asp-action, asp-controller,
+    // asp-area) that need an IRouter and crashes during email rendering.
+    Layout = "~/Views/EmailTemplates/_Layout.cshtml";
+}

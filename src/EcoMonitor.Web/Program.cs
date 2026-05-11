@@ -51,7 +51,7 @@ try
     .AddDataAnnotationsLocalization();
 
     builder.Services.AddApplication();
-    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
     // JWT bearer is added as a *named* scheme alongside the existing Identity cookie
     // scheme. The default authenticate/challenge scheme stays the cookie scheme set
@@ -90,7 +90,12 @@ try
 
     var app = builder.Build();
 
-    if (!app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment())
+    {
+        app.Logger.LogWarning(
+            "DEV mode: weak password policy enabled. Set ASPNETCORE_ENVIRONMENT=Production to enforce strong passwords.");
+    }
+    else
     {
         app.UseExceptionHandler("/Home/Error");
         app.UseHsts();

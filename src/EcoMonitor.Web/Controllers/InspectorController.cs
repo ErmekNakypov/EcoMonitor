@@ -1,5 +1,7 @@
 using EcoMonitor.Application.Common.Exceptions;
+using EcoMonitor.Application.Common.Models;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.ConfirmReport;
+using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.RejectCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.RejectReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.ResolveReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.TakeReport;
@@ -102,6 +104,15 @@ public class InspectorController : Controller
             UpdatedAt = dto.UpdatedAt,
             Source = dto.Source,
             TelegramUserName = dto.TelegramUserName,
+            InspectorObservations = dto.InspectorObservations,
+            InspectionPhotos = dto.InspectionPhotos,
+            CleanupBeforePhotos = dto.CleanupBeforePhotos,
+            CleanupAfterPhotos = dto.CleanupAfterPhotos,
+            CleanupCrewId = dto.CleanupCrewId,
+            CleanupCrewName = dto.CleanupCrewName,
+            CleanupStartedAt = dto.CleanupStartedAt,
+            CleanupCompletedAt = dto.CleanupCompletedAt,
+            CleanupNotes = dto.CleanupNotes,
             IsAssignedToCurrentUser = dto.AssignedInspectorId == currentId
         };
 
@@ -131,12 +142,31 @@ public class InspectorController : Controller
 
     [HttpPost("Reports/{id:guid}/Confirm")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Confirm(Guid id)
+    [RequestSizeLimit(50_000_000)]
+    public async Task<IActionResult> Confirm(Guid id, ConfirmInputModel model)
     {
+        if (model.Photos is null || model.Photos.Count == 0)
+        {
+            TempData["ErrorMessage"] = "Attach at least one inspection photo.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var uploaded = new List<UploadedPhotoDto>(model.Photos.Count);
+        foreach (var file in model.Photos)
+        {
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+            uploaded.Add(new UploadedPhotoDto(file.FileName, file.ContentType, stream.ToArray()));
+        }
+
         try
         {
-            await _mediator.Send(new ConfirmReportCommand(id, CurrentUserId()));
-            TempData["SuccessMessage"] = "Report confirmed.";
+            await _mediator.Send(new ConfirmReportCommand(
+                id,
+                CurrentUserId(),
+                model.Observations ?? string.Empty,
+                uploaded));
+            TempData["SuccessMessage"] = "Report confirmed. It is now in the cleanup queue.";
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -146,6 +176,33 @@ public class InspectorController : Controller
         catch (ForbiddenException)
         {
             return Forbid();
+        }
+        catch (DomainException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+    }
+
+    [HttpPost("Reports/{id:guid}/RejectCleanup")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectCleanup(Guid id, RejectCleanupInputModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            TempData["ErrorMessage"] = "Rework reason must be at least 10 characters.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        try
+        {
+            await _mediator.Send(new RejectCleanupCommand(id, CurrentUserId(), model.Reason));
+            TempData["SuccessMessage"] = "Report sent back to the cleanup crew for rework.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
         }
         catch (DomainException ex)
         {

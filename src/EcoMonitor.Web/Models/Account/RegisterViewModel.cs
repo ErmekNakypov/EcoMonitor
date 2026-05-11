@@ -16,7 +16,7 @@ public class RegisterViewModel
 
     [Required]
     [DataType(DataType.Password)]
-    [StringLength(100, MinimumLength = 8)]
+    [StringLength(100, ErrorMessage = "Password must be at most 100 characters.")]
     [Display(Name = "Password")]
     public string Password { get; set; } = string.Empty;
 

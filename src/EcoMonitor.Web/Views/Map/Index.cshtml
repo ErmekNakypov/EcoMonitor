@@ -61,6 +61,27 @@
 
         <div class="map-legend-grid mt-3">
             <div class="legend-section">
+                <div class="legend-title">What's on the map</div>
+                <div class="legend-items legend-items-vertical">
+                    <div class="legend-row">
+                        <div class="legend-sample air-sample"><span>42</span></div>
+                        <div><strong>Air quality station</strong> — colored circle with AQI value.</div>
+                    </div>
+                    <div class="legend-row">
+                        <div class="legend-sample air-sample air-sample-own"><span>42</span></div>
+                        <div><strong>Own IoT sensor</strong> — same as above with a green ring + broadcast dot.</div>
+                    </div>
+                    <div class="legend-row">
+                        <div class="legend-sample container-sample"><i class="bi bi-trash3-fill"></i></div>
+                        <div><strong>Waste container</strong> — small bin icon, color by type.</div>
+                    </div>
+                    <div class="legend-row">
+                        <div class="legend-sample dumpsite-sample-red"></div>
+                        <div><strong>Dumpsite report</strong> — flag pin (red = confirmed, green = resolved).</div>
+                    </div>
+                </div>
+            </div>
+            <div class="legend-section">
                 <div class="legend-title">Air quality (AQI US)</div>
                 <div class="legend-items">
                     <span class="aqi-pill" style="background:#10B981">Good 0–50</span>
@@ -69,14 +90,6 @@
                     <span class="aqi-pill" style="background:#EF4444">Unhealthy 151–200</span>
                     <span class="aqi-pill" style="background:#A855F7">Very unhealthy 201–300</span>
                     <span class="aqi-pill" style="background:#7F1D1D">Hazardous 300+</span>
-                </div>
-            </div>
-            <div class="legend-section">
-                <div class="legend-title">Source markers</div>
-                <div class="legend-items">
-                    <span class="aqi-pill" style="background:#9CA3AF;color:white">● OpenAQ</span>
-                    <span class="aqi-pill" style="background:#9CA3AF;color:white">■ IQAir</span>
-                    <span class="aqi-pill" style="background:transparent;color:var(--brand-primary,#2D6A4F);border:2px solid var(--brand-primary,#2D6A4F)">★ Own sensors</span>
                 </div>
             </div>
             <div class="legend-section">
@@ -167,6 +180,124 @@
                 </div>
             </div>
         </div>
+
+        <section class="map-data-tables mt-4">
+            <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-air" type="button" role="tab">
+                        <i class="bi bi-wind me-1"></i>
+                        Air quality stations
+                        <span class="badge bg-light text-dark" id="tab-air-count">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-containers" type="button" role="tab">
+                        <i class="bi bi-trash3 me-1"></i>
+                        Containers
+                        <span class="badge bg-light text-dark" id="tab-containers-count">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-reports" type="button" role="tab">
+                        <i class="bi bi-flag-fill me-1"></i>
+                        Reports
+                        <span class="badge bg-light text-dark" id="tab-reports-count">0</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-air" role="tabpanel">
+                    <div class="data-table-card">
+                        <div class="data-table-toolbar">
+                            <input type="search" id="air-search" placeholder="Search by name or locality..." class="form-control form-control-sm" style="max-width:280px" />
+                            <select id="air-source-filter" class="form-select form-select-sm" style="max-width:200px">
+                                <option value="">All sources</option>
+                                <option value="openaq">OpenAQ</option>
+                                <option value="iqair">IQAir</option>
+                                <option value="own">Own sensors</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive" style="max-height:480px; overflow-y:auto">
+                            <table class="table table-hover map-data-table mb-0">
+                                <thead class="sticky-top">
+                                    <tr>
+                                        <th style="width:40px"></th>
+                                        <th>Name</th>
+                                        <th>Locality</th>
+                                        <th class="text-end">AQI</th>
+                                        <th class="text-end">PM2.5</th>
+                                        <th>Updated</th>
+                                        <th>Source</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="air-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div id="air-empty" class="empty-table-state d-none">No stations match the filter.</div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-containers" role="tabpanel">
+                    <div class="data-table-card">
+                        <div class="data-table-toolbar">
+                            <input type="search" id="container-search" placeholder="Search by code or address..." class="form-control form-control-sm" style="max-width:280px" />
+                            <select id="container-type-filter" class="form-select form-select-sm" style="max-width:200px">
+                                <option value="">All types</option>
+                                <option value="General">General waste</option>
+                                <option value="Plastic">Plastic</option>
+                                <option value="Glass">Glass</option>
+                                <option value="Paper">Paper</option>
+                                <option value="Organic">Organic</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive" style="max-height:480px; overflow-y:auto">
+                            <table class="table table-hover map-data-table mb-0">
+                                <thead class="sticky-top">
+                                    <tr>
+                                        <th style="width:40px"></th>
+                                        <th>Code</th>
+                                        <th>Address</th>
+                                        <th>Type</th>
+                                        <th class="text-end">Capacity</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="container-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div id="container-empty" class="empty-table-state d-none">No containers match the filter.</div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-reports" role="tabpanel">
+                    <div class="data-table-card">
+                        <div class="data-table-toolbar">
+                            <input type="search" id="report-search" placeholder="Search by description..." class="form-control form-control-sm" style="max-width:280px" />
+                            <select id="report-status-filter" class="form-select form-select-sm" style="max-width:200px">
+                                <option value="">All statuses</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive" style="max-height:480px; overflow-y:auto">
+                            <table class="table table-hover map-data-table mb-0">
+                                <thead class="sticky-top">
+                                    <tr>
+                                        <th style="width:40px"></th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Reported</th>
+                                        <th class="text-end">Photos</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div id="report-empty" class="empty-table-state d-none">No reports match the filter.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </section>
 
@@ -200,7 +331,21 @@
             const subActive = { openaq: true, iqair: true, own: true };
             let airParentActive = true;
 
-            const containerLayer = L.markerClusterGroup({ maxClusterRadius: 50, disableClusteringAtZoom: 16 });
+            const containerLayer = L.markerClusterGroup({
+                maxClusterRadius: 50,
+                disableClusteringAtZoom: 16,
+                iconCreateFunction: function (cluster) {
+                    const count = cluster.getChildCount();
+                    const size = count >= 50 ? 'large' : count >= 10 ? 'medium' : 'small';
+                    return L.divIcon({
+                        html: '<div class="container-cluster container-cluster-' + size + '">'
+                            + '<i class="bi bi-trash3-fill me-1"></i>' + count
+                            + '</div>',
+                        className: 'container-cluster-wrapper',
+                        iconSize: [40, 40]
+                    });
+                }
+            });
             const dumpsiteLayer = L.layerGroup();
 
             airOpenAqLayer.addTo(map);
@@ -215,6 +360,14 @@
                 Glass:   '#14B8A6',
                 Paper:   '#D97706',
                 Organic: '#16A34A'
+            };
+
+            // Raw data + markers indexed by id so the data-table rows can focus
+            // the corresponding marker on the map.
+            const state = {
+                air:        { items: [], markers: new Map() },
+                containers: { items: [], markers: new Map() },
+                dumpsites:  { items: [], markers: new Map() }
             };
 
             function escapeHtml(s) {
@@ -235,26 +388,46 @@
                 return 'openaq';
             }
 
-            function buildAirMarker(s, bucket) {
-                const aqiText = s.aqiUs != null ? Math.round(s.aqiUs) : '?';
-                if (bucket === 'own') {
-                    const html = '<div class="air-marker air-marker-star" title="Own sensor">★</div>';
-                    const icon = L.divIcon({ html: html, className: 'air-marker-wrapper', iconSize: [28, 28], iconAnchor: [14, 14] });
-                    return L.marker([s.latitude, s.longitude], { icon: icon });
-                }
-                if (bucket === 'iqair') {
-                    const html = '<div class="air-marker air-marker-square" style="background:' + s.color
-                        + (s.isStale ? ';opacity:0.6' : '') + '">' + aqiText + '</div>';
-                    const icon = L.divIcon({ html: html, className: 'air-marker-wrapper', iconSize: [28, 28], iconAnchor: [14, 14] });
-                    return L.marker([s.latitude, s.longitude], { icon: icon });
-                }
-                // OpenAQ (and anything else External) — circle marker, current behaviour.
-                return L.circleMarker([s.latitude, s.longitude], {
-                    radius: 14,
-                    color: '#fff', weight: 2,
-                    fillColor: s.color,
-                    fillOpacity: s.isStale ? 0.45 : 0.9
+            function truncate(str, max) {
+                if (!str) return '';
+                return str.length > max ? str.slice(0, max) + '…' : str;
+            }
+
+            // Unified air-station marker: large filled circle with the AQI value
+            // as text. Own sensors get a brand-green ring + broadcast indicator.
+            function createAirMarker(s) {
+                const isOwn = s.source === 'OwnSensor';
+                const aqi = s.aqiUs != null ? Math.round(s.aqiUs) : '?';
+                const staleStyle = s.isStale ? 'opacity:0.55;' : '';
+                const ownClass = isOwn ? ' air-station-own' : '';
+                const ownIcon = isOwn
+                    ? '<span class="air-station-broadcast"><i class="bi bi-broadcast-pin"></i></span>'
+                    : '';
+
+                const html =
+                    '<div class="air-station-marker' + ownClass + '" style="background:' + s.color + ';' + staleStyle + '">' +
+                        '<span class="air-station-aqi">' + escapeHtml(aqi) + '</span>' +
+                        ownIcon +
+                    '</div>';
+
+                const icon = L.divIcon({
+                    html: html,
+                    className: 'air-station-icon-wrapper',
+                    iconSize: [42, 42],
+                    iconAnchor: [21, 21],
+                    popupAnchor: [0, -21]
                 });
+
+                const marker = L.marker([s.latitude, s.longitude], { icon: icon });
+
+                const pm = s.pm25 != null ? s.pm25.toFixed(1) : '?';
+                marker.bindTooltip(
+                    escapeHtml(s.name) + '<br>' +
+                    '<strong>AQI ' + escapeHtml(aqi) + '</strong> · PM2.5 ' + pm + ' μg/m³<br>' +
+                    '<span style="opacity:0.7">' + escapeHtml(s.providerName || '') + '</span>',
+                    { direction: 'top', offset: [0, -10], sticky: false, className: 'map-tooltip' }
+                );
+                return marker;
             }
 
             async function loadAirQuality() {
@@ -266,13 +439,15 @@
                     airOpenAqLayer.clearLayers();
                     airIqAirLayer.clearLayers();
                     airOwnLayer.clearLayers();
+                    state.air.items = data;
+                    state.air.markers.clear();
 
                     const counts = { openaq: 0, iqair: 0, own: 0 };
 
                     data.forEach(s => {
                         const bucket = classifySource(s);
                         counts[bucket]++;
-                        const marker = buildAirMarker(s, bucket);
+                        const marker = createAirMarker(s);
 
                         const aqiPart = s.aqiUs != null
                             ? '<strong>AQI ' + Math.round(s.aqiUs) + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff">' + escapeHtml(s.aqiLabel) + '</span>'
@@ -296,6 +471,7 @@
                             '</div>'
                         );
                         airSubLayers[bucket].addLayer(marker);
+                        state.air.markers.set(s.id, marker);
                     });
 
                     setText('air-count', data.length);
@@ -312,6 +488,8 @@
                         setText('stat-air', '—');
                         setText('stat-air-stations', '0');
                     }
+
+                    renderAirTable();
                 } catch (e) { console.warn('air-quality fetch failed', e); }
             }
 
@@ -322,27 +500,54 @@
                     const data = await r.json();
 
                     containerLayer.clearLayers();
+                    state.containers.items = data;
+                    state.containers.markers.clear();
+
+                    // Softer pastels so containers don't compete visually with
+                    // saturated AQI markers.
+                    const containerPastels = {
+                        General: '#9CA3AF',
+                        Plastic: '#60A5FA',
+                        Glass:   '#5EEAD4',
+                        Paper:   '#FCD34D',
+                        Organic: '#86EFAC'
+                    };
+
                     data.forEach(c => {
-                        const fill = containerColors[c.type] || '#9CA3AF';
-                        const marker = L.circleMarker([c.latitude, c.longitude], {
-                            radius: 7,
-                            color: '#fff', weight: 1,
-                            fillColor: fill,
-                            fillOpacity: 0.9
+                        const fill = containerPastels[c.type] || '#9CA3AF';
+                        const popupFill = containerColors[c.type] || '#9CA3AF';
+                        const html = '<div class="container-marker" style="background:' + fill + '">'
+                            + '<i class="bi bi-trash3-fill"></i>'
+                            + '</div>';
+                        const icon = L.divIcon({
+                            html: html,
+                            className: 'container-icon-wrapper',
+                            iconSize: [22, 22],
+                            iconAnchor: [11, 11],
+                            popupAnchor: [0, -11]
                         });
+                        const marker = L.marker([c.latitude, c.longitude], { icon: icon });
+                        marker.bindTooltip(
+                            escapeHtml(c.code) + '<br>' +
+                            escapeHtml(c.type) + ' · ' + c.capacity + 'L<br>' +
+                            '<span style="opacity:0.7">' + escapeHtml(c.address || '') + '</span>',
+                            { direction: 'top', offset: [0, -5], sticky: false, className: 'map-tooltip' }
+                        );
                         marker.bindPopup(
                             '<div style="min-width:200px">' +
                                 '<div class="fw-700">' + escapeHtml(c.code) + '</div>' +
                                 '<div class="text-muted small mb-2">' + escapeHtml(c.address) + '</div>' +
-                                '<div><span class="badge" style="background:' + fill + ';color:#fff">' + escapeHtml(c.type) + '</span> ' + c.capacity + ' L</div>' +
+                                '<div><span class="badge" style="background:' + popupFill + ';color:#fff">' + escapeHtml(c.type) + '</span> ' + c.capacity + ' L</div>' +
                                 '<div class="text-muted small mt-1">' + escapeHtml(c.status) + '</div>' +
                             '</div>'
                         );
                         containerLayer.addLayer(marker);
+                        state.containers.markers.set(c.id, marker);
                     });
 
                     setText('container-count', data.length);
                     setText('stat-containers', data.length);
+                    renderContainerTable();
                 } catch (e) { console.warn('containers fetch failed', e); }
             }
 
@@ -353,6 +558,9 @@
                     const data = await r.json();
 
                     dumpsiteLayer.clearLayers();
+                    state.dumpsites.items = data;
+                    state.dumpsites.markers.clear();
+
                     data.forEach(d => {
                         const html = '<div class="dumpsite-pin" style="background:' + d.color + '"><i class="bi bi-flag-fill"></i></div>';
                         const icon = L.divIcon({
@@ -363,6 +571,12 @@
                         });
                         const marker = L.marker([d.latitude, d.longitude], { icon: icon });
                         const photoText = d.photoCount + ' photo' + (d.photoCount === 1 ? '' : 's');
+                        marker.bindTooltip(
+                            escapeHtml(d.statusLabel) + ' dumpsite<br>' +
+                            escapeHtml(truncate(d.shortDescription, 60)) + '<br>' +
+                            '<span style="opacity:0.7">' + escapeHtml(d.createdRelative) + ' · ' + photoText + '</span>',
+                            { direction: 'top', offset: [0, -25], sticky: false, className: 'map-tooltip' }
+                        );
                         marker.bindPopup(
                             '<div style="min-width:240px">' +
                                 '<span class="badge" style="background:' + d.color + ';color:#fff">' + escapeHtml(d.statusLabel) + '</span>' +
@@ -372,6 +586,7 @@
                             '</div>'
                         );
                         dumpsiteLayer.addLayer(marker);
+                        state.dumpsites.markers.set(d.id, marker);
                     });
 
                     setText('dumpsite-count', data.length);
@@ -380,7 +595,194 @@
                     const resolved = data.filter(d => d.status === 'Resolved').length;
                     setText('stat-confirmed', confirmed);
                     setText('stat-resolved', resolved);
+                    renderReportTable();
                 } catch (e) { console.warn('dumpsites fetch failed', e); }
+            }
+
+            // ----------------------------------------------------------------
+            // Data tables: render + filter + click-to-focus
+            // ----------------------------------------------------------------
+
+            function shapeIconHtml(s) {
+                if (s.source === 'OwnSensor') {
+                    return '<span class="shape-icon shape-star" title="Own sensor">★</span>';
+                }
+                if ((s.providerName || '').toLowerCase().startsWith('iqair')) {
+                    return '<span class="shape-icon shape-square" style="background:' + s.color + '" title="IQAir"></span>';
+                }
+                return '<span class="shape-icon shape-circle" style="background:' + s.color + '" title="OpenAQ"></span>';
+            }
+
+            function renderAirTable() {
+                const search = (document.getElementById('air-search')?.value || '').toLowerCase();
+                const sourceFilter = document.getElementById('air-source-filter')?.value || '';
+
+                const filtered = state.air.items.filter(s => {
+                    if (search) {
+                        const hay = ((s.name || '') + ' ' + (s.locality || '')).toLowerCase();
+                        if (!hay.includes(search)) return false;
+                    }
+                    if (sourceFilter) {
+                        const bucket = classifySource(s);
+                        if (sourceFilter !== bucket) return false;
+                    }
+                    return true;
+                });
+
+                const tbody = document.getElementById('air-tbody');
+                const empty = document.getElementById('air-empty');
+                setText('tab-air-count', filtered.length);
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    empty.classList.remove('d-none');
+                    return;
+                }
+                empty.classList.add('d-none');
+
+                tbody.innerHTML = filtered.map(s => {
+                    const aqiCell = s.aqiUs != null
+                        ? '<span class="aqi-chip" style="background:' + s.color + ';color:white">' + Math.round(s.aqiUs) + '</span>'
+                        : '<span class="text-muted">—</span>';
+                    const pmCell = s.pm25 != null ? s.pm25.toFixed(1) : '—';
+                    return '<tr data-station-id="' + escapeHtml(s.id) + '">' +
+                        '<td>' + shapeIconHtml(s) + '</td>' +
+                        '<td><div class="fw-600">' + escapeHtml(s.name) + '</div></td>' +
+                        '<td class="text-muted small">' + escapeHtml(s.locality || '—') + '</td>' +
+                        '<td class="text-end">' + aqiCell + '</td>' +
+                        '<td class="text-end">' + pmCell + '</td>' +
+                        '<td class="text-muted small">' + escapeHtml(s.measuredRelative || '—') + '</td>' +
+                        '<td class="text-muted small">' + escapeHtml(s.providerName || '—') + '</td>' +
+                    '</tr>';
+                }).join('');
+
+                tbody.querySelectorAll('tr[data-station-id]').forEach(row => {
+                    row.addEventListener('click', () => focusOnStation(row.dataset.stationId));
+                });
+            }
+
+            function renderContainerTable() {
+                const search = (document.getElementById('container-search')?.value || '').toLowerCase();
+                const typeFilter = document.getElementById('container-type-filter')?.value || '';
+
+                const filtered = state.containers.items.filter(c => {
+                    if (search) {
+                        const hay = ((c.code || '') + ' ' + (c.address || '')).toLowerCase();
+                        if (!hay.includes(search)) return false;
+                    }
+                    if (typeFilter && c.type !== typeFilter) return false;
+                    return true;
+                });
+
+                const tbody = document.getElementById('container-tbody');
+                const empty = document.getElementById('container-empty');
+                setText('tab-containers-count', filtered.length);
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    empty.classList.remove('d-none');
+                    return;
+                }
+                empty.classList.add('d-none');
+
+                tbody.innerHTML = filtered.map(c => {
+                    const fill = containerColors[c.type] || '#9CA3AF';
+                    return '<tr data-container-id="' + escapeHtml(c.id) + '">' +
+                        '<td><span class="shape-icon shape-circle" style="background:' + fill + '" title="' + escapeHtml(c.type) + '"></span></td>' +
+                        '<td class="fw-600">' + escapeHtml(c.code) + '</td>' +
+                        '<td class="text-muted small">' + escapeHtml(c.address || '—') + '</td>' +
+                        '<td><span class="badge" style="background:' + fill + ';color:#fff">' + escapeHtml(c.type) + '</span></td>' +
+                        '<td class="text-end text-muted small">' + c.capacity + ' L</td>' +
+                        '<td class="text-muted small">' + escapeHtml(c.status) + '</td>' +
+                    '</tr>';
+                }).join('');
+
+                tbody.querySelectorAll('tr[data-container-id]').forEach(row => {
+                    row.addEventListener('click', () => focusOnContainer(row.dataset.containerId));
+                });
+            }
+
+            function renderReportTable() {
+                const search = (document.getElementById('report-search')?.value || '').toLowerCase();
+                const statusFilter = document.getElementById('report-status-filter')?.value || '';
+
+                const filtered = state.dumpsites.items.filter(d => {
+                    if (search) {
+                        if (!(d.shortDescription || '').toLowerCase().includes(search)) return false;
+                    }
+                    if (statusFilter && d.status !== statusFilter) return false;
+                    return true;
+                });
+
+                const tbody = document.getElementById('report-tbody');
+                const empty = document.getElementById('report-empty');
+                setText('tab-reports-count', filtered.length);
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    empty.classList.remove('d-none');
+                    return;
+                }
+                empty.classList.add('d-none');
+
+                tbody.innerHTML = filtered.map(d => {
+                    return '<tr data-report-id="' + escapeHtml(d.id) + '">' +
+                        '<td><span class="shape-icon shape-circle" style="background:' + d.color + '"></span></td>' +
+                        '<td><div class="fw-500">' + escapeHtml(d.shortDescription) + '</div></td>' +
+                        '<td><span class="badge" style="background:' + d.color + ';color:#fff">' + escapeHtml(d.statusLabel) + '</span></td>' +
+                        '<td class="text-muted small">' + escapeHtml(d.createdRelative) + '</td>' +
+                        '<td class="text-end text-muted small">' + d.photoCount + '</td>' +
+                    '</tr>';
+                }).join('');
+
+                tbody.querySelectorAll('tr[data-report-id]').forEach(row => {
+                    row.addEventListener('click', () => focusOnDumpsite(row.dataset.reportId));
+                });
+            }
+
+            function scrollMapIntoView() {
+                document.getElementById('city-map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function focusOnStation(id) {
+                const marker = state.air.markers.get(id);
+                if (!marker) return;
+                // Ensure the air-quality parent layer is on so the marker is visible.
+                if (!airParentActive) {
+                    airParentActive = true;
+                    if (airParentBtn) airParentBtn.classList.add('active');
+                    applyAirVisibility();
+                }
+                map.setView(marker.getLatLng(), 15, { animate: true });
+                marker.openPopup();
+                scrollMapIntoView();
+            }
+
+            function focusOnContainer(id) {
+                const marker = state.containers.markers.get(id);
+                if (!marker) return;
+                if (!map.hasLayer(containerLayer)) {
+                    map.addLayer(containerLayer);
+                    const btn = document.getElementById('toggle-containers');
+                    if (btn) btn.classList.add('active');
+                }
+                // Containers live in a marker cluster — zoom in until the marker
+                // is spiderfied, then open its popup in the callback.
+                containerLayer.zoomToShowLayer(marker, () => marker.openPopup());
+                scrollMapIntoView();
+            }
+
+            function focusOnDumpsite(id) {
+                const marker = state.dumpsites.markers.get(id);
+                if (!marker) return;
+                if (!map.hasLayer(dumpsiteLayer)) {
+                    map.addLayer(dumpsiteLayer);
+                    const btn = document.getElementById('toggle-dumpsites');
+                    if (btn) btn.classList.add('active');
+                }
+                map.setView(marker.getLatLng(), 16, { animate: true });
+                marker.openPopup();
+                scrollMapIntoView();
             }
 
             function setupToggle(toggleId, layer) {
@@ -454,6 +856,20 @@
                     loadDumpsites();
                 });
             }
+
+            // Filter inputs re-render their respective tables in place.
+            const tableFilters = [
+                ['air-search',             'input',  renderAirTable],
+                ['air-source-filter',      'change', renderAirTable],
+                ['container-search',       'input',  renderContainerTable],
+                ['container-type-filter',  'change', renderContainerTable],
+                ['report-search',          'input',  renderReportTable],
+                ['report-status-filter',   'change', renderReportTable]
+            ];
+            tableFilters.forEach(([id, evt, fn]) => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener(evt, fn);
+            });
 
             Promise.all([loadAirQuality(), loadContainers(), loadDumpsites()]);
             setInterval(loadAirQuality, 60000);

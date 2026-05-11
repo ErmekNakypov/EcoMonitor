@@ -940,37 +940,172 @@ tr.clickable-row:hover {
   border: none;
 }
 
-/* Air-quality markers — shape encodes data source */
-.air-marker-wrapper {
-  background: transparent;
-  border: none;
+/* Air-quality stations — large filled circle with AQI value inside.
+   Own sensors get a brand-green ring + broadcast badge. */
+.air-station-icon-wrapper {
+  background: transparent !important;
+  border: none !important;
 }
 
-.air-marker {
-  width: 28px;
-  height: 28px;
+.air-station-marker {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  font-weight: 700;
-  font-size: 11px;
-  border: 2px solid #FFFFFF;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: transform 150ms ease;
   box-sizing: border-box;
 }
 
-.air-marker-square {
-  border-radius: 4px;
+.air-station-marker:hover {
+  transform: scale(1.12);
+  cursor: pointer;
 }
 
-.air-marker-star {
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  border: 3px solid var(--brand-primary, #2D6A4F);
-  background-color: transparent;
-  color: var(--brand-primary, #2D6A4F);
-  font-size: 18px;
-  box-shadow: none;
+.air-station-aqi {
+  font-weight: 800;
+  font-size: 15px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  line-height: 1;
+}
+
+.air-station-own {
+  box-shadow: 0 0 0 3px var(--brand-primary, #2D6A4F), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.air-station-broadcast {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  background: var(--brand-primary, #2D6A4F);
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 2px solid #FFFFFF;
+  box-sizing: border-box;
+}
+
+/* Waste containers — small bin glyph in a tinted rounded square */
+.container-icon-wrapper {
+  background: transparent !important;
+  border: none !important;
+}
+
+.container-marker {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 11px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+/* Container clusters — neutral grey pill with bin icon + count */
+.container-cluster-wrapper {
+  background: transparent !important;
+  border: none !important;
+}
+
+.container-cluster {
+  background: rgba(107, 114, 128, 0.85);
+  color: #FFFFFF;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.container-cluster-medium { padding: 8px 12px; font-size: 13px; }
+.container-cluster-large  { padding: 10px 14px; font-size: 14px; }
+
+/* Shared Leaflet tooltip styling */
+.map-tooltip {
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px !important;
+  color: #1F2937 !important;
+  font-size: 0.85rem !important;
+  padding: 0.5rem 0.75rem !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.map-tooltip:before {
+  border-top-color: #FFFFFF !important;
+}
+
+/* Legend: "What's on the map" — vertical list with real marker samples */
+.legend-items-vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+}
+
+.legend-sample {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.air-sample {
+  background: #FCD34D;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 11px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.air-sample-own {
+  box-shadow: 0 0 0 2px var(--brand-primary, #2D6A4F), 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.container-sample {
+  background: #60A5FA;
+  border-radius: 5px;
+  color: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  font-size: 11px;
+}
+
+.dumpsite-sample-red {
+  background: #EF4444;
+  width: 24px;
+  height: 24px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #FFFFFF;
 }
 
 /* Source sub-filters under the "Air quality" pill */
@@ -1229,4 +1364,105 @@ tr.clickable-row:hover {
   font-size: 0.9rem;
   text-align: center;
   padding: 1rem;
+}
+
+/* Tabbed data tables under the map */
+.map-data-tables {
+  background: var(--brand-card-bg);
+  border-radius: 16px;
+  padding: 1.25rem;
+  border: 1px solid var(--brand-border);
+}
+
+.map-data-tables .nav-pills .nav-link {
+  color: var(--brand-text-muted);
+  font-weight: 600;
+  background: transparent;
+}
+
+.map-data-tables .nav-pills .nav-link:hover {
+  color: var(--brand-primary);
+}
+
+.map-data-tables .nav-pills .nav-link.active {
+  background: var(--brand-primary);
+  color: #FFFFFF;
+}
+
+.map-data-tables .nav-pills .nav-link.active .badge {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
+}
+
+.data-table-card {
+  background: var(--brand-card-bg);
+  border-radius: 12px;
+}
+
+.data-table-toolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.map-data-table thead th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--brand-text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--brand-border);
+  background: #F9FAFB;
+}
+
+.map-data-table tbody tr {
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.map-data-table tbody tr:hover {
+  background: rgba(45, 106, 79, 0.05);
+}
+
+.empty-table-state {
+  padding: 2rem;
+  text-align: center;
+  color: #9CA3AF;
+}
+
+.aqi-chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 40px;
+  display: inline-block;
+  text-align: center;
+}
+
+.shape-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  vertical-align: middle;
+}
+
+.shape-icon.shape-circle {
+  border-radius: 50%;
+}
+
+.shape-icon.shape-square {
+  border-radius: 4px;
+}
+
+.shape-icon.shape-star {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-size: 18px;
+  line-height: 20px;
+  color: var(--brand-primary);
+  text-align: center;
 }

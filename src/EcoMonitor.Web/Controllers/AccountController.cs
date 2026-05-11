@@ -122,12 +122,24 @@ public class AccountController : Controller
         return View(model);
     }
 
+    // GET /Account/Logout — Identity's LogoutPath redirects here, and users
+    // can also reach it via stale bookmarks or by typing the URL. Show a
+    // confirmation page instead of signing out, since an idempotent GET
+    // sign-out would itself be a CSRF risk.
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Logout() => View("LogoutConfirm");
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout(string? returnUrl = null)
     {
         await _signInManager.SignOutAsync();
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        {
+            return Redirect(returnUrl);
+        }
         return RedirectToAction("Index", "Home");
     }
 

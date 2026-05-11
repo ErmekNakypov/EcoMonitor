@@ -207,10 +207,10 @@
                         @if (!isSignedIn)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login">Sign in</a>
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Sign in</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-primary" asp-controller="Account" asp-action="Register">
+                                <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Register">
                                     <span>Get started</span>
                                 </a>
                             </li>
@@ -230,7 +230,7 @@
                                     </li>
                                     <li><hr class="dropdown-divider" /></li>
                                     <li>
-                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                                             <button type="submit" class="dropdown-item">
                                                 <i class="bi bi-box-arrow-right me-2"></i>
                                                 <span>Sign out</span>

@@ -67,7 +67,8 @@ public sealed class RoleNotificationService : IRoleNotificationService
                     report.Id,
                     preview,
                     report.CreatedAt,
-                    url);
+                    url,
+                    AutoTriageReason: report.AutoTriageReason);
 
                 var html = await _renderer.RenderAsync(
                     TemplateRoot + "InspectorNewAssignment.cshtml", model);

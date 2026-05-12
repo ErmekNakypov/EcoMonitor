@@ -1,3 +1,4 @@
+using EcoMonitor.Application.Features.Analytics.GetAutoTriageStats;
 using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
@@ -62,12 +63,21 @@ public class DashboardController : Controller
     {
         var user = (await _userManager.GetUserAsync(User))!;
 
+        var totalUsers = await _userManager.Users.CountAsync();
+        var totalReports = await _dbContext.DumpsiteReports.CountAsync();
+        var totalContainers = await _dbContext.WasteContainers.CountAsync();
+        var triage = await _mediator.Send(new GetAutoTriageStatsQuery());
+
         var model = new AdministratorDashboardViewModel
         {
             FullName = user.FullName,
-            TotalUsers = await _userManager.Users.CountAsync(),
-            TotalReports = await _dbContext.DumpsiteReports.CountAsync(),
-            TotalContainers = await _dbContext.WasteContainers.CountAsync()
+            TotalUsers = totalUsers,
+            TotalReports = totalReports,
+            TotalContainers = totalContainers,
+            AutoTriageTotal30d = triage.Total,
+            AutoTriageAutoConfirmed30d = triage.AutoConfirmed,
+            AutoTriageReviewed30d = triage.Reviewed,
+            AutoTriagePercentage30d = triage.Percentage
         };
 
         return View(model);

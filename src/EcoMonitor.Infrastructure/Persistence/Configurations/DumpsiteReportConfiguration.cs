@@ -37,6 +37,7 @@ public class DumpsiteReportConfiguration : IEntityTypeConfiguration<DumpsiteRepo
 
         builder.Property(r => r.InspectorObservations).HasMaxLength(1000);
         builder.Property(r => r.CleanupNotes).HasMaxLength(1000);
+        builder.Property(r => r.AutoTriageReason).HasMaxLength(500);
 
         builder.HasIndex(r => r.Status);
         builder.HasIndex(r => r.ReporterId);

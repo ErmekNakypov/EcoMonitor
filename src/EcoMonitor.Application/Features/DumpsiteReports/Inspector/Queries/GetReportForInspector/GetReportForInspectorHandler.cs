@@ -66,6 +66,10 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             .Select(p => p.FilePath)
             .ToListAsync(cancellationToken);
 
+        // Reporter track record. Match by ReporterId for web, TelegramUserId
+        // for bot, otherwise leave zeros.
+        var stats = await GetReporterStatsAsync(report, cancellationToken);
+
         return new InspectorReportDto(
             report.Id,
             report.Description,
@@ -92,6 +96,51 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             crew?.FullName,
             report.CleanupStartedAt,
             report.CleanupCompletedAt,
-            report.CleanupNotes);
+            report.CleanupNotes,
+            report.AutoTriageReason,
+            report.TelegramUserId,
+            stats.Total,
+            stats.Pending,
+            stats.Resolved,
+            stats.Rejected);
+    }
+
+    private async Task<(int Total, int Pending, int Resolved, int Rejected)> GetReporterStatsAsync(
+        EcoMonitor.Domain.Entities.DumpsiteReport report, CancellationToken ct)
+    {
+        IQueryable<EcoMonitor.Domain.Entities.DumpsiteReport>? query = null;
+        if (report.Source == ReportSource.Telegram && report.TelegramUserId.HasValue)
+        {
+            query = _dbContext.DumpsiteReports.AsNoTracking()
+                .Where(r => r.TelegramUserId == report.TelegramUserId);
+        }
+        else if (report.ReporterId.HasValue)
+        {
+            query = _dbContext.DumpsiteReports.AsNoTracking()
+                .Where(r => r.ReporterId == report.ReporterId);
+        }
+
+        if (query is null) return (0, 0, 0, 0);
+
+        // Single SQL roundtrip: status histogram for this reporter.
+        var byStatus = await query
+            .GroupBy(r => r.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync(ct);
+
+        var pendingStatuses = new[]
+        {
+            DumpsiteStatus.New,
+            DumpsiteStatus.InReview,
+            DumpsiteStatus.Confirmed,
+            DumpsiteStatus.CleanupInProgress,
+            DumpsiteStatus.AwaitingVerification
+        };
+
+        var total    = byStatus.Sum(x => x.Count);
+        var pending  = byStatus.Where(x => pendingStatuses.Contains(x.Status)).Sum(x => x.Count);
+        var resolved = byStatus.Where(x => x.Status == DumpsiteStatus.Resolved).Sum(x => x.Count);
+        var rejected = byStatus.Where(x => x.Status == DumpsiteStatus.Rejected).Sum(x => x.Count);
+        return (total, pending, resolved, rejected);
     }
 }

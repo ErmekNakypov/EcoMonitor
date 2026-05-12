@@ -121,6 +121,7 @@ public static class DependencyInjection
         services.AddScoped<IRazorViewRenderer, RazorViewRenderer>();
         services.AddScoped<IReportNotificationService, EmailReportNotificationService>();
         services.AddScoped<IRoleNotificationService, RoleNotificationService>();
+        services.AddScoped<IAutoTriageService, EcoMonitor.Infrastructure.Triage.BishkekAutoTriageService>();
         services.Configure<AppOptions>(configuration.GetSection(AppOptions.Section));
 
         services.AddSingleton<IJwtTokenService, JwtTokenService>();

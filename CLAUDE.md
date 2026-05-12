@@ -56,6 +56,17 @@ A dumpsite report passes through three roles and seven possible states:
 Status numeric values are frozen — never reorder the `DumpsiteStatus` enum.
 New states append at the end.
 
+## Auto-triage system
+New citizen reports are routed automatically before reaching humans.
+Rules (`BishkekAutoTriageService`): at least one photo, coordinates within
+Bishkek bounds, description ≥ 15 chars, no active duplicate within 50 m
+(Haversine). Reports that pass every rule go straight to `Confirmed` and
+notify CleanupCrew. Reports that fail any rule go to `InReview` with
+`DumpsiteReport.AutoTriageReason` set to a human-readable explanation, and
+the inspector is notified. The Inspector Details view shows an amber
+callout with the reason. Mirrors the civic-tech pattern of Moscow "Nash
+Gorod" and SeeClickFix: inspectors handle edge cases, not every report.
+
 ## Telegram bot
 Citizens can submit dumpsite reports through a Telegram bot in addition to the web UI.
 The bot runs as a hosted background service using long polling, no webhook required.

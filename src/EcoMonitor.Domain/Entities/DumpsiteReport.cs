@@ -19,7 +19,12 @@ public class DumpsiteReport : BaseEntity
     public long? TelegramUserId { get; set; }
     public string? TelegramUserName { get; set; }
 
+    // Auto-triage: null = passed all rules and was auto-confirmed; otherwise
+    // a human-readable explanation of why the report was routed to InReview.
+    public string? AutoTriageReason { get; set; }
+
     // Inspector confirmation
+    public DateTime? ConfirmedAt { get; set; }
     public string? InspectorObservations { get; set; }
 
     // Cleanup crew

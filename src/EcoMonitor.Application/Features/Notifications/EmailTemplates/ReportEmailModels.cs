@@ -4,7 +4,9 @@ public sealed record ReportCreatedEmailModel(
     string ReporterName,
     Guid ReportId,
     string Description,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    bool WasAutoConfirmed = false,
+    string? AutoTriageReason = null);
 
 public sealed record ReportConfirmedEmailModel(
     string ReporterName,
@@ -42,7 +44,8 @@ public sealed record InspectorNewAssignmentEmailModel(
     Guid ReportId,
     string ReportDescription,
     DateTime ReportedAt,
-    string ReportUrl);
+    string ReportUrl,
+    string? AutoTriageReason = null);
 
 public sealed record CleanupCrewNewTaskEmailModel(
     string CrewName,

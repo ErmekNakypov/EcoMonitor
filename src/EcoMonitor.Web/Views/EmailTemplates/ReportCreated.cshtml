@@ -2,12 +2,39 @@
 @{
     ViewBag.Title = "Report received";
     var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+    var statusBg = Model.WasAutoConfirmed ? "#FED7AA" : "#DBEAFE";
+    var statusFg = Model.WasAutoConfirmed ? "#9A3412" : "#1E40AF";
+    var statusLabel = Model.WasAutoConfirmed ? "Confirmed" : "In review";
 }
 <h2 style="margin:0 0 16px 0;color:#1F2937;font-size:20px;">Your dumpsite report has been received</h2>
 <p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.ReporterName,</p>
 <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
-    Thank you for reporting an unauthorized dumpsite. Your report has been registered in the system and forwarded to our inspector team for review.
+    Thank you for reporting an unauthorized dumpsite. Your report has been registered in the system.
 </p>
+
+@if (Model.WasAutoConfirmed)
+{
+    <div style="background:#D1FAE5;border-left:4px solid #10B981;padding:12px 16px;margin:16px 0;border-radius:6px;">
+        <strong style="color:#065F46;">Auto-confirmed</strong>
+        <p style="margin:6px 0 0 0;font-size:14px;color:#064E3B;line-height:1.5;">
+            Your report passed automated validation and is now in the cleanup queue. A crew will be assigned shortly.
+        </p>
+    </div>
+}
+else
+{
+    <div style="background:#FEF3C7;border-left:4px solid #F59E0B;padding:12px 16px;margin:16px 0;border-radius:6px;">
+        <strong style="color:#92400E;">Sent for inspector review</strong>
+        <p style="margin:6px 0 0 0;font-size:14px;color:#78350F;line-height:1.5;">
+            Your report needs manual verification before cleanup.
+            @if (!string.IsNullOrEmpty(Model.AutoTriageReason))
+            {
+                <text><br />Reason: @Model.AutoTriageReason</text>
+            }
+        </p>
+    </div>
+}
+
 <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#F9FAFB;border-radius:8px;padding:16px;margin:16px 0;">
     <tr>
         <td style="padding:8px 0;font-size:14px;color:#6B7280;">Reference ID</td>
@@ -20,10 +47,10 @@
     <tr>
         <td style="padding:8px 0;font-size:14px;color:#6B7280;">Status</td>
         <td style="padding:8px 0;font-size:14px;text-align:right;">
-            <span style="background:#9CA3AF;color:#fff;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;">New</span>
+            <span style="background:@statusBg;color:@statusFg;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;">@statusLabel</span>
         </td>
     </tr>
 </table>
 <p style="margin:16px 0 0 0;font-size:14px;color:#6B7280;line-height:1.6;">
-    You will receive further updates as your report is reviewed and processed. You can also track its status on the EcoMonitor website.
+    You will receive further updates as your report is processed. You can also track its status on the EcoMonitor website.
 </p>

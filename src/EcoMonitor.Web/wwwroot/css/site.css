@@ -1468,3 +1468,137 @@ tr.clickable-row:hover {
   color: var(--brand-primary);
   text-align: center;
 }
+
+/* Inspector Details — submission channel block */
+.submission-channel-card {
+  background: var(--brand-card-bg);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--brand-border);
+}
+
+.channel-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.channel-icon-telegram {
+  background: rgba(34, 158, 217, 0.10);
+  color: #229ED9;
+}
+
+.channel-icon-web {
+  background: rgba(107, 114, 128, 0.10);
+  color: var(--brand-text-muted);
+}
+
+/* Inspector Details — triage callouts */
+.alert-triage {
+  background: rgba(245, 158, 11, 0.10);
+  border-left: 4px solid #F59E0B;
+  color: #92400E;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.alert-triage > i {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.alert-triage-neutral {
+  background: rgba(107, 114, 128, 0.10);
+  border-left-color: var(--brand-text-muted);
+  color: #374151;
+}
+
+.alert-rejected {
+  background: rgba(239, 68, 68, 0.10);
+  border-left: 4px solid #EF4444;
+  color: #7F1D1D;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.alert-rejected > i {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Inspector Details — reporter info card */
+.reporter-card {
+  background: var(--brand-card-bg);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--brand-border);
+}
+
+.reporter-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.reporter-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.reporter-name {
+  font-size: 1rem;
+  color: var(--brand-text);
+}
+
+.reporter-stats {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.reporter-stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem;
+  background: #F9FAFB;
+  border-radius: 8px;
+}
+
+.reporter-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-text);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.reporter-stat-label {
+  font-size: 0.7rem;
+  color: var(--brand-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.reporter-stat-pending   .reporter-stat-value { color: #F59E0B; }
+.reporter-stat-confirmed .reporter-stat-value { color: #059669; }
+.reporter-stat-rejected  .reporter-stat-value { color: #DC2626; }

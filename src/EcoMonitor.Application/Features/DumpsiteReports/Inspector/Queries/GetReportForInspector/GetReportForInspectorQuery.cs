@@ -31,4 +31,10 @@ public sealed record InspectorReportDto(
     string? CleanupCrewName,
     DateTime? CleanupStartedAt,
     DateTime? CleanupCompletedAt,
-    string? CleanupNotes);
+    string? CleanupNotes,
+    string? AutoTriageReason,
+    long? TelegramUserId,
+    int ReporterTotalReports,
+    int ReporterPendingReports,
+    int ReporterResolvedReports,
+    int ReporterRejectedReports);

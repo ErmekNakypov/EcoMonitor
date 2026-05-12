@@ -113,6 +113,12 @@ public class InspectorController : Controller
             CleanupStartedAt = dto.CleanupStartedAt,
             CleanupCompletedAt = dto.CleanupCompletedAt,
             CleanupNotes = dto.CleanupNotes,
+            AutoTriageReason = dto.AutoTriageReason,
+            TelegramUserId = dto.TelegramUserId,
+            ReporterTotalReports = dto.ReporterTotalReports,
+            ReporterPendingReports = dto.ReporterPendingReports,
+            ReporterResolvedReports = dto.ReporterResolvedReports,
+            ReporterRejectedReports = dto.ReporterRejectedReports,
             IsAssignedToCurrentUser = dto.AssignedInspectorId == currentId
         };
 

@@ -32,6 +32,13 @@ public class ReportViewModel
     public DateTime? CleanupStartedAt { get; set; }
     public DateTime? CleanupCompletedAt { get; set; }
     public string? CleanupNotes { get; set; }
+    public string? AutoTriageReason { get; set; }
+
+    public long? TelegramUserId { get; set; }
+    public int ReporterTotalReports { get; set; }
+    public int ReporterPendingReports { get; set; }
+    public int ReporterResolvedReports { get; set; }
+    public int ReporterRejectedReports { get; set; }
 
     public bool IsAssignedToCurrentUser { get; set; }
     public bool CanTake => Status == DumpsiteStatus.New && AssignedInspectorId is null;

@@ -51,7 +51,9 @@ public sealed class EmailReportNotificationService : IReportNotificationService
             reporter.FullName,
             report.Id,
             report.Description,
-            report.CreatedAt);
+            report.CreatedAt,
+            WasAutoConfirmed: report.Status == DumpsiteStatus.Confirmed && report.AutoTriageReason is null,
+            AutoTriageReason: report.AutoTriageReason);
 
         var html = await _renderer.RenderAsync(TemplateRoot + "ReportCreated.cshtml", model);
         var subject = $"EcoMonitor: Report received (ref: {ShortRef(report.Id)})";

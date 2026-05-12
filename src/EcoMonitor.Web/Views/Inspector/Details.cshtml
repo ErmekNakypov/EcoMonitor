@@ -9,86 +9,241 @@
         new BreadcrumbItem { Label = "Queue", Url = Url.Action("Queue", "Inspector") },
         new BreadcrumbItem { Label = headline });
 
-    // 5-stage stepper: Submitted, In review, Confirmed, Cleanup, Resolved
-    int statusIndex = Model.Status switch
+    // 5-stage stepper: Submitted (1), In review (2), Confirmed (3), Cleanup (4), Resolved (5).
+    // Rejected is a dead-end path — handled separately below with a red banner
+    // that replaces the stepper entirely.
+    int currentStage = Model.Status switch
     {
-        DumpsiteStatus.New => 0,
-        DumpsiteStatus.InReview => 1,
-        DumpsiteStatus.Confirmed => 2,
-        DumpsiteStatus.CleanupInProgress => 3,
-        DumpsiteStatus.AwaitingVerification => 3,
-        DumpsiteStatus.Resolved => 4,
-        DumpsiteStatus.Rejected => 2,
-        _ => 0
+        DumpsiteStatus.New                  => 1,
+        DumpsiteStatus.InReview             => 2,
+        DumpsiteStatus.Confirmed            => 3,
+        DumpsiteStatus.CleanupInProgress    => 4,
+        DumpsiteStatus.AwaitingVerification => 4,
+        DumpsiteStatus.Resolved             => 5,
+        _                                   => 1
     };
+    bool isRejected = Model.Status == DumpsiteStatus.Rejected;
 
     string StepClass(int step)
     {
-        if (Model.Status == DumpsiteStatus.Rejected && step == 2) return "active rejected";
-        if (step < statusIndex) return "done";
-        if (step == statusIndex) return "active";
+        if (step < currentStage) return "done";
+        if (step == currentStage) return "active";
         return string.Empty;
     }
-
-    string Step3Label = Model.Status == DumpsiteStatus.Rejected ? "Rejected" : "Confirmed";
 
     string assignedLabel = Model.AssignedInspectorId is null
         ? "Unassigned"
         : Model.IsAssignedToCurrentUser
             ? "Assigned to you"
             : $"Assigned to {Model.AssignedInspectorEmail}";
+
+    string ReporterInitial()
+    {
+        var name = Model.ReporterFullName ?? string.Empty;
+        return name.Length > 0 ? name.Substring(0, 1).ToUpperInvariant() : "?";
+    }
 }
 
 <section class="py-5">
     <div class="container">
         <partial name="_Breadcrumbs" model="breadcrumbs" />
 
-        <div class="mb-4">
-            <div class="mb-2 d-flex flex-wrap gap-2">
+        <div class="mb-3">
+            <div class="mb-2">
                 <partial name="_StatusBadge" model="Model.Status" />
-                <partial name="_SourceBadge" model="Model.Source" />
             </div>
             <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
             <p class="text-muted small mb-0">
-                @if (Model.Source == ReportSource.Telegram)
-                {
-                    var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName;
-                    <text>Reported via Telegram by <span class="fw-500">@handle</span></text>
-                }
-                else
-                {
-                    <text>Reported by <span class="fw-500">@(Model.ReporterFullName ?? "(unknown)")</span> (@Model.ReporterEmail)</text>
-                }
                 @DateHelpers.FormatRelative(Model.CreatedAt) (@DateHelpers.FormatShort(Model.CreatedAt))
                 &middot; @assignedLabel
             </p>
         </div>
 
-        <div class="auth-card mb-4">
-            <h2 class="h6 fw-700 mb-3">Progress</h2>
-            <div class="status-stepper">
-                <div class="status-step @StepClass(0)">
-                    <span class="status-step-bullet">1</span>
-                    <div class="status-step-label">Submitted</div>
+        <div class="submission-channel-card mb-3">
+            @if (Model.Source == ReportSource.Telegram)
+            {
+                var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName;
+                <div class="d-flex align-items-center gap-3">
+                    <div class="channel-icon channel-icon-telegram">
+                        <i class="bi bi-telegram"></i>
+                    </div>
+                    <div>
+                        <div class="fw-600">Submitted via Telegram bot</div>
+                        <div class="text-muted small">
+                            @handle
+                            @if (Model.TelegramUserId.HasValue)
+                            {
+                                <text>&middot; Telegram user ID: @Model.TelegramUserId</text>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div class="status-step @StepClass(1)">
-                    <span class="status-step-bullet">2</span>
-                    <div class="status-step-label">In review</div>
+            }
+            else
+            {
+                <div class="d-flex align-items-center gap-3">
+                    <div class="channel-icon channel-icon-web">
+                        <i class="bi bi-globe2"></i>
+                    </div>
+                    <div>
+                        <div class="fw-600">Submitted via web</div>
+                        <div class="text-muted small">
+                            By @(Model.ReporterFullName ?? "(unknown)")
+                            @if (!string.IsNullOrEmpty(Model.ReporterEmail))
+                            {
+                                <text>&middot; @Model.ReporterEmail</text>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div class="status-step @StepClass(2)">
-                    <span class="status-step-bullet">3</span>
-                    <div class="status-step-label">@Step3Label</div>
-                </div>
-                <div class="status-step @StepClass(3)">
-                    <span class="status-step-bullet">4</span>
-                    <div class="status-step-label">Cleanup</div>
-                </div>
-                <div class="status-step @StepClass(4)">
-                    <span class="status-step-bullet">5</span>
-                    <div class="status-step-label">Resolved</div>
+            }
+        </div>
+
+        @if (Model.Status == DumpsiteStatus.InReview && !string.IsNullOrWhiteSpace(Model.AutoTriageReason))
+        {
+            <div class="alert-triage mb-3">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div>
+                    <div class="fw-600 mb-1">Auto-triage flagged this report</div>
+                    <div style="font-size:0.875rem;">@Model.AutoTriageReason</div>
+                    <div class="text-muted small mt-2">As inspector, please verify the situation before confirming or rejecting.</div>
                 </div>
             </div>
+        }
+        else if (Model.Status == DumpsiteStatus.InReview)
+        {
+            // Auto-triage went live on 2026-05-12. Reports older than that
+            // legitimately have no AutoTriageReason. Newer ones with a null
+            // reason are anomalies — call them out plainly rather than
+            // mislabel them as "pre-triage".
+            var autoTriageCutoff = new DateTime(2026, 5, 12, 0, 0, 0, DateTimeKind.Utc);
+
+            if (Model.CreatedAt < autoTriageCutoff)
+            {
+                <div class="alert-triage alert-triage-neutral mb-3">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <div>
+                        <div class="fw-600">Pre-triage report</div>
+                        <div style="font-size:0.875rem;">Submitted before the auto-triage system was active. Manual review required.</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert-triage alert-triage-neutral mb-3">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <div>
+                        <div class="fw-600">Manual review required</div>
+                        <div style="font-size:0.875rem;">No triage reason recorded. Please review manually.</div>
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="reporter-card mb-3">
+            <div class="reporter-header">
+                <div class="reporter-avatar">
+                    @if (Model.Source == ReportSource.Telegram)
+                    {
+                        <i class="bi bi-telegram"></i>
+                    }
+                    else
+                    {
+                        @ReporterInitial()
+                    }
+                </div>
+                <div>
+                    <div class="fw-600">Reporter</div>
+                    <div class="reporter-name">
+                        @if (Model.Source == ReportSource.Telegram)
+                        {
+                            @(string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName)
+                        }
+                        else
+                        {
+                            @(Model.ReporterFullName ?? "(unknown)")
+                        }
+                    </div>
+                    @if (Model.Source != ReportSource.Telegram && !string.IsNullOrEmpty(Model.ReporterEmail))
+                    {
+                        <div class="text-muted small">@Model.ReporterEmail</div>
+                    }
+                </div>
+            </div>
+            @if (Model.ReporterTotalReports > 0)
+            {
+                <div class="reporter-stats">
+                    <div class="reporter-stat-item">
+                        <div class="reporter-stat-value">@Model.ReporterTotalReports</div>
+                        <div class="reporter-stat-label">Total</div>
+                    </div>
+                    <div class="reporter-stat-item reporter-stat-pending">
+                        <div class="reporter-stat-value">@Model.ReporterPendingReports</div>
+                        <div class="reporter-stat-label">In progress</div>
+                    </div>
+                    <div class="reporter-stat-item reporter-stat-confirmed">
+                        <div class="reporter-stat-value">@Model.ReporterResolvedReports</div>
+                        <div class="reporter-stat-label">Resolved</div>
+                    </div>
+                    <div class="reporter-stat-item reporter-stat-rejected">
+                        <div class="reporter-stat-value">@Model.ReporterRejectedReports</div>
+                        <div class="reporter-stat-label">Rejected</div>
+                    </div>
+                </div>
+            }
         </div>
+
+        @if (isRejected)
+        {
+            <div class="alert-rejected mb-4">
+                <i class="bi bi-x-circle-fill"></i>
+                <div>
+                    <div class="fw-700">Rejected</div>
+                    @if (!string.IsNullOrWhiteSpace(Model.ResolutionNotes))
+                    {
+                        <div style="font-size:0.875rem;margin-top:0.25rem;">@Model.ResolutionNotes</div>
+                    }
+                    @if (Model.ResolvedAt.HasValue)
+                    {
+                        <div class="text-muted small mt-2">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="auth-card mb-4">
+                <h2 class="h6 fw-700 mb-3">Progress</h2>
+                <div class="status-stepper">
+                    <div class="status-step @StepClass(1)">
+                        <span class="status-step-bullet">1</span>
+                        <div class="status-step-label">Submitted</div>
+                    </div>
+                    <div class="status-step @StepClass(2)">
+                        <span class="status-step-bullet">2</span>
+                        <div class="status-step-label">In review</div>
+                    </div>
+                    <div class="status-step @StepClass(3)">
+                        <span class="status-step-bullet">3</span>
+                        <div class="status-step-label">Confirmed</div>
+                    </div>
+                    <div class="status-step @StepClass(4)">
+                        <span class="status-step-bullet">4</span>
+                        <div class="status-step-label">
+                            Cleanup
+                            @if (Model.Status == DumpsiteStatus.AwaitingVerification)
+                            {
+                                <div class="text-muted small mt-1">Awaiting inspector verification</div>
+                            }
+                        </div>
+                    </div>
+                    <div class="status-step @StepClass(5)">
+                        <span class="status-step-bullet">5</span>
+                        <div class="status-step-label">Resolved</div>
+                    </div>
+                </div>
+            </div>
+        }
 
         <div class="row g-4">
             <div class="col-md-7">

@@ -2,7 +2,11 @@ using MediatR;
 
 namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetVerificationQueue;
 
-public sealed record GetVerificationQueueQuery(int Page = 1, int PageSize = 20) : IRequest<VerificationQueueResult>;
+public sealed record GetVerificationQueueQuery(
+    int Page = 1,
+    int PageSize = 20,
+    string? Search = null,
+    string? SortBy = null) : IRequest<VerificationQueueResult>;
 
 public sealed record VerificationQueueResult(
     IReadOnlyList<VerificationItemDto> Items,

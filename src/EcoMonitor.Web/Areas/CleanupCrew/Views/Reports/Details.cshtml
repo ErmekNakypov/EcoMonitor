@@ -1,4 +1,5 @@
 @model CleanupReportDto
+@using EcoMonitor.Domain.Enums
 @{
     ViewData["Title"] = "Cleanup details";
     var currentUserId = (Guid)ViewData["CurrentUserId"]!;
@@ -10,16 +11,186 @@
         new BreadcrumbItem { Label = "Report" });
 
     var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
+
+    string ReporterInitial()
+    {
+        var name = Model.ReporterFullName ?? string.Empty;
+        return name.Length > 0 ? name.Substring(0, 1).ToUpperInvariant() : "?";
+    }
 }
 
 <section class="py-5">
     <div class="container">
         <partial name="_Breadcrumbs" model="breadcrumbs" />
 
-        <div class="mb-4">
+        <div class="mb-3">
             <div class="mb-2"><partial name="_StatusBadge" model="Model.Status" /></div>
             <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
+            <p class="text-muted small mb-0">
+                Reported @DateHelpers.FormatRelative(Model.CreatedAt) (@DateHelpers.FormatShort(Model.CreatedAt))
+            </p>
         </div>
+
+        <div class="submission-channel-card mb-3">
+            @if (Model.Source == ReportSource.Telegram)
+            {
+                var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName;
+                <div class="d-flex align-items-center gap-3">
+                    <div class="channel-icon channel-icon-telegram">
+                        <i class="bi bi-telegram"></i>
+                    </div>
+                    <div>
+                        <div class="fw-600">Submitted via Telegram bot</div>
+                        <div class="text-muted small">
+                            @handle
+                            @if (Model.TelegramUserId.HasValue)
+                            {
+                                <text>&middot; Telegram user ID: @Model.TelegramUserId</text>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex align-items-center gap-3">
+                    <div class="channel-icon channel-icon-web">
+                        <i class="bi bi-globe2"></i>
+                    </div>
+                    <div>
+                        <div class="fw-600">Submitted via web</div>
+                        <div class="text-muted small">
+                            By @(Model.ReporterFullName ?? "(unknown)")
+                            @if (!string.IsNullOrEmpty(Model.ReporterEmail))
+                            {
+                                <text>&middot; @Model.ReporterEmail</text>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (string.IsNullOrWhiteSpace(Model.AutoTriageReason))
+        {
+            <div class="alert-triage mb-3" style="background:#D1FAE5;border-color:#10B981;color:#064E3B;">
+                <i class="bi bi-lightning-charge-fill"></i>
+                <div>
+                    <div class="fw-600">Auto-confirmed by triage system</div>
+                    <div style="font-size:0.875rem;">Passed all auto-triage rules and reached the cleanup queue without manual review.</div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert-triage alert-triage-neutral mb-3">
+                <i class="bi bi-info-circle-fill"></i>
+                <div>
+                    <div class="fw-600">Confirmed by inspector after review</div>
+                    <div style="font-size:0.875rem;">Triage flag: @Model.AutoTriageReason</div>
+                </div>
+            </div>
+        }
+
+        <div class="reporter-card mb-3">
+            <div class="reporter-header">
+                <div class="reporter-avatar">
+                    @if (Model.Source == ReportSource.Telegram)
+                    {
+                        <i class="bi bi-telegram"></i>
+                    }
+                    else
+                    {
+                        @ReporterInitial()
+                    }
+                </div>
+                <div>
+                    <div class="fw-600">Reporter</div>
+                    <div class="reporter-name">
+                        @if (Model.Source == ReportSource.Telegram)
+                        {
+                            @(string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName)
+                        }
+                        else
+                        {
+                            @(Model.ReporterFullName ?? "(unknown)")
+                        }
+                    </div>
+                    @if (Model.Source != ReportSource.Telegram && !string.IsNullOrEmpty(Model.ReporterEmail))
+                    {
+                        <div class="text-muted small">@Model.ReporterEmail</div>
+                    }
+                </div>
+            </div>
+            @if (Model.ReporterTotalReports > 0)
+            {
+                <div class="reporter-stats">
+                    <div class="reporter-stat-item">
+                        <div class="reporter-stat-value">@Model.ReporterTotalReports</div>
+                        <div class="reporter-stat-label">Total</div>
+                    </div>
+                    <div class="reporter-stat-item reporter-stat-pending">
+                        <div class="reporter-stat-value">@Model.ReporterPendingReports</div>
+                        <div class="reporter-stat-label">In progress</div>
+                    </div>
+                    <div class="reporter-stat-item reporter-stat-confirmed">
+                        <div class="reporter-stat-value">@Model.ReporterResolvedReports</div>
+                        <div class="reporter-stat-label">Resolved</div>
+                    </div>
+                    <div class="reporter-stat-item reporter-stat-rejected">
+                        <div class="reporter-stat-value">@Model.ReporterRejectedReports</div>
+                        <div class="reporter-stat-label">Rejected</div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ConfirmingInspectorName) || Model.ConfirmedAt.HasValue)
+        {
+            <div class="auth-card mb-3" style="border-left:4px solid #2D6A4F;">
+                <h2 class="h6 fw-700 mb-2"><i class="bi bi-shield-check text-success me-2"></i>Confirmed by inspector</h2>
+                <p class="mb-1">
+                    @if (!string.IsNullOrEmpty(Model.ConfirmingInspectorName))
+                    {
+                        <strong>@Model.ConfirmingInspectorName</strong>
+                    }
+                    else
+                    {
+                        <text>Inspector</text>
+                    }
+                    @if (Model.ConfirmedAt.HasValue)
+                    {
+                        <text> &middot; @DateHelpers.FormatShort(Model.ConfirmedAt.Value) (@DateHelpers.FormatRelative(Model.ConfirmedAt.Value))</text>
+                    }
+                </p>
+                @if (!string.IsNullOrWhiteSpace(Model.InspectorObservations))
+                {
+                    <p class="mb-0 text-muted small"><em>"@Model.InspectorObservations"</em></p>
+                }
+            </div>
+        }
+
+        @if (Model.ReworkCount > 0 && Model.Status == DumpsiteStatus.CleanupInProgress)
+        {
+            <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+                <i class="bi bi-arrow-counterclockwise mt-1"></i>
+                <div>
+                    <strong>Rework required (attempt #@(Model.ReworkCount + 1))</strong>
+                    @if (Model.ReworkStartedAt.HasValue)
+                    {
+                        <div class="small text-muted">Returned by citizen appeal @Model.ReworkStartedAt.Value.ToString("dd MMM HH:mm") UTC</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AppealResolutionNotes))
+                    {
+                        <div class="mt-2"><strong>Inspector's note:</strong> @Model.AppealResolutionNotes</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AppealReason))
+                    {
+                        <div class="mt-1"><strong>Citizen's reason:</strong> @Model.AppealReason</div>
+                    }
+                </div>
+            </div>
+        }
 
         <div class="row g-4">
             <div class="col-md-7">
@@ -28,19 +199,45 @@
                     <p class="mb-0">@Model.Description</p>
                 </div>
 
-                @if (!string.IsNullOrWhiteSpace(Model.InspectorObservations))
-                {
-                    <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-2">Inspector observations</h2>
-                        <p class="mb-0">@Model.InspectorObservations</p>
-                    </div>
-                }
-
                 @if (!string.IsNullOrWhiteSpace(Model.CleanupNotes))
                 {
                     <div class="auth-card mb-4">
                         <h2 class="h6 fw-700 mb-2">Cleanup notes</h2>
                         <p class="mb-0" style="white-space: pre-wrap;">@Model.CleanupNotes</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.AppealReason))
+                {
+                    <div class="auth-card mb-4" style="border-left:4px solid #F59E0B;">
+                        <h2 class="h6 fw-700 mb-2"><i class="bi bi-flag-fill me-1" style="color:#F59E0B;"></i>Citizen's appeal</h2>
+                        <p class="mb-1">@Model.AppealReason</p>
+                        @if (Model.AppealedAt.HasValue)
+                        {
+                            <div class="text-muted small">Appealed @Model.AppealedAt.Value.ToString("dd MMM HH:mm") UTC</div>
+                        }
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.AppealResolutionNotes))
+                {
+                    <div class="auth-card mb-4" style="border-left:4px solid #2D6A4F;">
+                        <h2 class="h6 fw-700 mb-2"><i class="bi bi-shield-check text-success me-1"></i>Inspector's appeal decision</h2>
+                        <p class="mb-1">@Model.AppealResolutionNotes</p>
+                        <div class="text-muted small">
+                            @if (Model.AppealOutcome == AppealOutcome.Upheld)
+                            {
+                                <text>Appeal upheld</text>
+                            }
+                            else
+                            {
+                                <text>Appeal dismissed</text>
+                            }
+                            @if (Model.AppealReviewedAt.HasValue)
+                            {
+                                <text> &middot; @Model.AppealReviewedAt.Value.ToString("dd MMM HH:mm") UTC</text>
+                            }
+                        </div>
                     </div>
                 }
 
@@ -103,12 +300,29 @@
                         </div>
                     </div>
                 }
+
+                @if (Model.AppealPhotos.Count > 0)
+                {
+                    <div class="auth-card photo-section-warning mb-4">
+                        <h2 class="h6 fw-700 mb-1"><i class="bi bi-flag-fill me-1" style="color:#F59E0B;"></i>Appeal photos from citizen (@Model.AppealPhotos.Count)</h2>
+                        <p class="text-muted small mb-3">Photos the citizen attached to support their appeal.</p>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.AppealPhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Appeal photo" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
             </div>
 
             <div class="col-md-5">
                 <div class="auth-card mb-4">
                     <h2 class="h6 fw-700 mb-3">Location</h2>
-                    <p class="text-muted small mb-0">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</p>
+                    <div id="report-map" style="height:300px;border-radius:8px;margin-bottom:0.75rem"></div>
+                    <p class="text-muted small mb-0">@Model.Latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture), @Model.Longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)</p>
                 </div>
 
                 <div class="action-panel">
@@ -230,14 +444,30 @@
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         (function () {
+            var lat = @Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var lng = @Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            var map = L.map('report-map', {
+                zoomControl: true,
+                scrollWheelZoom: false
+            }).setView([lat, lng], 16);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map);
+
             var photoModal = document.getElementById('photo-modal');
-            if (!photoModal) return;
-            photoModal.addEventListener('show.bs.modal', function (e) {
-                var src = e.relatedTarget ? e.relatedTarget.getAttribute('data-photo-src') : null;
-                if (src) document.getElementById('photo-modal-img').setAttribute('src', src);
-            });
+            if (photoModal) {
+                photoModal.addEventListener('show.bs.modal', function (e) {
+                    var src = e.relatedTarget ? e.relatedTarget.getAttribute('data-photo-src') : null;
+                    if (src) document.getElementById('photo-modal-img').setAttribute('src', src);
+                });
+            }
         })();
     </script>
 }

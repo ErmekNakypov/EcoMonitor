@@ -157,6 +157,75 @@ public sealed class EmailReportNotificationService : IReportNotificationService
         await _queue.EnqueueAsync(reporter.Email, reporter.FullName, subject, html, "ReportResolved", report.Id, ct);
     }
 
+    public async Task NotifyAppealFiledAsync(Guid reportId, CancellationToken ct = default)
+    {
+        var ctx = await LoadAsync(reportId, ct);
+        if (ctx is null) return;
+        var (report, reporter, _) = ctx.Value;
+
+        var model = new AppealFiledEmailModel(
+            reporter.FullName,
+            report.Id,
+            report.AppealReason ?? string.Empty,
+            report.AppealedAt ?? DateTime.UtcNow);
+
+        var html = await _renderer.RenderAsync(TemplateRoot + "CitizenAppealFiledConfirmation.cshtml", model);
+        await _queue.EnqueueAsync(
+            reporter.Email, reporter.FullName,
+            "EcoMonitor: Your appeal has been received",
+            html, "CitizenAppealFiledConfirmation", report.Id, ct);
+    }
+
+    public async Task NotifyAppealUpheldAsync(Guid reportId, CancellationToken ct = default)
+    {
+        var ctx = await LoadAsync(reportId, ct);
+        if (ctx is null) return;
+        var (report, reporter, _) = ctx.Value;
+
+        var reviewer = await ResolveInspectorAsync(report.AppealReviewedByInspectorId, ct);
+
+        var model = new AppealUpheldEmailModel(
+            reporter.FullName,
+            report.Id,
+            reviewer?.FullName ?? "an inspector",
+            report.AppealResolutionNotes ?? string.Empty,
+            report.AppealReviewedAt ?? DateTime.UtcNow);
+
+        var html = await _renderer.RenderAsync(TemplateRoot + "CitizenAppealUpheld.cshtml", model);
+        await _queue.EnqueueAsync(
+            reporter.Email, reporter.FullName,
+            "EcoMonitor: Your appeal was accepted",
+            html, "CitizenAppealUpheld", report.Id, ct);
+    }
+
+    public async Task NotifyAppealDismissedAsync(Guid reportId, CancellationToken ct = default)
+    {
+        var ctx = await LoadAsync(reportId, ct);
+        if (ctx is null) return;
+        var (report, reporter, _) = ctx.Value;
+
+        var reviewer = await ResolveInspectorAsync(report.AppealReviewedByInspectorId, ct);
+
+        var model = new AppealDismissedEmailModel(
+            reporter.FullName,
+            report.Id,
+            reviewer?.FullName ?? "an inspector",
+            report.AppealResolutionNotes ?? string.Empty,
+            report.AppealReviewedAt ?? DateTime.UtcNow);
+
+        var html = await _renderer.RenderAsync(TemplateRoot + "CitizenAppealDismissed.cshtml", model);
+        await _queue.EnqueueAsync(
+            reporter.Email, reporter.FullName,
+            "EcoMonitor: Your appeal was reviewed",
+            html, "CitizenAppealDismissed", report.Id, ct);
+    }
+
+    private async Task<Application.Common.Models.UserSummaryDto?> ResolveInspectorAsync(Guid? inspectorId, CancellationToken ct)
+    {
+        if (!inspectorId.HasValue) return null;
+        return await _userLookup.GetByIdAsync(inspectorId.Value, ct);
+    }
+
     private async Task<(DumpsiteReport Report, Application.Common.Models.UserSummaryDto Reporter, Application.Common.Models.UserSummaryDto? Inspector)?> LoadAsync(
         Guid reportId, CancellationToken ct)
     {

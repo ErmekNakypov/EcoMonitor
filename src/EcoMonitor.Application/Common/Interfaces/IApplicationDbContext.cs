@@ -14,6 +14,7 @@ public interface IApplicationDbContext
     DbSet<IotDevice> IotDevices { get; }
     DbSet<DumpsiteInspectionPhoto> DumpsiteInspectionPhotos { get; }
     DbSet<DumpsiteCleanupPhoto> DumpsiteCleanupPhotos { get; }
+    DbSet<DumpsiteAppealPhoto> DumpsiteAppealPhotos { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

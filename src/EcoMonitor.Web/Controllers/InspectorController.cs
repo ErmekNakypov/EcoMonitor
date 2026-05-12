@@ -1,13 +1,17 @@
 using EcoMonitor.Application.Common.Exceptions;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.DismissAppeal;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.UpholdAppeal;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.ConfirmReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.RejectCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.RejectReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.ResolveReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.TakeReport;
+using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetAppealsQueue;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetMyAssignedReports;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportForInspector;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportQueue;
+using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetVerificationQueue;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
 using EcoMonitor.Infrastructure.Identity;
@@ -41,9 +45,9 @@ public class InspectorController : Controller
     private Guid CurrentUserId() => Guid.Parse(_userManager.GetUserId(User)!);
 
     [HttpGet("Queue")]
-    public async Task<IActionResult> Queue(int page = 1)
+    public async Task<IActionResult> Queue(string? search, string? sortBy, string? source, int page = 1)
     {
-        var result = await _mediator.Send(new GetReportQueueQuery(page, 20));
+        var result = await _mediator.Send(new GetReportQueueQuery(page, 20, search, sortBy, source));
 
         var model = new QueueListViewModel
         {
@@ -54,22 +58,100 @@ public class InspectorController : Controller
             TotalPages = result.TotalPages
         };
 
+        ViewBag.Search = search;
+        ViewBag.Sort = sortBy;
+        ViewBag.Source = source;
         return View(model);
     }
 
-    [HttpGet("MyReports")]
-    public async Task<IActionResult> MyReports(DumpsiteStatus? status, int page = 1)
+    [HttpGet("Verification")]
+    public async Task<IActionResult> Verification(string? search, string? sortBy, int page = 1)
     {
-        var result = await _mediator.Send(new GetMyAssignedReportsQuery(CurrentUserId(), status, page, 20));
+        var result = await _mediator.Send(new GetVerificationQueueQuery(page, 20, search, sortBy));
+        ViewBag.Search = search;
+        ViewBag.Sort = sortBy;
+        return View(result);
+    }
+
+    [HttpGet("Appeals")]
+    public async Task<IActionResult> Appeals(string? search, string? sortBy, int page = 1)
+    {
+        var result = await _mediator.Send(new GetAppealsQueueQuery(page, 20, search, sortBy));
+        ViewBag.Page = result.Page;
+        ViewBag.TotalPages = result.TotalPages;
+        ViewBag.TotalCount = result.TotalCount;
+        ViewBag.Search = search;
+        ViewBag.Sort = sortBy;
+        return View(result.Items);
+    }
+
+    [HttpPost("Reports/{id:guid}/UpholdAppeal")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpholdAppeal(Guid id, string resolutionNotes)
+    {
+        try
+        {
+            await _mediator.Send(new UpholdAppealCommand(id, CurrentUserId(), resolutionNotes ?? string.Empty));
+            TempData["SuccessMessage"] = "Appeal upheld. Report returned to the cleanup queue.";
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (DomainException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+        }
+        catch (ValidationException ex)
+        {
+            TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage));
+        }
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("Reports/{id:guid}/DismissAppeal")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DismissAppeal(Guid id, string resolutionNotes)
+    {
+        try
+        {
+            await _mediator.Send(new DismissAppealCommand(id, CurrentUserId(), resolutionNotes ?? string.Empty));
+            TempData["SuccessMessage"] = "Appeal dismissed. Report remains resolved.";
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (DomainException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+        }
+        catch (ValidationException ex)
+        {
+            TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage));
+        }
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("MyReports")]
+    public async Task<IActionResult> MyReports(string? tab, int page = 1)
+    {
+        var t = string.IsNullOrWhiteSpace(tab) ? "active" : tab.ToLowerInvariant();
+        if (t != "active" && t != "completed" && t != "all") t = "active";
+
+        var result = await _mediator.Send(new GetMyAssignedReportsQuery(CurrentUserId(), t, page, 20));
 
         var model = new MyAssignedViewModel
         {
-            StatusFilter = status,
+            Tab = t,
             Items = result.Items,
             TotalCount = result.TotalCount,
             Page = result.Page,
             PageSize = result.PageSize,
-            TotalPages = result.TotalPages
+            TotalPages = result.TotalPages,
+            ActiveCount = result.ActiveCount,
+            CompletedCount = result.CompletedCount,
+            OverallCount = result.OverallCount
         };
 
         return View(model);
@@ -119,6 +201,13 @@ public class InspectorController : Controller
             ReporterPendingReports = dto.ReporterPendingReports,
             ReporterResolvedReports = dto.ReporterResolvedReports,
             ReporterRejectedReports = dto.ReporterRejectedReports,
+            AppealedAt = dto.AppealedAt,
+            AppealReason = dto.AppealReason,
+            AppealPhotos = dto.AppealPhotos,
+            AppealReviewedAt = dto.AppealReviewedAt,
+            AppealResolutionNotes = dto.AppealResolutionNotes,
+            AppealOutcome = dto.AppealOutcome,
+            ClosedAt = dto.ClosedAt,
             IsAssignedToCurrentUser = dto.AssignedInspectorId == currentId
         };
 

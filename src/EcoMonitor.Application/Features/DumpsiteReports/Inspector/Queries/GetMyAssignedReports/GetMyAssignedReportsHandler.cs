@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,22 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetM
 
 public class GetMyAssignedReportsHandler : IRequestHandler<GetMyAssignedReportsQuery, MyAssignedResult>
 {
+    private static readonly DumpsiteStatus[] ActiveStatuses =
+    {
+        DumpsiteStatus.InReview,
+        DumpsiteStatus.AwaitingVerification,
+        DumpsiteStatus.Appealed
+    };
+
+    private static readonly DumpsiteStatus[] CompletedStatuses =
+    {
+        DumpsiteStatus.Confirmed,
+        DumpsiteStatus.CleanupInProgress,
+        DumpsiteStatus.Resolved,
+        DumpsiteStatus.Closed,
+        DumpsiteStatus.Rejected
+    };
+
     private readonly IApplicationDbContext _dbContext;
 
     public GetMyAssignedReportsHandler(IApplicationDbContext dbContext)
@@ -13,21 +30,43 @@ public class GetMyAssignedReportsHandler : IRequestHandler<GetMyAssignedReportsQ
         _dbContext = dbContext;
     }
 
-    public async Task<MyAssignedResult> Handle(GetMyAssignedReportsQuery request, CancellationToken cancellationToken)
+    public async Task<MyAssignedResult> Handle(GetMyAssignedReportsQuery request, CancellationToken ct)
     {
         var page = request.Page < 1 ? 1 : request.Page;
         var pageSize = request.PageSize < 1 ? 20 : request.PageSize;
+        var inspectorId = request.InspectorId;
 
-        var query = _dbContext.DumpsiteReports
+        // Inspector touches a report through three roles: original assignee,
+        // verifier of the cleanup, and appeal reviewer. Any of the three counts.
+        var mine = _dbContext.DumpsiteReports
             .AsNoTracking()
-            .Where(r => r.AssignedInspectorId == request.InspectorId);
+            .Where(r => r.AssignedInspectorId == inspectorId
+                     || r.VerifiedByInspectorId == inspectorId
+                     || r.AppealReviewedByInspectorId == inspectorId);
 
-        if (request.StatusFilter.HasValue)
+        var counts = await mine
+            .GroupBy(r => r.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync(ct);
+
+        var activeCount = counts.Where(c => ActiveStatuses.Contains(c.Status)).Sum(c => c.Count);
+        var completedCount = counts.Where(c => CompletedStatuses.Contains(c.Status)).Sum(c => c.Count);
+        var overallCount = counts.Sum(c => c.Count);
+
+        var tab = (request.Tab ?? "active").ToLowerInvariant();
+        var query = tab switch
         {
-            query = query.Where(r => r.Status == request.StatusFilter.Value);
-        }
+            "completed" => mine.Where(r => CompletedStatuses.Contains(r.Status)),
+            "all" => mine,
+            _ => mine.Where(r => ActiveStatuses.Contains(r.Status))
+        };
 
-        var totalCount = await query.CountAsync(cancellationToken);
+        var totalCount = tab switch
+        {
+            "completed" => completedCount,
+            "all" => overallCount,
+            _ => activeCount
+        };
         var totalPages = (int)Math.Max(1, Math.Ceiling(totalCount / (double)pageSize));
         if (page > totalPages) page = totalPages;
 
@@ -43,9 +82,15 @@ public class GetMyAssignedReportsHandler : IRequestHandler<GetMyAssignedReportsQ
                 r.Longitude,
                 r.PhotoPaths.FirstOrDefault(),
                 r.CreatedAt,
-                r.UpdatedAt))
-            .ToListAsync(cancellationToken);
+                r.UpdatedAt,
+                r.ResolvedAt,
+                r.ClosedAt,
+                r.AssignedInspectorId == inspectorId,
+                r.VerifiedByInspectorId == inspectorId,
+                r.AppealReviewedByInspectorId == inspectorId))
+            .ToListAsync(ct);
 
-        return new MyAssignedResult(rows, totalCount, page, pageSize, totalPages);
+        return new MyAssignedResult(rows, totalCount, page, pageSize, totalPages,
+            activeCount, completedCount, overallCount);
     }
 }

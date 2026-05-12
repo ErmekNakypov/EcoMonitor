@@ -1,4 +1,6 @@
+using EcoMonitor.Application.Common.Exceptions;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.AppealReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Commands.SubmitDumpsiteReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetReportDetails;
@@ -44,12 +46,16 @@ public class CitizenController : Controller
     private Guid CurrentUserId() => Guid.Parse(_userManager.GetUserId(User)!);
 
     [HttpGet("Reports")]
-    public async Task<IActionResult> Reports(int page = 1)
+    public async Task<IActionResult> Reports(string? tab, int page = 1)
     {
-        var result = await _mediator.Send(new GetMyReportsQuery(CurrentUserId(), page, 10));
+        var t = string.IsNullOrWhiteSpace(tab) ? "all" : tab.ToLowerInvariant();
+        if (t != "active" && t != "resolved" && t != "rejected" && t != "all") t = "all";
+
+        var result = await _mediator.Send(new GetMyReportsQuery(CurrentUserId(), t, page, 10));
 
         var model = new ReportListViewModel
         {
+            Tab = t,
             Reports = result.Items.Select(r => new ReportListItemViewModel
             {
                 Id = r.Id,
@@ -65,7 +71,11 @@ public class CitizenController : Controller
             TotalCount = result.TotalCount,
             Page = result.Page,
             PageSize = result.PageSize,
-            TotalPages = result.TotalPages
+            TotalPages = result.TotalPages,
+            ActiveCount = result.ActiveCount,
+            ResolvedCount = result.ResolvedCount,
+            RejectedCount = result.RejectedCount,
+            OverallCount = result.OverallCount
         };
 
         return View(model);
@@ -155,12 +165,87 @@ public class CitizenController : Controller
             Latitude = details.Latitude,
             Longitude = details.Longitude,
             PhotoPaths = details.PhotoPaths,
+            InspectionPhotos = details.InspectionPhotos,
+            BeforeCleanupPhotos = details.BeforeCleanupPhotos,
+            AfterCleanupPhotos = details.AfterCleanupPhotos,
             ResolutionNotes = details.ResolutionNotes,
             ResolvedAt = details.ResolvedAt,
             CreatedAt = details.CreatedAt,
-            UpdatedAt = details.UpdatedAt
+            UpdatedAt = details.UpdatedAt,
+            AppealedAt = details.AppealedAt,
+            AppealReason = details.AppealReason,
+            AppealPhotos = details.AppealPhotos,
+            AppealReviewedAt = details.AppealReviewedAt,
+            AppealResolutionNotes = details.AppealResolutionNotes,
+            AppealOutcome = details.AppealOutcome,
+            ClosedAt = details.ClosedAt,
+            CleanupCrewName = details.CleanupCrewName,
+            CleanupCompletedAt = details.CleanupCompletedAt,
+            VerifiedByInspectorName = details.VerifiedByInspectorName
         };
 
         return View(model);
+    }
+
+    [HttpPost("Reports/{id:guid}/Appeal")]
+    [ValidateAntiForgeryToken]
+    [RequestSizeLimit(30_000_000)]
+    public async Task<IActionResult> Appeal(Guid id, string appealReason, IFormFileCollection? appealPhotos)
+    {
+        appealPhotos ??= new FormFileCollection();
+
+        if (appealPhotos.Count > MaxPhotos)
+        {
+            TempData["ErrorMessage"] = $"You can attach at most {MaxPhotos} photos.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        foreach (var file in appealPhotos)
+        {
+            if (!AllowedContentTypes.Contains(file.ContentType))
+            {
+                TempData["ErrorMessage"] = $"{file.FileName}: only JPEG, PNG, or WEBP images are allowed.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            if (file.Length > MaxPhotoBytes)
+            {
+                TempData["ErrorMessage"] = $"{file.FileName}: file is larger than 5 MB.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+        }
+
+        var uploaded = new List<UploadedPhotoDto>(appealPhotos.Count);
+        foreach (var file in appealPhotos)
+        {
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+            uploaded.Add(new UploadedPhotoDto(file.FileName, file.ContentType, stream.ToArray()));
+        }
+
+        try
+        {
+            await _mediator.Send(new AppealReportCommand(id, CurrentUserId(), appealReason ?? string.Empty, uploaded));
+            _logger.LogInformation("Citizen {Email} appealed report {ReportId}", User.Identity?.Name, id);
+            TempData["SuccessMessage"] = "Appeal submitted. An inspector will review it.";
+        }
+        catch (ValidationException ex)
+        {
+            TempData["ErrorMessage"] = string.Join(" ", ex.Errors.Select(e => e.ErrorMessage));
+        }
+        catch (DomainException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (ForbiddenException)
+        {
+            return Forbid();
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
     }
 }

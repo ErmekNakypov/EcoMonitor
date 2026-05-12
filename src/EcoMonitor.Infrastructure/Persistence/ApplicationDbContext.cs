@@ -24,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<IotDevice> IotDevices => Set<IotDevice>();
     public DbSet<DumpsiteInspectionPhoto> DumpsiteInspectionPhotos => Set<DumpsiteInspectionPhoto>();
     public DbSet<DumpsiteCleanupPhoto> DumpsiteCleanupPhotos => Set<DumpsiteCleanupPhoto>();
+    public DbSet<DumpsiteAppealPhoto> DumpsiteAppealPhotos => Set<DumpsiteAppealPhoto>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -33,7 +33,21 @@ public class DumpsiteReport : BaseEntity
     public DateTime? CleanupCompletedAt { get; set; }
     public string? CleanupNotes { get; set; }
 
+    // Rework after upheld appeal — incremented each time an appeal is upheld
+    // and the report goes back to CleanupInProgress.
+    public int ReworkCount { get; set; }
+    public DateTime? ReworkStartedAt { get; set; }
+
     // Final verification by (possibly different) inspector
     public DateTime? VerifiedAt { get; set; }
     public Guid? VerifiedByInspectorId { get; set; }
+
+    // Citizen appeal of a Resolved report (7-day window).
+    public DateTime? AppealedAt { get; set; }
+    public string? AppealReason { get; set; }
+    public DateTime? AppealReviewedAt { get; set; }
+    public Guid? AppealReviewedByInspectorId { get; set; }
+    public string? AppealResolutionNotes { get; set; }
+    public AppealOutcome? AppealOutcome { get; set; }
+    public DateTime? ClosedAt { get; set; }
 }

@@ -38,16 +38,23 @@ public class ReportsController : Controller
     private Guid CurrentUserId() => Guid.Parse(_userManager.GetUserId(User)!);
 
     [HttpGet("Queue")]
-    public async Task<IActionResult> Queue(int page = 1, CancellationToken ct = default)
+    public async Task<IActionResult> Queue(string? search, string? sortBy, string? source, int page = 1, CancellationToken ct = default)
     {
-        var result = await _mediator.Send(new GetCleanupQueueQuery(page, 20), ct);
+        var result = await _mediator.Send(new GetCleanupQueueQuery(page, 20, search, sortBy, source), ct);
+        ViewBag.Search = search;
+        ViewBag.Sort = sortBy;
+        ViewBag.Source = source;
         return View(result);
     }
 
     [HttpGet("MyReports")]
-    public async Task<IActionResult> MyReports(int page = 1, CancellationToken ct = default)
+    public async Task<IActionResult> MyReports(string? tab, int page = 1, CancellationToken ct = default)
     {
-        var result = await _mediator.Send(new GetMyCleanupReportsQuery(CurrentUserId(), page, 20), ct);
+        var t = string.IsNullOrWhiteSpace(tab) ? "active" : tab.ToLowerInvariant();
+        if (t != "active" && t != "completed" && t != "all") t = "active";
+
+        var result = await _mediator.Send(new GetMyCleanupReportsQuery(CurrentUserId(), t, page, 20), ct);
+        ViewBag.Tab = t;
         return View(result);
     }
 

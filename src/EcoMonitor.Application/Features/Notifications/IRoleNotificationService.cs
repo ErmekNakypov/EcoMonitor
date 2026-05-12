@@ -4,4 +4,5 @@ public interface IRoleNotificationService
 {
     Task NotifyInspectorsOfNewReportAsync(Guid reportId, CancellationToken ct = default);
     Task NotifyCleanupCrewOfNewTaskAsync(Guid reportId, CancellationToken ct = default);
+    Task NotifyInspectorsOfAppealAsync(Guid reportId, CancellationToken ct = default);
 }

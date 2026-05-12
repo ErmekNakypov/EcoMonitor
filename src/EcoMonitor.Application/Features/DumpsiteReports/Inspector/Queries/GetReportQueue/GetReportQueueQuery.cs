@@ -3,7 +3,12 @@ using MediatR;
 
 namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportQueue;
 
-public sealed record GetReportQueueQuery(int Page = 1, int PageSize = 20) : IRequest<ReportQueueResult>;
+public sealed record GetReportQueueQuery(
+    int Page = 1,
+    int PageSize = 20,
+    string? Search = null,
+    string? SortBy = null,
+    string? Source = null) : IRequest<ReportQueueResult>;
 
 public sealed record ReportQueueResult(
     IReadOnlyList<QueueItemDto> Items,

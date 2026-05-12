@@ -137,6 +137,53 @@ public sealed class RoleNotificationService : IRoleNotificationService
         }
     }
 
+    public async Task NotifyInspectorsOfAppealAsync(Guid reportId, CancellationToken ct = default)
+    {
+        var report = await _db.DumpsiteReports
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == reportId, ct);
+        if (report is null)
+        {
+            _logger.LogWarning("Appeal notification: report {ReportId} not found", reportId);
+            return;
+        }
+
+        var inspectors = await _userManager.GetUsersInRoleAsync(RoleNames.Inspector);
+        var preview = Truncate(report.Description, 200);
+        var url = BuildReportUrl(report.Id, area: null, controller: "Inspector");
+
+        foreach (var inspector in inspectors.Where(u => u.IsActive && !string.IsNullOrEmpty(u.Email)))
+        {
+            try
+            {
+                var model = new InspectorAppealReceivedEmailModel(
+                    inspector.FullName,
+                    report.Id,
+                    preview,
+                    report.AppealReason ?? string.Empty,
+                    report.AppealedAt ?? DateTime.UtcNow,
+                    url);
+
+                var html = await _renderer.RenderAsync(
+                    TemplateRoot + "InspectorAppealReceived.cshtml", model);
+
+                await _queue.EnqueueAsync(
+                    inspector.Email!,
+                    inspector.FullName,
+                    "EcoMonitor: A citizen appealed a closed report",
+                    html,
+                    "InspectorAppealReceived",
+                    report.Id,
+                    ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to enqueue inspector appeal email for {InspectorEmail}", inspector.Email);
+            }
+        }
+    }
+
     // LinkGenerator works without an HTTP request, unlike IUrlHelper.Action,
     // which requires an ActionContext + routing data. The result is a relative
     // path; we prepend the configured AppOptions.BaseUrl so the link is

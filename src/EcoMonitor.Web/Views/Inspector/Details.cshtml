@@ -20,6 +20,8 @@
         DumpsiteStatus.CleanupInProgress    => 4,
         DumpsiteStatus.AwaitingVerification => 4,
         DumpsiteStatus.Resolved             => 5,
+        DumpsiteStatus.Appealed             => 5,
+        DumpsiteStatus.Closed               => 5,
         _                                   => 1
     };
     bool isRejected = Model.Status == DumpsiteStatus.Rejected;
@@ -239,7 +241,13 @@
                     </div>
                     <div class="status-step @StepClass(5)">
                         <span class="status-step-bullet">5</span>
-                        <div class="status-step-label">Resolved</div>
+                        <div class="status-step-label">
+                            @(Model.Status == DumpsiteStatus.Closed ? "Closed" : "Resolved")
+                            @if (Model.Status == DumpsiteStatus.Appealed)
+                            {
+                                <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -329,14 +337,55 @@
                     </div>
                 }
 
-                @if ((Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected) && !string.IsNullOrWhiteSpace(Model.ResolutionNotes))
+                @if ((Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected || Model.Status == DumpsiteStatus.Appealed || Model.Status == DumpsiteStatus.Closed) && !string.IsNullOrWhiteSpace(Model.ResolutionNotes))
                 {
                     <div class="auth-card mb-4">
                         <h2 class="h6 fw-700 mb-2">@(Model.Status == DumpsiteStatus.Rejected ? "Rejection reason" : "Resolution")</h2>
                         <p class="mb-2">@Model.ResolutionNotes</p>
                         @if (Model.ResolvedAt.HasValue)
                         {
-                            <p class="text-muted small mb-0">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</p>
+                            <p class="text-muted small mb-0">Resolved on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</p>
+                        }
+                    </div>
+                }
+
+                @if (Model.AppealedAt is not null)
+                {
+                    <div class="auth-card mb-4" style="border-left:4px solid #DC2626;">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h2 class="h6 fw-700 mb-0"><i class="bi bi-exclamation-octagon-fill text-danger me-2"></i>Citizen appeal</h2>
+                            <span class="text-muted small">Filed @DateHelpers.FormatShort(Model.AppealedAt.Value)</span>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.AppealReason))
+                        {
+                            <p class="mb-2"><strong>Reason:</strong> @Model.AppealReason</p>
+                        }
+                        @if (Model.AppealPhotos.Count > 0)
+                        {
+                            <div class="mb-2">
+                                <div class="text-muted small mb-1">Appeal photos (@Model.AppealPhotos.Count)</div>
+                                <div class="photo-gallery">
+                                    @foreach (var p in Model.AppealPhotos)
+                                    {
+                                        <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                            <img src="@p" alt="Appeal photo" />
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (Model.AppealReviewedAt is not null)
+                        {
+                            var outcomeClass = Model.AppealOutcome == AppealOutcome.Upheld ? "text-success" : "text-secondary";
+                            var outcomeLabel = Model.AppealOutcome == AppealOutcome.Upheld ? "Upheld" : "Dismissed";
+                            <div class="mt-2 pt-2 border-top">
+                                <strong class="@outcomeClass d-block mb-1">Decision: @outcomeLabel</strong>
+                                @if (!string.IsNullOrWhiteSpace(Model.AppealResolutionNotes))
+                                {
+                                    <p class="mb-1">@Model.AppealResolutionNotes</p>
+                                }
+                                <p class="text-muted small mb-0">Reviewed @DateHelpers.FormatShort(Model.AppealReviewedAt.Value)</p>
+                            </div>
                         }
                     </div>
                 }
@@ -415,7 +464,20 @@
                             </button>
                         </div>
                     }
-                    else if (Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected)
+                    else if (Model.CanReviewAppeal)
+                    {
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary btn-lg w-100"
+                                    data-bs-toggle="modal" data-bs-target="#uphold-modal">
+                                <i class="bi bi-arrow-counterclockwise me-2"></i>Uphold appeal &mdash; redo cleanup
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-lg"
+                                    data-bs-toggle="modal" data-bs-target="#dismiss-modal">
+                                <i class="bi bi-shield-check me-2"></i>Dismiss appeal
+                            </button>
+                        </div>
+                    }
+                    else if (Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected || Model.Status == DumpsiteStatus.Closed)
                     {
                         <p class="text-muted mb-0">
                             <i class="bi bi-lock me-2"></i>This report is closed.
@@ -545,6 +607,68 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-arrow-counterclockwise me-2"></i>Send back
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.CanReviewAppeal)
+{
+    <div class="modal fade" id="uphold-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="UpholdAppeal" asp-route-id="@Model.Id" method="post">
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Uphold appeal</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">
+                            The cleanup will return to the in-progress queue. Tell the citizen why the appeal
+                            was accepted and what the crew should redo.
+                        </p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="uphold-notes">Resolution notes</label>
+                            <textarea id="uphold-notes" name="resolutionNotes" rows="4" class="form-control" minlength="10" maxlength="1000" required></textarea>
+                        </div>
+                        <div class="form-text">10–1000 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-arrow-counterclockwise me-2"></i>Uphold and reopen cleanup
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dismiss-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="DismissAppeal" asp-route-id="@Model.Id" method="post">
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Dismiss appeal</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">
+                            The report stays resolved. Explain to the citizen why the appeal was not accepted.
+                        </p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="dismiss-notes">Explanation</label>
+                            <textarea id="dismiss-notes" name="resolutionNotes" rows="4" class="form-control" minlength="10" maxlength="1000" required></textarea>
+                        </div>
+                        <div class="form-text">10–1000 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-shield-check me-2"></i>Dismiss appeal
                         </button>
                     </div>
                 </form>

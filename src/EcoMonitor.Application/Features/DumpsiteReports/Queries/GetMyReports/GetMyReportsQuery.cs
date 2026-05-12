@@ -3,14 +3,22 @@ using MediatR;
 
 namespace EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 
-public sealed record GetMyReportsQuery(Guid ReporterId, int Page = 1, int PageSize = 10) : IRequest<MyReportsResult>;
+public sealed record GetMyReportsQuery(
+    Guid ReporterId,
+    string Tab = "all",
+    int Page = 1,
+    int PageSize = 10) : IRequest<MyReportsResult>;
 
 public sealed record MyReportsResult(
     IReadOnlyList<MyReportItemDto> Items,
     int TotalCount,
     int Page,
     int PageSize,
-    int TotalPages);
+    int TotalPages,
+    int ActiveCount,
+    int ResolvedCount,
+    int RejectedCount,
+    int OverallCount);
 
 public sealed record MyReportItemDto(
     Guid Id,

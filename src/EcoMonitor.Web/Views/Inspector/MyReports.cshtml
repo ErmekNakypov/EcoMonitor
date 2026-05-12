@@ -2,12 +2,24 @@
 @{
     ViewData["Title"] = "My assigned reports";
 
-    string ChipClass(DumpsiteStatus? value) =>
-        Model.StatusFilter == value ? "filter-chip active" : "filter-chip";
-
     var breadcrumbs = Breadcrumbs.Build(
         new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home") },
         new BreadcrumbItem { Label = "My reports" });
+
+    string TabClass(string tab) => Model.Tab == tab ? "nav-link active" : "nav-link";
+
+    string EmptyTitle = Model.Tab switch
+    {
+        "completed" => "No completed reports yet",
+        "all" => "You haven't taken any reports yet",
+        _ => "Nothing active right now"
+    };
+    string EmptySubtitle = Model.Tab switch
+    {
+        "completed" => "Reports you have closed, rejected, or sent to cleanup will appear here.",
+        "all" => "Pick up a report from the queue to start handling cases.",
+        _ => "Pick up a report from the queue or wait for an appeal to come in."
+    };
 }
 
 <section class="py-5">
@@ -20,7 +32,7 @@
                     <span>My reports</span>
                 </span>
                 <h1 class="h2 fw-700 mt-3 mb-1">Reports assigned to me</h1>
-                <p class="text-muted mb-0">@Model.TotalCount total</p>
+                <p class="text-muted mb-0">@Model.OverallCount total</p>
             </div>
         </div>
 
@@ -33,21 +45,31 @@
             </a>
         </div>
 
-        <div class="d-flex flex-wrap gap-2 mb-4">
-            <a asp-controller="Inspector" asp-action="MyReports" class="@ChipClass(null)">All</a>
-            <a asp-controller="Inspector" asp-action="MyReports" asp-route-status="@DumpsiteStatus.InReview" class="@ChipClass(DumpsiteStatus.InReview)">In review</a>
-            <a asp-controller="Inspector" asp-action="MyReports" asp-route-status="@DumpsiteStatus.Confirmed" class="@ChipClass(DumpsiteStatus.Confirmed)">Confirmed</a>
-            <a asp-controller="Inspector" asp-action="MyReports" asp-route-status="@DumpsiteStatus.Resolved" class="@ChipClass(DumpsiteStatus.Resolved)">Resolved</a>
-            <a asp-controller="Inspector" asp-action="MyReports" asp-route-status="@DumpsiteStatus.Rejected" class="@ChipClass(DumpsiteStatus.Rejected)">Rejected</a>
-        </div>
+        <ul class="nav nav-pills role-tabs mb-3" role="tablist">
+            <li class="nav-item">
+                <a class="@TabClass("active")" asp-controller="Inspector" asp-action="MyReports" asp-route-tab="active">
+                    Active <span class="role-tab-count">@Model.ActiveCount</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="@TabClass("completed")" asp-controller="Inspector" asp-action="MyReports" asp-route-tab="completed">
+                    Completed <span class="role-tab-count">@Model.CompletedCount</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="@TabClass("all")" asp-controller="Inspector" asp-action="MyReports" asp-route-tab="all">
+                    All <span class="role-tab-count">@Model.OverallCount</span>
+                </a>
+            </li>
+        </ul>
 
         @if (Model.Items.Count == 0)
         {
             var emptyState = new EmptyStateViewModel
             {
                 Icon = "bi-clipboard",
-                Title = "No reports here",
-                Subtitle = "Pick up a report from the queue to start handling cases."
+                Title = EmptyTitle,
+                Subtitle = EmptySubtitle
             };
             <div class="auth-card">
                 <partial name="_EmptyState" model="emptyState" />
@@ -58,6 +80,19 @@
             <div class="d-flex flex-column gap-3">
                 @foreach (var item in Model.Items)
                 {
+                    string? footnote = item.Status switch
+                    {
+                        DumpsiteStatus.Resolved when item.ResolvedAt.HasValue => $"Resolved {DateHelpers.FormatRelative(item.ResolvedAt.Value)}",
+                        DumpsiteStatus.Closed when item.ClosedAt.HasValue => $"Closed {DateHelpers.FormatRelative(item.ClosedAt.Value)}",
+                        DumpsiteStatus.Rejected when item.ResolvedAt.HasValue => $"Rejected {DateHelpers.FormatRelative(item.ResolvedAt.Value)}",
+                        _ => null
+                    };
+
+                    var rolesPlayed = new List<string>();
+                    if (item.WasAssigned) rolesPlayed.Add("reviewed");
+                    if (item.WasVerifier) rolesPlayed.Add("verified cleanup");
+                    if (item.WasAppealReviewer) rolesPlayed.Add("reviewed appeal");
+
                     <div class="report-card">
                         <div class="row g-3 align-items-center">
                             <div class="col-md-2">
@@ -73,10 +108,20 @@
                                 }
                             </div>
                             <div class="col-md-7">
+                                <div class="mb-2"><partial name="_StatusBadge" model="item.Status" /></div>
                                 <p class="mb-2 fw-500">@item.ShortDescription</p>
-                                <div class="d-flex flex-wrap align-items-center gap-2">
-                                    <partial name="_StatusBadge" model="item.Status" />
-                                    <span class="text-muted small"><i class="bi bi-clock me-1"></i>Updated @DateHelpers.FormatRelative(item.UpdatedAt)</span>
+                                @if (rolesPlayed.Count > 0)
+                                {
+                                    <div class="text-muted small mb-1">
+                                        <i class="bi bi-person-check me-1"></i>You: @string.Join(" · ", rolesPlayed)
+                                    </div>
+                                }
+                                <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+                                    <span><i class="bi bi-clock me-1"></i>Updated @DateHelpers.FormatRelative(item.UpdatedAt)</span>
+                                    @if (!string.IsNullOrEmpty(footnote))
+                                    {
+                                        <span><i class="bi bi-check2-circle me-1"></i>@footnote</span>
+                                    }
                                 </div>
                             </div>
                             <div class="col-md-3 text-md-end">
@@ -95,18 +140,18 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item @(Model.Page <= 1 ? "disabled" : string.Empty)">
                             <a class="page-link" asp-controller="Inspector" asp-action="MyReports"
-                               asp-route-page="@(Model.Page - 1)" asp-route-status="@Model.StatusFilter">Previous</a>
+                               asp-route-page="@(Model.Page - 1)" asp-route-tab="@Model.Tab">Previous</a>
                         </li>
                         @for (int p = 1; p <= Model.TotalPages; p++)
                         {
                             <li class="page-item @(p == Model.Page ? "active" : string.Empty)">
                                 <a class="page-link" asp-controller="Inspector" asp-action="MyReports"
-                                   asp-route-page="@p" asp-route-status="@Model.StatusFilter">@p</a>
+                                   asp-route-page="@p" asp-route-tab="@Model.Tab">@p</a>
                             </li>
                         }
                         <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : string.Empty)">
                             <a class="page-link" asp-controller="Inspector" asp-action="MyReports"
-                               asp-route-page="@(Model.Page + 1)" asp-route-status="@Model.StatusFilter">Next</a>
+                               asp-route-page="@(Model.Page + 1)" asp-route-tab="@Model.Tab">Next</a>
                         </li>
                     </ul>
                 </nav>

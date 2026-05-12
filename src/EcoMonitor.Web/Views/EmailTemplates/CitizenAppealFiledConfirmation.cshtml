@@ -1,0 +1,20 @@
+@model AppealFiledEmailModel
+@{
+    ViewBag.Title = "Your appeal has been received";
+    var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+}
+<h2 style="margin:0 0 16px 0;color:#1F2937;font-size:20px;">Your appeal has been received</h2>
+<p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.ReporterName,</p>
+<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
+    We've received your appeal for report <strong>@refId</strong>. An inspector
+    will review the site again and either uphold your appeal (cleanup will be
+    redone) or dismiss it with an explanation.
+</p>
+<div style="background:#F9FAFB;border-left:4px solid #6B7280;padding:12px 16px;margin:16px 0;border-radius:6px;">
+    <strong style="display:block;margin-bottom:4px;color:#374151;">Your reason</strong>
+    <p style="margin:0;font-size:14px;color:#374151;line-height:1.5;">@Model.AppealReason</p>
+</div>
+<p style="margin:16px 0 0 0;font-size:14px;color:#6B7280;line-height:1.6;">
+    Filed @Model.AppealedAt.ToString("MMM d, yyyy HH:mm") UTC. You'll receive
+    another email with the inspector's decision.
+</p>

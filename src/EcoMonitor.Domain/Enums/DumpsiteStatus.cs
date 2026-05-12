@@ -25,5 +25,11 @@ public enum DumpsiteStatus
     CleanupInProgress = 5,
 
     [Display(Name = "Awaiting verification")]
-    AwaitingVerification = 6
+    AwaitingVerification = 6,
+
+    [Display(Name = "Appealed")]
+    Appealed = 7,
+
+    [Display(Name = "Closed")]
+    Closed = 8
 }

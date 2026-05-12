@@ -1,10 +1,27 @@
 @model MyCleanupReportsResult
+@using EcoMonitor.Domain.Enums
 @{
     ViewData["Title"] = "My cleanups";
+    var tab = (string)(ViewBag.Tab ?? "active");
 
     var breadcrumbs = Breadcrumbs.Build(
         new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home", new { area = "" }) },
         new BreadcrumbItem { Label = "My cleanups" });
+
+    string TabClass(string t) => tab == t ? "nav-link active" : "nav-link";
+
+    string EmptyTitle = tab switch
+    {
+        "completed" => "No completed cleanups yet",
+        "all" => "You haven't taken any cleanup tasks yet",
+        _ => "Nothing in progress"
+    };
+    string EmptySubtitle = tab switch
+    {
+        "completed" => "Your finished work will appear here once an inspector verifies a cleanup.",
+        "all" => "Take a report from the queue to start your first cleanup.",
+        _ => "Take a report from the queue to start a cleanup."
+    };
 }
 
 <section class="py-5">
@@ -18,11 +35,11 @@
                     <span>Cleanup crew</span>
                 </span>
                 <h1 class="h2 fw-700 mt-3 mb-1">My cleanup assignments</h1>
-                <p class="text-muted mb-0">@Model.TotalCount active</p>
+                <p class="text-muted mb-0">@Model.OverallCount total</p>
             </div>
         </div>
 
-        <div class="d-flex gap-2 mb-4">
+        <div class="d-flex gap-2 mb-3">
             <a asp-area="CleanupCrew" asp-controller="Reports" asp-action="Queue" class="filter-chip">
                 <i class="bi bi-inboxes"></i><span>Queue</span>
             </a>
@@ -31,13 +48,31 @@
             </a>
         </div>
 
+        <ul class="nav nav-pills role-tabs mb-3" role="tablist">
+            <li class="nav-item">
+                <a class="@TabClass("active")" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" asp-route-tab="active">
+                    Active <span class="role-tab-count">@Model.ActiveCount</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="@TabClass("completed")" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" asp-route-tab="completed">
+                    Completed <span class="role-tab-count">@Model.CompletedCount</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="@TabClass("all")" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" asp-route-tab="all">
+                    All <span class="role-tab-count">@Model.OverallCount</span>
+                </a>
+            </li>
+        </ul>
+
         @if (Model.Items.Count == 0)
         {
             var emptyState = new EmptyStateViewModel
             {
                 Icon = "bi-clipboard",
-                Title = "Nothing in progress",
-                Subtitle = "Take a report from the queue to start a cleanup."
+                Title = EmptyTitle,
+                Subtitle = EmptySubtitle
             };
             <div class="auth-card">
                 <partial name="_EmptyState" model="emptyState" />
@@ -48,6 +83,15 @@
             <div class="d-flex flex-column gap-3">
                 @foreach (var item in Model.Items)
                 {
+                    string? footnote = item.Status switch
+                    {
+                        DumpsiteStatus.Resolved when item.ResolvedAt.HasValue => $"Resolved {DateHelpers.FormatRelative(item.ResolvedAt.Value)}",
+                        DumpsiteStatus.Closed when item.ClosedAt.HasValue => $"Closed {DateHelpers.FormatRelative(item.ClosedAt.Value)}",
+                        DumpsiteStatus.Appealed when item.CleanupCompletedAt.HasValue => $"Returned for rework {DateHelpers.FormatRelative(item.UpdatedAt)}",
+                        DumpsiteStatus.AwaitingVerification when item.CleanupCompletedAt.HasValue => $"Submitted {DateHelpers.FormatRelative(item.CleanupCompletedAt.Value)}",
+                        _ => null
+                    };
+
                     <div class="report-card">
                         <div class="row g-3 align-items-center">
                             <div class="col-md-2">
@@ -68,6 +112,10 @@
                                 <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
                                     <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
                                     <span><i class="bi bi-clock me-1"></i>Updated @DateHelpers.FormatRelative(item.UpdatedAt)</span>
+                                    @if (!string.IsNullOrEmpty(footnote))
+                                    {
+                                        <span><i class="bi bi-check2-circle me-1"></i>@footnote</span>
+                                    }
                                 </div>
                             </div>
                             <div class="col-md-3 text-md-end">
@@ -79,6 +127,29 @@
                     </div>
                 }
             </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="mt-4" aria-label="My cleanups pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.Page <= 1 ? "disabled" : string.Empty)">
+                            <a class="page-link" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports"
+                               asp-route-page="@(Model.Page - 1)" asp-route-tab="@tab">Previous</a>
+                        </li>
+                        @for (int p = 1; p <= Model.TotalPages; p++)
+                        {
+                            <li class="page-item @(p == Model.Page ? "active" : string.Empty)">
+                                <a class="page-link" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports"
+                                   asp-route-page="@p" asp-route-tab="@tab">@p</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : string.Empty)">
+                            <a class="page-link" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports"
+                               asp-route-page="@(Model.Page + 1)" asp-route-tab="@tab">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
         }
     </div>
 </section>

@@ -54,3 +54,31 @@ public sealed record CleanupCrewNewTaskEmailModel(
     double Latitude,
     double Longitude,
     string ReportUrl);
+
+public sealed record AppealFiledEmailModel(
+    string ReporterName,
+    Guid ReportId,
+    string AppealReason,
+    DateTime AppealedAt);
+
+public sealed record AppealUpheldEmailModel(
+    string ReporterName,
+    Guid ReportId,
+    string InspectorName,
+    string InspectorNotes,
+    DateTime ReviewedAt);
+
+public sealed record AppealDismissedEmailModel(
+    string ReporterName,
+    Guid ReportId,
+    string InspectorName,
+    string InspectorNotes,
+    DateTime ReviewedAt);
+
+public sealed record InspectorAppealReceivedEmailModel(
+    string InspectorName,
+    Guid ReportId,
+    string ReportDescription,
+    string AppealReason,
+    DateTime AppealedAt,
+    string ReportUrl);

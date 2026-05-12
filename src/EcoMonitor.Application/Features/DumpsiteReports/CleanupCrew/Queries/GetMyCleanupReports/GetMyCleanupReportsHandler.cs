@@ -14,6 +14,13 @@ public class GetMyCleanupReportsHandler : IRequestHandler<GetMyCleanupReportsQue
         DumpsiteStatus.AwaitingVerification
     };
 
+    private static readonly DumpsiteStatus[] CompletedStatuses =
+    {
+        DumpsiteStatus.Resolved,
+        DumpsiteStatus.Closed,
+        DumpsiteStatus.Appealed
+    };
+
     private readonly IApplicationDbContext _db;
 
     public GetMyCleanupReportsHandler(IApplicationDbContext db)
@@ -26,12 +33,33 @@ public class GetMyCleanupReportsHandler : IRequestHandler<GetMyCleanupReportsQue
         var page = request.Page < 1 ? 1 : request.Page;
         var pageSize = request.PageSize < 1 ? 20 : request.PageSize;
 
-        var query = _db.DumpsiteReports
+        var mine = _db.DumpsiteReports
             .AsNoTracking()
-            .Where(r => r.CleanupCrewId == request.CleanupUserId
-                        && ActiveStatuses.Contains(r.Status));
+            .Where(r => r.CleanupCrewId == request.CleanupUserId);
 
-        var totalCount = await query.CountAsync(ct);
+        var counts = await mine
+            .GroupBy(r => r.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync(ct);
+
+        var activeCount = counts.Where(c => ActiveStatuses.Contains(c.Status)).Sum(c => c.Count);
+        var completedCount = counts.Where(c => CompletedStatuses.Contains(c.Status)).Sum(c => c.Count);
+        var overallCount = counts.Sum(c => c.Count);
+
+        var tab = (request.Tab ?? "active").ToLowerInvariant();
+        var query = tab switch
+        {
+            "completed" => mine.Where(r => CompletedStatuses.Contains(r.Status)),
+            "all" => mine,
+            _ => mine.Where(r => ActiveStatuses.Contains(r.Status))
+        };
+
+        var totalCount = tab switch
+        {
+            "completed" => completedCount,
+            "all" => overallCount,
+            _ => activeCount
+        };
         var totalPages = (int)Math.Max(1, Math.Ceiling(totalCount / (double)pageSize));
         if (page > totalPages) page = totalPages;
 
@@ -46,9 +74,13 @@ public class GetMyCleanupReportsHandler : IRequestHandler<GetMyCleanupReportsQue
                 r.Latitude,
                 r.Longitude,
                 r.PhotoPaths.FirstOrDefault(),
-                r.UpdatedAt))
+                r.UpdatedAt,
+                r.CleanupCompletedAt,
+                r.ResolvedAt,
+                r.ClosedAt))
             .ToListAsync(ct);
 
-        return new MyCleanupReportsResult(rows, totalCount, page, pageSize, totalPages);
+        return new MyCleanupReportsResult(rows, totalCount, page, pageSize, totalPages,
+            activeCount, completedCount, overallCount);
     }
 }

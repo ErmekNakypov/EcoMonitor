@@ -14,4 +14,8 @@ public class AdministratorDashboardViewModel
     public int AutoTriageAutoConfirmed30d { get; set; }
     public int AutoTriageReviewed30d { get; set; }
     public double AutoTriagePercentage30d { get; set; }
+
+    public int AppealsTotalEligible30d { get; set; }
+    public int AppealsAppealed30d { get; set; }
+    public double AppealsPercentage30d { get; set; }
 }

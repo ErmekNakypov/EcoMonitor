@@ -37,4 +37,11 @@ public sealed record InspectorReportDto(
     int ReporterTotalReports,
     int ReporterPendingReports,
     int ReporterResolvedReports,
-    int ReporterRejectedReports);
+    int ReporterRejectedReports,
+    DateTime? AppealedAt,
+    string? AppealReason,
+    IReadOnlyList<string> AppealPhotos,
+    DateTime? AppealReviewedAt,
+    string? AppealResolutionNotes,
+    AppealOutcome? AppealOutcome,
+    DateTime? ClosedAt);

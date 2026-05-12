@@ -1,0 +1,23 @@
+@model AppealDismissedEmailModel
+@{
+    ViewBag.Title = "Appeal reviewed";
+    var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+}
+<h2 style="margin:0 0 16px 0;color:#1F2937;font-size:20px;">Your appeal was reviewed</h2>
+<p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.ReporterName,</p>
+<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
+    Inspector <strong>@Model.InspectorName</strong> reviewed your appeal on
+    report <strong>@refId</strong> and decided not to reopen the cleanup. The
+    report remains marked as resolved.
+</p>
+@if (!string.IsNullOrWhiteSpace(Model.InspectorNotes))
+{
+    <div style="background:#F9FAFB;border-left:4px solid #6B7280;padding:12px 16px;margin:16px 0;border-radius:6px;">
+        <strong style="display:block;margin-bottom:4px;color:#374151;">Inspector's explanation</strong>
+        <p style="margin:0;font-size:14px;color:#374151;line-height:1.5;">@Model.InspectorNotes</p>
+    </div>
+}
+<p style="margin:16px 0 0 0;font-size:14px;color:#6B7280;line-height:1.6;">
+    Reviewed @Model.ReviewedAt.ToString("MMM d, yyyy HH:mm") UTC. If you still
+    notice problems on site, you're welcome to submit a fresh report.
+</p>

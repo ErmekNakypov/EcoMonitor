@@ -38,11 +38,14 @@ public class DumpsiteReportConfiguration : IEntityTypeConfiguration<DumpsiteRepo
         builder.Property(r => r.InspectorObservations).HasMaxLength(1000);
         builder.Property(r => r.CleanupNotes).HasMaxLength(1000);
         builder.Property(r => r.AutoTriageReason).HasMaxLength(500);
+        builder.Property(r => r.AppealReason).HasMaxLength(500);
+        builder.Property(r => r.AppealResolutionNotes).HasMaxLength(1000);
 
         builder.HasIndex(r => r.Status);
         builder.HasIndex(r => r.ReporterId);
         builder.HasIndex(r => r.AssignedInspectorId);
         builder.HasIndex(r => r.TelegramUserId);
         builder.HasIndex(r => r.CleanupCrewId);
+        builder.HasIndex(r => r.ResolvedAt);
     }
 }

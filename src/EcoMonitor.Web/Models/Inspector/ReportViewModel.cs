@@ -46,4 +46,14 @@ public class ReportViewModel
     public bool CanReject => Status == DumpsiteStatus.InReview && IsAssignedToCurrentUser;
     // Verification step: any inspector can verify, not just the original assignee.
     public bool CanVerify => Status == DumpsiteStatus.AwaitingVerification;
+
+    public DateTime? AppealedAt { get; set; }
+    public string? AppealReason { get; set; }
+    public IReadOnlyList<string> AppealPhotos { get; set; } = Array.Empty<string>();
+    public DateTime? AppealReviewedAt { get; set; }
+    public string? AppealResolutionNotes { get; set; }
+    public AppealOutcome? AppealOutcome { get; set; }
+    public DateTime? ClosedAt { get; set; }
+
+    public bool CanReviewAppeal => Status == DumpsiteStatus.Appealed;
 }

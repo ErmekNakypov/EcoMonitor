@@ -23,12 +23,32 @@ public class GetReportQueueHandler : IRequestHandler<GetReportQueueQuery, Report
             .AsNoTracking()
             .Where(r => r.Status == DumpsiteStatus.New && r.AssignedInspectorId == null);
 
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var s = request.Search.Trim().ToLower();
+            query = query.Where(r => r.Description.ToLower().Contains(s));
+        }
+
+        if (string.Equals(request.Source, "web", StringComparison.OrdinalIgnoreCase))
+        {
+            query = query.Where(r => r.Source == ReportSource.Web);
+        }
+        else if (string.Equals(request.Source, "telegram", StringComparison.OrdinalIgnoreCase))
+        {
+            query = query.Where(r => r.Source == ReportSource.Telegram);
+        }
+
+        query = request.SortBy switch
+        {
+            "newest" => query.OrderByDescending(r => r.CreatedAt),
+            _ => query.OrderBy(r => r.CreatedAt)
+        };
+
         var totalCount = await query.CountAsync(cancellationToken);
         var totalPages = (int)Math.Max(1, Math.Ceiling(totalCount / (double)pageSize));
         if (page > totalPages) page = totalPages;
 
         var rows = await query
-            .OrderBy(r => r.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(r => new QueueItemDto(

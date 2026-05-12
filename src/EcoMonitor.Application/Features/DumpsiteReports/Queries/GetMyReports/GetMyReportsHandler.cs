@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,22 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 
 public class GetMyReportsHandler : IRequestHandler<GetMyReportsQuery, MyReportsResult>
 {
+    private static readonly DumpsiteStatus[] ActiveStatuses =
+    {
+        DumpsiteStatus.New,
+        DumpsiteStatus.InReview,
+        DumpsiteStatus.Confirmed,
+        DumpsiteStatus.CleanupInProgress,
+        DumpsiteStatus.AwaitingVerification,
+        DumpsiteStatus.Appealed
+    };
+
+    private static readonly DumpsiteStatus[] ResolvedStatuses =
+    {
+        DumpsiteStatus.Resolved,
+        DumpsiteStatus.Closed
+    };
+
     private readonly IApplicationDbContext _dbContext;
 
     public GetMyReportsHandler(IApplicationDbContext dbContext)
@@ -18,11 +35,36 @@ public class GetMyReportsHandler : IRequestHandler<GetMyReportsQuery, MyReportsR
         var page = request.Page < 1 ? 1 : request.Page;
         var pageSize = request.PageSize < 1 ? 10 : request.PageSize;
 
-        var query = _dbContext.DumpsiteReports
+        var mine = _dbContext.DumpsiteReports
             .AsNoTracking()
             .Where(r => r.ReporterId == request.ReporterId);
 
-        var totalCount = await query.CountAsync(cancellationToken);
+        var counts = await mine
+            .GroupBy(r => r.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync(cancellationToken);
+
+        var activeCount = counts.Where(c => ActiveStatuses.Contains(c.Status)).Sum(c => c.Count);
+        var resolvedCount = counts.Where(c => ResolvedStatuses.Contains(c.Status)).Sum(c => c.Count);
+        var rejectedCount = counts.Where(c => c.Status == DumpsiteStatus.Rejected).Sum(c => c.Count);
+        var overallCount = counts.Sum(c => c.Count);
+
+        var tab = (request.Tab ?? "all").ToLowerInvariant();
+        var query = tab switch
+        {
+            "active" => mine.Where(r => ActiveStatuses.Contains(r.Status)),
+            "resolved" => mine.Where(r => ResolvedStatuses.Contains(r.Status)),
+            "rejected" => mine.Where(r => r.Status == DumpsiteStatus.Rejected),
+            _ => mine
+        };
+
+        var totalCount = tab switch
+        {
+            "active" => activeCount,
+            "resolved" => resolvedCount,
+            "rejected" => rejectedCount,
+            _ => overallCount
+        };
         var totalPages = (int)Math.Max(1, Math.Ceiling(totalCount / (double)pageSize));
         if (page > totalPages) page = totalPages;
 
@@ -40,6 +82,7 @@ public class GetMyReportsHandler : IRequestHandler<GetMyReportsQuery, MyReportsR
                 r.CreatedAt))
             .ToListAsync(cancellationToken);
 
-        return new MyReportsResult(rows, totalCount, page, pageSize, totalPages);
+        return new MyReportsResult(rows, totalCount, page, pageSize, totalPages,
+            activeCount, resolvedCount, rejectedCount, overallCount);
     }
 }

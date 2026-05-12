@@ -5,7 +5,7 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetM
 
 public sealed record GetMyAssignedReportsQuery(
     Guid InspectorId,
-    DumpsiteStatus? StatusFilter,
+    string Tab = "active",
     int Page = 1,
     int PageSize = 20) : IRequest<MyAssignedResult>;
 
@@ -14,7 +14,10 @@ public sealed record MyAssignedResult(
     int TotalCount,
     int Page,
     int PageSize,
-    int TotalPages);
+    int TotalPages,
+    int ActiveCount,
+    int CompletedCount,
+    int OverallCount);
 
 public sealed record MyAssignedItemDto(
     Guid Id,
@@ -24,4 +27,9 @@ public sealed record MyAssignedItemDto(
     double Longitude,
     string? FirstPhotoPath,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    DateTime? ResolvedAt,
+    DateTime? ClosedAt,
+    bool WasAssigned,
+    bool WasVerifier,
+    bool WasAppealReviewer);

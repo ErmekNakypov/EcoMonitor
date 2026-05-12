@@ -457,6 +457,92 @@ a:hover {
 .status-awaiting  { background: #FAE8FF; color: #6B21A8; }
 .status-resolved  { background: #D1FAE5; color: #065F46; }
 .status-rejected  { background: #E5E7EB; color: #374151; }
+.status-appealed  { background: #FEE2E2; color: #991B1B; }
+.status-closed    { background: #F3F4F6; color: #4B5563; }
+
+/* Citizen Details — "After cleanup" highlight + resolution meta */
+.photo-section-highlight {
+  border-color: var(--brand-primary, #2D6A4F) !important;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+}
+
+.photo-section-warning {
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.resolution-meta {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F3F4F6;
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+.resolution-meta > div {
+  margin-bottom: 0.25rem;
+}
+
+/* Role tabs — Active / Completed / All pill nav on the "My X" pages */
+.role-tabs .nav-link {
+  color: var(--text-secondary, #6B7280);
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.role-tabs .nav-link.active {
+  background: var(--brand-primary, #2D6A4F);
+  color: #ffffff;
+}
+
+.role-tabs .nav-link:hover:not(.active) {
+  background: rgba(45, 106, 79, 0.08);
+  color: var(--brand-primary, #2D6A4F);
+}
+
+.role-tab-count {
+  background: rgba(0, 0, 0, 0.1);
+  color: inherit;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 22px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.role-tabs .nav-link.active .role-tab-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* Queue toolbar — search + sort + source filter on queue pages */
+.queue-toolbar {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.queue-toolbar .filter-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.queue-toolbar .filter-group input[type="search"],
+.queue-toolbar .filter-group select {
+  max-width: 220px;
+  flex: 1 1 180px;
+}
+.queue-toolbar .filter-group .btn {
+  flex: 0 0 auto;
+}
 
 /* Source pills (web vs Telegram) — same shape as .status-pill */
 .source-pill {

@@ -70,6 +70,13 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
         // for bot, otherwise leave zeros.
         var stats = await GetReporterStatsAsync(report, cancellationToken);
 
+        var appealPhotos = await _dbContext.DumpsiteAppealPhotos
+            .AsNoTracking()
+            .Where(p => p.ReportId == report.Id)
+            .OrderBy(p => p.UploadedAt)
+            .Select(p => p.FilePath)
+            .ToListAsync(cancellationToken);
+
         return new InspectorReportDto(
             report.Id,
             report.Description,
@@ -102,7 +109,14 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             stats.Total,
             stats.Pending,
             stats.Resolved,
-            stats.Rejected);
+            stats.Rejected,
+            report.AppealedAt,
+            report.AppealReason,
+            appealPhotos,
+            report.AppealReviewedAt,
+            report.AppealResolutionNotes,
+            report.AppealOutcome,
+            report.ClosedAt);
     }
 
     private async Task<(int Total, int Pending, int Resolved, int Rejected)> GetReporterStatsAsync(

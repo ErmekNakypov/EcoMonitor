@@ -8,4 +8,7 @@ public interface IReportNotificationService
     Task NotifyCleanupStartedAsync(Guid reportId, CancellationToken ct = default);
     Task NotifyCleanupCompletedAsync(Guid reportId, CancellationToken ct = default);
     Task NotifyReportResolvedAsync(Guid reportId, CancellationToken ct = default);
+    Task NotifyAppealFiledAsync(Guid reportId, CancellationToken ct = default);
+    Task NotifyAppealUpheldAsync(Guid reportId, CancellationToken ct = default);
+    Task NotifyAppealDismissedAsync(Guid reportId, CancellationToken ct = default);
 }

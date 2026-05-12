@@ -129,6 +129,7 @@ public static class DependencyInjection
         services.AddHostedService<AirQualityIngestionService>();
         services.AddHostedService<TelegramBotHostedService>();
         services.AddHostedService<EmailSenderHostedService>();
+        services.AddHostedService<EcoMonitor.Infrastructure.BackgroundServices.AutoCloseExpiredReportsService>();
 
         return services;
     }

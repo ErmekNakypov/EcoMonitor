@@ -95,7 +95,7 @@
         </div>
 
         <div class="row g-4 mb-5">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="stat-card" style="border-left:4px solid #2D6A4F;">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="stat-label">Auto-triage rate</span>
@@ -115,6 +115,30 @@
                                 @Model.AutoTriageAutoConfirmed30d of @Model.AutoTriageTotal30d reports
                                 auto-confirmed in the last 30 days
                                 &middot; @Model.AutoTriageReviewed30d kicked to inspector review
+                            </text>
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-card" style="border-left:4px solid #DC2626;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Citizen appeal rate</span>
+                        <i class="bi bi-exclamation-octagon-fill stat-icon" style="color:#DC2626;"></i>
+                    </div>
+                    <div class="stat-value">
+                        @Model.AppealsPercentage30d.ToString("0.#")%
+                    </div>
+                    <span class="text-muted small">
+                        @if (Model.AppealsTotalEligible30d == 0)
+                        {
+                            <text>No resolved reports in the last 30 days.</text>
+                        }
+                        else
+                        {
+                            <text>
+                                @Model.AppealsAppealed30d of @Model.AppealsTotalEligible30d resolved reports
+                                appealed by citizens in the last 30 days
                             </text>
                         }
                     </span>

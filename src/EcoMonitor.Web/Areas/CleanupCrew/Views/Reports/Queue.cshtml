@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="d-flex gap-2 mb-4">
+        <div class="d-flex gap-2 mb-3">
             <a asp-area="CleanupCrew" asp-controller="Reports" asp-action="Queue" class="filter-chip active">
                 <i class="bi bi-inboxes"></i><span>Queue</span>
             </a>
@@ -30,6 +30,22 @@
                 <i class="bi bi-clipboard-check"></i><span>My cleanups</span>
             </a>
         </div>
+
+        <form method="get" asp-area="CleanupCrew" asp-controller="Reports" asp-action="Queue" class="queue-toolbar">
+            <div class="filter-group">
+                <input type="search" name="search" placeholder="Search by description…" class="form-control" value="@ViewBag.Search" />
+                <select name="sortBy" class="form-select">
+                    <option value="oldest" selected="@(ViewBag.Sort == "oldest" || string.IsNullOrEmpty((string?)ViewBag.Sort))">Oldest first</option>
+                    <option value="newest" selected="@(ViewBag.Sort == "newest")">Newest first</option>
+                </select>
+                <select name="source" class="form-select">
+                    <option value="" selected="@(string.IsNullOrEmpty((string?)ViewBag.Source))">All sources</option>
+                    <option value="web" selected="@(ViewBag.Source == "web")">Web only</option>
+                    <option value="telegram" selected="@(ViewBag.Source == "telegram")">Telegram only</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </form>
 
         @if (Model.Items.Count == 0)
         {
@@ -67,6 +83,7 @@
                                 <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
                                     <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
                                     <span><i class="bi bi-clock me-1"></i>Confirmed @DateHelpers.FormatRelative(item.ConfirmedAt)</span>
+                                    <partial name="_SourceBadge" model="item.Source" />
                                 </div>
                             </div>
                             <div class="col-md-3 text-md-end">

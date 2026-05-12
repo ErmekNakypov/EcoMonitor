@@ -38,8 +38,8 @@ PostgreSQL connection string for development:
 Host=localhost;Port=5432;Database=ecomonitor;Username=ecomonitor_app;Password=devpassword123
 
 ## Dumpsite lifecycle (multi-stage cleanup workflow)
-A dumpsite report passes through three roles and seven possible states:
-`New → InReview → Confirmed → CleanupInProgress → AwaitingVerification → Resolved`
+A dumpsite report passes through three roles and the following states:
+`New → InReview → Confirmed → CleanupInProgress → AwaitingVerification → Resolved → (Appealed | Closed)`
 (plus `Rejected` as a dead-end from `InReview`).
 
 - **Citizen** submits via web or Telegram.
@@ -55,6 +55,32 @@ A dumpsite report passes through three roles and seven possible states:
 
 Status numeric values are frozen — never reorder the `DumpsiteStatus` enum.
 New states append at the end.
+
+## Appeal mechanism
+After a report reaches `Resolved`, the citizen reporter has 7 days to appeal
+if they disagree with the cleanup outcome. Otherwise the report auto-closes.
+
+- Citizen Details view shows a red **Disagree with resolution** button while
+  `Status == Resolved` and `UtcNow - ResolvedAt < 7d`. The modal collects a
+  10–500 char reason and up to 5 optional photos saved under
+  `wwwroot/uploads/appeals/` via `DumpsiteAppealPhoto` rows.
+- `AppealReportCommand` flips the report to `Appealed`, sets `AppealedAt`,
+  notifies the citizen (confirmation) and all inspectors.
+- Inspector navbar has an **Appeals** link with a live count badge powered by
+  `PendingAppealsBadgeViewComponent`. The Appeals queue view lists pending
+  appeals oldest-first.
+- On the Inspector Details view, when `Status == Appealed` the action panel
+  offers **Uphold appeal** (`UpholdAppealCommand`) or **Dismiss appeal**
+  (`DismissAppealCommand`). Both require a 10–1000 char `ResolutionNotes`.
+  - Uphold transitions back to `CleanupInProgress`, clears
+    `CleanupCompletedAt`, appends an `[Appeal upheld …]` line to
+    `CleanupNotes`, and emails the citizen.
+  - Dismiss returns to `Resolved` preserving the original `ResolvedAt` so
+    the 7-day auto-close timer continues unchanged; emails the citizen.
+- `AutoCloseExpiredReportsService` (`BackgroundService`) runs every hour and
+  flips `Resolved` reports older than 7 days to `Closed`, setting `ClosedAt`.
+- Numeric enum values are frozen: `Appealed = 7`, `Closed = 8`,
+  `AppealOutcome { Upheld = 0, Dismissed = 1 }`.
 
 ## Auto-triage system
 New citizen reports are routed automatically before reaching humans.
@@ -78,7 +104,8 @@ The bot runs as a hosted background service using long polling, no webhook requi
 
 ## Email notifications
 Web-submitted reports trigger transactional emails to the citizen reporter on
-status changes (created, confirmed, rejected, resolved).
+status changes (created, confirmed, rejected, resolved, appeal filed/upheld/
+dismissed). Inspectors also receive an email when a citizen files an appeal.
 - Bodies are Razor templates under `Views/EmailTemplates/` rendered to HTML.
 - Outbound mail is queued in the `email_messages` table; an `EmailSenderHostedService`
   background worker drains the queue with linear-backoff retry.

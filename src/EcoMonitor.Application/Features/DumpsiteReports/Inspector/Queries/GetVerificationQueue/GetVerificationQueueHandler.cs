@@ -26,12 +26,23 @@ public class GetVerificationQueueHandler : IRequestHandler<GetVerificationQueueQ
             .AsNoTracking()
             .Where(r => r.Status == DumpsiteStatus.AwaitingVerification);
 
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var s = request.Search.Trim().ToLower();
+            query = query.Where(r => r.Description.ToLower().Contains(s));
+        }
+
+        query = request.SortBy switch
+        {
+            "newest" => query.OrderByDescending(r => r.CleanupCompletedAt),
+            _ => query.OrderBy(r => r.CleanupCompletedAt)
+        };
+
         var totalCount = await query.CountAsync(ct);
         var totalPages = (int)Math.Max(1, Math.Ceiling(totalCount / (double)pageSize));
         if (page > totalPages) page = totalPages;
 
         var rows = await query
-            .OrderBy(r => r.CleanupCompletedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(r => new

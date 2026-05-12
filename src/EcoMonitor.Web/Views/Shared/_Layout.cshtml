@@ -154,6 +154,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Inspector", "Appeals") ? "active" : "")" asp-controller="Inspector" asp-action="Appeals">
+                                    <i class="bi bi-exclamation-octagon"></i><span>Appeals</span>
+                                    @await Component.InvokeAsync("PendingAppealsBadge")
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
                                     <i class="bi bi-geo-alt"></i><span>Map</span>
                                 </a>

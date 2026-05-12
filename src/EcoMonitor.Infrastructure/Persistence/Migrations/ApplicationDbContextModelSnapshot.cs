@@ -164,6 +164,48 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                     b.ToTable("air_quality_stations", (string)null);
                 });
 
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteAppealPhoto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("file_path");
+
+                    b.Property<Guid>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("report_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("uploaded_at");
+
+                    b.Property<Guid>("UploadedByCitizenId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("uploaded_by_citizen_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_dumpsite_appeal_photos");
+
+                    b.HasIndex("ReportId")
+                        .HasDatabaseName("ix_dumpsite_appeal_photos_report_id");
+
+                    b.ToTable("dumpsite_appeal_photos", (string)null);
+                });
+
             modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteCleanupPhoto", b =>
                 {
                     b.Property<Guid>("Id")
@@ -258,6 +300,32 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<int?>("AppealOutcome")
+                        .HasColumnType("integer")
+                        .HasColumnName("appeal_outcome");
+
+                    b.Property<string>("AppealReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("appeal_reason");
+
+                    b.Property<string>("AppealResolutionNotes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("appeal_resolution_notes");
+
+                    b.Property<DateTime?>("AppealReviewedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("appeal_reviewed_at");
+
+                    b.Property<Guid?>("AppealReviewedByInspectorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("appeal_reviewed_by_inspector_id");
+
+                    b.Property<DateTime?>("AppealedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("appealed_at");
+
                     b.Property<Guid?>("AssignedInspectorId")
                         .HasColumnType("uuid")
                         .HasColumnName("assigned_inspector_id");
@@ -283,6 +351,10 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CleanupStartedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("cleanup_started_at");
+
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("closed_at");
 
                     b.Property<DateTime?>("ConfirmedAt")
                         .HasColumnType("timestamp with time zone")
@@ -329,6 +401,14 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("resolved_at");
 
+                    b.Property<int>("ReworkCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("rework_count");
+
+                    b.Property<DateTime?>("ReworkStartedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("rework_started_at");
+
                     b.Property<int>("Source")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
@@ -371,6 +451,9 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ReporterId")
                         .HasDatabaseName("ix_dumpsite_reports_reporter_id");
+
+                    b.HasIndex("ResolvedAt")
+                        .HasDatabaseName("ix_dumpsite_reports_resolved_at");
 
                     b.HasIndex("Status")
                         .HasDatabaseName("ix_dumpsite_reports_status");

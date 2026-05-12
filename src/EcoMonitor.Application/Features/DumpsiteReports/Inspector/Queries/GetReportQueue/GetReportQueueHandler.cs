@@ -38,6 +38,19 @@ public class GetReportQueueHandler : IRequestHandler<GetReportQueueQuery, Report
             query = query.Where(r => r.Source == ReportSource.Telegram);
         }
 
+        // "My district only" — keep just the reports whose district is owned
+        // by the current inspector. Reports outside any district drop out.
+        if (request.OnlyDistrictInspectorId is { } inspectorId)
+        {
+            var myDistrictIds = await _dbContext.Districts
+                .AsNoTracking()
+                .Where(d => d.AssignedInspectorId == inspectorId)
+                .Select(d => d.Id)
+                .ToListAsync(cancellationToken);
+
+            query = query.Where(r => r.DistrictId != null && myDistrictIds.Contains(r.DistrictId.Value));
+        }
+
         query = request.SortBy switch
         {
             "newest" => query.OrderByDescending(r => r.CreatedAt),
@@ -58,7 +71,9 @@ public class GetReportQueueHandler : IRequestHandler<GetReportQueueQuery, Report
                 r.Longitude,
                 r.PhotoPaths.FirstOrDefault(),
                 r.CreatedAt,
-                r.Source))
+                r.Source,
+                r.District != null ? r.District.NameRu : null,
+                r.District != null ? r.District.ColorHex : null))
             .ToListAsync(cancellationToken);
 
         return new ReportQueueResult(rows, totalCount, page, pageSize, totalPages);

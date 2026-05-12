@@ -27,4 +27,6 @@ public sealed record AdminReportDto(
     ReportSource Source,
     string? TelegramUserName,
     IReadOnlyList<ReportEventDto> Events,
-    DateTime? CleanupFlaggedAt);
+    DateTime? CleanupFlaggedAt,
+    string? DistrictNameRu,
+    string? DistrictColorHex);

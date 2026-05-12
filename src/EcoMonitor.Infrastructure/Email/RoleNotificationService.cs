@@ -90,6 +90,60 @@ public sealed class RoleNotificationService : IRoleNotificationService
         }
     }
 
+    public async Task NotifyInspectorOfNewReviewTaskAsync(
+        Guid reportId, Guid inspectorId, CancellationToken ct = default)
+    {
+        var report = await _db.DumpsiteReports
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == reportId, ct);
+        if (report is null)
+        {
+            _logger.LogWarning("Inspector notification: report {ReportId} not found", reportId);
+            return;
+        }
+
+        var inspector = await _userManager.FindByIdAsync(inspectorId.ToString());
+        if (inspector is null || !inspector.IsActive || string.IsNullOrEmpty(inspector.Email))
+        {
+            _logger.LogWarning(
+                "Targeted inspector {InspectorId} unavailable for report {ReportId}; falling back to broadcast",
+                inspectorId, reportId);
+            await NotifyInspectorsOfNewReportAsync(reportId, ct);
+            return;
+        }
+
+        var preview = Truncate(report.Description, 200);
+        var url = BuildReportUrl(report.Id, area: null, controller: "Inspector");
+
+        try
+        {
+            var model = new InspectorNewAssignmentEmailModel(
+                inspector.FullName,
+                report.Id,
+                preview,
+                report.CreatedAt,
+                url,
+                AutoTriageReason: report.AutoTriageReason);
+
+            var html = await _renderer.RenderAsync(
+                TemplateRoot + "InspectorNewAssignment.cshtml", model);
+
+            await _queue.EnqueueAsync(
+                inspector.Email,
+                inspector.FullName,
+                "New report assigned to your district - EcoMonitor",
+                html,
+                "InspectorDistrictAssignment",
+                report.Id,
+                ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Failed to enqueue district-assignment email for {InspectorEmail}", inspector.Email);
+        }
+    }
+
     public async Task NotifyCleanupCrewOfNewTaskAsync(Guid reportId, CancellationToken ct = default)
     {
         var report = await _db.DumpsiteReports

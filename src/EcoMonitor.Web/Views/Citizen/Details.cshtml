@@ -69,8 +69,14 @@
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
             <div>
-                <div class="mb-2">
+                <div class="mb-2 d-flex flex-wrap gap-2 align-items-center">
                     <partial name="_StatusBadge" model="Model.Status" />
+                    @if (!string.IsNullOrEmpty(Model.DistrictNameRu))
+                    {
+                        <span class="district-badge" style="background:@Model.DistrictColorHex;">
+                            <i class="bi bi-geo-alt-fill"></i>@Model.DistrictNameRu
+                        </span>
+                    }
                 </div>
                 <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
                 <p class="text-muted small mb-0">

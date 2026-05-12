@@ -30,4 +30,6 @@ public sealed record ReportDetailsDto(
     string? CleanupCrewName,
     DateTime? CleanupCompletedAt,
     string? VerifiedByInspectorName,
-    IReadOnlyList<ReportEventDto> Events);
+    IReadOnlyList<ReportEventDto> Events,
+    string? DistrictNameRu,
+    string? DistrictColorHex);

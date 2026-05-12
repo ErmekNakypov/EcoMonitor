@@ -31,6 +31,9 @@ public class ReportDetailsViewModel
     public DateTime? CleanupCompletedAt { get; set; }
     public string? VerifiedByInspectorName { get; set; }
 
+    public string? DistrictNameRu { get; set; }
+    public string? DistrictColorHex { get; set; }
+
     public List<ReportEventViewModel> Events { get; set; } = new();
 
     // Resolution notes also carry the rejection reason when Status == Rejected.

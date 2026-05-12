@@ -78,6 +78,11 @@ public class GetReportDetailsHandler : IRequestHandler<GetReportDetailsQuery, Re
             ? users.GetValueOrDefault(report.VerifiedByInspectorId.Value)?.FullName
             : null;
 
+        var district = report.DistrictId.HasValue
+            ? await _dbContext.Districts.AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == report.DistrictId.Value, cancellationToken)
+            : null;
+
         return new ReportDetailsDto(
             report.Id,
             report.Description,
@@ -102,6 +107,8 @@ public class GetReportDetailsHandler : IRequestHandler<GetReportDetailsQuery, Re
             crewName,
             report.CleanupCompletedAt,
             verifierName,
-            events);
+            events,
+            district?.NameRu,
+            district?.ColorHex);
     }
 }

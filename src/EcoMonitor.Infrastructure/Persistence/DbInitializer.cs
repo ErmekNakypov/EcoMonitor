@@ -1,5 +1,6 @@
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Infrastructure.Identity;
+using EcoMonitor.Infrastructure.Persistence.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,18 +12,20 @@ namespace EcoMonitor.Infrastructure.Persistence;
 
 public static class DbInitializer
 {
-    private const string DevSeedEmailPrefix = "nakypoverm+";
-
-    private sealed record DevAccount(string Email, string FullName, string Role);
+    private sealed record DevAccount(string Email, string FullName, string Role, string? DistrictCode = null);
 
     private static readonly DevAccount[] DevAccounts =
     {
-        new("nakypoverm+admin@kstu.kg",      "Admin Manager",         RoleNames.Administrator),
-        new("nakypoverm+inspector1@kstu.kg", "Inspector One",         RoleNames.Inspector),
-        new("nakypoverm+inspector2@kstu.kg", "Inspector Two",         RoleNames.Inspector),
-        new("nakypoverm+crew1@kstu.kg",      "Tazalyk Brigade One",   RoleNames.CleanupCrew),
-        new("nakypoverm+crew2@kstu.kg",      "Tazalyk Brigade Two",   RoleNames.CleanupCrew),
-        new("nakypoverm+citizen@kstu.kg",    "Test Citizen",          RoleNames.Citizen)
+        new("nakypoverm+admin@kstu.kg",             "Admin Manager",                       RoleNames.Administrator),
+        new("nakypoverm+inspector1@kstu.kg",        "Inspector One",                       RoleNames.Inspector),
+        new("nakypoverm+inspector2@kstu.kg",        "Inspector Two",                       RoleNames.Inspector),
+        new("nakypoverm+inspector_sverdlov@kstu.kg","Инспектор Свердловского района",      RoleNames.Inspector, "SVERDLOV"),
+        new("nakypoverm+inspector_pervomay@kstu.kg","Инспектор Первомайского района",      RoleNames.Inspector, "PERVOMAY"),
+        new("nakypoverm+inspector_lenin@kstu.kg",   "Инспектор Ленинского района",         RoleNames.Inspector, "LENIN"),
+        new("nakypoverm+inspector_oktyabr@kstu.kg", "Инспектор Октябрьского района",       RoleNames.Inspector, "OKTYABR"),
+        new("nakypoverm+crew1@kstu.kg",             "Tazalyk Brigade One",                 RoleNames.CleanupCrew),
+        new("nakypoverm+crew2@kstu.kg",             "Tazalyk Brigade Two",                 RoleNames.CleanupCrew),
+        new("nakypoverm+citizen@kstu.kg",           "Test Citizen",                        RoleNames.Citizen)
     };
 
     public static async Task InitializeAsync(IServiceProvider services)
@@ -70,28 +73,30 @@ public static class DbInitializer
             }
         }
 
+        // Districts are city reference data — seed in every environment.
+        await BishkekDistrictsSeeder.SeedAsync(dbContext, logger);
+
         if (environment.IsDevelopment())
         {
             await SeedDevTestAccountsAsync(userManager, logger);
+            await LinkDistrictInspectorsAsync(dbContext, userManager, logger);
         }
     }
 
-    // Seeds the six role-targeted test accounts using the user's KSTU mailbox
-    // via Gmail-style plus-modifier aliases. Idempotent: if ANY user with the
-    // `nakypoverm+` prefix already exists, the seeder is a no-op.
+    // Seeds the role-targeted test accounts using the user's KSTU mailbox
+    // via Gmail-style plus-modifier aliases. Idempotent per-account: each
+    // missing email is created independently, so adding new specs later
+    // (e.g. district inspectors) backfills correctly even when older accounts
+    // already exist.
     private static async Task SeedDevTestAccountsAsync(
         UserManager<ApplicationUser> userManager,
         ILogger? logger)
     {
-        var anyExisting = await userManager.Users
-            .AnyAsync(u => u.Email != null && u.Email.StartsWith(DevSeedEmailPrefix));
-        if (anyExisting)
-        {
-            return;
-        }
-
         foreach (var spec in DevAccounts)
         {
+            var existing = await userManager.FindByEmailAsync(spec.Email);
+            if (existing is not null) continue;
+
             var user = new ApplicationUser
             {
                 UserName = spec.Email,
@@ -115,5 +120,38 @@ public static class DbInitializer
             await userManager.AddToRoleAsync(user, spec.Role);
             logger?.LogInformation("Dev seed: created {Email} ({Role})", spec.Email, spec.Role);
         }
+    }
+
+    // After both districts and inspector accounts exist, set each district's
+    // AssignedInspectorId so InReview reports route correctly. Idempotent:
+    // skips districts that already have an inspector assigned.
+    private static async Task LinkDistrictInspectorsAsync(
+        ApplicationDbContext db,
+        UserManager<ApplicationUser> userManager,
+        ILogger? logger)
+    {
+        var districtAccounts = DevAccounts.Where(a => a.DistrictCode is not null).ToList();
+        if (districtAccounts.Count == 0) return;
+
+        var dirty = false;
+        foreach (var spec in districtAccounts)
+        {
+            var district = await db.Districts.FirstOrDefaultAsync(d => d.Code == spec.DistrictCode);
+            if (district is null)
+            {
+                logger?.LogWarning("Dev seed: district {Code} not found for {Email}", spec.DistrictCode, spec.Email);
+                continue;
+            }
+            if (district.AssignedInspectorId is not null) continue;
+
+            var user = await userManager.FindByEmailAsync(spec.Email);
+            if (user is null) continue;
+
+            district.AssignedInspectorId = user.Id;
+            district.UpdatedAt = DateTime.UtcNow;
+            dirty = true;
+            logger?.LogInformation("Dev seed: linked district {Code} -> {Email}", spec.DistrictCode, spec.Email);
+        }
+        if (dirty) await db.SaveChangesAsync();
     }
 }

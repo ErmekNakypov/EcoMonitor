@@ -183,6 +183,8 @@ public class CitizenController : Controller
             CleanupCrewName = details.CleanupCrewName,
             CleanupCompletedAt = details.CleanupCompletedAt,
             VerifiedByInspectorName = details.VerifiedByInspectorName,
+            DistrictNameRu = details.DistrictNameRu,
+            DistrictColorHex = details.DistrictColorHex,
             Events = ReportEventViewModelMapper.MapCitizen(details.Events)
         };
 

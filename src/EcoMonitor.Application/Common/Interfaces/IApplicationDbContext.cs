@@ -16,6 +16,8 @@ public interface IApplicationDbContext
     DbSet<DumpsiteCleanupPhoto> DumpsiteCleanupPhotos { get; }
     DbSet<DumpsiteAppealPhoto> DumpsiteAppealPhotos { get; }
     DbSet<DumpsiteReportEvent> DumpsiteReportEvents { get; }
+    DbSet<District> Districts { get; }
+    DbSet<DistrictBoundaryPoint> DistrictBoundaryPoints { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

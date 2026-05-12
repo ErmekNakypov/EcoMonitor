@@ -71,6 +71,8 @@ public class ReportsController : Controller
             Source = dto.Source,
             TelegramUserName = dto.TelegramUserName,
             CleanupFlaggedAt = dto.CleanupFlaggedAt,
+            DistrictNameRu = dto.DistrictNameRu,
+            DistrictColorHex = dto.DistrictColorHex,
             Events = ReportEventViewModelMapper.MapStaff(dto.Events)
         };
 

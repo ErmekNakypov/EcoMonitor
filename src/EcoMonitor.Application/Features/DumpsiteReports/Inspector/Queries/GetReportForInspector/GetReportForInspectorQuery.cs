@@ -52,4 +52,9 @@ public sealed record InspectorReportDto(
     DateTime? CleanupFlaggedAt,
     string? CleanupFlaggedByCrewName,
     int ReassignCount,
-    IReadOnlyList<string> FlagEvidencePhotos);
+    IReadOnlyList<string> FlagEvidencePhotos,
+    Guid? DistrictId,
+    string? DistrictNameRu,
+    string? DistrictNameEn,
+    string? DistrictColorHex,
+    string? DistrictAssignedInspectorName);

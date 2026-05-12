@@ -1,4 +1,5 @@
 using EcoMonitor.Application.Common.Exceptions;
+using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
 using EcoMonitor.Application.Features.DumpsiteReports.Commands.ConfirmReportBack;
 using EcoMonitor.Application.Features.DumpsiteReports.Commands.DismissAppeal;
@@ -16,6 +17,7 @@ using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetMyAss
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportForInspector;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportQueue;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetVerificationQueue;
+using EcoMonitor.Application.Features.Routing.Queries;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
 using EcoMonitor.Infrastructure.Identity;
@@ -23,6 +25,7 @@ using EcoMonitor.Web.Models.Inspector;
 using EcoMonitor.Web.Models.Reports;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,24 +38,38 @@ public class InspectorController : Controller
 {
     private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IApplicationDbContext _dbContext;
     private readonly ILogger<InspectorController> _logger;
 
     public InspectorController(
         IMediator mediator,
         UserManager<ApplicationUser> userManager,
+        IApplicationDbContext dbContext,
         ILogger<InspectorController> logger)
     {
         _mediator = mediator;
         _userManager = userManager;
+        _dbContext = dbContext;
         _logger = logger;
     }
 
     private Guid CurrentUserId() => Guid.Parse(_userManager.GetUserId(User)!);
 
     [HttpGet("Queue")]
-    public async Task<IActionResult> Queue(string? search, string? sortBy, string? source, int page = 1)
+    public async Task<IActionResult> Queue(string? search, string? sortBy, string? source, bool myDistrictOnly = false, int page = 1)
     {
-        var result = await _mediator.Send(new GetReportQueueQuery(page, 20, search, sortBy, source));
+        var currentId = CurrentUserId();
+        Guid? districtFilterInspectorId = myDistrictOnly ? currentId : null;
+
+        var result = await _mediator.Send(new GetReportQueueQuery(
+            page, 20, search, sortBy, source, districtFilterInspectorId));
+
+        // Tell the view whether the current inspector owns any district so we
+        // can show "you're a city-wide inspector" when the toggle would be a
+        // no-op for them.
+        var hasDistrict = await _dbContext.Districts
+            .AsNoTracking()
+            .AnyAsync(d => d.AssignedInspectorId == currentId);
 
         var model = new QueueListViewModel
         {
@@ -66,6 +83,8 @@ public class InspectorController : Controller
         ViewBag.Search = search;
         ViewBag.Sort = sortBy;
         ViewBag.Source = source;
+        ViewBag.MyDistrictOnly = myDistrictOnly;
+        ViewBag.InspectorHasDistrict = hasDistrict;
         return View(model);
     }
 
@@ -124,6 +143,28 @@ public class InspectorController : Controller
         catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
         catch (ValidationException ex) { TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage)); }
         return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("BuildRoute")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BuildRoute(List<Guid> selectedIds, CancellationToken ct)
+    {
+        if (selectedIds is null || selectedIds.Count < 2)
+        {
+            TempData["ErrorMessage"] = "Select at least 2 reports to build a route.";
+            return RedirectToAction(nameof(Queue));
+        }
+        if (selectedIds.Count > 15)
+        {
+            TempData["ErrorMessage"] = "Maximum 15 reports per route.";
+            return RedirectToAction(nameof(Queue));
+        }
+        var route = await _mediator.Send(new BuildRouteForReportsQuery(selectedIds), ct);
+        ViewBag.BackUrl = Url.Action(nameof(Queue), "Inspector");
+        ViewBag.PageTitle = "Inspection route";
+        ViewBag.DetailsController = "Inspector";
+        ViewBag.DetailsArea = "";
+        return View("Route", route);
     }
 
     [HttpGet("Verification")]
@@ -277,6 +318,11 @@ public class InspectorController : Controller
             CleanupFlaggedByCrewName = dto.CleanupFlaggedByCrewName,
             ReassignCount = dto.ReassignCount,
             FlagEvidencePhotos = dto.FlagEvidencePhotos,
+            DistrictId = dto.DistrictId,
+            DistrictNameRu = dto.DistrictNameRu,
+            DistrictNameEn = dto.DistrictNameEn,
+            DistrictColorHex = dto.DistrictColorHex,
+            DistrictAssignedInspectorName = dto.DistrictAssignedInspectorName,
             Events = ReportEventViewModelMapper.MapStaff(dto.Events)
         };
 

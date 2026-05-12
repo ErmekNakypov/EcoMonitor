@@ -1,7 +1,10 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Domain.Constants;
+using EcoMonitor.Infrastructure.Persistence.Seeders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EcoMonitor.Web.Areas.Admin.Controllers;
 
@@ -12,13 +15,22 @@ public class DiagnosticsController : Controller
 {
     private readonly IAirQualityIngestionRunner _runner;
     private readonly IContainerImportService _containerImporter;
+    private readonly IApplicationDbContext _db;
+    private readonly IDistrictResolver _districts;
+    private readonly ILogger<DiagnosticsController> _logger;
 
     public DiagnosticsController(
         IAirQualityIngestionRunner runner,
-        IContainerImportService containerImporter)
+        IContainerImportService containerImporter,
+        IApplicationDbContext db,
+        IDistrictResolver districts,
+        ILogger<DiagnosticsController> logger)
     {
         _runner = runner;
         _containerImporter = containerImporter;
+        _db = db;
+        _districts = districts;
+        _logger = logger;
     }
 
     [HttpGet("")]
@@ -50,6 +62,44 @@ public class DiagnosticsController : Controller
             TempData["ErrorMessage"] = $"Ingestion problem: {result.Error}";
         }
 
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("BackfillDistricts")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BackfillDistricts(CancellationToken ct)
+    {
+        var unassigned = await _db.DumpsiteReports
+            .Where(r => r.DistrictId == null)
+            .ToListAsync(ct);
+
+        int matched = 0;
+        foreach (var report in unassigned)
+        {
+            var district = await _districts.ResolveAsync(report.Latitude, report.Longitude, ct);
+            if (district is null) continue;
+            report.DistrictId = district.Id;
+            matched++;
+        }
+
+        if (matched > 0)
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+
+        TempData["SuccessMessage"] =
+            $"District backfill complete: {matched} of {unassigned.Count} reports matched a district.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("ReseedDistrictBoundaries")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ReseedDistrictBoundaries(CancellationToken ct)
+    {
+        var rewritten = await BishkekDistrictsSeeder.ReseedBoundariesAsync(
+            _db, _districts, _logger, ct);
+        TempData["SuccessMessage"] =
+            $"Reseeded boundary points for {rewritten} of 4 districts. Map polygons and point-in-polygon resolution use the new shapes.";
         return RedirectToAction(nameof(Index));
     }
 

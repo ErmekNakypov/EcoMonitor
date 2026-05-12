@@ -22,4 +22,17 @@ public class AdministratorDashboardViewModel
     public int FlagsTotalEligible30d { get; set; }
     public int FlagsFlagged30d { get; set; }
     public double FlagsPercentage30d { get; set; }
+
+    public List<DistrictReportSlice> DistrictBreakdown30d { get; set; } = new();
+}
+
+public class DistrictReportSlice
+{
+    public string Code { get; set; } = string.Empty;
+    public string NameRu { get; set; } = string.Empty;
+    public string ColorHex { get; set; } = string.Empty;
+    public int Total { get; set; }
+    public int Resolved { get; set; }
+    public int Rejected { get; set; }
+    public int InProgress { get; set; }
 }

@@ -35,6 +35,11 @@ public class GetReportForAdminHandler : IRequestHandler<GetReportForAdminQuery, 
             .Select(e => new ReportEventDto(e.EventType, e.OccurredAt, e.ActorRole, e.ActorDisplayName, e.Notes))
             .ToListAsync(cancellationToken);
 
+        var district = report.DistrictId.HasValue
+            ? await _dbContext.Districts.AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == report.DistrictId.Value, cancellationToken)
+            : null;
+
         var ids = new List<Guid>();
         if (report.ReporterId.HasValue) ids.Add(report.ReporterId.Value);
         if (report.AssignedInspectorId.HasValue) ids.Add(report.AssignedInspectorId.Value);
@@ -69,6 +74,8 @@ public class GetReportForAdminHandler : IRequestHandler<GetReportForAdminQuery, 
             report.Source,
             report.TelegramUserName,
             events,
-            report.CleanupFlaggedAt);
+            report.CleanupFlaggedAt,
+            district?.NameRu,
+            district?.ColorHex);
     }
 }

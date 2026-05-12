@@ -67,5 +67,11 @@ public class ReportViewModel
 
     public bool CanReviewFlag => Status == DumpsiteStatus.FlaggedByCleanupCrew;
 
+    public Guid? DistrictId { get; set; }
+    public string? DistrictNameRu { get; set; }
+    public string? DistrictNameEn { get; set; }
+    public string? DistrictColorHex { get; set; }
+    public string? DistrictAssignedInspectorName { get; set; }
+
     public List<ReportEventViewModel> Events { get; set; } = new();
 }

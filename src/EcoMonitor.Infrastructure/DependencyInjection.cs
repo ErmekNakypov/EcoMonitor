@@ -123,6 +123,8 @@ public static class DependencyInjection
         services.AddScoped<IRoleNotificationService, RoleNotificationService>();
         services.AddScoped<IAutoTriageService, EcoMonitor.Infrastructure.Triage.BishkekAutoTriageService>();
         services.AddScoped<IReportEventLogger, EcoMonitor.Infrastructure.Logging.ReportEventLogger>();
+        services.AddMemoryCache();
+        services.AddScoped<IDistrictResolver, EcoMonitor.Infrastructure.Districts.DistrictResolver>();
         services.Configure<AppOptions>(configuration.GetSection(AppOptions.Section));
 
         services.AddSingleton<IJwtTokenService, JwtTokenService>();

@@ -1,6 +1,7 @@
 using EcoMonitor.Application.Features.Analytics.GetAppealStats;
 using EcoMonitor.Application.Features.Analytics.GetAutoTriageStats;
 using EcoMonitor.Application.Features.Analytics.GetFlagStats;
+using EcoMonitor.Application.Features.Analytics.GetReportsByDistrict;
 using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
@@ -71,6 +72,7 @@ public class DashboardController : Controller
         var triage = await _mediator.Send(new GetAutoTriageStatsQuery());
         var appeals = await _mediator.Send(new GetAppealStatsQuery());
         var flags = await _mediator.Send(new GetFlagStatsQuery());
+        var byDistrict = await _mediator.Send(new GetReportsByDistrictQuery());
 
         var model = new AdministratorDashboardViewModel
         {
@@ -87,7 +89,17 @@ public class DashboardController : Controller
             AppealsPercentage30d = appeals.Percentage,
             FlagsTotalEligible30d = flags.TotalEligible,
             FlagsFlagged30d = flags.Flagged,
-            FlagsPercentage30d = flags.Percentage
+            FlagsPercentage30d = flags.Percentage,
+            DistrictBreakdown30d = byDistrict.Stats.Select(s => new DistrictReportSlice
+            {
+                Code = s.Code,
+                NameRu = s.NameRu,
+                ColorHex = s.ColorHex,
+                Total = s.Total,
+                Resolved = s.Resolved,
+                Rejected = s.Rejected,
+                InProgress = s.InProgress
+            }).ToList()
         };
 
         return View(model);

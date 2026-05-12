@@ -16,6 +16,7 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
     private readonly IRoleNotificationService _roleNotifications;
     private readonly IUserLookupService _userLookup;
     private readonly IReportEventLogger _events;
+    private readonly IDistrictResolver _districtResolver;
     private readonly ILogger<SubmitDumpsiteReportHandler> _logger;
 
     public SubmitDumpsiteReportHandler(
@@ -26,6 +27,7 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         IRoleNotificationService roleNotifications,
         IUserLookupService userLookup,
         IReportEventLogger events,
+        IDistrictResolver districtResolver,
         ILogger<SubmitDumpsiteReportHandler> logger)
     {
         _dbContext = dbContext;
@@ -35,6 +37,7 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         _roleNotifications = roleNotifications;
         _userLookup = userLookup;
         _events = events;
+        _districtResolver = districtResolver;
         _logger = logger;
     }
 
@@ -57,6 +60,13 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
             PhotoPaths = savedPaths
         };
 
+        // Resolve the district for this report's coordinates so we can route
+        // it geographically. Reports outside any district keep DistrictId
+        // null and fall back to the broadcast notification path.
+        var district = await _districtResolver.ResolveAsync(
+            request.Latitude, request.Longitude, cancellationToken);
+        report.DistrictId = district?.Id;
+
         // Run the report through auto-triage before persisting. Reports that
         // pass every rule skip Inspector review and land directly in the
         // cleanup queue; reports that fail any rule go to InReview with a
@@ -72,6 +82,12 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         {
             report.Status = DumpsiteStatus.InReview;
             report.AutoTriageReason = decision.RejectionReason;
+            // District-targeted auto-assignment: when an inspector owns this
+            // district, hand the report straight to them.
+            if (district?.AssignedInspectorId is { } inspectorId)
+            {
+                report.AssignedInspectorId = inspectorId;
+            }
         }
 
         _dbContext.DumpsiteReports.Add(report);
@@ -118,7 +134,19 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         {
             try
             {
-                await _roleNotifications.NotifyInspectorsOfNewReportAsync(report.Id, cancellationToken);
+                if (report.AssignedInspectorId is { } targetInspectorId)
+                {
+                    // District resolved → notify just the responsible inspector.
+                    await _roleNotifications.NotifyInspectorOfNewReviewTaskAsync(
+                        report.Id, targetInspectorId, cancellationToken);
+                }
+                else
+                {
+                    // Outside all districts (or district has no assigned
+                    // inspector) → fall back to broadcasting to every inspector.
+                    await _roleNotifications.NotifyInspectorsOfNewReportAsync(
+                        report.Id, cancellationToken);
+                }
             }
             catch (Exception ex)
             {

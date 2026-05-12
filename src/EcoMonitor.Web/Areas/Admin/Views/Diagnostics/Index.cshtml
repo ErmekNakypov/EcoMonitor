@@ -47,5 +47,43 @@
                 </button>
             </form>
         </div>
+
+        <div class="auth-card mt-4" style="max-width: 720px;">
+            <h2 class="h5 fw-700 mb-2">Backfill districts on existing reports</h2>
+            <p class="text-muted mb-4">
+                Resolves the district for every report with a null
+                <code>district_id</code> using the point-in-polygon algorithm
+                and the seeded district boundaries. Reports outside every
+                polygon stay null.
+            </p>
+            <form asp-area="Admin" asp-controller="Diagnostics" asp-action="BackfillDistricts" method="post" class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-bounding-box me-2"></i>Backfill districts
+                </button>
+            </form>
+        </div>
+
+        <div class="auth-card mt-4" style="max-width: 720px;">
+            <h2 class="h5 fw-700 mb-2">Reseed district boundaries</h2>
+            <p class="text-muted mb-2">
+                Rewrites the polygon points of all four Bishkek districts in
+                place using the current spec in <code>BishkekDistrictsSeeder</code>.
+                Preserves district IDs and inspector assignments — only the
+                boundary points are replaced.
+            </p>
+            <p class="text-muted small mb-4">
+                Run this after editing the boundary spec (e.g. to switch from
+                simplified rectangles to irregular polygons). The in-memory
+                cache is invalidated automatically; existing reports keep
+                their <code>district_id</code> values, so consider running
+                "Backfill districts" afterwards if the new shapes substantially
+                reassign coordinates.
+            </p>
+            <form asp-area="Admin" asp-controller="Diagnostics" asp-action="ReseedDistrictBoundaries" method="post" class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-bounding-box-circles me-2"></i>Reseed district boundaries
+                </button>
+            </form>
+        </div>
     </div>
 </section>

@@ -43,6 +43,23 @@
                 </select>
                 <button type="submit" class="btn btn-primary">Apply</button>
             </div>
+            @{
+                var hasDistrict = ViewBag.InspectorHasDistrict as bool? ?? false;
+                var districtToggled = ViewBag.MyDistrictOnly as bool? ?? false;
+            }
+            @if (hasDistrict)
+            {
+                <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="districtFilter" name="myDistrictOnly" value="true" @(districtToggled ? "checked" : "")>
+                    <label class="form-check-label" for="districtFilter">Show only reports in my district</label>
+                </div>
+            }
+            else
+            {
+                <div class="text-muted small mt-2">
+                    <i class="bi bi-info-circle me-1"></i>You are a city-wide inspector (no district assigned).
+                </div>
+            }
         </form>
 
         @if (Model.Items.Count == 0)
@@ -59,40 +76,64 @@
         }
         else
         {
-            <div class="d-flex flex-column gap-3">
-                @foreach (var item in Model.Items)
-                {
-                    <div class="report-card">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-md-2">
-                                @if (!string.IsNullOrEmpty(item.FirstPhotoPath))
-                                {
-                                    <img src="@item.FirstPhotoPath" alt="Report photo" class="report-thumb" />
-                                }
-                                else
-                                {
-                                    <div class="report-thumb report-thumb-placeholder">
-                                        <i class="bi bi-camera"></i>
+            <form asp-controller="Inspector" asp-action="BuildRoute" method="post" id="route-form">
+                @Html.AntiForgeryToken()
+                <div class="route-select-bar">
+                    <span class="text-muted small">
+                        <i class="bi bi-info-circle me-1"></i>Tick 2–15 reports to plan an inspection route.
+                    </span>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="text-muted small" id="route-selected-count">0 selected</span>
+                        <button type="submit" class="btn btn-primary btn-sm" id="route-build-btn" disabled>
+                            <i class="bi bi-signpost-split me-1"></i>Build inspection route
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="report-card">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-1 d-flex justify-content-center">
+                                    <input class="form-check-input route-checkbox" type="checkbox" name="selectedIds" value="@item.Id" aria-label="Select report for route" />
+                                </div>
+                                <div class="col-md-2">
+                                    @if (!string.IsNullOrEmpty(item.FirstPhotoPath))
+                                    {
+                                        <img src="@item.FirstPhotoPath" alt="Report photo" class="report-thumb" />
+                                    }
+                                    else
+                                    {
+                                        <div class="report-thumb report-thumb-placeholder">
+                                            <i class="bi bi-camera"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2 fw-500">@item.ShortDescription</p>
+                                    <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+                                        <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
+                                        <span><i class="bi bi-clock me-1"></i>Reported @DateHelpers.FormatRelative(item.CreatedAt)</span>
+                                        <partial name="_SourceBadge" model="item.Source" />
+                                        @if (!string.IsNullOrEmpty(item.DistrictNameRu))
+                                        {
+                                            <span class="district-badge" style="background:@item.DistrictColorHex;">
+                                                <i class="bi bi-geo-alt-fill me-1"></i>@item.DistrictNameRu
+                                            </span>
+                                        }
                                     </div>
-                                }
-                            </div>
-                            <div class="col-md-7">
-                                <p class="mb-2 fw-500">@item.ShortDescription</p>
-                                <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
-                                    <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
-                                    <span><i class="bi bi-clock me-1"></i>Reported @DateHelpers.FormatRelative(item.CreatedAt)</span>
-                                    <partial name="_SourceBadge" model="item.Source" />
+                                </div>
+                                <div class="col-md-3 text-md-end">
+                                    <a asp-controller="Inspector" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">
+                                        Open <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-md-3 text-md-end">
-                                <a asp-controller="Inspector" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">
-                                    Open <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            </form>
 
             @if (Model.TotalPages > 1)
             {
@@ -116,3 +157,20 @@
         }
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        (function () {
+            const checkboxes = document.querySelectorAll('.route-checkbox');
+            const btn = document.getElementById('route-build-btn');
+            const counter = document.getElementById('route-selected-count');
+            if (!btn || !counter) return;
+            function update() {
+                const count = document.querySelectorAll('.route-checkbox:checked').length;
+                counter.textContent = count + ' selected';
+                btn.disabled = count < 2 || count > 15;
+            }
+            checkboxes.forEach(cb => cb.addEventListener('change', update));
+        })();
+    </script>
+}

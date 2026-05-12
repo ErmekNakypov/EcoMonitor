@@ -4,6 +4,7 @@ using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.Compl
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.StartCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.TakeForCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.Commands.FlagCleanup;
+using EcoMonitor.Application.Features.Routing.Queries;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Queries.GetCleanupQueue;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Queries.GetMyCleanupReports;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Queries.GetReportForCleanup;
@@ -143,6 +144,28 @@ public class ReportsController : Controller
             TempData["ErrorMessage"] = ex.Message;
             return RedirectToAction(nameof(Details), new { id });
         }
+    }
+
+    [HttpPost("BuildRoute")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BuildRoute(List<Guid> selectedIds, CancellationToken ct)
+    {
+        if (selectedIds is null || selectedIds.Count < 2)
+        {
+            TempData["ErrorMessage"] = "Select at least 2 reports to build a route.";
+            return RedirectToAction(nameof(Queue));
+        }
+        if (selectedIds.Count > 15)
+        {
+            TempData["ErrorMessage"] = "Maximum 15 reports per route.";
+            return RedirectToAction(nameof(Queue));
+        }
+        var route = await _mediator.Send(new BuildRouteForReportsQuery(selectedIds), ct);
+        ViewBag.BackUrl = Url.Action(nameof(Queue), "Reports", new { area = "CleanupCrew" });
+        ViewBag.PageTitle = "Cleanup route";
+        ViewBag.DetailsController = "Reports";
+        ViewBag.DetailsArea = "CleanupCrew";
+        return View("Route", route);
     }
 
     [HttpPost("Flag/{id:guid}")]

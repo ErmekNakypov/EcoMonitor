@@ -27,6 +27,8 @@ public class AdminReportViewModel
     public string? TelegramUserName { get; set; }
 
     public DateTime? CleanupFlaggedAt { get; set; }
+    public string? DistrictNameRu { get; set; }
+    public string? DistrictColorHex { get; set; }
 
     public List<ReportEventViewModel> Events { get; set; } = new();
 }

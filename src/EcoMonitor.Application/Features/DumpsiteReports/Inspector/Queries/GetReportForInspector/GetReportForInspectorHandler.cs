@@ -35,6 +35,16 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
         if (report.CleanupCrewId.HasValue) ids.Add(report.CleanupCrewId.Value);
         if (report.CleanupFlaggedByCrewId.HasValue) ids.Add(report.CleanupFlaggedByCrewId.Value);
 
+        var district = report.DistrictId.HasValue
+            ? await _dbContext.Districts.AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == report.DistrictId.Value, cancellationToken)
+            : null;
+        if (district?.AssignedInspectorId is { } districtInspectorId
+            && !ids.Contains(districtInspectorId))
+        {
+            ids.Add(districtInspectorId);
+        }
+
         IReadOnlyDictionary<Guid, UserSummaryDto> users = ids.Count > 0
             ? await _userLookup.GetByIdsAsync(ids, cancellationToken)
             : new Dictionary<Guid, UserSummaryDto>();
@@ -142,7 +152,14 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             report.CleanupFlaggedAt,
             flagger?.FullName,
             report.ReassignCount,
-            flagEvidencePhotos);
+            flagEvidencePhotos,
+            report.DistrictId,
+            district?.NameRu,
+            district?.NameEn,
+            district?.ColorHex,
+            district?.AssignedInspectorId.HasValue == true
+                ? users.GetValueOrDefault(district.AssignedInspectorId.Value)?.FullName
+                : null);
     }
 
     private async Task<(int Total, int Pending, int Resolved, int Rejected)> GetReporterStatsAsync(

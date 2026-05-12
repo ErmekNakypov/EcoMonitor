@@ -37,6 +37,10 @@
                 <span>Reports</span>
                 <span class="filter-count" id="dumpsite-count">0</span>
             </button>
+            <button id="toggle-districts" type="button" class="filter-pill">
+                <i class="bi bi-bounding-box"></i>
+                <span>Districts</span>
+            </button>
             <button id="refresh-static" type="button" class="filter-pill ms-auto" title="Reload containers and reports">
                 <i class="bi bi-arrow-clockwise"></i>
                 <span>Refresh</span>
@@ -799,6 +803,41 @@
             }
             setupToggle('toggle-containers', containerLayer);
             setupToggle('toggle-dumpsites', dumpsiteLayer);
+
+            // Districts overlay — fetched once on demand and toggled by pill.
+            const districtsLayer = L.layerGroup();
+            let districtsLoaded = false;
+            async function loadDistricts() {
+                if (districtsLoaded) return;
+                try {
+                    const r = await fetch('/api/districts');
+                    if (!r.ok) return;
+                    const data = await r.json();
+                    data.forEach(d => {
+                        const polygon = L.polygon(d.boundary, {
+                            color: d.color,
+                            fillColor: d.color,
+                            fillOpacity: 0.15,
+                            weight: 2
+                        });
+                        polygon.bindTooltip('<strong>' + d.name_ru + '</strong>', { permanent: false });
+                        districtsLayer.addLayer(polygon);
+                    });
+                    districtsLoaded = true;
+                } catch (e) { console.warn('districts fetch failed', e); }
+            }
+            const districtsBtn = document.getElementById('toggle-districts');
+            if (districtsBtn) {
+                districtsBtn.addEventListener('click', async () => {
+                    const isActive = districtsBtn.classList.toggle('active');
+                    if (isActive) {
+                        await loadDistricts();
+                        map.addLayer(districtsLayer);
+                    } else {
+                        map.removeLayer(districtsLayer);
+                    }
+                });
+            }
 
             // Air-quality parent + per-source sub-pill orchestration.
             const subBtns = {

@@ -49,4 +49,6 @@ public sealed record CleanupReportDto(
     DateTime? CleanupFlaggedAt,
     Guid? CleanupFlaggedByCrewId,
     int ReassignCount,
-    IReadOnlyList<string> FlagEvidencePhotos);
+    IReadOnlyList<string> FlagEvidencePhotos,
+    string? DistrictNameRu,
+    string? DistrictColorHex);

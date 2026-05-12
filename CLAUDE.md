@@ -82,6 +82,57 @@ if they disagree with the cleanup outcome. Otherwise the report auto-closes.
 - Numeric enum values are frozen: `Appealed = 7`, `Closed = 8`,
   `AppealOutcome { Upheld = 0, Dismissed = 1 }`.
 
+## Route optimization
+Inspector and CleanupCrew can select 2–15 reports from their queue and
+build an optimized inspection or cleanup route. Selection is via a checkbox
+column on the queue rows; the "Build … route" button POSTs the chosen IDs
+to `/Inspector/BuildRoute` or `/CleanupCrew/Reports/BuildRoute`.
+
+`RouteCalculator` (Application layer) provides Haversine distance and a
+nearest-neighbor TSP heuristic over the selected points — polynomial-time
+(O(n²)), ~25% above optimal on average, plenty fast for the route-size cap.
+Average urban speed of 25 km/h yields the estimated-time figure.
+
+`BuildRouteForReportsQuery` is role-agnostic: loads the chosen reports,
+runs the heuristic, returns ordered `RouteStop`s with district context.
+The `Route.cshtml` view (one copy per role area) renders a Leaflet map
+with a dashed eco-green polyline and numbered markers — green start,
+red finish, primary mid-stops — plus stat cards for stop count, total
+distance, and ETA, and an ordered "Visit order" list with district badges
+and per-stop links back to the Details page. Routes are computed on
+demand; nothing is persisted. Future extensions: 2-opt local search or
+OSRM/Google Directions API for road distances instead of great-circle.
+
+## District-based dispatch
+Bishkek is divided into 4 administrative districts (Свердловский,
+Первомайский, Ленинский, Октябрьский). Each `District` row carries a code,
+multilingual names, a hex color, an ordered list of `DistrictBoundaryPoint`s
+forming a polygon, and an optional `AssignedInspectorId`.
+
+`IDistrictResolver` (Infrastructure) caches districts + boundaries in
+`IMemoryCache` for 15 min and runs ray-casting point-in-polygon
+(`PointInPolygonChecker`) to resolve the district for any (lat, lng).
+`SubmitDumpsiteReportHandler` calls the resolver before persisting; reports
+that land in `InReview` get auto-assigned to the responsible district
+inspector and a targeted notification is sent (`NotifyInspectorOfNewReviewTaskAsync`).
+Reports outside every polygon stay `DistrictId = null` and fall back to the
+broadcast notification path so city-wide inspectors still see them.
+
+District boundaries + the public map polygon overlay are seeded by
+`BishkekDistrictsSeeder` on first startup (approximate rectangles split on
+lat 42.875 / lng 74.6). The four district inspectors are created by the
+dev-test-accounts seeder and linked via `DbInitializer.LinkDistrictInspectorsAsync`.
+`inspector1`/`inspector2` remain as city-wide inspectors without a district.
+
+UI surfaces: a tinted district badge appears next to status on every
+Details page (Citizen, Inspector, CleanupCrew, Admin) and on queue items;
+the inspector queue gets a "Show only reports in my district" toggle that
+filters to the inspector's district(s); the public `/Map` page has a
+"Districts" pill that fetches `/api/districts` and renders Leaflet polygons;
+the admin dashboard shows a "Reports by district (last 30 days)" breakdown
+with bars colored by district. `/Admin/Diagnostics` exposes a one-shot
+"Backfill districts" button for reports created before the feature shipped.
+
 ## Cleanup flag mechanism
 When a cleanup crew arrives on site and finds the report is invalid (no
 dumpsite, wrong location, outside jurisdiction, photo mismatch), they flag

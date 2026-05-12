@@ -26,6 +26,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<DumpsiteCleanupPhoto> DumpsiteCleanupPhotos => Set<DumpsiteCleanupPhoto>();
     public DbSet<DumpsiteAppealPhoto> DumpsiteAppealPhotos => Set<DumpsiteAppealPhoto>();
     public DbSet<DumpsiteReportEvent> DumpsiteReportEvents => Set<DumpsiteReportEvent>();
+    public DbSet<District> Districts => Set<District>();
+    public DbSet<DistrictBoundaryPoint> DistrictBoundaryPoints => Set<DistrictBoundaryPoint>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

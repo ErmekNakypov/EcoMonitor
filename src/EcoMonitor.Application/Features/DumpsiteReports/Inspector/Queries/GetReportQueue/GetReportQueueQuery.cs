@@ -8,7 +8,8 @@ public sealed record GetReportQueueQuery(
     int PageSize = 20,
     string? Search = null,
     string? SortBy = null,
-    string? Source = null) : IRequest<ReportQueueResult>;
+    string? Source = null,
+    Guid? OnlyDistrictInspectorId = null) : IRequest<ReportQueueResult>;
 
 public sealed record ReportQueueResult(
     IReadOnlyList<QueueItemDto> Items,
@@ -24,4 +25,6 @@ public sealed record QueueItemDto(
     double Longitude,
     string? FirstPhotoPath,
     DateTime CreatedAt,
-    ReportSource Source);
+    ReportSource Source,
+    string? DistrictNameRu,
+    string? DistrictColorHex);

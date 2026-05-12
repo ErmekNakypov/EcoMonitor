@@ -51,6 +51,13 @@ public class DumpsiteReport : BaseEntity
     public AppealOutcome? AppealOutcome { get; set; }
     public DateTime? ClosedAt { get; set; }
 
+    // District auto-assignment: resolved from coordinates on submission.
+    // Null when the point falls outside every district polygon (e.g. outside
+    // Bishkek). When set, used to target the district's responsible inspector
+    // for InReview routing.
+    public Guid? DistrictId { get; set; }
+    public District? District { get; set; }
+
     // Cleanup crew flag — fires when crew on-site finds the report is invalid
     // (no dumpsite, wrong location, etc.). Inspector reviews and decides reject /
     // confirm-back / reassign. Reason is a frozen enum-style string captured by

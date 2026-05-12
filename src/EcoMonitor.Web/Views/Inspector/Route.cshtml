@@ -1,0 +1,158 @@
+@using EcoMonitor.Application.Features.Routing.Queries
+@model RouteResult
+@{
+    var title = (string?)ViewBag.PageTitle ?? "Inspection route";
+    ViewData["Title"] = title;
+    var backUrl = (string?)ViewBag.BackUrl ?? "#";
+    var detailsController = (string?)ViewBag.DetailsController ?? "Inspector";
+    var detailsArea = (string?)ViewBag.DetailsArea ?? "";
+
+    var stopsForJson = Model.Stops.Select(s => new
+    {
+        order = s.OrderNumber,
+        title = s.Title,
+        lat = s.Latitude,
+        lng = s.Longitude,
+        color = s.DistrictColorHex
+    });
+    var stopsJson = System.Text.Json.JsonSerializer.Serialize(stopsForJson);
+
+    var breadcrumbs = Breadcrumbs.Build(
+        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home") },
+        new BreadcrumbItem { Label = "Queue", Url = backUrl },
+        new BreadcrumbItem { Label = title });
+}
+
+<section class="py-5">
+    <div class="container">
+        <partial name="_Breadcrumbs" model="breadcrumbs" />
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
+            <div>
+                <span class="hero-badge mb-2">
+                    <i class="bi bi-signpost-split"></i>
+                    <span>@title</span>
+                </span>
+                <h1 class="h2 fw-700 mt-3 mb-1">@title</h1>
+                <p class="text-muted mb-0">Optimized via nearest-neighbor heuristic over Haversine distances.</p>
+            </div>
+            <a href="@backUrl" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Back to queue
+            </a>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Stops</span>
+                        <i class="bi bi-geo-alt-fill stat-icon" style="color:#2D6A4F;"></i>
+                    </div>
+                    <div class="stat-value">@Model.Stops.Count</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Total distance</span>
+                        <i class="bi bi-rulers stat-icon" style="color:#2D6A4F;"></i>
+                    </div>
+                    <div class="stat-value">@Model.TotalDistanceKm.ToString("F1") km</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Estimated time</span>
+                        <i class="bi bi-clock stat-icon" style="color:#2D6A4F;"></i>
+                    </div>
+                    <div class="stat-value">~@Model.EstimatedMinutes min</div>
+                    <span class="text-muted small">at 25 km/h average urban speed</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card mb-3 p-0">
+            <div id="route-map" style="height:480px;border-radius:12px;"></div>
+        </div>
+
+        <div class="auth-card">
+            <h2 class="h6 fw-700 mb-3">Visit order</h2>
+            <ol class="route-list">
+                @foreach (var stop in Model.Stops)
+                {
+                    <li class="route-list-item">
+                        <div class="route-list-bullet" style="background:#2D6A4F;">@stop.OrderNumber</div>
+                        <div class="route-list-content">
+                            <div class="fw-600">@stop.Title</div>
+                            <div class="text-muted small d-flex flex-wrap align-items-center gap-2 mt-1">
+                                @if (!string.IsNullOrEmpty(stop.DistrictName))
+                                {
+                                    <span class="district-badge" style="background:@stop.DistrictColorHex;">
+                                        <i class="bi bi-geo-alt-fill"></i>@stop.DistrictName
+                                    </span>
+                                }
+                                <span><i class="bi bi-geo-alt me-1"></i>@stop.Latitude.ToString("F4"), @stop.Longitude.ToString("F4")</span>
+                                <partial name="_StatusBadge" model="stop.Status" />
+                            </div>
+                        </div>
+                        <div>
+                            @if (string.IsNullOrEmpty(detailsArea))
+                            {
+                                <a asp-controller="@detailsController" asp-action="Details" asp-route-id="@stop.ReportId" class="btn btn-sm btn-outline-secondary">
+                                    Open <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-area="@detailsArea" asp-controller="@detailsController" asp-action="Details" asp-route-id="@stop.ReportId" class="btn btn-sm btn-outline-secondary">
+                                    Open <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            }
+                        </div>
+                    </li>
+                }
+            </ol>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        (function () {
+            const stops = @Html.Raw(stopsJson);
+            if (stops.length === 0) return;
+
+            const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            const latlngs = stops.map(s => [s.lat, s.lng]);
+            const polyline = L.polyline(latlngs, {
+                color: '#2D6A4F',
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '8,8'
+            }).addTo(map);
+
+            stops.forEach((s, idx) => {
+                const isStart = idx === 0;
+                const isEnd = idx === stops.length - 1;
+                const color = isStart ? '#10B981' : (isEnd ? '#EF4444' : '#2D6A4F');
+                const icon = L.divIcon({
+                    html: '<div style="background:' + color + ';color:#fff;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);font-size:14px;">' + s.order + '</div>',
+                    className: 'route-marker',
+                    iconSize: [34, 34],
+                    iconAnchor: [17, 17]
+                });
+                L.marker([s.lat, s.lng], { icon: icon })
+                    .addTo(map)
+                    .bindTooltip('<strong>' + s.order + '. ' + s.title + '</strong>', { permanent: false });
+            });
+
+            map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+        })();
+    </script>
+}

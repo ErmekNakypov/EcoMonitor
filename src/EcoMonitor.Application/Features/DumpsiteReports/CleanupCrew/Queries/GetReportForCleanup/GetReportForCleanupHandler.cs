@@ -81,6 +81,11 @@ public class GetReportForCleanupHandler : IRequestHandler<GetReportForCleanupQue
             .Select(p => p.FilePath)
             .ToListAsync(ct);
 
+        var district = report.DistrictId.HasValue
+            ? await _db.Districts.AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == report.DistrictId.Value, ct)
+            : null;
+
         var stats = await GetReporterStatsAsync(report, ct);
 
         // The moment a report reached Confirmed status — first inspection photo
@@ -136,7 +141,9 @@ public class GetReportForCleanupHandler : IRequestHandler<GetReportForCleanupQue
             report.CleanupFlaggedAt,
             report.CleanupFlaggedByCrewId,
             report.ReassignCount,
-            flagEvidencePhotos);
+            flagEvidencePhotos,
+            district?.NameRu,
+            district?.ColorHex);
     }
 
     private async Task<(int Total, int Pending, int Resolved, int Rejected)> GetReporterStatsAsync(

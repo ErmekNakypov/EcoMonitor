@@ -461,6 +461,72 @@ a:hover {
 .status-closed    { background: #F3F4F6; color: #4B5563; }
 .status-flagged   { background: #FEF3C7; color: #92400E; }
 
+/* Route page — ordered list of stops with numbered bullets matching map markers. */
+.route-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.route-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+.route-list-item:last-child { border-bottom: none; }
+.route-list-bullet {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.route-list-content { flex: 1 1 auto; min-width: 0; }
+
+/* Route selection rail — checkbox column on queue pages. */
+.route-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #F9FAFB;
+  border: 1px dashed #D1D5DB;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  color: #4B5563;
+}
+.route-select-bar {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* District badge — tinted by the district's own color, neutral text. */
+.district-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1F2937;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
 /* Citizen Details — "After cleanup" highlight + resolution meta */
 .photo-section-highlight {
   border-color: var(--brand-primary, #2D6A4F) !important;

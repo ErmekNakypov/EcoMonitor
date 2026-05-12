@@ -17,6 +17,7 @@
         DumpsiteStatus.Confirmed => 3,
         DumpsiteStatus.CleanupInProgress => 4,
         DumpsiteStatus.AwaitingVerification => 4,
+        DumpsiteStatus.FlaggedByCleanupCrew => 4,
         DumpsiteStatus.Resolved => 5,
         DumpsiteStatus.Appealed => 5,
         DumpsiteStatus.Closed => 5,
@@ -25,8 +26,24 @@
 
     bool isRejected = Model.Status == DumpsiteStatus.Rejected;
 
+    // For a Rejected report, find at which stage the rejection happened so
+    // the stepper can show partial progress. If a cleanup crew was ever
+    // recorded the rejection landed at the Cleanup stage (4); otherwise
+    // rejection happened during inspector review (stage 2). The citizen
+    // DTO doesn't expose CleanupFlaggedAt, so "crew was assigned" is the
+    // available proxy.
+    int rejectionStage = isRejected
+        ? (Model.CleanupCrewName is not null ? 4 : 2)
+        : -1;
+
     string StepClass(int step)
     {
+        if (isRejected)
+        {
+            if (step < rejectionStage) return "done";
+            if (step == rejectionStage) return "rejected-stage";
+            return "faded";
+        }
         if (step < currentStage) return "done";
         if (step == currentStage) return "active";
         return string.Empty;
@@ -79,6 +96,54 @@
             }
         </div>
 
+        <div class="auth-card mb-4">
+            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <div class="status-stepper">
+                <div class="status-step @StepClass(1)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 1 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)1)</span>
+                    <div class="status-step-label">Submitted</div>
+                </div>
+                <div class="status-step @StepClass(2)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 2 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)2)</span>
+                    <div class="status-step-label">In review</div>
+                </div>
+                <div class="status-step @StepClass(3)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 3 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)3)</span>
+                    <div class="status-step-label">Confirmed</div>
+                </div>
+                <div class="status-step @StepClass(4)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 4 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)4)</span>
+                    <div class="status-step-label">
+                        Cleanup
+                        @if (Model.Status == DumpsiteStatus.AwaitingVerification)
+                        {
+                            <div class="text-muted small mt-1">Awaiting inspector verification</div>
+                        }
+                        else if (Model.Status == DumpsiteStatus.FlaggedByCleanupCrew)
+                        {
+                            <div class="text-muted small mt-1">Inspector reviewing site report</div>
+                        }
+                    </div>
+                </div>
+                <div class="status-step @StepClass(5)">
+                    <span class="status-step-bullet">5</span>
+                    <div class="status-step-label">
+                        @Stage5Label
+                        @if (Model.Status == DumpsiteStatus.Appealed)
+                        {
+                            <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            @if (Model.Status == DumpsiteStatus.Appealed)
+            {
+                <div class="alert alert-info small mb-0 mt-3">
+                    <i class="bi bi-flag-fill me-1"></i> Your appeal is under review by an inspector.
+                </div>
+            }
+        </div>
+
         @if (isRejected)
         {
             <div class="alert-rejected mb-4">
@@ -94,52 +159,6 @@
                         <div class="text-muted small mt-2">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</div>
                     }
                 </div>
-            </div>
-        }
-        else
-        {
-            <div class="auth-card mb-4">
-                <h2 class="h6 fw-700 mb-3">Progress</h2>
-                <div class="status-stepper">
-                    <div class="status-step @StepClass(1)">
-                        <span class="status-step-bullet">1</span>
-                        <div class="status-step-label">Submitted</div>
-                    </div>
-                    <div class="status-step @StepClass(2)">
-                        <span class="status-step-bullet">2</span>
-                        <div class="status-step-label">In review</div>
-                    </div>
-                    <div class="status-step @StepClass(3)">
-                        <span class="status-step-bullet">3</span>
-                        <div class="status-step-label">Confirmed</div>
-                    </div>
-                    <div class="status-step @StepClass(4)">
-                        <span class="status-step-bullet">4</span>
-                        <div class="status-step-label">
-                            Cleanup
-                            @if (Model.Status == DumpsiteStatus.AwaitingVerification)
-                            {
-                                <div class="text-muted small mt-1">Awaiting inspector verification</div>
-                            }
-                        </div>
-                    </div>
-                    <div class="status-step @StepClass(5)">
-                        <span class="status-step-bullet">5</span>
-                        <div class="status-step-label">
-                            @Stage5Label
-                            @if (Model.Status == DumpsiteStatus.Appealed)
-                            {
-                                <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-                @if (Model.Status == DumpsiteStatus.Appealed)
-                {
-                    <div class="alert alert-info small mb-0 mt-3">
-                        <i class="bi bi-flag-fill me-1"></i> Your appeal is under review by an inspector.
-                    </div>
-                }
             </div>
         }
 
@@ -293,10 +312,15 @@
             </div>
 
             <div class="col-md-5">
-                <div class="auth-card">
+                <div class="auth-card mb-4">
                     <h2 class="h6 fw-700 mb-3">Location</h2>
                     <div id="details-map"></div>
                     <p class="text-muted small mb-0 mt-2">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</p>
+                </div>
+
+                <div class="auth-card">
+                    <h2 class="h6 fw-700 mb-3"><i class="bi bi-clock-history me-1"></i>Activity timeline</h2>
+                    @await Html.PartialAsync("_ReportTimeline", Model.Events)
                 </div>
             </div>
         </div>

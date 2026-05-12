@@ -14,6 +14,8 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
     private readonly IAutoTriageService _triage;
     private readonly IReportNotificationService _notifications;
     private readonly IRoleNotificationService _roleNotifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<SubmitDumpsiteReportHandler> _logger;
 
     public SubmitDumpsiteReportHandler(
@@ -22,6 +24,8 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         IAutoTriageService triage,
         IReportNotificationService notifications,
         IRoleNotificationService roleNotifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<SubmitDumpsiteReportHandler> logger)
     {
         _dbContext = dbContext;
@@ -29,6 +33,8 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
         _triage = triage;
         _notifications = notifications;
         _roleNotifications = roleNotifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -76,6 +82,25 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
             report.Id, request.ReporterId, savedPaths.Count,
             decision.ShouldAutoConfirm ? "confirmed" : "review",
             decision.ShouldAutoConfirm ? string.Empty : $" ({decision.RejectionReason})");
+
+        // Audit timeline: report submitted, then auto-triage outcome.
+        var reporter = await _userLookup.GetByIdAsync(request.ReporterId, cancellationToken);
+        var citizenName = reporter?.FullName ?? "Anonymous";
+        await _events.LogAsync(report.Id, DumpsiteEventType.ReportSubmitted,
+            request.ReporterId, "Citizen", citizenName, ct: cancellationToken);
+
+        if (decision.ShouldAutoConfirm)
+        {
+            await _events.LogAsync(report.Id, DumpsiteEventType.AutoTriaged,
+                null, "System", "Auto-triage system",
+                notes: "Passed all triage rules", ct: cancellationToken);
+        }
+        else
+        {
+            await _events.LogAsync(report.Id, DumpsiteEventType.SentToReview,
+                null, "System", "Auto-triage system",
+                notes: decision.RejectionReason, ct: cancellationToken);
+        }
 
         // Citizen always gets a confirmation email; the template differentiates
         // auto-confirmed vs sent-to-review using report.AutoTriageReason.

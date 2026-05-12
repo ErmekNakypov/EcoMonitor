@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Features.Analytics.GetAppealStats;
 using EcoMonitor.Application.Features.Analytics.GetAutoTriageStats;
+using EcoMonitor.Application.Features.Analytics.GetFlagStats;
 using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetMyReports;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
@@ -69,6 +70,7 @@ public class DashboardController : Controller
         var totalContainers = await _dbContext.WasteContainers.CountAsync();
         var triage = await _mediator.Send(new GetAutoTriageStatsQuery());
         var appeals = await _mediator.Send(new GetAppealStatsQuery());
+        var flags = await _mediator.Send(new GetFlagStatsQuery());
 
         var model = new AdministratorDashboardViewModel
         {
@@ -82,7 +84,10 @@ public class DashboardController : Controller
             AutoTriagePercentage30d = triage.Percentage,
             AppealsTotalEligible30d = appeals.TotalEligible,
             AppealsAppealed30d = appeals.Appealed,
-            AppealsPercentage30d = appeals.Percentage
+            AppealsPercentage30d = appeals.Percentage,
+            FlagsTotalEligible30d = flags.TotalEligible,
+            FlagsFlagged30d = flags.Flagged,
+            FlagsPercentage30d = flags.Percentage
         };
 
         return View(model);

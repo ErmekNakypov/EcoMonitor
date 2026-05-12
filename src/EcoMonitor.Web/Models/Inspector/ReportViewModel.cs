@@ -1,4 +1,5 @@
 using EcoMonitor.Domain.Enums;
+using EcoMonitor.Web.Models.Reports;
 
 namespace EcoMonitor.Web.Models.Inspector;
 
@@ -56,4 +57,15 @@ public class ReportViewModel
     public DateTime? ClosedAt { get; set; }
 
     public bool CanReviewAppeal => Status == DumpsiteStatus.Appealed;
+
+    public string? CleanupRejectionReason { get; set; }
+    public string? CleanupRejectionNotes { get; set; }
+    public DateTime? CleanupFlaggedAt { get; set; }
+    public string? CleanupFlaggedByCrewName { get; set; }
+    public int ReassignCount { get; set; }
+    public IReadOnlyList<string> FlagEvidencePhotos { get; set; } = Array.Empty<string>();
+
+    public bool CanReviewFlag => Status == DumpsiteStatus.FlaggedByCleanupCrew;
+
+    public List<ReportEventViewModel> Events { get; set; } = new();
 }

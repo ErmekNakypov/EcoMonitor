@@ -19,6 +19,7 @@
         DumpsiteStatus.Confirmed            => 3,
         DumpsiteStatus.CleanupInProgress    => 4,
         DumpsiteStatus.AwaitingVerification => 4,
+        DumpsiteStatus.FlaggedByCleanupCrew => 4,
         DumpsiteStatus.Resolved             => 5,
         DumpsiteStatus.Appealed             => 5,
         DumpsiteStatus.Closed               => 5,
@@ -26,8 +27,22 @@
     };
     bool isRejected = Model.Status == DumpsiteStatus.Rejected;
 
+    // Rejected reports keep the stepper but show progress up to the rejection
+    // stage. CleanupFlaggedAt != null means rejection happened at the Cleanup
+    // stage (after crew flagged on site). Otherwise rejection happened during
+    // initial inspector review.
+    int rejectionStage = isRejected
+        ? (Model.CleanupFlaggedAt is not null ? 4 : 2)
+        : -1;
+
     string StepClass(int step)
     {
+        if (isRejected)
+        {
+            if (step < rejectionStage) return "done";
+            if (step == rejectionStage) return "rejected-stage";
+            return "faded";
+        }
         if (step < currentStage) return "done";
         if (step == currentStage) return "active";
         return string.Empty;
@@ -100,6 +115,34 @@
                 </div>
             }
         </div>
+
+        @if (Model.Status == DumpsiteStatus.FlaggedByCleanupCrew)
+        {
+            var reasonDisplay = EcoMonitor.Application.Features.DumpsiteReports.Commands.FlagCleanup
+                .FlagCleanupReasons.Display(Model.CleanupRejectionReason);
+            <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+                <i class="bi bi-flag-fill text-warning mt-1" style="font-size:1.25rem;"></i>
+                <div>
+                    <div class="fw-700">Cleanup crew flagged this report</div>
+                    <div class="small mt-1">
+                        <strong>Crew:</strong> @(Model.CleanupFlaggedByCrewName ?? "(unknown)") &middot;
+                        <strong>Reason:</strong> @reasonDisplay
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.CleanupRejectionNotes))
+                    {
+                        <div class="mt-2"><strong>Notes:</strong> @Model.CleanupRejectionNotes</div>
+                    }
+                    @if (Model.CleanupFlaggedAt.HasValue)
+                    {
+                        <div class="text-muted small mt-2">Flagged @DateHelpers.FormatShort(Model.CleanupFlaggedAt.Value)</div>
+                    }
+                    @if (Model.ReassignCount > 0)
+                    {
+                        <div class="text-muted small">Previously reassigned @Model.ReassignCount&times;</div>
+                    }
+                </div>
+            </div>
+        }
 
         @if (Model.Status == DumpsiteStatus.InReview && !string.IsNullOrWhiteSpace(Model.AutoTriageReason))
         {
@@ -195,6 +238,48 @@
             }
         </div>
 
+        <div class="auth-card mb-4">
+            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <div class="status-stepper">
+                <div class="status-step @StepClass(1)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 1 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)1)</span>
+                    <div class="status-step-label">Submitted</div>
+                </div>
+                <div class="status-step @StepClass(2)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 2 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)2)</span>
+                    <div class="status-step-label">In review</div>
+                </div>
+                <div class="status-step @StepClass(3)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 3 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)3)</span>
+                    <div class="status-step-label">Confirmed</div>
+                </div>
+                <div class="status-step @StepClass(4)">
+                    <span class="status-step-bullet">@(isRejected && rejectionStage == 4 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)4)</span>
+                    <div class="status-step-label">
+                        Cleanup
+                        @if (Model.Status == DumpsiteStatus.AwaitingVerification)
+                        {
+                            <div class="text-muted small mt-1">Awaiting inspector verification</div>
+                        }
+                        else if (Model.Status == DumpsiteStatus.FlaggedByCleanupCrew)
+                        {
+                            <div class="text-muted small mt-1">Flagged — awaiting decision</div>
+                        }
+                    </div>
+                </div>
+                <div class="status-step @StepClass(5)">
+                    <span class="status-step-bullet">5</span>
+                    <div class="status-step-label">
+                        @(Model.Status == DumpsiteStatus.Closed ? "Closed" : "Resolved")
+                        @if (Model.Status == DumpsiteStatus.Appealed)
+                        {
+                            <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @if (isRejected)
         {
             <div class="alert-rejected mb-4">
@@ -212,46 +297,6 @@
                 </div>
             </div>
         }
-        else
-        {
-            <div class="auth-card mb-4">
-                <h2 class="h6 fw-700 mb-3">Progress</h2>
-                <div class="status-stepper">
-                    <div class="status-step @StepClass(1)">
-                        <span class="status-step-bullet">1</span>
-                        <div class="status-step-label">Submitted</div>
-                    </div>
-                    <div class="status-step @StepClass(2)">
-                        <span class="status-step-bullet">2</span>
-                        <div class="status-step-label">In review</div>
-                    </div>
-                    <div class="status-step @StepClass(3)">
-                        <span class="status-step-bullet">3</span>
-                        <div class="status-step-label">Confirmed</div>
-                    </div>
-                    <div class="status-step @StepClass(4)">
-                        <span class="status-step-bullet">4</span>
-                        <div class="status-step-label">
-                            Cleanup
-                            @if (Model.Status == DumpsiteStatus.AwaitingVerification)
-                            {
-                                <div class="text-muted small mt-1">Awaiting inspector verification</div>
-                            }
-                        </div>
-                    </div>
-                    <div class="status-step @StepClass(5)">
-                        <span class="status-step-bullet">5</span>
-                        <div class="status-step-label">
-                            @(Model.Status == DumpsiteStatus.Closed ? "Closed" : "Resolved")
-                            @if (Model.Status == DumpsiteStatus.Appealed)
-                            {
-                                <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
 
         <div class="row g-4">
             <div class="col-md-7">
@@ -265,6 +310,22 @@
                     <div class="auth-card mb-4">
                         <h2 class="h6 fw-700 mb-2">Inspector observations</h2>
                         <p class="mb-0">@Model.InspectorObservations</p>
+                    </div>
+                }
+
+                @if (Model.FlagEvidencePhotos.Count > 0)
+                {
+                    <div class="auth-card photo-section-warning mb-4">
+                        <h2 class="h6 fw-700 mb-1"><i class="bi bi-flag-fill me-1" style="color:#F59E0B;"></i>Flag evidence — from crew (@Model.FlagEvidencePhotos.Count)</h2>
+                        <p class="text-muted small mb-3">Photos the cleanup crew took on site to support their flag.</p>
+                        <div class="photo-gallery">
+                            @foreach (var p in Model.FlagEvidencePhotos)
+                            {
+                                <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@p">
+                                    <img src="@p" alt="Flag evidence" />
+                                </a>
+                            }
+                        </div>
                     </div>
                 }
 
@@ -464,6 +525,24 @@
                             </button>
                         </div>
                     }
+                    else if (Model.CanReviewFlag)
+                    {
+                        <p class="text-muted small mb-2">Review the crew's evidence and the citizen's report, then choose:</p>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-danger w-100"
+                                    data-bs-toggle="modal" data-bs-target="#rejectFlaggedModal">
+                                <i class="bi bi-x-circle me-2"></i>Reject (crew is correct)
+                            </button>
+                            <button type="button" class="btn btn-success w-100"
+                                    data-bs-toggle="modal" data-bs-target="#confirmBackModal">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Send back to same crew
+                            </button>
+                            <button type="button" class="btn btn-warning w-100"
+                                    data-bs-toggle="modal" data-bs-target="#reassignModal">
+                                <i class="bi bi-people me-2"></i>Reassign to another crew
+                            </button>
+                        </div>
+                    }
                     else if (Model.CanReviewAppeal)
                     {
                         <div class="d-grid gap-2">
@@ -489,6 +568,11 @@
                             <i class="bi bi-person-check me-2"></i>This report is being handled by @Model.AssignedInspectorEmail.
                         </p>
                     }
+                </div>
+
+                <div class="auth-card mt-4">
+                    <h2 class="h6 fw-700 mb-3"><i class="bi bi-clock-history me-1"></i>Activity timeline</h2>
+                    @await Html.PartialAsync("_ReportTimeline", Model.Events)
                 </div>
             </div>
         </div>
@@ -607,6 +691,93 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-arrow-counterclockwise me-2"></i>Send back
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.CanReviewFlag)
+{
+    <div class="modal fade" id="rejectFlaggedModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="RejectFlagged" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Reject report</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Agreed with the crew: the report is invalid. Citizen will be notified.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="reject-flag-notes">Decision notes</label>
+                            <textarea id="reject-flag-notes" name="decisionNotes" rows="4" class="form-control" minlength="10" maxlength="500" required></textarea>
+                        </div>
+                        <div class="form-text">10–500 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-x-circle me-2"></i>Reject report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmBackModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="ConfirmBack" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Send back to same crew</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">The dumpsite exists. The same crew will re-check the site.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="confirm-back-notes">Decision notes</label>
+                            <textarea id="confirm-back-notes" name="decisionNotes" rows="4" class="form-control" minlength="10" maxlength="500" required></textarea>
+                        </div>
+                        <div class="form-text">10–500 characters. Tell the crew what to look for again.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Send back
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reassignModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Inspector" asp-action="Reassign" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h2 class="h5 fw-700 modal-title mb-0">Reassign to another crew</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">Return the report to the cleanup queue. Any other crew can take it.</p>
+                        <div class="mb-2">
+                            <label class="form-label fw-500" for="reassign-notes">Decision notes</label>
+                            <textarea id="reassign-notes" name="decisionNotes" rows="4" class="form-control" minlength="10" maxlength="500" required></textarea>
+                        </div>
+                        <div class="form-text">10–500 characters.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-people me-2"></i>Reassign
                         </button>
                     </div>
                 </form>

@@ -144,6 +144,30 @@
                     </span>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="stat-card" style="border-left:4px solid #F59E0B;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-label">Cleanup-crew flag rate</span>
+                        <i class="bi bi-flag-fill stat-icon" style="color:#F59E0B;"></i>
+                    </div>
+                    <div class="stat-value">
+                        @Model.FlagsPercentage30d.ToString("0.#")%
+                    </div>
+                    <span class="text-muted small">
+                        @if (Model.FlagsTotalEligible30d == 0)
+                        {
+                            <text>No cleanups dispatched in the last 30 days.</text>
+                        }
+                        else
+                        {
+                            <text>
+                                @Model.FlagsFlagged30d of @Model.FlagsTotalEligible30d confirmed reports
+                                flagged by cleanup crews on site
+                            </text>
+                        }
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div class="auth-card">

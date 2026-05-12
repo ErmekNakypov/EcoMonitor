@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,13 @@ public class GetReportForAdminHandler : IRequestHandler<GetReportForAdminQuery, 
         {
             return null;
         }
+
+        var events = await _dbContext.DumpsiteReportEvents
+            .AsNoTracking()
+            .Where(e => e.ReportId == report.Id)
+            .OrderBy(e => e.OccurredAt)
+            .Select(e => new ReportEventDto(e.EventType, e.OccurredAt, e.ActorRole, e.ActorDisplayName, e.Notes))
+            .ToListAsync(cancellationToken);
 
         var ids = new List<Guid>();
         if (report.ReporterId.HasValue) ids.Add(report.ReporterId.Value);
@@ -59,6 +67,8 @@ public class GetReportForAdminHandler : IRequestHandler<GetReportForAdminQuery, 
             report.CreatedAt,
             report.UpdatedAt,
             report.Source,
-            report.TelegramUserName);
+            report.TelegramUserName,
+            events,
+            report.CleanupFlaggedAt);
     }
 }

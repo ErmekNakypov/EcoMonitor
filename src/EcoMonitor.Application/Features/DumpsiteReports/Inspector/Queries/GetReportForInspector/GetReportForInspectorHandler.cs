@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
         if (report.ReporterId.HasValue) ids.Add(report.ReporterId.Value);
         if (report.AssignedInspectorId.HasValue) ids.Add(report.AssignedInspectorId.Value);
         if (report.CleanupCrewId.HasValue) ids.Add(report.CleanupCrewId.Value);
+        if (report.CleanupFlaggedByCrewId.HasValue) ids.Add(report.CleanupFlaggedByCrewId.Value);
 
         IReadOnlyDictionary<Guid, UserSummaryDto> users = ids.Count > 0
             ? await _userLookup.GetByIdsAsync(ids, cancellationToken)
@@ -43,6 +45,9 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             : null;
         var crew = report.CleanupCrewId.HasValue
             ? users.GetValueOrDefault(report.CleanupCrewId.Value)
+            : null;
+        var flagger = report.CleanupFlaggedByCrewId.HasValue
+            ? users.GetValueOrDefault(report.CleanupFlaggedByCrewId.Value)
             : null;
 
         var inspectionPhotos = await _dbContext.DumpsiteInspectionPhotos
@@ -70,10 +75,24 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
         // for bot, otherwise leave zeros.
         var stats = await GetReporterStatsAsync(report, cancellationToken);
 
+        var events = await _dbContext.DumpsiteReportEvents
+            .AsNoTracking()
+            .Where(e => e.ReportId == report.Id)
+            .OrderBy(e => e.OccurredAt)
+            .Select(e => new ReportEventDto(e.EventType, e.OccurredAt, e.ActorRole, e.ActorDisplayName, e.Notes))
+            .ToListAsync(cancellationToken);
+
         var appealPhotos = await _dbContext.DumpsiteAppealPhotos
             .AsNoTracking()
             .Where(p => p.ReportId == report.Id)
             .OrderBy(p => p.UploadedAt)
+            .Select(p => p.FilePath)
+            .ToListAsync(cancellationToken);
+
+        var flagEvidencePhotos = await _dbContext.DumpsiteCleanupPhotos
+            .AsNoTracking()
+            .Where(p => p.ReportId == report.Id && p.Type == CleanupPhotoType.FlagEvidence)
+            .OrderBy(p => p.CreatedAt)
             .Select(p => p.FilePath)
             .ToListAsync(cancellationToken);
 
@@ -116,7 +135,14 @@ public class GetReportForInspectorHandler : IRequestHandler<GetReportForInspecto
             report.AppealReviewedAt,
             report.AppealResolutionNotes,
             report.AppealOutcome,
-            report.ClosedAt);
+            report.ClosedAt,
+            events,
+            report.CleanupRejectionReason,
+            report.CleanupRejectionNotes,
+            report.CleanupFlaggedAt,
+            flagger?.FullName,
+            report.ReassignCount,
+            flagEvidencePhotos);
     }
 
     private async Task<(int Total, int Pending, int Resolved, int Rejected)> GetReporterStatsAsync(

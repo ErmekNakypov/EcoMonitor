@@ -1,0 +1,38 @@
+@model InspectorReportFlaggedEmailModel
+@{
+    ViewBag.Title = "Cleanup crew flagged a report";
+    var refId = Model.ReportId.ToString().Substring(0, 8).ToUpperInvariant();
+}
+<h2 style="margin:0 0 16px 0;color:#92400E;font-size:20px;">A cleanup crew flagged a report</h2>
+<p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;">Hello @Model.InspectorName,</p>
+<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;">
+    Cleanup crew member <strong>@Model.CrewName</strong> went on site for report
+    <strong>@refId</strong> and could not complete the cleanup. They attached
+    evidence photos. Please review and either reject the report, send it back
+    to the same crew, or reassign it to another crew.
+</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#F9FAFB;border-radius:8px;padding:16px;margin:16px 0;">
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Report ID</td>
+        <td style="padding:8px 0;font-size:14px;font-weight:700;text-align:right;">@refId</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;vertical-align:top;">Original description</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">@Model.ReportDescription</td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0;font-size:14px;color:#6B7280;">Flagged at</td>
+        <td style="padding:8px 0;font-size:14px;text-align:right;">@Model.FlaggedAt.ToString("dd MMM yyyy, HH:mm") UTC</td>
+    </tr>
+</table>
+<div style="background:#FEF3C7;border-left:4px solid #F59E0B;padding:12px 16px;margin:16px 0;border-radius:6px;">
+    <strong style="display:block;margin-bottom:4px;color:#92400E;">Crew's reason</strong>
+    <p style="margin:0;font-size:14px;color:#78350F;line-height:1.5;">@Model.FlagReasonDisplay</p>
+    @if (!string.IsNullOrWhiteSpace(Model.AdditionalNotes))
+    {
+        <p style="margin:8px 0 0 0;font-size:14px;color:#78350F;line-height:1.5;">@Model.AdditionalNotes</p>
+    }
+</div>
+<p style="margin:24px 0;">
+    <a href="@Model.ReportUrl" style="background:#2D6A4F;color:#FFFFFF;padding:12px 24px;text-decoration:none;border-radius:8px;display:inline-block;font-weight:600;">Open report</a>
+</p>

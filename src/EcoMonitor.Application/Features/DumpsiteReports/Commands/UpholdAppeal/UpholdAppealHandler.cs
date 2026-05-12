@@ -12,15 +12,21 @@ public class UpholdAppealHandler : IRequestHandler<UpholdAppealCommand, Unit>
 {
     private readonly IApplicationDbContext _db;
     private readonly IReportNotificationService _notifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<UpholdAppealHandler> _logger;
 
     public UpholdAppealHandler(
         IApplicationDbContext db,
         IReportNotificationService notifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<UpholdAppealHandler> logger)
     {
         _db = db;
         _notifications = notifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -64,6 +70,19 @@ public class UpholdAppealHandler : IRequestHandler<UpholdAppealCommand, Unit>
         _logger.LogInformation(
             "Inspector {InspectorId} upheld appeal for report {ReportId}",
             request.InspectorId, report.Id);
+
+        var actor = await _userLookup.GetByIdAsync(request.InspectorId, ct);
+        var actorName = actor?.FullName ?? "Inspector";
+        await _events.LogAsync(report.Id, DumpsiteEventType.AppealUpheld,
+            request.InspectorId, "Inspector", actorName,
+            notes: notes, ct: ct);
+        // Upheld appeal immediately starts a rework cycle (status flips to
+        // CleanupInProgress on the same line above), so emit ReworkStarted
+        // as a system event right after so the timeline reads as a chain.
+        await _events.LogAsync(report.Id, DumpsiteEventType.ReworkStarted,
+            null, "System", "Workflow",
+            notes: $"Rework #{report.ReworkCount} after upheld appeal",
+            ct: ct);
 
         try
         {

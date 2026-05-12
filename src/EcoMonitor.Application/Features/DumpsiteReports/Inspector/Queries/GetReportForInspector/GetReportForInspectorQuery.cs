@@ -1,3 +1,4 @@
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 
@@ -44,4 +45,11 @@ public sealed record InspectorReportDto(
     DateTime? AppealReviewedAt,
     string? AppealResolutionNotes,
     AppealOutcome? AppealOutcome,
-    DateTime? ClosedAt);
+    DateTime? ClosedAt,
+    IReadOnlyList<ReportEventDto> Events,
+    string? CleanupRejectionReason,
+    string? CleanupRejectionNotes,
+    DateTime? CleanupFlaggedAt,
+    string? CleanupFlaggedByCrewName,
+    int ReassignCount,
+    IReadOnlyList<string> FlagEvidencePhotos);

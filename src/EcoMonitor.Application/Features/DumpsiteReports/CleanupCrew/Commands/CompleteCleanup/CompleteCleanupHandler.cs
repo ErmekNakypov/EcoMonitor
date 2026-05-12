@@ -14,17 +14,23 @@ public class CompleteCleanupHandler : IRequestHandler<CompleteCleanupCommand, Un
     private readonly IApplicationDbContext _dbContext;
     private readonly IFileStorageService _fileStorage;
     private readonly IReportNotificationService _notifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<CompleteCleanupHandler> _logger;
 
     public CompleteCleanupHandler(
         IApplicationDbContext dbContext,
         IFileStorageService fileStorage,
         IReportNotificationService notifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<CompleteCleanupHandler> logger)
     {
         _dbContext = dbContext;
         _fileStorage = fileStorage;
         _notifications = notifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -74,6 +80,11 @@ public class CompleteCleanupHandler : IRequestHandler<CompleteCleanupCommand, Un
         _logger.LogInformation(
             "Cleanup user {UserId} completed cleanup for report {ReportId} with {Count} after-photo(s)",
             request.CleanupUserId, report.Id, request.AfterPhotos.Count);
+
+        var actor = await _userLookup.GetByIdAsync(request.CleanupUserId, cancellationToken);
+        await _events.LogAsync(report.Id, DumpsiteEventType.CleanupCompleted,
+            request.CleanupUserId, "CleanupCrew", actor?.FullName ?? "Cleanup crew",
+            notes: report.CleanupNotes, ct: cancellationToken);
 
         try
         {

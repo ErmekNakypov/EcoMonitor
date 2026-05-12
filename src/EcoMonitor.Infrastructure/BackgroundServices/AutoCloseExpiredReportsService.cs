@@ -61,6 +61,7 @@ public sealed class AutoCloseExpiredReportsService : BackgroundService
     {
         using var scope = _services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+        var events = scope.ServiceProvider.GetRequiredService<IReportEventLogger>();
 
         var cutoff = DateTime.UtcNow - AppealWindow;
 
@@ -83,6 +84,14 @@ public sealed class AutoCloseExpiredReportsService : BackgroundService
         }
 
         await db.SaveChangesAsync(ct);
+
+        foreach (var report in expired)
+        {
+            await events.LogAsync(report.Id, DumpsiteEventType.AutoClosed,
+                null, "System", "Auto-close service",
+                notes: "7-day appeal window passed", ct: ct);
+        }
+
         _logger.LogInformation(
             "Auto-closed {Count} reports past the {Days}-day appeal window",
             expired.Count, AppealWindow.TotalDays);

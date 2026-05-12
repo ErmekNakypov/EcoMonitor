@@ -343,10 +343,28 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("cleanup_crew_id");
 
+                    b.Property<DateTime?>("CleanupFlaggedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("cleanup_flagged_at");
+
+                    b.Property<Guid?>("CleanupFlaggedByCrewId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cleanup_flagged_by_crew_id");
+
                     b.Property<string>("CleanupNotes")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("cleanup_notes");
+
+                    b.Property<string>("CleanupRejectionNotes")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("cleanup_rejection_notes");
+
+                    b.Property<string>("CleanupRejectionReason")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("cleanup_rejection_reason");
 
                     b.Property<DateTime?>("CleanupStartedAt")
                         .HasColumnType("timestamp with time zone")
@@ -387,6 +405,10 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("photo_paths");
+
+                    b.Property<int>("ReassignCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("reassign_count");
 
                     b.Property<Guid?>("ReporterId")
                         .HasColumnType("uuid")
@@ -462,6 +484,67 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasDatabaseName("ix_dumpsite_reports_telegram_user_id");
 
                     b.ToTable("dumpsite_reports", (string)null);
+                });
+
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteReportEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ActorDisplayName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("actor_display_name");
+
+                    b.Property<string>("ActorRole")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("actor_role");
+
+                    b.Property<Guid?>("ActorUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("actor_user_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("EventType")
+                        .HasColumnType("integer")
+                        .HasColumnName("event_type");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("notes");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at");
+
+                    b.Property<string>("PayloadJson")
+                        .HasColumnType("text")
+                        .HasColumnName("payload_json");
+
+                    b.Property<Guid>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("report_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_dumpsite_report_events");
+
+                    b.HasIndex("ReportId", "OccurredAt")
+                        .HasDatabaseName("ix_dumpsite_report_events_report_id_occurred_at");
+
+                    b.ToTable("dumpsite_report_events", (string)null);
                 });
 
             modelBuilder.Entity("EcoMonitor.Domain.Entities.EmailMessage", b =>
@@ -1049,6 +1132,18 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .HasConstraintName("fk_air_quality_readings_air_quality_stations_station_id");
                 });
 
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteReportEvent", b =>
+                {
+                    b.HasOne("EcoMonitor.Domain.Entities.DumpsiteReport", "Report")
+                        .WithMany("Events")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_dumpsite_report_events_dumpsite_reports_report_id");
+
+                    b.Navigation("Report");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("EcoMonitor.Infrastructure.Identity.ApplicationRole", null)
@@ -1104,6 +1199,11 @@ namespace EcoMonitor.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_user_tokens_users_user_id");
+                });
+
+            modelBuilder.Entity("EcoMonitor.Domain.Entities.DumpsiteReport", b =>
+                {
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

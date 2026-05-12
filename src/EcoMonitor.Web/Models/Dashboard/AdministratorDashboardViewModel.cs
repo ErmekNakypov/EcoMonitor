@@ -18,4 +18,8 @@ public class AdministratorDashboardViewModel
     public int AppealsTotalEligible30d { get; set; }
     public int AppealsAppealed30d { get; set; }
     public double AppealsPercentage30d { get; set; }
+
+    public int FlagsTotalEligible30d { get; set; }
+    public int FlagsFlagged30d { get; set; }
+    public double FlagsPercentage30d { get; set; }
 }

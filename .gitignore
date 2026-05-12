@@ -58,6 +58,8 @@ src/EcoMonitor.Web/wwwroot/uploads/cleanup/*
 !src/EcoMonitor.Web/wwwroot/uploads/cleanup/.gitkeep
 src/EcoMonitor.Web/wwwroot/uploads/appeals/*
 !src/EcoMonitor.Web/wwwroot/uploads/appeals/.gitkeep
+src/EcoMonitor.Web/wwwroot/uploads/flags/*
+!src/EcoMonitor.Web/wwwroot/uploads/flags/.gitkeep
 
 # Local user secrets / overrides
 appsettings.*.local.json

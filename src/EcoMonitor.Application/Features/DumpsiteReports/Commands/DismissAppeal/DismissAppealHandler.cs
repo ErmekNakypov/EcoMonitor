@@ -12,15 +12,21 @@ public class DismissAppealHandler : IRequestHandler<DismissAppealCommand, Unit>
 {
     private readonly IApplicationDbContext _db;
     private readonly IReportNotificationService _notifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<DismissAppealHandler> _logger;
 
     public DismissAppealHandler(
         IApplicationDbContext db,
         IReportNotificationService notifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<DismissAppealHandler> logger)
     {
         _db = db;
         _notifications = notifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -58,6 +64,11 @@ public class DismissAppealHandler : IRequestHandler<DismissAppealCommand, Unit>
         _logger.LogInformation(
             "Inspector {InspectorId} dismissed appeal for report {ReportId}",
             request.InspectorId, report.Id);
+
+        var actor = await _userLookup.GetByIdAsync(request.InspectorId, ct);
+        await _events.LogAsync(report.Id, DumpsiteEventType.AppealDismissed,
+            request.InspectorId, "Inspector", actor?.FullName ?? "Inspector",
+            notes: notes, ct: ct);
 
         try
         {

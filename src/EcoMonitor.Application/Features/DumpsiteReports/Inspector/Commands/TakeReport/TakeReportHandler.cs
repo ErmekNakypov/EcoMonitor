@@ -10,11 +10,19 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.Tak
 public class TakeReportHandler : IRequestHandler<TakeReportCommand, Unit>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<TakeReportHandler> _logger;
 
-    public TakeReportHandler(IApplicationDbContext dbContext, ILogger<TakeReportHandler> logger)
+    public TakeReportHandler(
+        IApplicationDbContext dbContext,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
+        ILogger<TakeReportHandler> logger)
     {
         _dbContext = dbContext;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -39,6 +47,12 @@ public class TakeReportHandler : IRequestHandler<TakeReportCommand, Unit>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Inspector {InspectorId} took report {ReportId}", request.InspectorId, report.Id);
+
+        var actor = await _userLookup.GetByIdAsync(request.InspectorId, cancellationToken);
+        await _events.LogAsync(report.Id, DumpsiteEventType.InspectorTook,
+            request.InspectorId, "Inspector", actor?.FullName ?? "Inspector",
+            ct: cancellationToken);
+
         return Unit.Value;
     }
 }

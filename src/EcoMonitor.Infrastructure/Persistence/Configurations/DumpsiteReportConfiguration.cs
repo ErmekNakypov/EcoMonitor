@@ -40,6 +40,8 @@ public class DumpsiteReportConfiguration : IEntityTypeConfiguration<DumpsiteRepo
         builder.Property(r => r.AutoTriageReason).HasMaxLength(500);
         builder.Property(r => r.AppealReason).HasMaxLength(500);
         builder.Property(r => r.AppealResolutionNotes).HasMaxLength(1000);
+        builder.Property(r => r.CleanupRejectionReason).HasMaxLength(64);
+        builder.Property(r => r.CleanupRejectionNotes).HasMaxLength(500);
 
         builder.HasIndex(r => r.Status);
         builder.HasIndex(r => r.ReporterId);

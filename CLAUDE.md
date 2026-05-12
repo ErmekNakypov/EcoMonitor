@@ -82,6 +82,49 @@ if they disagree with the cleanup outcome. Otherwise the report auto-closes.
 - Numeric enum values are frozen: `Appealed = 7`, `Closed = 8`,
   `AppealOutcome { Upheld = 0, Dismissed = 1 }`.
 
+## Cleanup flag mechanism
+When a cleanup crew arrives on site and finds the report is invalid (no
+dumpsite, wrong location, outside jurisdiction, photo mismatch), they flag
+it with at least one mandatory evidence photo. Status moves to
+`FlaggedByCleanupCrew = 9` and the assigned crew waits. Inspector reviews
+in the Flagged queue and chooses one of three:
+- **Reject** — crew was correct, citizen notified, `Status → Rejected`.
+- **Confirm back** — dumpsite does exist, same crew re-checks
+  (`Status → Confirmed`, `CleanupCrewId` preserved, inspector notes
+  appended to `InspectorObservations`).
+- **Reassign** — return to the queue for a different crew
+  (`Status → Confirmed`, `CleanupCrewId = null`, `ReassignCount++`,
+  notification skips the original flagger).
+
+This closes the false-report gap not caught by auto-triage rules and adds
+a second human-validation layer. Flag reasons are a frozen string set
+(`NoDumpsiteFound`, `AlreadyClean`, `OutsideJurisdiction`, `PhotoMismatch`,
+`Other`) defined in `FlagCleanupReasons`. The admin dashboard exposes a
+"Cleanup-crew flag rate" stat card next to auto-triage and appeal rates —
+a high flag rate signals the auto-triage thresholds are too permissive.
+
+## Activity timeline
+Every state-changing action on a dumpsite report is logged to
+`dumpsite_report_events` for full audit transparency. Each row captures the
+event type, who did it (user or system, with an actor-name snapshot frozen at
+event time so the log stays readable after renames or deletions), when, and
+any associated notes. The append-only log is rendered as a vertical
+timeline on every Details page across roles via the
+`Views/Shared/_ReportTimeline.cshtml` partial.
+
+Visibility: staff and admin see the full timeline. Citizens see a filtered
+view that hides internal handoffs (`InspectorTook`, `CleanupTaken`) — the
+remaining events are still informative ("Auto-confirmed by triage system",
+"Confirmed by inspector", "Cleanup completed", "Marked as resolved",
+"Appealed by citizen", "Appeal upheld", etc.) without leaking which inspector
+or crew member acted internally.
+
+Event types are frozen (`DumpsiteEventType` 0..14). Logging is centralized in
+`IReportEventLogger` (`ReportEventLogger` writes one row per call, scoped to
+the request lifetime). All eleven dumpsite command handlers and the
+`AutoCloseExpiredReportsService` background job log their outcomes after the
+main action succeeds.
+
 ## Auto-triage system
 New citizen reports are routed automatically before reaching humans.
 Rules (`BishkekAutoTriageService`): at least one photo, coordinates within

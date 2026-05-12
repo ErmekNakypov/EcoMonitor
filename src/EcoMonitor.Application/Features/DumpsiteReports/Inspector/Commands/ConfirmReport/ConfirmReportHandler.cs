@@ -15,6 +15,8 @@ public class ConfirmReportHandler : IRequestHandler<ConfirmReportCommand, Unit>
     private readonly IFileStorageService _fileStorage;
     private readonly IReportNotificationService _notifications;
     private readonly IRoleNotificationService _roleNotifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<ConfirmReportHandler> _logger;
 
     public ConfirmReportHandler(
@@ -22,12 +24,16 @@ public class ConfirmReportHandler : IRequestHandler<ConfirmReportCommand, Unit>
         IFileStorageService fileStorage,
         IReportNotificationService notifications,
         IRoleNotificationService roleNotifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<ConfirmReportHandler> logger)
     {
         _dbContext = dbContext;
         _fileStorage = fileStorage;
         _notifications = notifications;
         _roleNotifications = roleNotifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -78,6 +84,11 @@ public class ConfirmReportHandler : IRequestHandler<ConfirmReportCommand, Unit>
         _logger.LogInformation(
             "Inspector {InspectorId} confirmed report {ReportId} with {Count} inspection photo(s)",
             request.InspectorId, report.Id, request.InspectionPhotos.Count);
+
+        var actor = await _userLookup.GetByIdAsync(request.InspectorId, cancellationToken);
+        await _events.LogAsync(report.Id, DumpsiteEventType.Confirmed,
+            request.InspectorId, "Inspector", actor?.FullName ?? "Inspector",
+            notes: report.InspectorObservations, ct: cancellationToken);
 
         try
         {

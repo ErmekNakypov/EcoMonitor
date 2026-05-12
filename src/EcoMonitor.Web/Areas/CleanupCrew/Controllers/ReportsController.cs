@@ -3,12 +3,14 @@ using EcoMonitor.Application.Common.Models;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.CompleteCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.StartCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.TakeForCleanup;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.FlagCleanup;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Queries.GetCleanupQueue;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Queries.GetMyCleanupReports;
 using EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Queries.GetReportForCleanup;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Web.Models.CleanupCrew;
+using EcoMonitor.Web.Models.Reports;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +66,7 @@ public class ReportsController : Controller
         var dto = await _mediator.Send(new GetReportForCleanupQuery(id), ct);
         if (dto is null) return NotFound();
         ViewData["CurrentUserId"] = CurrentUserId();
+        ViewData["Events"] = ReportEventViewModelMapper.MapStaff(dto.Events);
         return View(dto);
     }
 
@@ -132,6 +135,35 @@ public class ReportsController : Controller
                 id, CurrentUserId(), model.Notes ?? string.Empty, uploaded), ct);
             TempData["SuccessMessage"] = "Cleanup completed. The inspector will verify your work.";
             return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (NotFoundException) { return NotFound(); }
+        catch (ForbiddenException) { return Forbid(); }
+        catch (DomainException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+    }
+
+    [HttpPost("Flag/{id:guid}")]
+    [ValidateAntiForgeryToken]
+    [RequestSizeLimit(50_000_000)]
+    public async Task<IActionResult> Flag(Guid id, string? Reason, string? AdditionalNotes, List<IFormFile>? Photos, CancellationToken ct)
+    {
+        if (Photos is null || Photos.Count == 0)
+        {
+            TempData["ErrorMessage"] = "Attach at least one evidence photo.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var uploaded = await ToDtos(Photos, ct);
+
+        try
+        {
+            await _mediator.Send(new FlagCleanupCommand(
+                id, CurrentUserId(), Reason ?? string.Empty, AdditionalNotes, uploaded), ct);
+            TempData["SuccessMessage"] = "Report flagged. An inspector will review your evidence.";
+            return RedirectToAction(nameof(MyReports));
         }
         catch (NotFoundException) { return NotFound(); }
         catch (ForbiddenException) { return Forbid(); }

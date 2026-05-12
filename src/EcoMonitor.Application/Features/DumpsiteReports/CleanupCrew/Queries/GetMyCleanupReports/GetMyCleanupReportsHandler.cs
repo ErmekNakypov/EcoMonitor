@@ -11,14 +11,16 @@ public class GetMyCleanupReportsHandler : IRequestHandler<GetMyCleanupReportsQue
     {
         DumpsiteStatus.Confirmed,
         DumpsiteStatus.CleanupInProgress,
-        DumpsiteStatus.AwaitingVerification
+        DumpsiteStatus.AwaitingVerification,
+        DumpsiteStatus.FlaggedByCleanupCrew,
+        DumpsiteStatus.Appealed
     };
 
     private static readonly DumpsiteStatus[] CompletedStatuses =
     {
         DumpsiteStatus.Resolved,
         DumpsiteStatus.Closed,
-        DumpsiteStatus.Appealed
+        DumpsiteStatus.Rejected
     };
 
     private readonly IApplicationDbContext _db;
@@ -33,9 +35,14 @@ public class GetMyCleanupReportsHandler : IRequestHandler<GetMyCleanupReportsQue
         var page = request.Page < 1 ? 1 : request.Page;
         var pageSize = request.PageSize < 1 ? 20 : request.PageSize;
 
+        // A crew member sees a report in their list if they are currently the
+        // assigned crew OR if they were the one who flagged it (Reassign clears
+        // CleanupCrewId, so without this OR the report disappears from the
+        // flagger's list).
         var mine = _db.DumpsiteReports
             .AsNoTracking()
-            .Where(r => r.CleanupCrewId == request.CleanupUserId);
+            .Where(r => r.CleanupCrewId == request.CleanupUserId
+                     || r.CleanupFlaggedByCrewId == request.CleanupUserId);
 
         var counts = await mine
             .GroupBy(r => r.Status)

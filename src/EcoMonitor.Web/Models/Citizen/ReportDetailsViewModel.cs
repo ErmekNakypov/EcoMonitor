@@ -1,4 +1,5 @@
 using EcoMonitor.Domain.Enums;
+using EcoMonitor.Web.Models.Reports;
 
 namespace EcoMonitor.Web.Models.Citizen;
 
@@ -29,6 +30,8 @@ public class ReportDetailsViewModel
     public string? CleanupCrewName { get; set; }
     public DateTime? CleanupCompletedAt { get; set; }
     public string? VerifiedByInspectorName { get; set; }
+
+    public List<ReportEventViewModel> Events { get; set; } = new();
 
     // Resolution notes also carry the rejection reason when Status == Rejected.
     public string? RejectionReason => Status == DumpsiteStatus.Rejected ? ResolutionNotes : null;

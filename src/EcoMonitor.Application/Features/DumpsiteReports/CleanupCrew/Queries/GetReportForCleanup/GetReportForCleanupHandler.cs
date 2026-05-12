@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -59,10 +60,24 @@ public class GetReportForCleanupHandler : IRequestHandler<GetReportForCleanupQue
             .Select(p => p.FilePath)
             .ToListAsync(ct);
 
+        var events = await _db.DumpsiteReportEvents
+            .AsNoTracking()
+            .Where(e => e.ReportId == report.Id)
+            .OrderBy(e => e.OccurredAt)
+            .Select(e => new ReportEventDto(e.EventType, e.OccurredAt, e.ActorRole, e.ActorDisplayName, e.Notes))
+            .ToListAsync(ct);
+
         var appealPhotos = await _db.DumpsiteAppealPhotos
             .AsNoTracking()
             .Where(p => p.ReportId == report.Id)
             .OrderBy(p => p.UploadedAt)
+            .Select(p => p.FilePath)
+            .ToListAsync(ct);
+
+        var flagEvidencePhotos = await _db.DumpsiteCleanupPhotos
+            .AsNoTracking()
+            .Where(p => p.ReportId == report.Id && p.Type == CleanupPhotoType.FlagEvidence)
+            .OrderBy(p => p.CreatedAt)
             .Select(p => p.FilePath)
             .ToListAsync(ct);
 
@@ -114,7 +129,14 @@ public class GetReportForCleanupHandler : IRequestHandler<GetReportForCleanupQue
             report.AppealReason,
             report.AppealReviewedAt,
             report.AppealResolutionNotes,
-            report.AppealOutcome);
+            report.AppealOutcome,
+            events,
+            report.CleanupRejectionReason,
+            report.CleanupRejectionNotes,
+            report.CleanupFlaggedAt,
+            report.CleanupFlaggedByCrewId,
+            report.ReassignCount,
+            flagEvidencePhotos);
     }
 
     private async Task<(int Total, int Pending, int Resolved, int Rejected)> GetReporterStatsAsync(

@@ -18,6 +18,8 @@ public class AppealReportHandler : IRequestHandler<AppealReportCommand, Unit>
     private readonly IFileStorageService _fileStorage;
     private readonly IReportNotificationService _notifications;
     private readonly IRoleNotificationService _roleNotifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<AppealReportHandler> _logger;
 
     public AppealReportHandler(
@@ -25,12 +27,16 @@ public class AppealReportHandler : IRequestHandler<AppealReportCommand, Unit>
         IFileStorageService fileStorage,
         IReportNotificationService notifications,
         IRoleNotificationService roleNotifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<AppealReportHandler> logger)
     {
         _db = db;
         _fileStorage = fileStorage;
         _notifications = notifications;
         _roleNotifications = roleNotifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -95,6 +101,11 @@ public class AppealReportHandler : IRequestHandler<AppealReportCommand, Unit>
         _logger.LogInformation(
             "Citizen {CitizenId} appealed report {ReportId} with {PhotoCount} photo(s)",
             request.CitizenId, report.Id, request.Photos?.Count ?? 0);
+
+        var actor = await _userLookup.GetByIdAsync(request.CitizenId, ct);
+        await _events.LogAsync(report.Id, DumpsiteEventType.Appealed,
+            request.CitizenId, "Citizen", actor?.FullName ?? "Citizen",
+            notes: reason, ct: ct);
 
         try
         {

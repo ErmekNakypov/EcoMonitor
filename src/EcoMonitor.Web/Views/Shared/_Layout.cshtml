@@ -160,6 +160,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Inspector", "Flagged") ? "active" : "")" asp-controller="Inspector" asp-action="Flagged">
+                                    <i class="bi bi-flag-fill"></i><span>Flagged</span>
+                                    @await Component.InvokeAsync("PendingFlagsBadge")
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
                                     <i class="bi bi-geo-alt"></i><span>Map</span>
                                 </a>

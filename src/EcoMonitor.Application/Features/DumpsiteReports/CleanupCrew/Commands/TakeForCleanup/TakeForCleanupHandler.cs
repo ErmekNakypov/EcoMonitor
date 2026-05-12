@@ -10,11 +10,19 @@ namespace EcoMonitor.Application.Features.DumpsiteReports.CleanupCrew.Commands.T
 public class TakeForCleanupHandler : IRequestHandler<TakeForCleanupCommand, Unit>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<TakeForCleanupHandler> _logger;
 
-    public TakeForCleanupHandler(IApplicationDbContext dbContext, ILogger<TakeForCleanupHandler> logger)
+    public TakeForCleanupHandler(
+        IApplicationDbContext dbContext,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
+        ILogger<TakeForCleanupHandler> logger)
     {
         _dbContext = dbContext;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -45,6 +53,11 @@ public class TakeForCleanupHandler : IRequestHandler<TakeForCleanupCommand, Unit
         _logger.LogInformation(
             "Cleanup user {UserId} took report {ReportId}",
             request.CleanupUserId, report.Id);
+
+        var actor = await _userLookup.GetByIdAsync(request.CleanupUserId, cancellationToken);
+        await _events.LogAsync(report.Id, DumpsiteEventType.CleanupTaken,
+            request.CleanupUserId, "CleanupCrew", actor?.FullName ?? "Cleanup crew",
+            ct: cancellationToken);
 
         return Unit.Value;
     }

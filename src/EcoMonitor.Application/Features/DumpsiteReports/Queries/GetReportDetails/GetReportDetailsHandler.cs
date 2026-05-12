@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,13 @@ public class GetReportDetailsHandler : IRequestHandler<GetReportDetailsQuery, Re
             .Select(p => p.FilePath)
             .ToListAsync(cancellationToken);
 
+        var events = await _dbContext.DumpsiteReportEvents
+            .AsNoTracking()
+            .Where(e => e.ReportId == report.Id)
+            .OrderBy(e => e.OccurredAt)
+            .Select(e => new ReportEventDto(e.EventType, e.OccurredAt, e.ActorRole, e.ActorDisplayName, e.Notes))
+            .ToListAsync(cancellationToken);
+
         var ids = new List<Guid>();
         if (report.CleanupCrewId.HasValue) ids.Add(report.CleanupCrewId.Value);
         if (report.VerifiedByInspectorId.HasValue) ids.Add(report.VerifiedByInspectorId.Value);
@@ -93,6 +101,7 @@ public class GetReportDetailsHandler : IRequestHandler<GetReportDetailsQuery, Re
             report.ClosedAt,
             crewName,
             report.CleanupCompletedAt,
-            verifierName);
+            verifierName,
+            events);
     }
 }

@@ -12,15 +12,21 @@ public class RejectReportHandler : IRequestHandler<RejectReportCommand, Unit>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IReportNotificationService _notifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<RejectReportHandler> _logger;
 
     public RejectReportHandler(
         IApplicationDbContext dbContext,
         IReportNotificationService notifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<RejectReportHandler> logger)
     {
         _dbContext = dbContext;
         _notifications = notifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -51,6 +57,11 @@ public class RejectReportHandler : IRequestHandler<RejectReportCommand, Unit>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Inspector {InspectorId} rejected report {ReportId}", request.InspectorId, report.Id);
+
+        var actor = await _userLookup.GetByIdAsync(request.InspectorId, cancellationToken);
+        await _events.LogAsync(report.Id, DumpsiteEventType.Rejected,
+            request.InspectorId, "Inspector", actor?.FullName ?? "Inspector",
+            notes: request.Reason, ct: cancellationToken);
 
         try
         {

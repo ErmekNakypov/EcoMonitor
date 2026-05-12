@@ -1,4 +1,5 @@
 using EcoMonitor.Domain.Enums;
+using EcoMonitor.Web.Models.Reports;
 
 namespace EcoMonitor.Web.Models.Admin.Reports;
 
@@ -24,4 +25,8 @@ public class AdminReportViewModel
 
     public ReportSource Source { get; set; }
     public string? TelegramUserName { get; set; }
+
+    public DateTime? CleanupFlaggedAt { get; set; }
+
+    public List<ReportEventViewModel> Events { get; set; } = new();
 }

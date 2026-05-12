@@ -1,3 +1,4 @@
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 
@@ -28,4 +29,5 @@ public sealed record ReportDetailsDto(
     DateTime? ClosedAt,
     string? CleanupCrewName,
     DateTime? CleanupCompletedAt,
-    string? VerifiedByInspectorName);
+    string? VerifiedByInspectorName,
+    IReadOnlyList<ReportEventDto> Events);

@@ -82,3 +82,30 @@ public sealed record InspectorAppealReceivedEmailModel(
     string AppealReason,
     DateTime AppealedAt,
     string ReportUrl);
+
+public sealed record InspectorReportFlaggedEmailModel(
+    string InspectorName,
+    Guid ReportId,
+    string ReportDescription,
+    string CrewName,
+    string FlagReasonDisplay,
+    string? AdditionalNotes,
+    DateTime FlaggedAt,
+    string ReportUrl);
+
+public sealed record CleanupCrewReportReturnedEmailModel(
+    string CrewName,
+    Guid ReportId,
+    string ReportDescription,
+    string InspectorName,
+    string InspectorNotes,
+    string ReportUrl);
+
+public sealed record CleanupCrewReportReassignedEmailModel(
+    string CrewName,
+    Guid ReportId,
+    string ReportDescription,
+    string InspectorName,
+    string InspectorNotes,
+    int ReassignCount,
+    string ReportUrl);

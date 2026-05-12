@@ -15,6 +15,7 @@ public interface IApplicationDbContext
     DbSet<DumpsiteInspectionPhoto> DumpsiteInspectionPhotos { get; }
     DbSet<DumpsiteCleanupPhoto> DumpsiteCleanupPhotos { get; }
     DbSet<DumpsiteAppealPhoto> DumpsiteAppealPhotos { get; }
+    DbSet<DumpsiteReportEvent> DumpsiteReportEvents { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

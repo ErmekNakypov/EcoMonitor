@@ -1,3 +1,4 @@
+using EcoMonitor.Application.Features.DumpsiteReports.Common;
 using EcoMonitor.Domain.Enums;
 using MediatR;
 
@@ -24,4 +25,6 @@ public sealed record AdminReportDto(
     DateTime CreatedAt,
     DateTime UpdatedAt,
     ReportSource Source,
-    string? TelegramUserName);
+    string? TelegramUserName,
+    IReadOnlyList<ReportEventDto> Events,
+    DateTime? CleanupFlaggedAt);

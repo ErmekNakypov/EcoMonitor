@@ -21,17 +21,20 @@ public sealed class TelegramDialogService : ITelegramDialogService
     private readonly ApplicationDbContext _db;
     private readonly IWebHostEnvironment _env;
     private readonly BotLocalizer _localizer;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<TelegramDialogService> _logger;
 
     public TelegramDialogService(
         ApplicationDbContext db,
         IWebHostEnvironment env,
         BotLocalizer localizer,
+        IReportEventLogger events,
         ILogger<TelegramDialogService> logger)
     {
         _db = db;
         _env = env;
         _localizer = localizer;
+        _events = events;
         _logger = logger;
     }
 
@@ -451,6 +454,14 @@ public sealed class TelegramDialogService : ITelegramDialogService
         ResetDraft(session);
 
         await _db.SaveChangesAsync(ct);
+
+        var actorName = !string.IsNullOrWhiteSpace(session.UserName)
+            ? "@" + session.UserName
+            : !string.IsNullOrWhiteSpace(session.FirstName)
+                ? session.FirstName!
+                : "Anonymous Telegram user";
+        await _events.LogAsync(report.Id, DumpsiteEventType.ReportSubmitted,
+            null, "Citizen", actorName, ct: ct);
 
         await bot.SendMessage(
             message.Chat.Id,

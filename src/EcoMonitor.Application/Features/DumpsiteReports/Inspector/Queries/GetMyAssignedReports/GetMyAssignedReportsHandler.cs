@@ -11,7 +11,8 @@ public class GetMyAssignedReportsHandler : IRequestHandler<GetMyAssignedReportsQ
     {
         DumpsiteStatus.InReview,
         DumpsiteStatus.AwaitingVerification,
-        DumpsiteStatus.Appealed
+        DumpsiteStatus.Appealed,
+        DumpsiteStatus.FlaggedByCleanupCrew
     };
 
     private static readonly DumpsiteStatus[] CompletedStatuses =

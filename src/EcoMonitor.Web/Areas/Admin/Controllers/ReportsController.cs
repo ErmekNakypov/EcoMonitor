@@ -3,6 +3,7 @@ using EcoMonitor.Application.Features.DumpsiteReports.Admin.GetReportForAdmin;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
 using EcoMonitor.Web.Models.Admin.Reports;
+using EcoMonitor.Web.Models.Reports;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,9 @@ public class ReportsController : Controller
             CreatedAt = dto.CreatedAt,
             UpdatedAt = dto.UpdatedAt,
             Source = dto.Source,
-            TelegramUserName = dto.TelegramUserName
+            TelegramUserName = dto.TelegramUserName,
+            CleanupFlaggedAt = dto.CleanupFlaggedAt,
+            Events = ReportEventViewModelMapper.MapStaff(dto.Events)
         };
 
         return View(model);

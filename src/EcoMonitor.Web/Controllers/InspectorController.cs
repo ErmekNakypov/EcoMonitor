@@ -1,6 +1,9 @@
 using EcoMonitor.Application.Common.Exceptions;
 using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.ConfirmReportBack;
 using EcoMonitor.Application.Features.DumpsiteReports.Commands.DismissAppeal;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.ReassignToAnotherCrew;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.RejectFlaggedReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Commands.UpholdAppeal;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.ConfirmReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.RejectCleanup;
@@ -8,6 +11,7 @@ using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.RejectR
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.ResolveReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Commands.TakeReport;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetAppealsQueue;
+using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetFlaggedReports;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetMyAssignedReports;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportForInspector;
 using EcoMonitor.Application.Features.DumpsiteReports.Inspector.Queries.GetReportQueue;
@@ -16,6 +20,7 @@ using EcoMonitor.Domain.Constants;
 using EcoMonitor.Domain.Enums;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Web.Models.Inspector;
+using EcoMonitor.Web.Models.Reports;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +67,63 @@ public class InspectorController : Controller
         ViewBag.Sort = sortBy;
         ViewBag.Source = source;
         return View(model);
+    }
+
+    [HttpGet("Flagged")]
+    public async Task<IActionResult> Flagged(string? search, string? sortBy, int page = 1)
+    {
+        var result = await _mediator.Send(new GetFlaggedReportsQuery(page, 20, search, sortBy));
+        ViewBag.Page = result.Page;
+        ViewBag.TotalPages = result.TotalPages;
+        ViewBag.TotalCount = result.TotalCount;
+        ViewBag.Search = search;
+        ViewBag.Sort = sortBy;
+        return View(result.Items);
+    }
+
+    [HttpPost("Reports/{id:guid}/RejectFlagged")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectFlagged(Guid id, string decisionNotes)
+    {
+        try
+        {
+            await _mediator.Send(new RejectFlaggedReportCommand(id, CurrentUserId(), decisionNotes ?? string.Empty));
+            TempData["SuccessMessage"] = "Report rejected. Citizen has been notified.";
+        }
+        catch (NotFoundException) { return NotFound(); }
+        catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
+        catch (ValidationException ex) { TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage)); }
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("Reports/{id:guid}/ConfirmBack")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmBack(Guid id, string decisionNotes)
+    {
+        try
+        {
+            await _mediator.Send(new ConfirmReportBackCommand(id, CurrentUserId(), decisionNotes ?? string.Empty));
+            TempData["SuccessMessage"] = "Report returned to the same cleanup crew.";
+        }
+        catch (NotFoundException) { return NotFound(); }
+        catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
+        catch (ValidationException ex) { TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage)); }
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("Reports/{id:guid}/Reassign")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Reassign(Guid id, string decisionNotes)
+    {
+        try
+        {
+            await _mediator.Send(new ReassignToAnotherCrewCommand(id, CurrentUserId(), decisionNotes ?? string.Empty));
+            TempData["SuccessMessage"] = "Report reassigned to another crew.";
+        }
+        catch (NotFoundException) { return NotFound(); }
+        catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
+        catch (ValidationException ex) { TempData["ErrorMessage"] = string.Join(' ', ex.Errors.Select(e => e.ErrorMessage)); }
+        return RedirectToAction(nameof(Details), new { id });
     }
 
     [HttpGet("Verification")]
@@ -208,7 +270,14 @@ public class InspectorController : Controller
             AppealResolutionNotes = dto.AppealResolutionNotes,
             AppealOutcome = dto.AppealOutcome,
             ClosedAt = dto.ClosedAt,
-            IsAssignedToCurrentUser = dto.AssignedInspectorId == currentId
+            IsAssignedToCurrentUser = dto.AssignedInspectorId == currentId,
+            CleanupRejectionReason = dto.CleanupRejectionReason,
+            CleanupRejectionNotes = dto.CleanupRejectionNotes,
+            CleanupFlaggedAt = dto.CleanupFlaggedAt,
+            CleanupFlaggedByCrewName = dto.CleanupFlaggedByCrewName,
+            ReassignCount = dto.ReassignCount,
+            FlagEvidencePhotos = dto.FlagEvidencePhotos,
+            Events = ReportEventViewModelMapper.MapStaff(dto.Events)
         };
 
         return View(model);

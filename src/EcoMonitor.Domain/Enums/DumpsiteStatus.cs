@@ -31,5 +31,8 @@ public enum DumpsiteStatus
     Appealed = 7,
 
     [Display(Name = "Closed")]
-    Closed = 8
+    Closed = 8,
+
+    [Display(Name = "Flagged by cleanup crew")]
+    FlaggedByCleanupCrew = 9
 }

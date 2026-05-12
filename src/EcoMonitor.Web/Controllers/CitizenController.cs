@@ -7,6 +7,7 @@ using EcoMonitor.Application.Features.DumpsiteReports.Queries.GetReportDetails;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Web.Models.Citizen;
+using EcoMonitor.Web.Models.Reports;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -181,7 +182,8 @@ public class CitizenController : Controller
             ClosedAt = details.ClosedAt,
             CleanupCrewName = details.CleanupCrewName,
             CleanupCompletedAt = details.CleanupCompletedAt,
-            VerifiedByInspectorName = details.VerifiedByInspectorName
+            VerifiedByInspectorName = details.VerifiedByInspectorName,
+            Events = ReportEventViewModelMapper.MapCitizen(details.Events)
         };
 
         return View(model);

@@ -1,0 +1,33 @@
+@model List<EcoMonitor.Web.Models.Reports.ReportEventViewModel>
+
+<div class="report-timeline">
+    @if (Model is null || Model.Count == 0)
+    {
+        <div class="text-muted small">No events recorded yet.</div>
+    }
+    else
+    {
+        <ul class="timeline-list">
+            @foreach (var evt in Model)
+            {
+                <li class="timeline-item">
+                    <div class="timeline-marker timeline-marker-@evt.MarkerClass">
+                        <i class="bi bi-@evt.IconName"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">@evt.Title</div>
+                        <div class="timeline-meta">
+                            <span class="actor">@evt.ActorDisplayName</span>
+                            <span class="separator">·</span>
+                            <span class="time">@evt.OccurredAt.ToString("dd MMM HH:mm") UTC</span>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(evt.Notes))
+                        {
+                            <div class="timeline-note">@evt.Notes</div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</div>

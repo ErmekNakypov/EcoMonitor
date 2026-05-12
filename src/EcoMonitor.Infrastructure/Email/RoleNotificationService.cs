@@ -184,6 +184,170 @@ public sealed class RoleNotificationService : IRoleNotificationService
         }
     }
 
+    public async Task NotifyInspectorsOfFlaggedReportAsync(Guid reportId, CancellationToken ct = default)
+    {
+        var report = await _db.DumpsiteReports
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == reportId, ct);
+        if (report is null)
+        {
+            _logger.LogWarning("Flagged-report notification: report {ReportId} not found", reportId);
+            return;
+        }
+
+        var crewName = "Cleanup crew";
+        if (report.CleanupFlaggedByCrewId.HasValue)
+        {
+            var crew = await _userManager.FindByIdAsync(report.CleanupFlaggedByCrewId.Value.ToString());
+            if (crew is not null) crewName = crew.FullName;
+        }
+
+        var reasonDisplay = EcoMonitor.Application.Features.DumpsiteReports.Commands.FlagCleanup
+            .FlagCleanupReasons.Display(report.CleanupRejectionReason);
+
+        var inspectors = await _userManager.GetUsersInRoleAsync(RoleNames.Inspector);
+        var preview = Truncate(report.Description, 200);
+        var url = BuildReportUrl(report.Id, area: null, controller: "Inspector");
+
+        foreach (var inspector in inspectors.Where(u => u.IsActive && !string.IsNullOrEmpty(u.Email)))
+        {
+            try
+            {
+                var model = new InspectorReportFlaggedEmailModel(
+                    inspector.FullName,
+                    report.Id,
+                    preview,
+                    crewName,
+                    reasonDisplay,
+                    report.CleanupRejectionNotes,
+                    report.CleanupFlaggedAt ?? DateTime.UtcNow,
+                    url);
+
+                var html = await _renderer.RenderAsync(
+                    TemplateRoot + "InspectorReportFlagged.cshtml", model);
+
+                await _queue.EnqueueAsync(
+                    inspector.Email!,
+                    inspector.FullName,
+                    "EcoMonitor: Cleanup crew flagged a report",
+                    html,
+                    "InspectorReportFlagged",
+                    report.Id,
+                    ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to enqueue flagged-report email for {InspectorEmail}", inspector.Email);
+            }
+        }
+    }
+
+    public async Task NotifyCleanupCrewOfReturnedReportAsync(Guid reportId, CancellationToken ct = default)
+    {
+        var report = await _db.DumpsiteReports
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == reportId, ct);
+        if (report is null || !report.CleanupCrewId.HasValue)
+        {
+            _logger.LogWarning("Returned-report notification: report {ReportId} not found or no crew", reportId);
+            return;
+        }
+
+        var member = await _userManager.FindByIdAsync(report.CleanupCrewId.Value.ToString());
+        if (member is null || !member.IsActive || string.IsNullOrEmpty(member.Email))
+        {
+            return;
+        }
+
+        var inspectorName = "Inspector";
+        if (report.AssignedInspectorId.HasValue)
+        {
+            var insp = await _userManager.FindByIdAsync(report.AssignedInspectorId.Value.ToString());
+            if (insp is not null) inspectorName = insp.FullName;
+        }
+
+        var preview = Truncate(report.Description, 200);
+        var url = BuildReportUrl(report.Id, area: "CleanupCrew", controller: "Reports");
+        var inspectorNotes = report.InspectorObservations ?? string.Empty;
+
+        try
+        {
+            var model = new CleanupCrewReportReturnedEmailModel(
+                member.FullName, report.Id, preview, inspectorName, inspectorNotes, url);
+            var html = await _renderer.RenderAsync(
+                TemplateRoot + "CleanupCrewReportReturned.cshtml", model);
+
+            await _queue.EnqueueAsync(
+                member.Email,
+                member.FullName,
+                "EcoMonitor: Inspector reviewed your flag — please re-check",
+                html,
+                "CleanupCrewReportReturned",
+                report.Id,
+                ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Failed to enqueue cleanup-returned email for {CrewEmail}", member.Email);
+        }
+    }
+
+    public async Task NotifyCleanupCrewOfReassignedReportAsync(
+        Guid reportId, Guid? excludedCrewId, CancellationToken ct = default)
+    {
+        var report = await _db.DumpsiteReports
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == reportId, ct);
+        if (report is null)
+        {
+            _logger.LogWarning("Reassigned-report notification: report {ReportId} not found", reportId);
+            return;
+        }
+
+        var inspectorName = "Inspector";
+        if (report.AssignedInspectorId.HasValue)
+        {
+            var insp = await _userManager.FindByIdAsync(report.AssignedInspectorId.Value.ToString());
+            if (insp is not null) inspectorName = insp.FullName;
+        }
+
+        var crew = await _userManager.GetUsersInRoleAsync(RoleNames.CleanupCrew);
+        var preview = Truncate(report.Description, 200);
+        var url = BuildReportUrl(report.Id, area: "CleanupCrew", controller: "Reports");
+        var inspectorNotes = report.InspectorObservations ?? string.Empty;
+
+        foreach (var member in crew.Where(u =>
+            u.IsActive && !string.IsNullOrEmpty(u.Email)
+            && (excludedCrewId is null || u.Id != excludedCrewId.Value)))
+        {
+            try
+            {
+                var model = new CleanupCrewReportReassignedEmailModel(
+                    member.FullName, report.Id, preview, inspectorName,
+                    inspectorNotes, report.ReassignCount, url);
+
+                var html = await _renderer.RenderAsync(
+                    TemplateRoot + "CleanupCrewReportReassigned.cshtml", model);
+
+                await _queue.EnqueueAsync(
+                    member.Email!,
+                    member.FullName,
+                    "EcoMonitor: Report available for pickup (previously flagged)",
+                    html,
+                    "CleanupCrewReportReassigned",
+                    report.Id,
+                    ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to enqueue cleanup-reassigned email for {CrewEmail}", member.Email);
+            }
+        }
+    }
+
     // LinkGenerator works without an HTTP request, unlike IUrlHelper.Action,
     // which requires an ActionContext + routing data. The result is a relative
     // path; we prepend the configured AppOptions.BaseUrl so the link is

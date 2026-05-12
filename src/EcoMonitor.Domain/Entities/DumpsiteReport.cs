@@ -50,4 +50,17 @@ public class DumpsiteReport : BaseEntity
     public string? AppealResolutionNotes { get; set; }
     public AppealOutcome? AppealOutcome { get; set; }
     public DateTime? ClosedAt { get; set; }
+
+    // Cleanup crew flag — fires when crew on-site finds the report is invalid
+    // (no dumpsite, wrong location, etc.). Inspector reviews and decides reject /
+    // confirm-back / reassign. Reason is a frozen enum-style string captured by
+    // the Flag UI dropdown.
+    public string? CleanupRejectionReason { get; set; }
+    public string? CleanupRejectionNotes { get; set; }
+    public DateTime? CleanupFlaggedAt { get; set; }
+    public Guid? CleanupFlaggedByCrewId { get; set; }
+    public int ReassignCount { get; set; }
+
+    // Append-only audit log — one entry per significant state change.
+    public List<DumpsiteReportEvent> Events { get; set; } = new();
 }

@@ -12,15 +12,21 @@ public class ResolveReportHandler : IRequestHandler<ResolveReportCommand, Unit>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IReportNotificationService _notifications;
+    private readonly IUserLookupService _userLookup;
+    private readonly IReportEventLogger _events;
     private readonly ILogger<ResolveReportHandler> _logger;
 
     public ResolveReportHandler(
         IApplicationDbContext dbContext,
         IReportNotificationService notifications,
+        IUserLookupService userLookup,
+        IReportEventLogger events,
         ILogger<ResolveReportHandler> logger)
     {
         _dbContext = dbContext;
         _notifications = notifications;
+        _userLookup = userLookup;
+        _events = events;
         _logger = logger;
     }
 
@@ -53,6 +59,11 @@ public class ResolveReportHandler : IRequestHandler<ResolveReportCommand, Unit>
         _logger.LogInformation(
             "Inspector {InspectorId} verified+resolved report {ReportId}",
             request.InspectorId, report.Id);
+
+        var actor = await _userLookup.GetByIdAsync(request.InspectorId, cancellationToken);
+        await _events.LogAsync(report.Id, DumpsiteEventType.MarkedResolved,
+            request.InspectorId, "Inspector", actor?.FullName ?? "Inspector",
+            notes: request.Notes, ct: cancellationToken);
 
         try
         {

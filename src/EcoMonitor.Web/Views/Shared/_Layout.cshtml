@@ -80,6 +80,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Live") ? "active" : "")" asp-area="" asp-controller="Live" asp-action="Index">
+                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link @(IsActive("Admin", "Containers") ? "active" : "")" asp-area="Admin" asp-controller="Containers" asp-action="Index">
                                     <i class="bi bi-trash3"></i><span>Containers</span>
                                 </a>
@@ -170,6 +175,11 @@
                                     <i class="bi bi-geo-alt"></i><span>Map</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
+                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                </a>
+                            </li>
                         }
                         else if (isCleanupCrew)
                         {
@@ -195,6 +205,11 @@
                                     <i class="bi bi-geo-alt"></i><span>Map</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
+                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                </a>
+                            </li>
                         }
                         else if (isCitizen)
                         {
@@ -206,6 +221,11 @@
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
                                     <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
+                                    <i class="bi bi-broadcast"></i><span>Live</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -229,6 +249,11 @@
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
                                     <i class="bi bi-geo-alt"></i><span>Map</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
+                                    <i class="bi bi-broadcast"></i><span>Live</span>
                                 </a>
                             </li>
                         }

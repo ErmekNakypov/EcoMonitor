@@ -28,6 +28,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<DumpsiteReportEvent> DumpsiteReportEvents => Set<DumpsiteReportEvent>();
     public DbSet<District> Districts => Set<District>();
     public DbSet<DistrictBoundaryPoint> DistrictBoundaryPoints => Set<DistrictBoundaryPoint>();
+    public DbSet<ContainerFillReading> ContainerFillReadings => Set<ContainerFillReading>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

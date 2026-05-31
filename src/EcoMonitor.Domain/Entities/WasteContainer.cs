@@ -15,4 +15,14 @@ public class WasteContainer : BaseEntity
     public DateTime InstalledAt { get; set; }
     public long? OsmId { get; set; }
     public bool IsImported { get; set; }
+
+    // Distance from the ultrasonic sensor (mounted on the lid) to the
+    // empty-bin floor. Required to translate raw HC-SR04 distance readings
+    // into a fill percentage. 0 means "not configured" — ingestion will
+    // reject readings until an admin sets a real height.
+    public double HeightCm { get; set; }
+
+    public double? LastFillPercent { get; set; }
+    public double? LastDistanceCm { get; set; }
+    public DateTime? LastMeasuredAt { get; set; }
 }

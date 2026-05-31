@@ -11,11 +11,16 @@ namespace EcoMonitor.Application.Features.Sensors.IngestSensorReading;
 public class IngestSensorReadingHandler : IRequestHandler<IngestSensorReadingCommand, IngestSensorReadingResult>
 {
     private readonly IApplicationDbContext _db;
+    private readonly ISensorRealtimePublisher _realtime;
     private readonly ILogger<IngestSensorReadingHandler> _logger;
 
-    public IngestSensorReadingHandler(IApplicationDbContext db, ILogger<IngestSensorReadingHandler> logger)
+    public IngestSensorReadingHandler(
+        IApplicationDbContext db,
+        ISensorRealtimePublisher realtime,
+        ILogger<IngestSensorReadingHandler> logger)
     {
         _db = db;
+        _realtime = realtime;
         _logger = logger;
     }
 
@@ -35,9 +40,7 @@ public class IngestSensorReadingHandler : IRequestHandler<IngestSensorReadingCom
             return new IngestSensorReadingResult(false, null, validation);
         }
 
-        var measuredAtUtc = request.Reading.MeasuredAt.Kind == DateTimeKind.Utc
-            ? request.Reading.MeasuredAt
-            : request.Reading.MeasuredAt.ToUniversalTime();
+        var measuredAtUtc = ResolveMeasuredAtUtc(request.Reading.MeasuredAt);
 
         var station = await _db.AirQualityStations
             .FirstOrDefaultAsync(
@@ -101,7 +104,31 @@ public class IngestSensorReadingHandler : IRequestHandler<IngestSensorReadingCom
             "Sensor reading {ReadingId} ingested from device {DeviceId} (station {StationId})",
             reading.Id, device.DeviceId, station.Id);
 
+        await _realtime.PublishAirReadingAsync(
+            station.Id,
+            measuredAtUtc,
+            reading.Pm25,
+            reading.Pm10,
+            reading.Temperature,
+            reading.Humidity,
+            reading.AqiUs,
+            cancellationToken);
+
         return new IngestSensorReadingResult(true, reading.Id, null);
+    }
+
+    // Firmware can submit a default/uninitialised timestamp (DateTime.MinValue or a
+    // pre-2000 epoch when its RTC hasn't synced yet). Treat those as "missing" and
+    // stamp UtcNow rather than letting -infinity / Year 1970 rows poison the chart.
+    private static DateTime ResolveMeasuredAtUtc(DateTime measuredAt)
+    {
+        if (measuredAt == default || measuredAt.Year < 2000)
+        {
+            return DateTime.UtcNow;
+        }
+        return measuredAt.Kind == DateTimeKind.Utc
+            ? measuredAt
+            : measuredAt.ToUniversalTime();
     }
 
     private static string? Validate(SensorReadingDto r)

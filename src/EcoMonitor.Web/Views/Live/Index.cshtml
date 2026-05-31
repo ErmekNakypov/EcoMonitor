@@ -1,0 +1,616 @@
+@model LiveDashboardViewModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Live sensors";
+    var airId = Model.AirStationId.ToString();
+    var containerId = Model.ContainerId.ToString();
+}
+
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
+            <div>
+                <h1 class="h3 fw-700 mb-1">Live sensors</h1>
+                <p class="text-muted mb-0 small">Real-time readings from our IoT devices. Updates are pushed by the server as soon as a sensor reports.</p>
+            </div>
+            <div class="text-md-end small text-muted">
+                <span id="live-clock">—</span>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- AIR CARD -->
+            <div class="col-lg-6">
+                <div id="air-card" class="auth-card live-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="text-muted text-uppercase small fw-600">Air quality</div>
+                            <h2 class="h5 fw-700 mb-0 d-flex align-items-center gap-2">
+                                <span>@Model.AirDeviceName</span>
+                                <span id="air-band-badge" class="live-band-badge live-band-badge--idle">awaiting data</span>
+                            </h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 small">
+                            <span id="air-status-dot" class="live-dot live-dot--idle" aria-hidden="true"></span>
+                            <span id="air-status-label" class="text-muted">connecting…</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6 col-md-3">
+                            <div id="air-pm25-tile" class="live-tile live-tile--banded">
+                                <div class="live-tile__label">PM2.5</div>
+                                <div class="live-tile__value" id="air-pm25">—</div>
+                                <div class="live-tile__unit">µg/m³</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div id="air-pm10-tile" class="live-tile live-tile--banded">
+                                <div class="live-tile__label">PM10</div>
+                                <div class="live-tile__value" id="air-pm10">—</div>
+                                <div class="live-tile__unit">µg/m³</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="live-tile">
+                                <div class="live-tile__label">Temp</div>
+                                <div class="live-tile__value" id="air-temp">—</div>
+                                <div class="live-tile__unit">°C</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="live-tile">
+                                <div class="live-tile__label">Humidity</div>
+                                <div class="live-tile__value" id="air-humidity">—</div>
+                                <div class="live-tile__unit">%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="small text-muted mb-2">Last 60 minutes</div>
+                    <canvas id="air-chart" height="140"></canvas>
+                    <div class="small text-muted mt-2">
+                        Last updated: <span id="air-last-updated">no data yet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILL CARD -->
+            <div class="col-lg-6">
+                <div id="fill-card" class="auth-card live-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="text-muted text-uppercase small fw-600">Container fill level</div>
+                            <h2 class="h5 fw-700 mb-0 d-flex align-items-center gap-2">
+                                <span>@Model.ContainerCode</span>
+                                <span id="fill-band-badge" class="live-band-badge live-band-badge--idle">awaiting data</span>
+                            </h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 small">
+                            <span id="fill-status-dot" class="live-dot live-dot--idle" aria-hidden="true"></span>
+                            <span id="fill-status-label" class="text-muted">connecting…</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3 align-items-center">
+                        <div class="col-md-5">
+                            <div class="live-gauge-wrap">
+                                <canvas id="fill-gauge"></canvas>
+                                <div class="live-gauge-center">
+                                    <div class="live-gauge-value" id="fill-pct">—</div>
+                                    <div class="live-gauge-unit">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="live-tile mb-2">
+                                <div class="live-tile__label">Distance to trash</div>
+                                <div class="live-tile__value" id="fill-distance">—</div>
+                                <div class="live-tile__unit">cm</div>
+                            </div>
+                            <div class="live-tile">
+                                <div class="live-tile__label">Bin height</div>
+                                <div class="live-tile__value" id="fill-height">—</div>
+                                <div class="live-tile__unit">cm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="small text-muted mb-2">Last 60 minutes</div>
+                    <canvas id="fill-chart" height="140"></canvas>
+                    <div class="small text-muted mt-2">
+                        Last updated: <span id="fill-last-updated">no data yet</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="live-legend small text-muted">
+                    <strong class="text-dark">Bands.</strong>
+                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--good"></span> good</span>
+                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--moderate"></span> moderate / nearly full</span>
+                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--hazardous"></span> hazardous / full</span>
+                    <span class="live-legend__source">Air thresholds based on <a href="https://www.who.int/publications/i/item/9789240034228" target="_blank" rel="noopener">WHO Air Quality Guidelines 2021</a> (PM2.5 ≤ 15 / ≤ 35 µg/m³ · PM10 ≤ 45 / ≤ 75 µg/m³, 24-hour mean reference). Container thresholds are operational (≥ 70 % nearly full, ≥ 90 % full).</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<style>
+    .live-tile { background:#F1F5F2; border-radius:10px; padding:.6rem .8rem; }
+    .live-tile__label { font-size:.7rem; text-transform:uppercase; letter-spacing:.04em; color:#6B7280; font-weight:600; }
+    .live-tile__value { font-size:1.6rem; font-weight:800; color:#1F2937; line-height:1.1; }
+    .live-tile__unit { font-size:.75rem; color:#6B7280; }
+    .live-dot { display:inline-block; width:10px; height:10px; border-radius:50%; }
+    .live-dot--idle { background:#9CA3AF; }
+    .live-dot--live { background:#10B981; box-shadow:0 0 0 0 rgba(16,185,129,.6); animation: live-pulse 1.6s infinite; }
+    .live-dot--poll { background:#F59E0B; }
+    .live-dot--down { background:#EF4444; }
+    @@keyframes live-pulse {
+        0% { box-shadow:0 0 0 0 rgba(16,185,129,.6); }
+        70% { box-shadow:0 0 0 10px rgba(16,185,129,0); }
+        100% { box-shadow:0 0 0 0 rgba(16,185,129,0); }
+    }
+    .live-gauge-wrap { position:relative; max-width:240px; margin:0 auto; }
+    .live-gauge-center { position:absolute; left:0; right:0; bottom:0; text-align:center; padding-bottom:.3rem; }
+    .live-gauge-value { font-size:2.4rem; font-weight:800; color:#2D6A4F; line-height:1; transition: color .35s ease; }
+    .live-gauge-unit { font-size:.85rem; color:#6B7280; }
+
+    /* ---- threshold bands (display-only) ---- */
+    /* Subtle tint + thicker left border so colour stays readable on a white card.
+       Band classes are toggled by JS; transitions keep band changes calm. */
+    .live-card { border-left: 4px solid #E5E7EB; transition: border-left-color .35s ease, background-color .35s ease; }
+    .live-card--good      { border-left-color:#2D6A4F; background-color: rgba(45,106,79,0.04); }
+    .live-card--moderate  { border-left-color:#B8860B; background-color: rgba(184,134,11,0.05); }
+    .live-card--hazardous { border-left-color:#B02A37; background-color: rgba(176,42,55,0.05); }
+
+    .live-tile--banded { border-left: 3px solid transparent; transition: border-left-color .35s ease, color .35s ease; }
+    .live-tile--banded.live-tile--good      { border-left-color:#2D6A4F; }
+    .live-tile--banded.live-tile--good      .live-tile__value { color:#1B4332; }
+    .live-tile--banded.live-tile--moderate  { border-left-color:#B8860B; }
+    .live-tile--banded.live-tile--moderate  .live-tile__value { color:#7A5A0A; }
+    .live-tile--banded.live-tile--hazardous { border-left-color:#B02A37; }
+    .live-tile--banded.live-tile--hazardous .live-tile__value { color:#7A1C25; }
+
+    .live-band-badge {
+        display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.02em;
+        padding:.2rem .55rem; border-radius:999px; line-height:1; text-transform:uppercase;
+        transition: background-color .35s ease, color .35s ease;
+    }
+    .live-band-badge--idle      { background:#E5E7EB; color:#6B7280; }
+    .live-band-badge--good      { background:rgba(45,106,79,0.14);  color:#1B4332; }
+    .live-band-badge--moderate  { background:rgba(184,134,11,0.18); color:#7A5A0A; }
+    .live-band-badge--hazardous { background:rgba(176,42,55,0.16);  color:#7A1C25; }
+
+    .live-gauge-value.live-gauge-value--good      { color:#2D6A4F; }
+    .live-gauge-value.live-gauge-value--moderate  { color:#B8860B; }
+    .live-gauge-value.live-gauge-value--hazardous { color:#B02A37; }
+
+    .live-legend { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem 1.25rem; padding:.6rem .8rem; background:#F8FAFC; border-radius:10px; }
+    .live-legend__item { display:inline-flex; align-items:center; gap:.4rem; }
+    .live-legend__swatch { display:inline-block; width:14px; height:14px; border-radius:4px; }
+    .live-legend__swatch--good      { background:#2D6A4F; }
+    .live-legend__swatch--moderate  { background:#B8860B; }
+    .live-legend__swatch--hazardous { background:#B02A37; }
+    .live-legend__source { flex-basis:100%; font-size:.78rem; color:#6B7280; }
+</style>
+
+<!-- Both scripts are deferred so they execute AFTER the head's `<script defer src="chart.js">` -->
+<!-- has loaded, in document order, but BEFORE DOMContentLoaded fires. Without defer the         -->
+<!-- adapter ran before Chart.js was defined and silently failed to install, which then           -->
+<!-- broke time-scale chart creation downstream.                                                  -->
+<script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@@8.0.7/dist/browser/signalr.min.js"></script>
+<script>
+(function () {
+    const AIR_STATION_ID = '@airId';
+    const CONTAINER_ID  = '@containerId';
+    const WINDOW_MINUTES = 60;
+    const WINDOW_MS = WINDOW_MINUTES * 60 * 1000;
+    const FALLBACK_DELAY_MS = 5000;
+    const POLL_INTERVAL_MS = 5000;
+    const ACCENT = '#2D6A4F';
+    const ACCENT_LIGHT = 'rgba(45,106,79,0.12)';
+    const ACCENT_PM10 = '#74C69D';
+
+    // ---------- threshold bands (single source of truth — edit here to retune) ----------
+    // Air thresholds follow the WHO Global Air Quality Guidelines 2021 (24-hour mean
+    // reference levels) as an indicative banding:
+    //   PM2.5 — 15 µg/m³ is the WHO 2021 AQG 24-hour guideline, 35 µg/m³ is Interim Target 1.
+    //   PM10  — 45 µg/m³ is the WHO 2021 AQG 24-hour guideline, 75 µg/m³ is the Interim Target.
+    // Container fill thresholds are operational (not WHO):
+    //   < 70 ok, 70-89 nearly full (schedule pickup), >= 90 full (needs pickup).
+    // To force amber/red during a demo with low ambient sensor readings, lower the
+    // PM2.5_MODERATE / PM2.5_HAZARDOUS numbers temporarily.
+    const THRESHOLDS = {
+        PM25_MODERATE:  15,  // µg/m³  — > this and <= HAZARDOUS → amber
+        PM25_HAZARDOUS: 35,  // µg/m³  — > this → red
+        PM10_MODERATE:  45,
+        PM10_HAZARDOUS: 75,
+        FILL_NEARLY:    70,  // %      — >= this and < FULL → amber
+        FILL_FULL:      90   // %      — >= this → red
+    };
+    const BAND = { GOOD: 'good', MODERATE: 'moderate', HAZARDOUS: 'hazardous' };
+    const BAND_RANK = { good: 0, moderate: 1, hazardous: 2 };
+    const BAND_LABEL_AIR  = { good: 'Good air',  moderate: 'Moderate',                   hazardous: 'Hazardous' };
+    const BAND_LABEL_FILL = { good: 'OK',        moderate: 'Nearly full — schedule pickup', hazardous: 'Full — needs pickup' };
+    const BAND_COLOR_GAUGE = { good: '#2D6A4F', moderate: '#B8860B', hazardous: '#B02A37' };
+
+    function bandFor(value, moderate, hazardous) {
+        if (value === null || value === undefined || isNaN(value)) return null;
+        if (value > hazardous) return BAND.HAZARDOUS;
+        if (value > moderate)  return BAND.MODERATE;
+        return BAND.GOOD;
+    }
+    function worseBand(a, b) {
+        if (!a) return b;
+        if (!b) return a;
+        return BAND_RANK[a] >= BAND_RANK[b] ? a : b;
+    }
+    function applyBandClasses(el, band, prefix) {
+        if (!el) return;
+        el.classList.remove(prefix + 'good', prefix + 'moderate', prefix + 'hazardous', prefix + 'idle');
+        el.classList.add(prefix + (band ?? 'idle'));
+    }
+
+    // ---------- helpers ----------
+    function fmtNum(v, digits) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
+        return Number(v).toFixed(digits ?? 1);
+    }
+    function fmtTime(d) {
+        if (!d) return 'no data yet';
+        const t = (d instanceof Date) ? d : new Date(d);
+        if (isNaN(t.getTime())) return 'no data yet';
+        return t.toLocaleTimeString();
+    }
+    function trimByTime(arr) {
+        const cutoff = Date.now() - WINDOW_MS;
+        while (arr.length && arr[0].t.getTime() < cutoff) arr.shift();
+    }
+    function tickClock() {
+        document.getElementById('live-clock').textContent = 'Browser time: ' + new Date().toLocaleTimeString();
+    }
+    setInterval(tickClock, 1000);
+    tickClock();
+
+    // ---------- charts ----------
+    const airSeries = { pm25: [], pm10: [] };
+    const fillSeries = { pct: [] };
+
+    let airChart = null;
+    let fillChart = null;
+    let fillGauge = null;
+
+    function makeLineChart(canvasId, datasets) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        return new Chart(ctx, {
+            type: 'line',
+            data: { datasets },
+            options: {
+                responsive: true,
+                animation: false,
+                parsing: false,
+                interaction: { mode: 'nearest', intersect: false },
+                plugins: { legend: { display: datasets.length > 1, position: 'bottom', labels: { boxWidth: 10 } } },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { unit: 'minute', tooltipFormat: 'HH:mm:ss', displayFormats: { minute: 'HH:mm' } },
+                        ticks: { autoSkip: true, maxTicksLimit: 8 }
+                    },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    function ensureCharts() {
+        // Each chart is built independently so that one failure (e.g. a missing date
+        // adapter killing a time-scale chart) cannot prevent the others — or, more
+        // importantly, the SignalR connection — from coming up.
+        if (!airChart) {
+            try {
+                airChart = makeLineChart('air-chart', [
+                    { label: 'PM2.5 µg/m³', data: [], parsing: false, borderColor: ACCENT,        backgroundColor: ACCENT_LIGHT, tension: 0.25, pointRadius: 2, fill: true },
+                    { label: 'PM10 µg/m³',  data: [], parsing: false, borderColor: ACCENT_PM10,   backgroundColor: 'transparent', tension: 0.25, pointRadius: 2, fill: false, borderDash: [4,4] }
+                ]);
+            } catch (e) { console.error('air chart init failed', e); airChart = null; }
+        }
+        if (!fillChart) {
+            try {
+                fillChart = makeLineChart('fill-chart', [
+                    { label: 'Fill %', data: [], parsing: false, borderColor: ACCENT, backgroundColor: ACCENT_LIGHT, tension: 0.25, pointRadius: 2, fill: true }
+                ]);
+                fillChart.options.scales.y.max = 100;
+            } catch (e) { console.error('fill chart init failed', e); fillChart = null; }
+        }
+        if (!fillGauge) {
+            try {
+                const ctx = document.getElementById('fill-gauge').getContext('2d');
+                fillGauge = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Filled', 'Empty'],
+                        datasets: [{
+                            data: [0, 100],
+                            backgroundColor: [ACCENT, '#E5E7EB'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '72%',
+                        rotation: -90,
+                        circumference: 180,
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        animation: { duration: 400 }
+                    }
+                });
+            } catch (e) { console.error('fill gauge init failed', e); fillGauge = null; }
+        }
+    }
+
+    function pushAirPoint(p) {
+        const t = new Date(p.measuredAt);
+        if (isNaN(t.getTime())) return;
+        airSeries.pm25.push({ t, x: t, y: p.pm25 ?? null });
+        airSeries.pm10.push({ t, x: t, y: p.pm10 ?? null });
+        trimByTime(airSeries.pm25);
+        trimByTime(airSeries.pm10);
+        if (airChart) {
+            airChart.data.datasets[0].data = airSeries.pm25.map(d => ({ x: d.x, y: d.y }));
+            airChart.data.datasets[1].data = airSeries.pm10.map(d => ({ x: d.x, y: d.y }));
+            airChart.update('none');
+        }
+
+        document.getElementById('air-pm25').textContent     = fmtNum(p.pm25, 1);
+        document.getElementById('air-pm10').textContent     = fmtNum(p.pm10, 1);
+        document.getElementById('air-temp').textContent     = fmtNum(p.temperature, 1);
+        document.getElementById('air-humidity').textContent = fmtNum(p.humidity, 0);
+        document.getElementById('air-last-updated').textContent = fmtTime(t);
+
+        // ---- band coloring ----
+        const pm25Band = bandFor(p.pm25, THRESHOLDS.PM25_MODERATE, THRESHOLDS.PM25_HAZARDOUS);
+        const pm10Band = bandFor(p.pm10, THRESHOLDS.PM10_MODERATE, THRESHOLDS.PM10_HAZARDOUS);
+        const cardBand = worseBand(pm25Band, pm10Band);
+        applyBandClasses(document.getElementById('air-pm25-tile'), pm25Band, 'live-tile--');
+        applyBandClasses(document.getElementById('air-pm10-tile'), pm10Band, 'live-tile--');
+        applyBandClasses(document.getElementById('air-card'),      cardBand, 'live-card--');
+        const badge = document.getElementById('air-band-badge');
+        applyBandClasses(badge, cardBand, 'live-band-badge--');
+        if (badge) badge.textContent = cardBand ? BAND_LABEL_AIR[cardBand] : 'awaiting data';
+    }
+
+    function pushFillPoint(p) {
+        const t = new Date(p.measuredAt);
+        if (isNaN(t.getTime())) return;
+        fillSeries.pct.push({ t, x: t, y: p.fillPercent });
+        trimByTime(fillSeries.pct);
+        if (fillChart) {
+            fillChart.data.datasets[0].data = fillSeries.pct.map(d => ({ x: d.x, y: d.y }));
+            fillChart.update('none');
+        }
+
+        const pct = Math.max(0, Math.min(100, p.fillPercent ?? 0));
+        const fillBand = bandFor(pct, THRESHOLDS.FILL_NEARLY - 0.0001, THRESHOLDS.FILL_FULL - 0.0001);
+        // bandFor uses ">", but the spec is ">=" for fill thresholds; tiny epsilon
+        // shifts the boundary so e.g. exactly 70 % is still "nearly full" not "ok".
+
+        if (fillGauge) {
+            fillGauge.data.datasets[0].backgroundColor = [BAND_COLOR_GAUGE[fillBand ?? 'good'], '#E5E7EB'];
+            fillGauge.data.datasets[0].data = [pct, 100 - pct];
+            fillGauge.update('none');
+        }
+        const pctEl = document.getElementById('fill-pct');
+        pctEl.textContent = fmtNum(pct, 0);
+        applyBandClasses(pctEl, fillBand, 'live-gauge-value--');
+        applyBandClasses(document.getElementById('fill-card'), fillBand, 'live-card--');
+        const badge = document.getElementById('fill-band-badge');
+        applyBandClasses(badge, fillBand, 'live-band-badge--');
+        if (badge) badge.textContent = fillBand ? BAND_LABEL_FILL[fillBand] : 'awaiting data';
+
+        document.getElementById('fill-distance').textContent = fmtNum(p.distanceCm, 1);
+        document.getElementById('fill-last-updated').textContent = fmtTime(t);
+    }
+
+    // ---------- initial seed via REST ----------
+    async function seed() {
+        ensureCharts();
+        try {
+            const r = await fetch(`/api/sensors/air/${AIR_STATION_ID}/recent?minutes=${WINDOW_MINUTES}`);
+            if (r.ok) {
+                const points = await r.json();
+                points.forEach(pushAirPoint);
+            }
+        } catch (e) { console.warn('air seed failed', e); }
+
+        try {
+            const r = await fetch(`/api/sensors/containers/${CONTAINER_ID}/latest`);
+            if (r.ok) {
+                const snap = await r.json();
+                document.getElementById('fill-height').textContent = fmtNum(snap.heightCm, 0);
+                if (snap.lastFillPercent !== null && snap.lastFillPercent !== undefined) {
+                    pushFillPoint({
+                        measuredAt: snap.lastMeasuredAt,
+                        distanceCm: snap.lastDistanceCm ?? 0,
+                        fillPercent: snap.lastFillPercent
+                    });
+                }
+            }
+        } catch (e) { console.warn('container latest failed', e); }
+
+        try {
+            const r = await fetch(`/api/sensors/containers/${CONTAINER_ID}/recent?minutes=${WINDOW_MINUTES}`);
+            if (r.ok) {
+                const points = await r.json();
+                // replace seeded last-point with full history (ordered)
+                fillSeries.pct.length = 0;
+                fillChart.data.datasets[0].data = [];
+                points.forEach(p => pushFillPoint({
+                    measuredAt: p.measuredAt,
+                    distanceCm: p.distanceCm,
+                    fillPercent: p.fillPercent
+                }));
+            }
+        } catch (e) { console.warn('fill recent failed', e); }
+    }
+
+    // ---------- SignalR + polling fallback ----------
+    const status = {
+        air:  setStatus.bind(null, 'air-status-dot',  'air-status-label'),
+        fill: setStatus.bind(null, 'fill-status-dot', 'fill-status-label')
+    };
+
+    function setStatus(dotId, labelId, mode, label) {
+        const dot = document.getElementById(dotId);
+        const lbl = document.getElementById(labelId);
+        dot.className = 'live-dot live-dot--' + mode;
+        lbl.textContent = label;
+    }
+
+    let signalrConnected = false;
+    let pollingActive = false;
+    let airPollTimer = null;
+    let fillPollTimer = null;
+    let lastAirSeenTs = 0;
+    let lastFillSeenTs = 0;
+
+    function stopPolling() {
+        pollingActive = false;
+        if (airPollTimer)  { clearInterval(airPollTimer);  airPollTimer  = null; }
+        if (fillPollTimer) { clearInterval(fillPollTimer); fillPollTimer = null; }
+    }
+
+    function startPolling(reason) {
+        if (pollingActive) return;
+        pollingActive = true;
+        status.air ('poll', 'polling (' + reason + ')');
+        status.fill('poll', 'polling (' + reason + ')');
+
+        airPollTimer = setInterval(async () => {
+            try {
+                const r = await fetch(`/api/sensors/air/${AIR_STATION_ID}/recent?minutes=2`);
+                if (!r.ok) return;
+                const points = await r.json();
+                for (const p of points) {
+                    const ts = new Date(p.measuredAt).getTime();
+                    if (ts > lastAirSeenTs) { lastAirSeenTs = ts; pushAirPoint(p); }
+                }
+            } catch (e) { /* swallow */ }
+        }, POLL_INTERVAL_MS);
+
+        fillPollTimer = setInterval(async () => {
+            try {
+                const r = await fetch(`/api/sensors/containers/${CONTAINER_ID}/recent?minutes=2`);
+                if (!r.ok) return;
+                const points = await r.json();
+                for (const p of points) {
+                    const ts = new Date(p.measuredAt).getTime();
+                    if (ts > lastFillSeenTs) { lastFillSeenTs = ts; pushFillPoint(p); }
+                }
+            } catch (e) { /* swallow */ }
+        }, POLL_INTERVAL_MS);
+    }
+
+    async function connectSignalR() {
+        if (typeof signalR === 'undefined') {
+            console.warn('SignalR client lib not loaded');
+            startPolling('no SignalR');
+            return;
+        }
+        const conn = new signalR.HubConnectionBuilder()
+            .withUrl('/hubs/sensors')
+            .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
+            .configureLogging(signalR.LogLevel.Warning)
+            .build();
+
+        conn.on('airReading', (data) => {
+            if (!data || data.stationId !== AIR_STATION_ID) return;
+            const ts = new Date(data.measuredAt).getTime();
+            if (ts <= lastAirSeenTs) return;
+            lastAirSeenTs = ts;
+            pushAirPoint(data);
+        });
+        conn.on('fillReading', (data) => {
+            if (!data || data.containerId !== CONTAINER_ID) return;
+            const ts = new Date(data.measuredAt).getTime();
+            if (ts <= lastFillSeenTs) return;
+            lastFillSeenTs = ts;
+            pushFillPoint(data);
+        });
+
+        conn.onreconnecting(() => {
+            signalrConnected = false;
+            status.air ('poll', 'reconnecting…');
+            status.fill('poll', 'reconnecting…');
+            startPolling('signalR reconnecting');
+        });
+        conn.onreconnected(() => {
+            signalrConnected = true;
+            stopPolling();
+            status.air ('live', 'live');
+            status.fill('live', 'live');
+        });
+        conn.onclose(() => {
+            signalrConnected = false;
+            startPolling('signalR closed');
+            status.air ('down', 'disconnected — polling');
+            status.fill('down', 'disconnected — polling');
+        });
+
+        // Watchdog: if SignalR hasn't connected within FALLBACK_DELAY_MS, start polling anyway.
+        const watchdog = setTimeout(() => {
+            if (!signalrConnected) startPolling('signalR slow');
+        }, FALLBACK_DELAY_MS);
+
+        try {
+            await conn.start();
+            signalrConnected = true;
+            clearTimeout(watchdog);
+            stopPolling();
+            status.air ('live', 'live');
+            status.fill('live', 'live');
+        } catch (err) {
+            console.warn('SignalR start failed', err);
+            startPolling('signalR failed');
+        }
+    }
+
+    // ---------- go ----------
+    document.addEventListener('DOMContentLoaded', async () => {
+        // All defer-loaded scripts (Chart.js in head, date-fns adapter + SignalR in body)
+        // have already executed by the time DOMContentLoaded fires, so the polling loop
+        // below is just defence-in-depth.
+        let tries = 0;
+        while (typeof Chart === 'undefined' && tries++ < 30) {
+            await new Promise(r => setTimeout(r, 100));
+        }
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js failed to load — tiles will still update via SignalR');
+        }
+
+        try {
+            await seed();
+        } catch (e) {
+            console.error('seed() failed; continuing to SignalR anyway', e);
+        }
+
+        if (airSeries.pm25.length)  lastAirSeenTs  = airSeries.pm25[airSeries.pm25.length-1].t.getTime();
+        if (fillSeries.pct.length)  lastFillSeenTs = fillSeries.pct[fillSeries.pct.length-1].t.getTime();
+
+        // SignalR must come up regardless of chart / seed errors.
+        try {
+            await connectSignalR();
+        } catch (e) {
+            console.error('connectSignalR threw', e);
+            startPolling('signalR threw');
+        }
+    });
+})();
+</script>
+}

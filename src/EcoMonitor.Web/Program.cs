@@ -1,8 +1,10 @@
 using System.Globalization;
 using System.Text;
 using EcoMonitor.Application;
+using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Infrastructure;
 using EcoMonitor.Infrastructure.Persistence;
+using EcoMonitor.Web.Hubs;
 using EcoMonitor.Web.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
@@ -52,6 +54,9 @@ try
 
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+
+    builder.Services.AddSignalR();
+    builder.Services.AddSingleton<ISensorRealtimePublisher, SignalRSensorRealtimePublisher>();
 
     // JWT bearer is added as a *named* scheme alongside the existing Identity cookie
     // scheme. The default authenticate/challenge scheme stays the cookie scheme set
@@ -121,6 +126,8 @@ try
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
         .WithStaticAssets();
+
+    app.MapHub<SensorHub>("/hubs/sensors");
 
     using (var scope = app.Services.CreateScope())
     {

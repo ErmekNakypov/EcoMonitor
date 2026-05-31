@@ -15,5 +15,12 @@ public class IotDeviceConfiguration : IEntityTypeConfiguration<IotDevice>
 
         builder.HasIndex(d => d.DeviceId).IsUnique();
         builder.HasIndex(d => d.Status);
+
+        builder.HasOne<WasteContainer>()
+            .WithMany()
+            .HasForeignKey(d => d.ContainerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasIndex(d => d.ContainerId);
     }
 }

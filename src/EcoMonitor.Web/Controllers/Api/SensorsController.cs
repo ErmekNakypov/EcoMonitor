@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using EcoMonitor.Application.Features.Sensors.IngestContainerFillReading;
 using EcoMonitor.Application.Features.Sensors.IngestSensorReading;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,5 +37,26 @@ public class SensorsController : ControllerBase
         }
 
         return Ok(new { accepted = true, readingId = result.ReadingId });
+    }
+
+    [HttpPost("fill-readings")]
+    [Authorize(Policy = "DeviceOnly")]
+    public async Task<IActionResult> PostFillReading(
+        [FromBody] ContainerFillReadingDto dto,
+        CancellationToken ct)
+    {
+        var deviceGuidStr = User.FindFirstValue("deviceGuid");
+        if (!Guid.TryParse(deviceGuidStr, out var deviceGuid))
+        {
+            return Unauthorized(new { error = "Invalid token: missing deviceGuid claim" });
+        }
+
+        var result = await _mediator.Send(new IngestContainerFillReadingCommand(deviceGuid, dto), ct);
+        if (!result.Success)
+        {
+            return BadRequest(new { error = result.Error });
+        }
+
+        return Ok(new { accepted = true, readingId = result.ReadingId, fillPercent = result.FillPercent });
     }
 }

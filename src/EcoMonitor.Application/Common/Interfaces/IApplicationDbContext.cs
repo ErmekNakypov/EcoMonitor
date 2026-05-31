@@ -18,6 +18,7 @@ public interface IApplicationDbContext
     DbSet<DumpsiteReportEvent> DumpsiteReportEvents { get; }
     DbSet<District> Districts { get; }
     DbSet<DistrictBoundaryPoint> DistrictBoundaryPoints { get; }
+    DbSet<ContainerFillReading> ContainerFillReadings { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

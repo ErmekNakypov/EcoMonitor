@@ -25,10 +25,20 @@ public class SubmitDumpsiteReportCommandValidator : AbstractValidator<SubmitDump
         RuleFor(c => c.Longitude)
             .InclusiveBetween(-180.0, 180.0);
 
+        // Photos may be supplied either inline (Web) or as paths to files already
+        // on disk (Telegram bot — see PreSavedPhotoPaths). Require at least one
+        // of the two and cap the inline list at 5.
         RuleFor(c => c.Photos)
-            .NotNull()
-            .Must(p => p.Count <= 5)
+            .NotNull();
+
+        RuleFor(c => c.Photos.Count)
+            .LessThanOrEqualTo(5)
             .WithMessage("You can attach at most 5 photos.");
+
+        RuleFor(c => c)
+            .Must(c => (c.Photos != null && c.Photos.Count > 0)
+                    || (c.PreSavedPhotoPaths != null && c.PreSavedPhotoPaths.Count > 0))
+            .WithMessage("At least one photo is required.");
 
         RuleForEach(c => c.Photos).ChildRules(photo =>
         {

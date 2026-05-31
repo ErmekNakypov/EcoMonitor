@@ -1,8 +1,11 @@
 using System.Globalization;
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Application.Common.Models;
+using EcoMonitor.Application.Features.DumpsiteReports.Commands.SubmitDumpsiteReport;
 using EcoMonitor.Domain.Entities;
 using EcoMonitor.Domain.Enums;
 using EcoMonitor.Infrastructure.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,6 +25,7 @@ public sealed class TelegramDialogService : ITelegramDialogService
     private readonly IWebHostEnvironment _env;
     private readonly BotLocalizer _localizer;
     private readonly IReportEventLogger _events;
+    private readonly IMediator _mediator;
     private readonly ILogger<TelegramDialogService> _logger;
 
     public TelegramDialogService(
@@ -29,12 +33,14 @@ public sealed class TelegramDialogService : ITelegramDialogService
         IWebHostEnvironment env,
         BotLocalizer localizer,
         IReportEventLogger events,
+        IMediator mediator,
         ILogger<TelegramDialogService> logger)
     {
         _db = db;
         _env = env;
         _localizer = localizer;
         _events = events;
+        _mediator = mediator;
         _logger = logger;
     }
 
@@ -437,40 +443,35 @@ public sealed class TelegramDialogService : ITelegramDialogService
             return;
         }
 
-        var report = new DumpsiteReport
-        {
-            ReporterId = null,
-            Description = session.DraftDescription!,
-            Latitude = session.DraftLatitude!.Value,
-            Longitude = session.DraftLongitude!.Value,
-            Status = DumpsiteStatus.New,
-            PhotoPaths = savedPaths,
-            Source = ReportSource.Telegram,
-            TelegramUserId = session.TelegramUserId,
-            TelegramUserName = session.UserName ?? session.FirstName
-        };
-        _db.DumpsiteReports.Add(report);
-
+        // Route through the same MediatR command the web uses so Telegram
+        // reports get auto-triage, district resolution, district-inspector
+        // assignment, role notifications, and the ReportSubmitted +
+        // AutoTriaged/SentToReview timeline events for free. Photos were
+        // downloaded above and live under wwwroot/uploads/dumpsites/ — hand
+        // the paths to the handler via PreSavedPhotoPaths so it skips its
+        // own save loop.
         ResetDraft(session);
-
         await _db.SaveChangesAsync(ct);
 
-        var actorName = !string.IsNullOrWhiteSpace(session.UserName)
-            ? "@" + session.UserName
-            : !string.IsNullOrWhiteSpace(session.FirstName)
-                ? session.FirstName!
-                : "Anonymous Telegram user";
-        await _events.LogAsync(report.Id, DumpsiteEventType.ReportSubmitted,
-            null, "Citizen", actorName, ct: ct);
+        var reportId = await _mediator.Send(new SubmitDumpsiteReportCommand(
+            ReporterId: null,
+            Description: session.DraftDescription!,
+            Latitude: session.DraftLatitude!.Value,
+            Longitude: session.DraftLongitude!.Value,
+            Photos: Array.Empty<UploadedPhotoDto>(),
+            Source: ReportSource.Telegram,
+            TelegramUserId: session.TelegramUserId,
+            TelegramUserName: session.UserName ?? session.FirstName,
+            PreSavedPhotoPaths: savedPaths), ct);
 
         await bot.SendMessage(
             message.Chat.Id,
-            _localizer.Get(lang, "report_submitted", report.Id.ToString()[..8]),
+            _localizer.Get(lang, "report_submitted", reportId.ToString()[..8]),
             cancellationToken: ct);
 
         _logger.LogInformation(
             "Telegram report {ReportId} submitted by Telegram user {UserId} with {PhotoCount} photo(s)",
-            report.Id, session.TelegramUserId, savedPaths.Count);
+            reportId, session.TelegramUserId, savedPaths.Count);
     }
 
     private async Task<string> DownloadPhotoAsync(ITelegramBotClient bot, string fileId, CancellationToken ct)

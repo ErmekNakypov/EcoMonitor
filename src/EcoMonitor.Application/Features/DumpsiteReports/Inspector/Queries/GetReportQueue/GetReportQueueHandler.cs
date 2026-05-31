@@ -19,9 +19,14 @@ public class GetReportQueueHandler : IRequestHandler<GetReportQueueQuery, Report
         var page = request.Page < 1 ? 1 : request.Page;
         var pageSize = request.PageSize < 1 ? 20 : request.PageSize;
 
+        // "Unassigned, needs initial inspector action" covers two persisted
+        // states today: New (Telegram bot writes this) and InReview (web reports
+        // post-auto-triage when no district inspector was available). Both with
+        // AssignedInspectorId == null are claimable from the queue.
         var query = _dbContext.DumpsiteReports
             .AsNoTracking()
-            .Where(r => r.Status == DumpsiteStatus.New && r.AssignedInspectorId == null);
+            .Where(r => (r.Status == DumpsiteStatus.New || r.Status == DumpsiteStatus.InReview)
+                     && r.AssignedInspectorId == null);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {

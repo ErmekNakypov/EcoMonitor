@@ -42,7 +42,8 @@ public class ReportViewModel
     public int ReporterRejectedReports { get; set; }
 
     public bool IsAssignedToCurrentUser { get; set; }
-    public bool CanTake => Status == DumpsiteStatus.New && AssignedInspectorId is null;
+    public bool CanTake => AssignedInspectorId is null
+        && (Status == DumpsiteStatus.New || Status == DumpsiteStatus.InReview);
     public bool CanConfirm => Status == DumpsiteStatus.InReview && IsAssignedToCurrentUser;
     public bool CanReject => Status == DumpsiteStatus.InReview && IsAssignedToCurrentUser;
     // Verification step: any inspector can verify, not just the original assignee.

@@ -110,8 +110,11 @@ public class DashboardController : Controller
     {
         var user = (await _userManager.GetUserAsync(User))!;
 
+        // Keep in lockstep with GetReportQueueHandler — both states count as
+        // "unassigned, needs initial inspector action".
         var queueSize = await _dbContext.DumpsiteReports
-            .CountAsync(r => r.Status == DumpsiteStatus.New && r.AssignedInspectorId == null);
+            .CountAsync(r => (r.Status == DumpsiteStatus.New || r.Status == DumpsiteStatus.InReview)
+                          && r.AssignedInspectorId == null);
 
         var myActive = await _dbContext.DumpsiteReports
             .CountAsync(r => r.AssignedInspectorId == user.Id

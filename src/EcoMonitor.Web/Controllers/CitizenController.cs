@@ -129,11 +129,11 @@ public class CitizenController : Controller
         try
         {
             var reportId = await _mediator.Send(new SubmitDumpsiteReportCommand(
-                CurrentUserId(),
-                model.Description,
-                model.Latitude,
-                model.Longitude,
-                uploaded));
+                ReporterId: CurrentUserId(),
+                Description: model.Description,
+                Latitude: model.Latitude,
+                Longitude: model.Longitude,
+                Photos: uploaded));
 
             _logger.LogInformation("Citizen {Email} submitted report {ReportId}", User.Identity?.Name, reportId);
             TempData["SuccessMessage"] = "Report submitted. Thank you for helping keep Bishkek clean.";

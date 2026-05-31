@@ -43,11 +43,24 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
 
     public async Task<Guid> Handle(SubmitDumpsiteReportCommand request, CancellationToken cancellationToken)
     {
-        var savedPaths = new List<string>(request.Photos.Count);
-        foreach (var photo in request.Photos)
+        // Two photo-supply modes:
+        //   - Web: caller hands raw UploadedPhotoDto bytes; we save them here.
+        //   - Telegram: caller already downloaded the files from the Telegram API
+        //     into wwwroot/uploads/dumpsites/ and supplies the resulting relative
+        //     paths in PreSavedPhotoPaths. Skip the save loop.
+        List<string> savedPaths;
+        if (request.PreSavedPhotoPaths is { Count: > 0 })
         {
-            var path = await _fileStorage.SaveAsync(photo, "dumpsites", cancellationToken);
-            savedPaths.Add(path);
+            savedPaths = request.PreSavedPhotoPaths.ToList();
+        }
+        else
+        {
+            savedPaths = new List<string>(request.Photos.Count);
+            foreach (var photo in request.Photos)
+            {
+                var path = await _fileStorage.SaveAsync(photo, "dumpsites", cancellationToken);
+                savedPaths.Add(path);
+            }
         }
 
         var report = new DumpsiteReport
@@ -57,7 +70,10 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
             Latitude = request.Latitude,
             Longitude = request.Longitude,
             Status = DumpsiteStatus.New,
-            PhotoPaths = savedPaths
+            PhotoPaths = savedPaths,
+            Source = request.Source,
+            TelegramUserId = request.TelegramUserId,
+            TelegramUserName = request.TelegramUserName
         };
 
         // Resolve the district for this report's coordinates so we can route
@@ -100,8 +116,20 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
             decision.ShouldAutoConfirm ? string.Empty : $" ({decision.RejectionReason})");
 
         // Audit timeline: report submitted, then auto-triage outcome.
-        var reporter = await _userLookup.GetByIdAsync(request.ReporterId, cancellationToken);
-        var citizenName = reporter?.FullName ?? "Anonymous";
+        // For anonymous (Telegram) submissions, fall back to the Telegram handle
+        // and skip the user lookup — there is no ApplicationUser to find.
+        string citizenName;
+        if (request.ReporterId is { } reporterId)
+        {
+            var reporter = await _userLookup.GetByIdAsync(reporterId, cancellationToken);
+            citizenName = reporter?.FullName ?? "Anonymous";
+        }
+        else
+        {
+            citizenName = !string.IsNullOrWhiteSpace(request.TelegramUserName)
+                ? "@" + request.TelegramUserName
+                : "Anonymous Telegram user";
+        }
         await _events.LogAsync(report.Id, DumpsiteEventType.ReportSubmitted,
             request.ReporterId, "Citizen", citizenName, ct: cancellationToken);
 

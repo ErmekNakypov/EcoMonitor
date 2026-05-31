@@ -36,9 +36,16 @@ public class TakeReportHandler : IRequestHandler<TakeReportCommand, Unit>
             throw new NotFoundException($"Report {request.ReportId} not found.");
         }
 
-        if (report.Status != DumpsiteStatus.New || report.AssignedInspectorId is not null)
+        // Two claimable shapes:
+        //   - Status=New, unassigned    → bot-submitted, advances to InReview.
+        //   - Status=InReview, unassigned → web report whose district had no
+        //                                    inspector, claimed without status change.
+        // Either way the report ends up Status=InReview, AssignedInspectorId=me.
+        var isClaimableNew = report.Status == DumpsiteStatus.New && report.AssignedInspectorId is null;
+        var isClaimableUnassignedReview = report.Status == DumpsiteStatus.InReview && report.AssignedInspectorId is null;
+        if (!isClaimableNew && !isClaimableUnassignedReview)
         {
-            throw new DomainException("This report is already taken or not in New status.");
+            throw new DomainException("This report is already taken or not in a claimable state.");
         }
 
         report.Status = DumpsiteStatus.InReview;

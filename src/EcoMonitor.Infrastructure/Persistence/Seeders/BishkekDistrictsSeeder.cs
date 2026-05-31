@@ -119,53 +119,81 @@ public static class BishkekDistrictsSeeder
         ILogger? logger,
         CancellationToken ct = default)
     {
+        // Wrap the work in an explicit transaction so the bulk
+        // ExecuteDeleteAsync calls and the trailing SaveChangesAsync commit or
+        // roll back as one unit. The previous shape relied on EF's implicit
+        // per-SaveChanges transaction and used per-row tracked deletes
+        // (RemoveRange on the Include-loaded children), which produced a
+        // DbUpdateConcurrencyException ("0 rows affected") whenever EF's
+        // per-row affected-rows check tripped on a re-run after a partially-
+        // completed prior attempt. ExecuteDeleteAsync issues a single bulk
+        // DELETE per district and does not perform per-row tracking.
         var now = DateTime.UtcNow;
         var rewritten = 0;
 
-        foreach (var spec in Specs)
+        await using var tx = await db.BeginTransactionAsync(ct);
+        try
         {
-            var district = await db.Districts
-                .Include(d => d.Boundary)
-                .FirstOrDefaultAsync(d => d.Code == spec.Code, ct);
-
-            if (district is null)
+            foreach (var spec in Specs)
             {
-                logger?.LogWarning(
-                    "Reseed: district {Code} not found — call SeedAsync first", spec.Code);
-                continue;
-            }
+                // Load WITHOUT Include — the boundary points are removed by
+                // the bulk delete below, no tracking required.
+                var district = await db.Districts
+                    .FirstOrDefaultAsync(d => d.Code == spec.Code, ct);
 
-            db.DistrictBoundaryPoints.RemoveRange(district.Boundary);
-            district.Boundary.Clear();
-
-            for (var i = 0; i < spec.Vertices.Length; i++)
-            {
-                var v = spec.Vertices[i];
-                district.Boundary.Add(new DistrictBoundaryPoint
+                if (district is null)
                 {
-                    Id = Guid.NewGuid(),
-                    DistrictId = district.Id,
-                    SequenceNumber = i,
-                    Latitude = v.Lat,
-                    Longitude = v.Lng,
-                    CreatedAt = now,
-                    UpdatedAt = now
-                });
+                    logger?.LogWarning(
+                        "Reseed: district {Code} not found — call SeedAsync first", spec.Code);
+                    continue;
+                }
+
+                // Bulk delete — single statement, no tracking, no per-row
+                // "expected 1 affected" check. Idempotent: 0 rows is fine.
+                await db.DistrictBoundaryPoints
+                    .Where(p => p.DistrictId == district.Id)
+                    .ExecuteDeleteAsync(ct);
+
+                for (var i = 0; i < spec.Vertices.Length; i++)
+                {
+                    var v = spec.Vertices[i];
+                    db.DistrictBoundaryPoints.Add(new DistrictBoundaryPoint
+                    {
+                        Id = Guid.NewGuid(),
+                        DistrictId = district.Id,
+                        SequenceNumber = i,
+                        Latitude = v.Lat,
+                        Longitude = v.Lng,
+                        CreatedAt = now,
+                        UpdatedAt = now
+                    });
+                }
+
+                district.UpdatedAt = now;
+                rewritten++;
+                logger?.LogInformation(
+                    "Reseed: rewrote {Count} boundary points for district {Code}",
+                    spec.Vertices.Length, spec.Code);
             }
 
-            district.UpdatedAt = now;
-            rewritten++;
-            logger?.LogInformation(
-                "Reseed: rewrote {Count} boundary points for district {Code}",
-                spec.Vertices.Length, spec.Code);
+            if (rewritten > 0)
+            {
+                await db.SaveChangesAsync(ct);
+            }
+
+            await tx.CommitAsync(ct);
+        }
+        catch
+        {
+            await tx.RollbackAsync(ct);
+            throw;
         }
 
+        // Invalidate the resolver's 15-min in-memory cache ONLY after a
+        // successful commit, so a rolled-back reseed doesn't blow away the
+        // last known-good cache entry.
         if (rewritten > 0)
         {
-            await db.SaveChangesAsync(ct);
-            // The resolver caches districts+boundaries for 15 min; without
-            // invalidation, the new polygons would not take effect until the
-            // next process restart.
             districtResolver.InvalidateCache();
         }
         return rewritten;

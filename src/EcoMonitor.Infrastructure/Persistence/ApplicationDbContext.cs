@@ -72,6 +72,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         return base.SaveChangesAsync(cancellationToken);
     }
 
+    // IApplicationDbContext.BeginTransactionAsync — forwards to Database so
+    // seeders/handlers don't need to cast to the concrete context type.
+    public Task<Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction>
+        BeginTransactionAsync(CancellationToken cancellationToken = default)
+        => Database.BeginTransactionAsync(cancellationToken);
+
     public override int SaveChanges()
     {
         TouchUpdatedAt();

@@ -1,5 +1,6 @@
 using EcoMonitor.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EcoMonitor.Application.Common.Interfaces;
 
@@ -21,4 +22,8 @@ public interface IApplicationDbContext
     DbSet<ContainerFillReading> ContainerFillReadings { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    // Lets callers wrap multi-statement work (e.g. ExecuteDelete + Add + SaveChanges)
+    // in a single explicit transaction without casting to ApplicationDbContext.
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 }

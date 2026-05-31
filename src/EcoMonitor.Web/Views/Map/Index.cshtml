@@ -308,6 +308,7 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="~/js/districts-overlay.js" asp-append-version="true"></script>
     <script>
         (function () {
             const map = L.map('city-map', {
@@ -804,37 +805,24 @@
             setupToggle('toggle-containers', containerLayer);
             setupToggle('toggle-dumpsites', dumpsiteLayer);
 
-            // Districts overlay — fetched once on demand and toggled by pill.
-            const districtsLayer = L.layerGroup();
-            let districtsLoaded = false;
-            async function loadDistricts() {
-                if (districtsLoaded) return;
-                try {
-                    const r = await fetch('/api/districts');
-                    if (!r.ok) return;
-                    const data = await r.json();
-                    data.forEach(d => {
-                        const polygon = L.polygon(d.boundary, {
-                            color: d.color,
-                            fillColor: d.color,
-                            fillOpacity: 0.15,
-                            weight: 2
-                        });
-                        polygon.bindTooltip('<strong>' + d.name_ru + '</strong>', { permanent: false });
-                        districtsLayer.addLayer(polygon);
-                    });
-                    districtsLoaded = true;
-                } catch (e) { console.warn('districts fetch failed', e); }
-            }
+            // Districts overlay — same lazy-load + toggle behaviour as before,
+            // backed by the shared DistrictsOverlay module so other views can
+            // reuse it. The Map page does not need point-in-polygon hints,
+            // only the polygons + tooltip.
+            const districtsOverlay = DistrictsOverlay.attach(map, {
+                interactive: true,
+                addToMap: false,
+                fillOpacity: 0.15
+            });
             const districtsBtn = document.getElementById('toggle-districts');
             if (districtsBtn) {
                 districtsBtn.addEventListener('click', async () => {
                     const isActive = districtsBtn.classList.toggle('active');
                     if (isActive) {
-                        await loadDistricts();
-                        map.addLayer(districtsLayer);
+                        await districtsOverlay.load();
+                        map.addLayer(districtsOverlay.layerGroup);
                     } else {
-                        map.removeLayer(districtsLayer);
+                        map.removeLayer(districtsOverlay.layerGroup);
                     }
                 });
             }

@@ -46,6 +46,10 @@
                         <div class="mb-3">
                             <span class="form-label fw-500 d-block">Location</span>
                             <span id="coords-text" class="text-muted small">Click on the map to set the location.</span>
+                            @* Client-side PREVIEW only. Authoritative district routing is done
+                               server-side in SubmitDumpsiteReportHandler via IDistrictResolver; the
+                               server wins on disagreement and the preview never crosses the wire. *@
+                            <span id="district-hint" class="text-muted small d-block mt-1"></span>
                             <span asp-validation-for="Latitude" class="text-danger small d-block"></span>
                             <span asp-validation-for="Longitude" class="text-danger small d-block"></span>
                         </div>
@@ -75,6 +79,7 @@
 
 @section Scripts {
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="~/js/districts-overlay.js" asp-append-version="true"></script>
     <script>
         (function () {
             const map = L.map('dumpsite-map').setView([42.8746, 74.5698], 12);
@@ -82,10 +87,54 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
 
+            // District polygons are display + client-side preview only. The
+            // authoritative district for the submitted report is resolved
+            // server-side by IDistrictResolver inside SubmitDumpsiteReportHandler
+            // — the server wins on disagreement. interactive:false keeps clicks
+            // falling through to the pin-placer. A fetch failure here logs a
+            // warning and degrades to "no overlay, no hint" — submission still
+            // works.
+            const districtsOverlay = DistrictsOverlay.attach(map, {
+                interactive: false,
+                addToMap: true,
+                fillOpacity: 0.12
+            });
+            let districtsReady = false;
+            let lastPinForHint = null;
+            districtsOverlay.load().then(d => {
+                districtsReady = Array.isArray(d) && d.length > 0;
+                // If the user already dropped a pin before the fetch finished,
+                // backfill the hint now that polygons are known.
+                if (districtsReady && lastPinForHint) {
+                    updateDistrictHint(lastPinForHint.lat, lastPinForHint.lng);
+                }
+            });
+
             const latInput = document.getElementById('Latitude');
             const lngInput = document.getElementById('Longitude');
             const coordText = document.getElementById('coords-text');
+            const districtHint = document.getElementById('district-hint');
             let marker = null;
+
+            function updateDistrictHint(lat, lng) {
+                if (!districtHint) return;
+                lastPinForHint = { lat, lng };
+                // Don't claim "outside districts" before we know what the
+                // districts even are; the overlay backfills this once loaded.
+                if (!districtsReady) {
+                    districtHint.textContent = '';
+                    districtHint.style.color = '';
+                    return;
+                }
+                const d = districtsOverlay.getDistrictForPoint(lat, lng);
+                if (d) {
+                    districtHint.textContent = 'Your report will be routed to: ' + (d.name_ru || d.name_en || d.code);
+                    districtHint.style.color = d.color || '';
+                } else {
+                    districtHint.textContent = 'This location is outside the mapped districts; a general inspector will review it.';
+                    districtHint.style.color = '';
+                }
+            }
 
             function updateInputs(latlng) {
                 latInput.value = latlng.lat.toString();
@@ -93,6 +142,7 @@
                 coordText.textContent = 'Location: ' + latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
                 coordText.classList.remove('text-muted');
                 coordText.classList.add('text-body');
+                updateDistrictHint(latlng.lat, latlng.lng);
             }
 
             function placeMarker(latlng) {

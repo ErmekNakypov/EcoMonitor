@@ -85,5 +85,31 @@
                 </button>
             </form>
         </div>
+
+        <div class="auth-card mt-4" style="max-width: 720px;">
+            <h2 class="h5 fw-700 mb-2">Reseed district boundaries from GeoJSON (real OSM)</h2>
+            <p class="text-muted mb-2">
+                Replaces all four district polygons with the real OSM-derived
+                boundaries shipped as
+                <code>Districts/Snapshots/bishkek-districts.geojson</code>.
+                Same idempotent transactional write path as the hand-tuned
+                reseed above — district IDs and inspector assignments are
+                preserved.
+            </p>
+            <p class="text-muted small mb-4">
+                The file is validated strictly before any DB write: exactly 4
+                Polygon features with codes
+                <code>LENIN</code>, <code>PERVOMAY</code>, <code>SVERDLOV</code>,
+                <code>OKTYABR</code>; if validation fails the existing
+                boundaries stay intact. After running, consider
+                <em>Backfill districts</em> so historic reports near a moved
+                edge re-resolve.
+            </p>
+            <form asp-area="Admin" asp-controller="Diagnostics" asp-action="ReseedDistrictBoundariesFromGeoJson" method="post" class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-globe2 me-2"></i>Reseed from GeoJSON (real OSM)
+                </button>
+            </form>
+        </div>
     </div>
 </section>

@@ -1,5 +1,6 @@
 using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Domain.Entities;
+using EcoMonitor.Infrastructure.Districts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -113,38 +114,77 @@ public static class BishkekDistrictsSeeder
     // irregular shapes) so districts can be reshaped without losing their
     // IDs or AssignedInspectorId values. Returns the number of districts
     // whose boundaries were rewritten.
-    public static async Task<int> ReseedBoundariesAsync(
+    // Hand-tuned irregular polygons baked into the seeder. Cheap fallback when
+    // a real GeoJSON snapshot isn't available.
+    public static Task<int> ReseedBoundariesAsync(
         IApplicationDbContext db,
         IDistrictResolver districtResolver,
         ILogger? logger,
         CancellationToken ct = default)
     {
-        // Wrap the work in an explicit transaction so the bulk
-        // ExecuteDeleteAsync calls and the trailing SaveChangesAsync commit or
-        // roll back as one unit. The previous shape relied on EF's implicit
-        // per-SaveChanges transaction and used per-row tracked deletes
-        // (RemoveRange on the Include-loaded children), which produced a
-        // DbUpdateConcurrencyException ("0 rows affected") whenever EF's
-        // per-row affected-rows check tripped on a re-run after a partially-
-        // completed prior attempt. ExecuteDeleteAsync issues a single bulk
-        // DELETE per district and does not perform per-row tracking.
+        var verticesByCode = Specs.ToDictionary(
+            s => s.Code,
+            s => (IReadOnlyList<(double Lat, double Lng)>)s.Vertices.ToList());
+        return ReseedCoreAsync(db, districtResolver, logger, ct,
+            sourceLabel: "hand-tuned spec",
+            verticesByCode: verticesByCode);
+    }
+
+    // Real OSM-derived polygons read from
+    // Districts/Snapshots/bishkek-districts.geojson. Validated by
+    // GeoJsonDistrictsLoader; if validation fails an exception bubbles before
+    // any DB write happens.
+    public static async Task<int> ReseedFromGeoJsonAsync(
+        IApplicationDbContext db,
+        IDistrictResolver districtResolver,
+        ILogger? logger,
+        CancellationToken ct = default)
+    {
+        var features = await GeoJsonDistrictsLoader.LoadAsync(ct);
+        var verticesByCode = features.ToDictionary(f => f.Code, f => f.Vertices);
+        return await ReseedCoreAsync(db, districtResolver, logger, ct,
+            sourceLabel: "GeoJSON snapshot",
+            verticesByCode: verticesByCode);
+    }
+
+    // Single transactional core used by both reseed entry points. Each
+    // public method computes the (code → vertex list) dictionary and calls in
+    // here; the transactional structure, idempotency, and cache-invalidation
+    // logic live in exactly one place.
+    //
+    // Wraps everything in an explicit transaction so the bulk ExecuteDeletes
+    // and the trailing SaveChanges commit or roll back as one unit. The
+    // previous shape relied on EF's implicit per-SaveChanges transaction and
+    // used per-row tracked deletes (RemoveRange on Include-loaded children),
+    // which produced a DbUpdateConcurrencyException ("0 rows affected") on
+    // re-run. ExecuteDeleteAsync issues one bulk DELETE per district with no
+    // per-row tracking.
+    private static async Task<int> ReseedCoreAsync(
+        IApplicationDbContext db,
+        IDistrictResolver districtResolver,
+        ILogger? logger,
+        CancellationToken ct,
+        string sourceLabel,
+        IReadOnlyDictionary<string, IReadOnlyList<(double Lat, double Lng)>> verticesByCode)
+    {
         var now = DateTime.UtcNow;
         var rewritten = 0;
 
         await using var tx = await db.BeginTransactionAsync(ct);
         try
         {
-            foreach (var spec in Specs)
+            foreach (var (code, vertices) in verticesByCode)
             {
                 // Load WITHOUT Include — the boundary points are removed by
                 // the bulk delete below, no tracking required.
                 var district = await db.Districts
-                    .FirstOrDefaultAsync(d => d.Code == spec.Code, ct);
+                    .FirstOrDefaultAsync(d => d.Code == code, ct);
 
                 if (district is null)
                 {
                     logger?.LogWarning(
-                        "Reseed: district {Code} not found — call SeedAsync first", spec.Code);
+                        "Reseed ({Source}): district {Code} not found — call SeedAsync first",
+                        sourceLabel, code);
                     continue;
                 }
 
@@ -154,9 +194,9 @@ public static class BishkekDistrictsSeeder
                     .Where(p => p.DistrictId == district.Id)
                     .ExecuteDeleteAsync(ct);
 
-                for (var i = 0; i < spec.Vertices.Length; i++)
+                for (var i = 0; i < vertices.Count; i++)
                 {
-                    var v = spec.Vertices[i];
+                    var v = vertices[i];
                     db.DistrictBoundaryPoints.Add(new DistrictBoundaryPoint
                     {
                         Id = Guid.NewGuid(),
@@ -172,8 +212,8 @@ public static class BishkekDistrictsSeeder
                 district.UpdatedAt = now;
                 rewritten++;
                 logger?.LogInformation(
-                    "Reseed: rewrote {Count} boundary points for district {Code}",
-                    spec.Vertices.Length, spec.Code);
+                    "Reseed ({Source}): rewrote {Count} boundary points for district {Code}",
+                    sourceLabel, vertices.Count, code);
             }
 
             if (rewritten > 0)

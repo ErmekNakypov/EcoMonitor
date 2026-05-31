@@ -103,6 +103,28 @@ public class DiagnosticsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost("ReseedDistrictBoundariesFromGeoJson")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ReseedDistrictBoundariesFromGeoJson(CancellationToken ct)
+    {
+        try
+        {
+            var rewritten = await BishkekDistrictsSeeder.ReseedFromGeoJsonAsync(
+                _db, _districts, _logger, ct);
+            TempData["SuccessMessage"] =
+                $"Reseeded boundary points for {rewritten} of 4 districts from the bundled GeoJSON snapshot (real OSM-derived polygons).";
+        }
+        catch (FileNotFoundException ex)
+        {
+            TempData["ErrorMessage"] = $"GeoJSON snapshot missing: {ex.Message}";
+        }
+        catch (InvalidDataException ex)
+        {
+            TempData["ErrorMessage"] = $"GeoJSON snapshot rejected by validation: {ex.Message}";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost("ImportContainers")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ImportContainers()

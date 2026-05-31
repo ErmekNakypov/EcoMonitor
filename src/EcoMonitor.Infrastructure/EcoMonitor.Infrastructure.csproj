@@ -12,6 +12,9 @@
     <Content Include="Containers\Snapshots\bishkek-containers.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Districts\Snapshots\bishkek-districts.geojson">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Telegram\Localization\bot-strings.ru.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

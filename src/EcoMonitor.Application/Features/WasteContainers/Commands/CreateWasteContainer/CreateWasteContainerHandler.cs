@@ -11,11 +11,16 @@ namespace EcoMonitor.Application.Features.WasteContainers.Commands.CreateWasteCo
 public class CreateWasteContainerHandler : IRequestHandler<CreateWasteContainerCommand, Guid>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IDistrictResolver _districtResolver;
     private readonly ILogger<CreateWasteContainerHandler> _logger;
 
-    public CreateWasteContainerHandler(IApplicationDbContext dbContext, ILogger<CreateWasteContainerHandler> logger)
+    public CreateWasteContainerHandler(
+        IApplicationDbContext dbContext,
+        IDistrictResolver districtResolver,
+        ILogger<CreateWasteContainerHandler> logger)
     {
         _dbContext = dbContext;
+        _districtResolver = districtResolver;
         _logger = logger;
     }
 
@@ -28,6 +33,13 @@ public class CreateWasteContainerHandler : IRequestHandler<CreateWasteContainerC
             throw new DomainException("A container with this code already exists.");
         }
 
+        // Resolve once at create time so future "container is full" reports
+        // can be routed straight to the district inspector. Containers outside
+        // every polygon stay null and fall back to the broadcast notification
+        // path (same convention as DumpsiteReport.DistrictId).
+        var district = await _districtResolver.ResolveAsync(
+            request.Latitude, request.Longitude, cancellationToken);
+
         var container = new WasteContainer
         {
             Code = request.Code,
@@ -37,7 +49,8 @@ public class CreateWasteContainerHandler : IRequestHandler<CreateWasteContainerC
             Type = request.Type,
             Capacity = request.Capacity,
             InstalledAt = request.InstalledAt,
-            Status = ContainerStatus.Active
+            Status = ContainerStatus.Active,
+            DistrictId = district?.Id
         };
 
         _dbContext.WasteContainers.Add(container);

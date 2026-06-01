@@ -157,6 +157,14 @@
                         <dt class="col-5 text-muted fw-500">Pressure</dt>
                         <dd class="col-7 mb-0">@Pretty(s.Pressure, "hPa", "0")</dd>
                     </dl>
+                    @* Health advisory derived from AqiHelper.ClassifyAqiUs /
+                       ClassifyPm25 — the same classification used to color the
+                       headline AQI pill above. Conceptual basis: WHO 2021
+                       Global Air Quality Guidelines bands. *@
+                    <div class="mt-3 pt-3 border-top">
+                        <div class="text-muted text-uppercase small fw-600 mb-1">Recommendation</div>
+                        <p class="small mb-0">@AirAdvisory.For(aqi)</p>
+                    </div>
                 </div>
 
                 <div class="auth-card">

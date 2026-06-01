@@ -64,6 +64,22 @@
         </div>
 
         <div class="auth-card mt-4" style="max-width: 720px;">
+            <h2 class="h5 fw-700 mb-2">Backfill districts on existing containers</h2>
+            <p class="text-muted mb-4">
+                Resolves the district for every waste container with a null
+                <code>district_id</code> so future "container is full" IoT
+                tasks auto-route to the right district inspector. Containers
+                outside every polygon stay null and fall back to the broadcast
+                notification path.
+            </p>
+            <form asp-area="Admin" asp-controller="Diagnostics" asp-action="BackfillContainerDistricts" method="post" class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-trash3 me-2"></i>Backfill container districts
+                </button>
+            </form>
+        </div>
+
+        <div class="auth-card mt-4" style="max-width: 720px;">
             <h2 class="h5 fw-700 mb-2">Reseed district boundaries</h2>
             <p class="text-muted mb-2">
                 Rewrites the polygon points of all four Bishkek districts in

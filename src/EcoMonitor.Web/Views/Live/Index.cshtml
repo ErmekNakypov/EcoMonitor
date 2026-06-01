@@ -67,6 +67,15 @@
                         </div>
                     </div>
 
+                    @* Health advisory derived from the same band the colour
+                       classification uses. Conceptual basis: WHO 2021 Global
+                       Air Quality Guidelines bands. The text is updated on
+                       every SignalR push from window.AIR_ADVISORIES. *@
+                    <div class="live-advisory mb-3" id="air-advisory-box">
+                        <div class="live-advisory__label">Recommendation</div>
+                        <div class="live-advisory__text" id="air-advisory">—</div>
+                    </div>
+
                     <div class="small text-muted mb-2">Last 60 minutes</div>
                     <canvas id="air-chart" height="140"></canvas>
                     <div class="small text-muted mt-2">
@@ -197,6 +206,14 @@
     .live-legend__swatch--moderate  { background:#B8860B; }
     .live-legend__swatch--hazardous { background:#B02A37; }
     .live-legend__source { flex-basis:100%; font-size:.78rem; color:#6B7280; }
+
+    .live-advisory { background:#F8FAFC; border-radius:10px; padding:.6rem .8rem; transition: background-color .35s ease, color .35s ease; }
+    .live-advisory__label { font-size:.7rem; text-transform:uppercase; letter-spacing:.04em; color:#6B7280; font-weight:600; margin-bottom:.2rem; }
+    .live-advisory__text  { font-size:.9rem; color:#1F2937; }
+    .live-advisory.live-advisory--moderate  { background:rgba(184,134,11,0.08); }
+    .live-advisory.live-advisory--moderate  .live-advisory__text { color:#7A5A0A; }
+    .live-advisory.live-advisory--hazardous { background:rgba(176,42,55,0.08); }
+    .live-advisory.live-advisory--hazardous .live-advisory__text { color:#7A1C25; }
 </style>
 
 <!-- Both scripts are deferred so they execute AFTER the head's `<script defer src="chart.js">` -->
@@ -216,6 +233,18 @@
     const ACCENT = '#2D6A4F';
     const ACCENT_LIGHT = 'rgba(45,106,79,0.12)';
     const ACCENT_PM10 = '#74C69D';
+
+    // Server-rendered health advisory strings (Russian by default; the helper
+    // chooses Ru/En/Ky based on the page's UI culture). The three air bands
+    // map to AqiLevel entries on the server: good → Good, moderate → Moderate,
+    // hazardous → Unhealthy (matches the WHO IT-1 cutoff which roughly
+    // corresponds to EPA "Unhealthy"). Idle = empty until we have data.
+    const AIR_ADVISORIES = {
+        good:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(EcoMonitor.Web.Helpers.AirAdvisory.For(EcoMonitor.Web.Helpers.AqiLevel.Good))),
+        moderate:  @Html.Raw(System.Text.Json.JsonSerializer.Serialize(EcoMonitor.Web.Helpers.AirAdvisory.For(EcoMonitor.Web.Helpers.AqiLevel.Moderate))),
+        hazardous: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(EcoMonitor.Web.Helpers.AirAdvisory.For(EcoMonitor.Web.Helpers.AqiLevel.Unhealthy))),
+        idle:      ''
+    };
 
     // ---------- threshold bands (single source of truth — edit here to retune) ----------
     // Air thresholds follow the WHO Global Air Quality Guidelines 2021 (24-hour mean
@@ -384,6 +413,17 @@
         const badge = document.getElementById('air-band-badge');
         applyBandClasses(badge, cardBand, 'live-band-badge--');
         if (badge) badge.textContent = cardBand ? BAND_LABEL_AIR[cardBand] : 'awaiting data';
+
+        // Health advisory tracks the worst-of-two band. Strings are
+        // server-rendered into AIR_ADVISORIES at page load (WHO 2021 basis).
+        const advisoryBox  = document.getElementById('air-advisory-box');
+        const advisoryText = document.getElementById('air-advisory');
+        if (advisoryBox && advisoryText) {
+            applyBandClasses(advisoryBox, cardBand, 'live-advisory--');
+            advisoryText.textContent = cardBand
+                ? (AIR_ADVISORIES[cardBand] || '—')
+                : (AIR_ADVISORIES.idle || '—');
+        }
     }
 
     function pushFillPoint(p) {

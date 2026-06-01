@@ -25,4 +25,10 @@ public class WasteContainer : BaseEntity
     public double? LastFillPercent { get; set; }
     public double? LastDistanceCm { get; set; }
     public DateTime? LastMeasuredAt { get; set; }
+
+    // Resolved from (Latitude, Longitude) by IDistrictResolver at create /
+    // import time so a "container is full" cleanup task auto-routes to the
+    // right district inspector. Nullable: containers outside every district
+    // polygon legitimately stay null and fall back to the broadcast path.
+    public Guid? DistrictId { get; set; }
 }

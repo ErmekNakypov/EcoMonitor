@@ -116,22 +116,33 @@ public class SubmitDumpsiteReportHandler : IRequestHandler<SubmitDumpsiteReportC
             decision.ShouldAutoConfirm ? string.Empty : $" ({decision.RejectionReason})");
 
         // Audit timeline: report submitted, then auto-triage outcome.
-        // For anonymous (Telegram) submissions, fall back to the Telegram handle
-        // and skip the user lookup — there is no ApplicationUser to find.
+        // Three actor variants:
+        //   - Web (logged-in citizen): look up the user, use FullName.
+        //   - Telegram (anonymous): fall back to the @handle / first name.
+        //   - IoT (system-created when a sensor reports a full container):
+        //     no human actor at all — the actor row reads "IoT sensor".
         string citizenName;
-        if (request.ReporterId is { } reporterId)
+        string actorRole;
+        if (request.Source == ReportSource.Iot)
+        {
+            citizenName = "IoT sensor";
+            actorRole = "System";
+        }
+        else if (request.ReporterId is { } reporterId)
         {
             var reporter = await _userLookup.GetByIdAsync(reporterId, cancellationToken);
             citizenName = reporter?.FullName ?? "Anonymous";
+            actorRole = "Citizen";
         }
         else
         {
             citizenName = !string.IsNullOrWhiteSpace(request.TelegramUserName)
                 ? "@" + request.TelegramUserName
                 : "Anonymous Telegram user";
+            actorRole = "Citizen";
         }
         await _events.LogAsync(report.Id, DumpsiteEventType.ReportSubmitted,
-            request.ReporterId, "Citizen", citizenName, ct: cancellationToken);
+            request.ReporterId, actorRole, citizenName, ct: cancellationToken);
 
         if (decision.ShouldAutoConfirm)
         {

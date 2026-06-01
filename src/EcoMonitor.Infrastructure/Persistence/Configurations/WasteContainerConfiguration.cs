@@ -22,5 +22,11 @@ public class WasteContainerConfiguration : IEntityTypeConfiguration<WasteContain
         builder.HasIndex(c => c.OsmId)
             .IsUnique()
             .HasFilter("osm_id IS NOT NULL");
+
+        builder.HasOne<District>()
+            .WithMany()
+            .HasForeignKey(c => c.DistrictId)
+            .OnDelete(DeleteBehavior.SetNull);
+        builder.HasIndex(c => c.DistrictId);
     }
 }

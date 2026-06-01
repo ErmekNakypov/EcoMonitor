@@ -1,3 +1,4 @@
+using EcoMonitor.Domain.Enums;
 using FluentValidation;
 
 namespace EcoMonitor.Application.Features.DumpsiteReports.Commands.SubmitDumpsiteReport;
@@ -35,8 +36,13 @@ public class SubmitDumpsiteReportCommandValidator : AbstractValidator<SubmitDump
             .LessThanOrEqualTo(5)
             .WithMessage("You can attach at most 5 photos.");
 
+        // Photo presence: Web + Telegram citizen reports require at least one
+        // photo. IoT-sourced reports (auto-created when a sensor reports a
+        // full container) legitimately have no photo — they're system events,
+        // not citizen observations. Exempt Source == Iot from this rule.
         RuleFor(c => c)
-            .Must(c => (c.Photos != null && c.Photos.Count > 0)
+            .Must(c => c.Source == ReportSource.Iot
+                    || (c.Photos != null && c.Photos.Count > 0)
                     || (c.PreSavedPhotoPaths != null && c.PreSavedPhotoPaths.Count > 0))
             .WithMessage("At least one photo is required.");
 

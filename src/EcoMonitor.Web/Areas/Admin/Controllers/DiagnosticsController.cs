@@ -92,6 +92,33 @@ public class DiagnosticsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost("BackfillContainerDistricts")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BackfillContainerDistricts(CancellationToken ct)
+    {
+        var unassigned = await _db.WasteContainers
+            .Where(c => c.DistrictId == null)
+            .ToListAsync(ct);
+
+        int matched = 0;
+        foreach (var container in unassigned)
+        {
+            var district = await _districts.ResolveAsync(container.Latitude, container.Longitude, ct);
+            if (district is null) continue;
+            container.DistrictId = district.Id;
+            matched++;
+        }
+
+        if (matched > 0)
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+
+        TempData["SuccessMessage"] =
+            $"Container district backfill complete: {matched} of {unassigned.Count} containers matched a district.";
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost("ReseedDistrictBoundaries")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ReseedDistrictBoundaries(CancellationToken ct)

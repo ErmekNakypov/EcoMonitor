@@ -21,12 +21,18 @@ public sealed class OsmContainerImporter : IContainerImportService
 
     private readonly IHttpClientFactory _httpFactory;
     private readonly ApplicationDbContext _db;
+    private readonly IDistrictResolver _districtResolver;
     private readonly ILogger<OsmContainerImporter> _logger;
 
-    public OsmContainerImporter(IHttpClientFactory httpFactory, ApplicationDbContext db, ILogger<OsmContainerImporter> logger)
+    public OsmContainerImporter(
+        IHttpClientFactory httpFactory,
+        ApplicationDbContext db,
+        IDistrictResolver districtResolver,
+        ILogger<OsmContainerImporter> logger)
     {
         _httpFactory = httpFactory;
         _db = db;
+        _districtResolver = districtResolver;
         _logger = logger;
     }
 
@@ -76,12 +82,19 @@ out body;";
                 var type = MapOsmToType(tags);
                 var address = BuildAddress(tags, el.Lat, el.Lon);
 
+                // Resolve the district once per row — the resolver caches all
+                // four polygons in memory, so 500 importer iterations cost one
+                // DB hit total. New rows get DistrictId set; existing rows are
+                // updated if their lat/lng moved (rare, but cheap).
+                var district = await _districtResolver.ResolveAsync(el.Lat, el.Lon, ct);
+
                 if (existing.TryGetValue(el.Id, out var container))
                 {
                     container.Latitude = el.Lat;
                     container.Longitude = el.Lon;
                     container.Type = type;
                     container.Address = address;
+                    container.DistrictId = district?.Id;
                     updated++;
                 }
                 else
@@ -97,7 +110,8 @@ out body;";
                         Type = type,
                         Capacity = type == ContainerType.General ? 240 : 660,
                         Status = ContainerStatus.Active,
-                        InstalledAt = DateTime.UtcNow.AddYears(-1)
+                        InstalledAt = DateTime.UtcNow.AddYears(-1),
+                        DistrictId = district?.Id
                     };
                     _db.WasteContainers.Add(newContainer);
                     nextNumber++;

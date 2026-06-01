@@ -148,7 +148,11 @@ public class ReportsController : Controller
 
     [HttpPost("BuildRoute")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> BuildRoute(List<Guid> selectedIds, CancellationToken ct)
+    public async Task<IActionResult> BuildRoute(
+        List<Guid> selectedIds,
+        double? startLat,
+        double? startLng,
+        CancellationToken ct)
     {
         if (selectedIds is null || selectedIds.Count < 2)
         {
@@ -160,7 +164,8 @@ public class ReportsController : Controller
             TempData["ErrorMessage"] = "Maximum 15 reports per route.";
             return RedirectToAction(nameof(Queue));
         }
-        var route = await _mediator.Send(new BuildRouteForReportsQuery(selectedIds), ct);
+        var route = await _mediator.Send(
+            new BuildRouteForReportsQuery(selectedIds, startLat, startLng), ct);
         ViewBag.BackUrl = Url.Action(nameof(Queue), "Reports", new { area = "CleanupCrew" });
         ViewBag.PageTitle = "Cleanup route";
         ViewBag.DetailsController = "Reports";

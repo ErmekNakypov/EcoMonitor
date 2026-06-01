@@ -49,22 +49,48 @@ public class BuildRouteForReportsHandler
             .Where(r => r is not null)
             .ToList();
 
-        var points = ordered.Select(r => (r!.Latitude, r.Longitude)).ToList();
+        // Optional geolocation origin: if the queue page captured the user's
+        // current position, prepend it to the points list as a virtual node
+        // at index 0. The unchanged NearestNeighborOrder seeds from index 0,
+        // so the algorithm naturally walks origin → nearest report → next →
+        // … and the resulting TotalDistance includes the origin→first leg.
+        RouteOrigin? origin = null;
+        var hasOrigin = request.StartLat is { } startLat && request.StartLng is { } startLng;
+        var points = new List<(double Lat, double Lng)>(ordered.Count + (hasOrigin ? 1 : 0));
+        if (hasOrigin)
+        {
+            origin = new RouteOrigin(request.StartLat!.Value, request.StartLng!.Value);
+            points.Add((origin.Latitude, origin.Longitude));
+        }
+        points.AddRange(ordered.Select(r => (r!.Latitude, r.Longitude)));
+
         var visitOrder = RouteCalculator.NearestNeighborOrder(points);
 
         var orderedPoints = visitOrder.Select(i => points[i]).ToList();
         var totalKm = RouteCalculator.TotalDistance(orderedPoints);
         var minutes = RouteCalculator.EstimatedMinutes(totalKm);
 
-        var stops = new List<RouteStop>(visitOrder.Count);
+        // visitOrder is over the augmented points list; when an origin is
+        // present it sits at index 0 of that list. Skip it when materialising
+        // RouteStops (the origin is reported separately via RouteResult.Origin),
+        // and map the remaining indices back to the underlying report rows.
+        var stops = new List<RouteStop>(ordered.Count);
+        var orderNumber = 0;
         for (var i = 0; i < visitOrder.Count; i++)
         {
-            var r = ordered[visitOrder[i]]!;
+            var pointIndex = visitOrder[i];
+            if (hasOrigin && pointIndex == 0)
+            {
+                continue;
+            }
+            var reportIndex = hasOrigin ? pointIndex - 1 : pointIndex;
+            var r = ordered[reportIndex]!;
             var title = r.Description.Length > 80
                 ? r.Description.Substring(0, 80) + "…"
                 : r.Description;
+            orderNumber++;
             stops.Add(new RouteStop(
-                OrderNumber: i + 1,
+                OrderNumber: orderNumber,
                 ReportId: r.Id,
                 Title: title,
                 DistrictName: r.DistrictName,
@@ -74,6 +100,6 @@ public class BuildRouteForReportsHandler
                 Longitude: r.Longitude));
         }
 
-        return new RouteResult(stops, totalKm, minutes);
+        return new RouteResult(stops, totalKm, minutes, origin);
     }
 }

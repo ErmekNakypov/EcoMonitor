@@ -78,6 +78,11 @@
         {
             <form asp-controller="Inspector" asp-action="BuildRoute" method="post" id="route-form">
                 @Html.AntiForgeryToken()
+                @* Filled by the click handler below when the browser grants
+                   geolocation. Left empty otherwise — the server treats null
+                   StartLat/StartLng as "no origin, fall back to first stop". *@
+                <input type="hidden" name="startLat" id="route-start-lat" value="" />
+                <input type="hidden" name="startLng" id="route-start-lng" value="" />
                 <div class="route-select-bar">
                     <span class="text-muted small">
                         <i class="bi bi-info-circle me-1"></i>Tick 2–15 reports to plan an inspection route.
@@ -164,6 +169,9 @@
             const checkboxes = document.querySelectorAll('.route-checkbox');
             const btn = document.getElementById('route-build-btn');
             const counter = document.getElementById('route-selected-count');
+            const form = document.getElementById('route-form');
+            const latInput = document.getElementById('route-start-lat');
+            const lngInput = document.getElementById('route-start-lng');
             if (!btn || !counter) return;
             function update() {
                 const count = document.querySelectorAll('.route-checkbox:checked').length;
@@ -171,6 +179,45 @@
                 btn.disabled = count < 2 || count > 15;
             }
             checkboxes.forEach(cb => cb.addEventListener('change', update));
+
+            // Capture the user's location at click time and submit it as
+            // hidden startLat/startLng fields so the server can prepend a
+            // virtual origin to the nearest-neighbor input.
+            //
+            // Degrades gracefully on denial, timeout, position-unavailable,
+            // or no geolocation API at all: in any of those cases the inputs
+            // stay empty and the form is submitted as before, producing
+            // today's "start from the first selected report" behaviour.
+            //
+            // Note: navigator.geolocation only resolves on https origins or
+            // localhost; on plain http to a non-localhost host the prompt
+            // never appears and the error path is taken.
+            let geoInFlight = false;
+            if (form && latInput && lngInput) {
+                btn.addEventListener('click', function (e) {
+                    if (geoInFlight) { e.preventDefault(); return; }
+                    if (!('geolocation' in navigator)) { return; /* native submit */ }
+                    e.preventDefault();
+                    geoInFlight = true;
+                    function done() {
+                        geoInFlight = false;
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit(btn);
+                        } else {
+                            form.submit();
+                        }
+                    }
+                    navigator.geolocation.getCurrentPosition(
+                        function (pos) {
+                            latInput.value = pos.coords.latitude;
+                            lngInput.value = pos.coords.longitude;
+                            done();
+                        },
+                        function (_err) { done(); /* denial/timeout/unavailable */ },
+                        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+                    );
+                });
+            }
         })();
     </script>
 }

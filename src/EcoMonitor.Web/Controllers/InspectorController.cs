@@ -147,7 +147,11 @@ public class InspectorController : Controller
 
     [HttpPost("BuildRoute")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> BuildRoute(List<Guid> selectedIds, CancellationToken ct)
+    public async Task<IActionResult> BuildRoute(
+        List<Guid> selectedIds,
+        double? startLat,
+        double? startLng,
+        CancellationToken ct)
     {
         if (selectedIds is null || selectedIds.Count < 2)
         {
@@ -159,7 +163,8 @@ public class InspectorController : Controller
             TempData["ErrorMessage"] = "Maximum 15 reports per route.";
             return RedirectToAction(nameof(Queue));
         }
-        var route = await _mediator.Send(new BuildRouteForReportsQuery(selectedIds), ct);
+        var route = await _mediator.Send(
+            new BuildRouteForReportsQuery(selectedIds, startLat, startLng), ct);
         ViewBag.BackUrl = Url.Action(nameof(Queue), "Inspector");
         ViewBag.PageTitle = "Inspection route";
         ViewBag.DetailsController = "Inspector";

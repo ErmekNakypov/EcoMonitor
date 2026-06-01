@@ -43,4 +43,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="EcoMonitor.Tests" />
+  </ItemGroup>
+
 </Project>

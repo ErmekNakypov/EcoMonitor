@@ -38,15 +38,32 @@ internal static class GeoJsonDistrictsLoader
                 path);
         }
 
+        await using var stream = File.OpenRead(path);
+        return await LoadFromStreamAsync(stream, path, ct);
+    }
+
+    // Test seam: the parse + validation logic without the disk-read step.
+    // Production callers go through LoadAsync(); tests feed a MemoryStream
+    // built from an inline JSON string to exercise the validation rules
+    // without touching the filesystem. Behavioural parity is guaranteed
+    // because LoadAsync delegates here.
+    internal static async Task<IReadOnlyList<DistrictFeature>> LoadFromStreamAsync(
+        Stream stream, string source, CancellationToken ct = default)
+    {
         FeatureCollectionDto? parsed;
-        await using (var stream = File.OpenRead(path))
+        try
         {
             parsed = await JsonSerializer.DeserializeAsync<FeatureCollectionDto>(stream, JsonOptions, ct);
+        }
+        catch (JsonException jx)
+        {
+            throw new InvalidDataException(
+                $"District boundaries snapshot at '{source}' is not valid JSON: {jx.Message}");
         }
 
         if (parsed is null)
         {
-            throw new InvalidDataException($"District boundaries snapshot at '{path}' is empty or unparseable JSON.");
+            throw new InvalidDataException($"District boundaries snapshot at '{source}' is empty or unparseable JSON.");
         }
         if (!string.Equals(parsed.Type, "FeatureCollection", StringComparison.Ordinal))
         {

@@ -207,7 +207,10 @@ public class IngestContainerFillReadingHandler
             : measuredAt.Value.ToUniversalTime();
     }
 
-    private static double ComputeFillPercent(double heightCm, double distanceCm)
+    // internal so EcoMonitor.Tests can exercise the pure formula in isolation
+    // (see InternalsVisibleTo in EcoMonitor.Application.csproj). No behavioural
+    // change; this was previously `private static`.
+    internal static double ComputeFillPercent(double heightCm, double distanceCm)
     {
         var pct = (heightCm - distanceCm) / heightCm * 100.0;
         if (pct < 0) return 0;

@@ -1,0 +1,174 @@
+/* =====================================================================
+   EcoMonitor design tokens — single source of truth.
+   Loaded in _Layout.cshtml BEFORE site.css and AFTER Bootstrap, so that:
+     - site.css and every view can reference --em-* variables;
+     - the --bs-* overrides at the bottom take effect against Bootstrap.
+   No new brand hues are introduced. Every value is either:
+     (a) an existing project hex extracted from site.css / inline view CSS, or
+     (b) a clearly-derived tint / aliased semantic name for one of those.
+   ===================================================================== */
+
+:root {
+  /* ---------- Brand greens (extracted from existing --brand-* in site.css) ---------- */
+  --em-brand:          #2D6A4F;  /* primary green — was --brand-primary */
+  --em-brand-strong:   #1B4332;  /* hover / heading ink on tints — was --brand-primary-hover */
+  --em-brand-soft:     #74C69D;  /* secondary chart line / accents — was --brand-accent */
+  --em-brand-tint-04:  rgba(45, 106, 79, 0.04);  /* card subtle wash */
+  --em-brand-tint-12:  rgba(45, 106, 79, 0.12);  /* chart fill under primary line */
+  --em-brand-tint-15:  rgba(45, 106, 79, 0.15);  /* polygon fill on Map */
+
+  /* ---------- Surface / ink scale ---------- */
+  --em-surface:        #FFFFFF;  /* card / panel base */
+  --em-surface-2:      #F8F9FA;  /* page subtle bg — was --brand-bg */
+  --em-surface-3:      #F1F5F2;  /* tinted tile bg used on /Live */
+  --em-surface-hero:   #F0FDF4;  /* hero gradient stop used on landing */
+
+  --em-ink:            #1B263B;  /* primary text — was --brand-text */
+  --em-ink-2:          #1F2937;  /* tile values, alt body ink already used in views */
+  --em-ink-muted:      #6C757D;  /* secondary text — was --brand-text-muted */
+  --em-ink-soft:       #6B7280;  /* alt muted ink already used in views */
+  --em-ink-faint:      #9CA3AF;  /* placeholders, no-data, idle status */
+
+  --em-line:           #E9ECEF;  /* default hairline — was --brand-border */
+  --em-line-soft:      #E5E7EB;  /* alt hairline already used in views */
+
+  /* ---------- Semantic status (used everywhere: queue badge, marker, timeline) ---------- */
+  --em-ok:                 #2D6A4F;            /* success = brand */
+  --em-ok-strong:          #10B981;            /* live indicator pulse / Good AQI */
+  --em-ok-tint:            #D1FAE5;            /* subtle ok wash — was --brand-icon-bg */
+
+  --em-warn:               #B8860B;            /* moderate band (Live air card) */
+  --em-warn-strong:        #F59E0B;            /* amber accent (status dot / pills) */
+  --em-warn-tint:          rgba(184, 134, 11, 0.08);
+  --em-warn-tint-strong:   rgba(184, 134, 11, 0.18);
+  --em-warn-ink:           #7A5A0A;            /* dark amber, text on warn tints */
+
+  --em-danger:             #B02A37;            /* hazardous / full container */
+  --em-danger-strong:      #EF4444;            /* brighter red — route end, "down" dot */
+  --em-danger-tint:        rgba(176, 42, 55, 0.08);
+  --em-danger-tint-strong: rgba(176, 42, 55, 0.16);
+  --em-danger-ink:         #7A1C25;            /* dark red, text on danger tints */
+
+  --em-info:               #1D4ED8;            /* route origin marker, /Live advisory */
+  --em-info-soft:          #93C5FD;            /* tints, OKTYABR district */
+
+  /* ---------- AQI band scale (must match AqiHelper.GetColorHex on the server) ---------- */
+  --em-aqi-good:                #10B981;
+  --em-aqi-moderate:            #FCD34D;
+  --em-aqi-unhealthy-sens:      #FB923C;
+  --em-aqi-unhealthy:           #EF4444;
+  --em-aqi-very-unhealthy:      #A855F7;
+  --em-aqi-hazardous:           #7F1D1D;
+  --em-aqi-unknown:             #9CA3AF;
+
+  /* ---------- District palette (data-side, must match seeded ColorHex per row) -------- */
+  --em-district-lenin:    #86EFAC;
+  --em-district-pervomay: #FCA5A5;
+  --em-district-sverdlov: #FCD34D;
+  --em-district-oktyabr:  #93C5FD;
+
+  /* ---------- Spacing scale (4px base) ---------- */
+  --em-space-1: 4px;
+  --em-space-2: 8px;
+  --em-space-3: 12px;
+  --em-space-4: 16px;
+  --em-space-5: 24px;
+  --em-space-6: 32px;
+  --em-space-7: 48px;
+  --em-space-section-y: var(--em-space-7);   /* default section padding-y */
+
+  /* ---------- Radius (one for controls, one for cards — skill rule) ---------- */
+  --em-radius-control: 6px;     /* buttons, inputs, badges */
+  --em-radius-card:    12px;    /* cards, popovers, modals */
+  --em-radius-pill:    999px;   /* status pills only */
+
+  /* ---------- Shadows (two levels only — hairline border + one soft elevation) ----- */
+  --em-shadow-soft:    0 4px 14px rgba(27, 67, 50, 0.08);
+  --em-shadow-soft-strong: 0 8px 22px rgba(27, 67, 50, 0.12);
+  --em-border-hairline: 1px solid var(--em-line);
+
+  /* ---------- Motion ---------- */
+  --em-transition-fast: 150ms ease-out;
+  --em-transition-norm: 200ms ease-out;
+
+  /* ---------- Legacy aliases — keep existing site.css and views unchanged ---------- */
+  /* (These match the values that used to live in site.css :root.) */
+  --brand-primary:        var(--em-brand);
+  --brand-primary-hover:  var(--em-brand-strong);
+  --brand-accent:         var(--em-brand-soft);
+  --brand-bg:             var(--em-surface-2);
+  --brand-card-bg:        var(--em-surface);
+  --brand-text:           var(--em-ink);
+  --brand-text-muted:     var(--em-ink-muted);
+  --brand-border:         var(--em-line);
+  --brand-icon-bg:        var(--em-ok-tint);
+  --brand-hero-from:      var(--em-surface-hero);
+  --brand-hero-to:        var(--em-surface);
+
+  /* =====================================================================
+     Bootstrap variable bridge — overrides take effect because tokens.css
+     loads AFTER bootstrap.min.css. We replace bs-blue (#0d6efd) with brand
+     green and align radius / border / ink with our scale.
+     ===================================================================== */
+  --bs-primary:          var(--em-brand);
+  --bs-primary-rgb:      45, 106, 79;
+  --bs-link-color:       var(--em-brand);
+  --bs-link-color-rgb:   45, 106, 79;
+  --bs-link-hover-color: var(--em-brand-strong);
+  --bs-link-hover-color-rgb: 27, 67, 50;
+
+  --bs-border-radius:    var(--em-radius-control);
+  --bs-border-radius-sm: 4px;
+  --bs-border-radius-lg: var(--em-radius-card);
+  --bs-border-color:     var(--em-line);
+
+  --bs-body-color:       var(--em-ink);
+  --bs-body-color-rgb:   27, 38, 59;
+  --bs-secondary-color:  var(--em-ink-muted);
+  --bs-tertiary-bg:      var(--em-surface-2);
+  --bs-light-rgb:        248, 249, 250;
+}
+
+/* ---------- Themed Bootstrap primitives (variables only — no overrides) ----------
+   These set the per-class CSS vars Bootstrap 5.3 uses, so utility classes resolve
+   to brand colors automatically without touching markup. */
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--em-brand);
+  --bs-btn-border-color: var(--em-brand);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--em-brand-strong);
+  --bs-btn-hover-border-color: var(--em-brand-strong);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--em-brand-strong);
+  --bs-btn-active-border-color: var(--em-brand-strong);
+  --bs-btn-focus-shadow-rgb: 45, 106, 79;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--em-brand);
+  --bs-btn-border-color: var(--em-brand);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--em-brand);
+  --bs-btn-hover-border-color: var(--em-brand);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--em-brand-strong);
+  --bs-btn-active-border-color: var(--em-brand-strong);
+  --bs-btn-focus-shadow-rgb: 45, 106, 79;
+}
+
+/* Link focus also brand-green, not bs-blue. */
+a:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--em-brand);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--em-brand-soft);
+  box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.18);
+}

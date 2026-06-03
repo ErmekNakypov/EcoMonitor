@@ -1,19 +1,7 @@
-:root {
-  --brand-primary: #2D6A4F;
-  --brand-primary-hover: #1B4332;
-  --brand-accent: #74C69D;
-  --brand-bg: #F8F9FA;
-  --brand-card-bg: #FFFFFF;
-  --brand-text: #1B263B;
-  --brand-text-muted: #6C757D;
-  --brand-border: #E9ECEF;
-  --brand-icon-bg: #D1FAE5;
-  --brand-hero-from: #F0FDF4;
-  --brand-hero-to: #FFFFFF;
-
-  --bs-primary: var(--brand-primary);
-  --bs-primary-rgb: 45, 106, 79;
-}
+/* Design tokens (--em-* canonical + legacy --brand-* aliases) and the
+   Bootstrap variable bridge now live in wwwroot/css/tokens.css and are
+   loaded BEFORE this file from _Layout.cshtml. Nothing here references new
+   raw hex values; everything resolves through var(--brand-*) / var(--em-*). */
 
 html {
   font-size: 14px;

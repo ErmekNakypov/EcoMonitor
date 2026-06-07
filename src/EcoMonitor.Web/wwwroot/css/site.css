@@ -78,21 +78,33 @@ h6, .h6 { font-size: var(--em-text-base); line-height: var(--em-leading-card); }
   transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-/* Navbar */
+/* =====================================================================
+   Navbar — skill step 3 refinement (refine, do not replace).
+   Sticky top, hairline bottom border, tokenised soft elevation. Active
+   state gets a brand-tinted pill PLUS a 2px brand underline so it's
+   visually decisive (skill: "clear active state"). Hover adds a subtle
+   surface wash so the cursor isn't lost on bare text. /Live link uses
+   the .nav-link--live modifier to mark itself as the live monitoring
+   surface with a pulsing brand-green dot (skill: "the live /Live page
+   link visually distinct").
+   ===================================================================== */
 .navbar {
-  background-color: #FFFFFF !important;
-  border-bottom: 1px solid var(--brand-border);
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  background-color: var(--em-surface) !important;
+  border-bottom: var(--em-border-hairline);
+  box-shadow: var(--em-shadow-soft);
+  padding-top: var(--em-space-3);
+  padding-bottom: var(--em-space-3);
 }
 
 .navbar-brand {
   color: var(--brand-primary) !important;
+  font-family: var(--em-font-display);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: var(--em-text-lg);
+  letter-spacing: -0.01em;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--em-space-2);
 }
 
 .navbar-brand .bi {
@@ -100,27 +112,66 @@ h6, .h6 { font-size: var(--em-text-base); line-height: var(--em-leading-card); }
 }
 
 .navbar .nav-link {
+  position: relative;             /* anchor for ::after underline + ::before dot */
   color: var(--brand-text) !important;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  transition: color 0.2s ease;
+  gap: var(--em-space-2);
+  padding-inline: var(--em-space-3);
+  border-radius: var(--em-radius-control);
+  transition: color var(--em-transition-fast),
+              background-color var(--em-transition-fast);
 }
 
 .navbar .nav-link:hover,
 .navbar .nav-link:focus {
   color: var(--brand-primary) !important;
+  background-color: var(--em-brand-tint-04);
 }
 
 .navbar .nav-link.active {
   color: var(--brand-primary) !important;
-  background-color: var(--brand-icon-bg);
-  border-radius: 8px;
+  background-color: var(--em-ok-tint);
+  border-radius: var(--em-radius-control);
+}
+
+/* Decisive active indicator — 2px brand bar beneath the pill. Independent
+   of color so it remains visible to colour-blind users (skill rule). */
+.navbar .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: var(--em-space-3);
+  right: var(--em-space-3);
+  bottom: -6px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--em-brand);
+}
+
+/* /Live link — pulsing brand-green dot before the icon. Pairs with the
+   "Live" text label and bi-broadcast icon, so meaning is never carried
+   by colour alone (skill accessibility rule). */
+.navbar .nav-link--live::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--em-ok-strong);
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55);
+  animation: navbarLivePulse 1.8s infinite;
+  margin-right: var(--em-space-1);
+}
+
+@keyframes navbarLivePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
 .navbar-cta {
-  border-radius: 8px;
+  border-radius: var(--em-radius-control);
 }
 
 .lang-toggle {

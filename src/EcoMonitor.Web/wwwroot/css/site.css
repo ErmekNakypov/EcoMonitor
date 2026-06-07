@@ -1546,6 +1546,25 @@ tr.clickable-row:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
 }
+/* Same anti-AI rules as .stat-strip__label — normal case, no uppercase,
+   no letter-spacing — applied here so the air-summary hero matches the
+   strip pattern instead of using the old uppercase fw-600 small label. */
+.air-summary-card__label {
+  font-size: var(--em-text-sm);
+  font-weight: 500;
+  color: var(--em-ink-muted);
+  line-height: 1.35;
+}
+.air-summary-card__value {
+  font-family: var(--em-font-display);
+  font-size: 32px;       /* skill range 24-32; hero is on the upper end */
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--em-ink);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: 0;
+}
 
 .station-stale {
   opacity: 0.6;
@@ -2098,6 +2117,14 @@ tr.clickable-row:hover {
   flex: 1 1 200px;
   padding: var(--em-space-4) var(--em-space-5);
   border-left: 1px solid var(--em-line);
+  /* Grid keeps the value row at a fixed offset even when the label
+     wraps to two lines — without it, a wrapped label pushes its
+     value down and the strip's tabular numbers no longer share a
+     baseline across cells. */
+  display: grid;
+  grid-template-rows: minmax(2.8em, auto) auto auto;
+  align-content: start;
+  row-gap: var(--em-space-2);
 }
 .stat-strip__item:first-child {
   border-left: 0;
@@ -2111,13 +2138,20 @@ tr.clickable-row:hover {
 }
 
 .stat-strip__label {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;        /* sits at the top of the reserved 2-line row */
   gap: var(--em-space-2);
   font-size: var(--em-text-sm);
   font-weight: 500;
+  line-height: 1.35;
   color: var(--em-ink-muted);
   /* normal case, no uppercase, no letter-spacing — anti-AI rule */
+}
+/* Optical alignment: the dot is a 8×8 circle and the label text uses
+   line-height 1.35 — drop the dot a few px so it sits on the cap-line
+   of the first label line instead of hugging the top of the line box. */
+.stat-strip__label > .stat-strip__dot {
+  margin-top: 0.45em;
 }
 
 /* Single semantic accent — small colored dot before the label.
@@ -2136,17 +2170,35 @@ tr.clickable-row:hover {
   font-weight: 700;
   line-height: 1.1;
   color: var(--em-ink);
-  margin-top: var(--em-space-2);
+  /* margin-top removed — .stat-strip__item's grid row-gap handles spacing
+     and keeps every cell's value aligned to a shared baseline. */
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
+  /* Reset any inherited tracking from the display font so the digits
+     line up perfectly under tabular-nums. */
+  letter-spacing: 0;
 }
 
 .stat-strip__caption {
   display: block;
-  margin-top: var(--em-space-2);
   font-size: var(--em-text-xs);
   color: var(--em-ink-muted);
   line-height: 1.4;
+}
+/* Anchor captions (role-aware links on the Map page, "View list" etc.)
+   inherit the muted ink colour so the strip is visually uniform — the
+   caption is metadata, not a call to action. Underline preserved as
+   the affordance; hover lifts the underline contrast. */
+.stat-strip__caption a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--em-line);
+  text-underline-offset: 2px;
+}
+.stat-strip__caption a:hover,
+.stat-strip__caption a:focus-visible {
+  color: var(--em-ink);
+  text-decoration-color: currentColor;
 }
 
 /* Unit suffix shown alongside the main tabular figure (km, min, %, ...).

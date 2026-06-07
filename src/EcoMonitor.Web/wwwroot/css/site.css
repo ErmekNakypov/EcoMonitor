@@ -2148,3 +2148,13 @@ tr.clickable-row:hover {
   color: var(--em-ink-muted);
   line-height: 1.4;
 }
+
+/* Unit suffix shown alongside the main tabular figure (km, min, %, ...).
+   Lighter weight + smaller size so the number stays the focal point. */
+.stat-strip__unit {
+  font-size: 0.6em;
+  font-weight: 500;
+  color: var(--em-ink-muted);
+  margin-left: 0.15em;
+  font-variant-numeric: normal;
+}

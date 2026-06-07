@@ -57,34 +57,26 @@
             </a>
         </div>
 
-        <div class="row g-3 mb-3">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Stops</span>
-                        <i class="bi bi-geo-alt-fill stat-icon" style="color:#2D6A4F;"></i>
-                    </div>
-                    <div class="stat-value">@Model.Stops.Count</div>
-                </div>
+        @* Stat strip — single shared surface, hairline dividers, no
+           corner icons, no uppercase labels, no dots. All three figures
+           are absolute route metrics (stop count, distance, ETA), not
+           rates with semantic state. Skill section "Dashboards and KPI
+           stats (anti-AI patterns)". *@
+        <div class="stat-strip mb-3">
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Stops</span>
+                <div class="stat-strip__value">@Model.Stops.Count</div>
+                <span class="stat-strip__caption">Selected for this route</span>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Total distance</span>
-                        <i class="bi bi-rulers stat-icon" style="color:#2D6A4F;"></i>
-                    </div>
-                    <div class="stat-value">@Model.TotalDistanceKm.ToString("F1") km</div>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Total distance</span>
+                <div class="stat-strip__value">@Model.TotalDistanceKm.ToString("F1") <span class="stat-strip__unit">km</span></div>
+                <span class="stat-strip__caption">Great-circle, nearest-neighbour order</span>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Estimated time</span>
-                        <i class="bi bi-clock stat-icon" style="color:#2D6A4F;"></i>
-                    </div>
-                    <div class="stat-value">~@Model.EstimatedMinutes min</div>
-                    <span class="text-muted small">at 25 km/h average urban speed</span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Estimated time</span>
+                <div class="stat-strip__value">~@Model.EstimatedMinutes <span class="stat-strip__unit">min</span></div>
+                <span class="stat-strip__caption">At 25 km/h urban average</span>
             </div>
         </div>
 

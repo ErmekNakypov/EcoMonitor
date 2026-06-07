@@ -2074,3 +2074,77 @@ tr.clickable-row:hover {
   border-bottom-color: var(--em-line);
   border-left-color: var(--em-line);
 }
+
+/* =====================================================================
+   Stat strip — replaces .stat-card grids on dashboards.
+   Skill section "Dashboards and KPI stats (anti-AI patterns)":
+   one shared surface; hairline vertical dividers between stats; no
+   corner icons; normal-case --em-ink-muted label; ONE accent maximum
+   (a small colored dot before the label) for semantic stats; tabular
+   figures at ~28px; "X of Y" context in the caption, never inflated
+   into the headline number.
+   ===================================================================== */
+.stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: var(--em-surface);
+  border: var(--em-border-hairline);
+  border-radius: var(--em-radius-card);
+  box-shadow: var(--em-shadow-soft);
+  overflow: hidden;
+}
+
+.stat-strip__item {
+  flex: 1 1 200px;
+  padding: var(--em-space-4) var(--em-space-5);
+  border-left: 1px solid var(--em-line);
+}
+.stat-strip__item:first-child {
+  border-left: 0;
+}
+
+/* Wrapped rows: dividers turn into top borders so each row gets its own
+   horizontal hairline rather than a stray vertical bar at the wrap-point. */
+@media (max-width: 768px) {
+  .stat-strip__item { border-top: 1px solid var(--em-line); }
+  .stat-strip__item:first-child { border-top: 0; }
+}
+
+.stat-strip__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--em-space-2);
+  font-size: var(--em-text-sm);
+  font-weight: 500;
+  color: var(--em-ink-muted);
+  /* normal case, no uppercase, no letter-spacing — anti-AI rule */
+}
+
+/* Single semantic accent — small colored dot before the label.
+   Caller sets the background colour inline from a semantic token. */
+.stat-strip__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.stat-strip__value {
+  font-family: var(--em-font-display);
+  font-size: 28px;       /* skill range 24-32; not 48+ */
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--em-ink);
+  margin-top: var(--em-space-2);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.stat-strip__caption {
+  display: block;
+  margin-top: var(--em-space-2);
+  font-size: var(--em-text-xs);
+  color: var(--em-ink-muted);
+  line-height: 1.4;
+}

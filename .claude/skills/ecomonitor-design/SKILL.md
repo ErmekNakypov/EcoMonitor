@@ -105,3 +105,25 @@ When asked to "improve the design", do not restyle everything blindly. Work in t
 layout and nav; 4) the highest-traffic screens (citizen report form, inspector queue,
 /Live dashboard); 5) map and charts theming; 6) empty states and micro-interactions.
 After each step, show the result and wait for confirmation before the next.
+
+## Dashboards and KPI stats (anti-AI patterns)
+
+The single biggest "AI-generated" tell is a grid of identical KPI cards:
+uppercase letter-spaced label + decorative icon in the top-right corner +
+oversized number + muted caption, each in its own bordered box. Never build
+stats this way.
+
+Rules:
+- No decorative icons in card corners. An icon is allowed only when it carries
+  meaning (status, trend), never as filler.
+- No uppercase letter-spaced labels. Normal case, medium weight, --em-ink-muted.
+- ONE accent maximum per card. Never combine a colored top border with a
+  colored left border. For semantic states use a small colored dot before the
+  label OR a 3px left bar - not both, and no brand top strip on top of it.
+- Prefer a stat strip over a card grid: one shared surface, stats separated by
+  hairline vertical dividers, label above value, context line below. Boxes are
+  for interactive content, not for single numbers.
+- Numbers: tabular figures, 24-32px, not 48px+. Context (period, X of Y) lives
+  in the caption, not in inflated digits.
+- Density: key stats fit above the fold; generous padding inside near-empty
+  boxes is a smell.

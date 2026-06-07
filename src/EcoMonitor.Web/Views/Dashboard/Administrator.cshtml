@@ -61,112 +61,76 @@
 
         <vc:air-quality-summary />
 
-        <div class="row g-4 mb-5">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Total users</span>
-                        <i class="bi bi-people stat-icon"></i>
-                    </div>
-                    <div class="stat-value">@Model.TotalUsers</div>
-                    <span class="text-muted small">Across all roles</span>
-                </div>
+        @* Stat strip — single shared surface, hairline vertical dividers.
+           Skill section "Dashboards and KPI stats (anti-AI patterns)":
+           normal-case labels, no corner icons, no double accent borders;
+           the three rate stats get a single semantic dot before the label. *@
+        <div class="stat-strip mb-5">
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Total users</span>
+                <div class="stat-strip__value">@Model.TotalUsers</div>
+                <span class="stat-strip__caption">Across all roles</span>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Total reports</span>
-                        <i class="bi bi-pin-map-fill stat-icon"></i>
-                    </div>
-                    <div class="stat-value">@Model.TotalReports</div>
-                    <span class="text-muted small">Citizen submissions</span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Total reports</span>
+                <div class="stat-strip__value">@Model.TotalReports</div>
+                <span class="stat-strip__caption">Citizen submissions</span>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Total containers</span>
-                        <i class="bi bi-trash3 stat-icon"></i>
-                    </div>
-                    <div class="stat-value">@Model.TotalContainers</div>
-                    <span class="text-muted small">Tracked across the city</span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Total containers</span>
+                <div class="stat-strip__value">@Model.TotalContainers</div>
+                <span class="stat-strip__caption">Tracked across the city</span>
             </div>
-        </div>
-
-        <div class="row g-4 mb-5">
-            <div class="col-md-6">
-                <div class="stat-card" style="border-left:4px solid #2D6A4F;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Auto-triage rate</span>
-                        <i class="bi bi-lightning-charge-fill stat-icon" style="color:#F59E0B;"></i>
-                    </div>
-                    <div class="stat-value">
-                        @Model.AutoTriagePercentage30d.ToString("0.#")%
-                    </div>
-                    <span class="text-muted small">
-                        @if (Model.AutoTriageTotal30d == 0)
-                        {
-                            <text>No reports in the last 30 days.</text>
-                        }
-                        else
-                        {
-                            <text>
-                                @Model.AutoTriageAutoConfirmed30d of @Model.AutoTriageTotal30d reports
-                                auto-confirmed in the last 30 days
-                                &middot; @Model.AutoTriageReviewed30d kicked to inspector review
-                            </text>
-                        }
-                    </span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">
+                    <span class="stat-strip__dot" style="background: var(--em-ok);"></span>
+                    Auto-triage rate
+                </span>
+                <div class="stat-strip__value">@Model.AutoTriagePercentage30d.ToString("0.#")%</div>
+                <span class="stat-strip__caption">
+                    @if (Model.AutoTriageTotal30d == 0)
+                    {
+                        <text>No reports in the last 30 days.</text>
+                    }
+                    else
+                    {
+                        <text>@Model.AutoTriageAutoConfirmed30d of @Model.AutoTriageTotal30d auto-confirmed (30d) · @Model.AutoTriageReviewed30d sent to inspector review</text>
+                    }
+                </span>
             </div>
-            <div class="col-md-6">
-                <div class="stat-card" style="border-left:4px solid #DC2626;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Citizen appeal rate</span>
-                        <i class="bi bi-exclamation-octagon-fill stat-icon" style="color:#DC2626;"></i>
-                    </div>
-                    <div class="stat-value">
-                        @Model.AppealsPercentage30d.ToString("0.#")%
-                    </div>
-                    <span class="text-muted small">
-                        @if (Model.AppealsTotalEligible30d == 0)
-                        {
-                            <text>No resolved reports in the last 30 days.</text>
-                        }
-                        else
-                        {
-                            <text>
-                                @Model.AppealsAppealed30d of @Model.AppealsTotalEligible30d resolved reports
-                                appealed by citizens in the last 30 days
-                            </text>
-                        }
-                    </span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">
+                    <span class="stat-strip__dot" style="background: var(--em-danger);"></span>
+                    Citizen appeal rate
+                </span>
+                <div class="stat-strip__value">@Model.AppealsPercentage30d.ToString("0.#")%</div>
+                <span class="stat-strip__caption">
+                    @if (Model.AppealsTotalEligible30d == 0)
+                    {
+                        <text>No resolved reports in the last 30 days.</text>
+                    }
+                    else
+                    {
+                        <text>@Model.AppealsAppealed30d of @Model.AppealsTotalEligible30d resolved reports appealed (30d)</text>
+                    }
+                </span>
             </div>
-            <div class="col-md-6">
-                <div class="stat-card" style="border-left:4px solid #F59E0B;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Cleanup-crew flag rate</span>
-                        <i class="bi bi-flag-fill stat-icon" style="color:#F59E0B;"></i>
-                    </div>
-                    <div class="stat-value">
-                        @Model.FlagsPercentage30d.ToString("0.#")%
-                    </div>
-                    <span class="text-muted small">
-                        @if (Model.FlagsTotalEligible30d == 0)
-                        {
-                            <text>No cleanups dispatched in the last 30 days.</text>
-                        }
-                        else
-                        {
-                            <text>
-                                @Model.FlagsFlagged30d of @Model.FlagsTotalEligible30d confirmed reports
-                                flagged by cleanup crews on site
-                            </text>
-                        }
-                    </span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">
+                    <span class="stat-strip__dot" style="background: var(--em-warn);"></span>
+                    Cleanup-crew flag rate
+                </span>
+                <div class="stat-strip__value">@Model.FlagsPercentage30d.ToString("0.#")%</div>
+                <span class="stat-strip__caption">
+                    @if (Model.FlagsTotalEligible30d == 0)
+                    {
+                        <text>No cleanups dispatched in the last 30 days.</text>
+                    }
+                    else
+                    {
+                        <text>@Model.FlagsFlagged30d of @Model.FlagsTotalEligible30d confirmed reports flagged on site (30d)</text>
+                    }
+                </span>
             </div>
         </div>
 

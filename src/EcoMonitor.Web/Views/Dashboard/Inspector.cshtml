@@ -17,36 +17,26 @@
             <div class="text-muted small mt-3 mt-sm-0">@DateTime.Now.ToString("dddd, d MMMM yyyy")</div>
         </div>
 
-        <div class="row g-4 mb-5">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Queue size</span>
-                        <i class="bi bi-inboxes stat-icon"></i>
-                    </div>
-                    <div class="stat-value">@Model.QueueSize</div>
-                    <span class="text-muted small">Unassigned new reports</span>
-                </div>
+        @* Stat strip — single shared surface, hairline dividers, no corner
+           icons, no uppercase labels. All three stats are absolute counts
+           (not rates with semantic state), so no dot accent before the
+           label — the strip stays neutral. Skill section "Dashboards and
+           KPI stats (anti-AI patterns)". *@
+        <div class="stat-strip mb-5">
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Queue size</span>
+                <div class="stat-strip__value">@Model.QueueSize</div>
+                <span class="stat-strip__caption">Unassigned new reports</span>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">My active</span>
-                        <i class="bi bi-clipboard-pulse stat-icon"></i>
-                    </div>
-                    <div class="stat-value">@Model.MyActiveReports</div>
-                    <span class="text-muted small">In review or confirmed</span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">My active</span>
+                <div class="stat-strip__value">@Model.MyActiveReports</div>
+                <span class="stat-strip__caption">In review or confirmed</span>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">My resolved</span>
-                        <i class="bi bi-check2-circle stat-icon"></i>
-                    </div>
-                    <div class="stat-value">@Model.MyResolvedReports</div>
-                    <span class="text-muted small">Closed cases</span>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">My resolved</span>
+                <div class="stat-strip__value">@Model.MyResolvedReports</div>
+                <span class="stat-strip__caption">Closed cases</span>
             </div>
         </div>
 

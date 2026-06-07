@@ -121,67 +121,62 @@
             <strong>Own sensors</strong> (push). Real-time data from registered IoT devices.
         </p>
 
-        <div class="row g-3 mt-3">
-            <div class="col-md-4">
-                <div class="map-stat-card" style="border-left-color:#2D6A4F">
-                    <div class="text-muted text-uppercase small fw-600">Air quality</div>
-                    <div class="d-flex align-items-baseline gap-2 mt-2">
-                        <span id="stat-air" class="display-6 fw-800">—</span>
-                        <span class="text-muted small">AQI US average</span>
-                    </div>
-                    <div class="text-muted small mt-2">
-                        <span id="stat-air-stations">0</span> stations active in the last 24 hours
-                    </div>
-                </div>
+        @* Stat strip — replaces the three .map-stat-card boxes with one
+           shared surface, hairline vertical dividers, no uppercase
+           labels, no coloured left borders, and tabular numbers. Counts
+           are absolute (not rates with semantic meaning), so no dot
+           accent. Element IDs (stat-air, stat-air-stations,
+           stat-containers, stat-confirmed, stat-resolved) are preserved
+           so the existing Leaflet scripts continue to populate them.
+           Skill section "Dashboards and KPI stats (anti-AI patterns)". *@
+        <div class="stat-strip mt-3">
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Air quality</span>
+                <div class="stat-strip__value" id="stat-air">—</div>
+                <span class="stat-strip__caption">
+                    AQI US average · <span id="stat-air-stations">0</span> stations in last 24h
+                </span>
             </div>
-            <div class="col-md-4">
-                <div class="map-stat-card" style="border-left-color:#3B82F6">
-                    <div class="text-muted text-uppercase small fw-600">Waste network</div>
-                    <div class="d-flex align-items-baseline gap-2 mt-2">
-                        <span id="stat-containers" class="display-6 fw-800">—</span>
-                        <span class="text-muted small">active containers</span>
-                    </div>
-                    <div class="text-muted small mt-2">
-                        @if (isAdmin)
-                        {
-                            <a asp-area="Admin" asp-controller="Containers" asp-action="Index">View list</a>
-                        }
-                        else
-                        {
-                            <span>across the city</span>
-                        }
-                    </div>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Containers</span>
+                <div class="stat-strip__value" id="stat-containers">—</div>
+                <span class="stat-strip__caption">
+                    @if (isAdmin)
+                    {
+                        <a asp-area="Admin" asp-controller="Containers" asp-action="Index">Active across the city</a>
+                    }
+                    else
+                    {
+                        <text>Active across the city</text>
+                    }
+                </span>
             </div>
-            <div class="col-md-4">
-                <div class="map-stat-card" style="border-left-color:#EF4444">
-                    <div class="text-muted text-uppercase small fw-600">Active reports</div>
-                    <div class="d-flex align-items-baseline gap-2 mt-2">
-                        <span id="stat-confirmed" class="display-6 fw-800">—</span>
-                        <span class="text-muted small">confirmed</span>
-                        <span class="text-muted small">·</span>
-                        <span id="stat-resolved" class="fw-700">—</span>
-                        <span class="text-muted small">resolved</span>
-                    </div>
-                    <div class="text-muted small mt-2">
-                        @if (isCitizen)
-                        {
-                            <a asp-controller="Citizen" asp-action="Create"><i class="bi bi-plus-circle me-1"></i>Report a dumpsite</a>
-                        }
-                        else if (isInspector)
-                        {
-                            <a asp-controller="Inspector" asp-action="Queue"><i class="bi bi-inboxes me-1"></i>Inspector queue</a>
-                        }
-                        else if (isAdmin)
-                        {
-                            <a asp-area="Admin" asp-controller="Reports" asp-action="Index">All reports</a>
-                        }
-                        else
-                        {
-                            <span>visible to citizens once confirmed</span>
-                        }
-                    </div>
-                </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Confirmed reports</span>
+                <div class="stat-strip__value" id="stat-confirmed">—</div>
+                <span class="stat-strip__caption">
+                    @if (isCitizen)
+                    {
+                        <a asp-controller="Citizen" asp-action="Create">Report a dumpsite</a>
+                    }
+                    else if (isInspector)
+                    {
+                        <a asp-controller="Inspector" asp-action="Queue">Inspector queue</a>
+                    }
+                    else if (isAdmin)
+                    {
+                        <a asp-area="Admin" asp-controller="Reports" asp-action="Index">All active reports</a>
+                    }
+                    else
+                    {
+                        <text>Active dumpsite reports</text>
+                    }
+                </span>
+            </div>
+            <div class="stat-strip__item">
+                <span class="stat-strip__label">Resolved</span>
+                <div class="stat-strip__value" id="stat-resolved">—</div>
+                <span class="stat-strip__caption">Cleaned-up reports</span>
             </div>
         </div>
 

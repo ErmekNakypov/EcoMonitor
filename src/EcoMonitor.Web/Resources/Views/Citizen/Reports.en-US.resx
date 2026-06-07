@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Badge" xml:space="preserve"><value>Your reports</value></data>
+  <data name="TotalCount" xml:space="preserve"><value>{0} total</value></data>
+
+  <data name="TabActive" xml:space="preserve"><value>Active</value></data>
+  <data name="TabResolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="TabRejected" xml:space="preserve"><value>Rejected</value></data>
+  <data name="TabAll" xml:space="preserve"><value>All</value></data>
+
+  <data name="EmptyDefaultTitle" xml:space="preserve"><value>You haven't reported any dumpsites yet</value></data>
+  <data name="EmptyDefaultSubtitle" xml:space="preserve"><value>When you submit your first report, it will appear here so you can track its progress.</value></data>
+  <data name="EmptyDefaultCta" xml:space="preserve"><value>Report your first dumpsite</value></data>
+
+  <data name="EmptyActiveTitle" xml:space="preserve"><value>No reports in progress</value></data>
+  <data name="EmptyActiveSubtitle" xml:space="preserve"><value>Reports being reviewed, cleaned up, or under appeal will appear here.</value></data>
+  <data name="EmptyResolvedTitle" xml:space="preserve"><value>No resolved reports yet</value></data>
+  <data name="EmptyResolvedSubtitle" xml:space="preserve"><value>Once an inspector verifies a cleanup, the report will appear here.</value></data>
+  <data name="EmptyRejectedTitle" xml:space="preserve"><value>No rejected reports</value></data>
+  <data name="EmptyRejectedSubtitle" xml:space="preserve"><value>Reports an inspector decided not to act on will appear here.</value></data>
+
+  <data name="AltReportPhoto" xml:space="preserve"><value>Report photo</value></data>
+  <data name="ReportedAt" xml:space="preserve"><value>Reported {0}</value></data>
+  <data name="ViewDetails" xml:space="preserve"><value>View details</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Reports pagination</value></data>
+</root>

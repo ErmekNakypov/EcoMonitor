@@ -47,4 +47,9 @@
   <data name="Nav.NoRoles" xml:space="preserve"><value>No roles</value></data>
 
   <data name="Nav.ToggleNavigation" xml:space="preserve"><value>Toggle navigation</value></data>
+
+  <data name="Common.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common.Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Common.Previous" xml:space="preserve"><value>Previous</value></data>
+  <data name="Common.Next" xml:space="preserve"><value>Next</value></data>
 </root>

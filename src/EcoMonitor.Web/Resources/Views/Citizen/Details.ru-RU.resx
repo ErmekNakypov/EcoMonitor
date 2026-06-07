@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Детали заявки</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Заявка о свалке</value></data>
+
+  <data name="ReportedAndUpdated" xml:space="preserve"><value>Подано {0} ({1}) · обновлено {2}</value></data>
+
+  <data name="AppealButton" xml:space="preserve"><value>Не согласен с решением</value></data>
+  <data name="AppealTimeRemaining" xml:space="preserve"><value>Осталось {0}д {1}ч на подачу апелляции</value></data>
+
+  <data name="Progress" xml:space="preserve"><value>Ход рассмотрения</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Подано</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>На рассмотрении</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Подтверждено</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Уборка</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Ожидает проверки инспектором</value></data>
+  <data name="Step4SubFlagged" xml:space="preserve"><value>Инспектор рассматривает отчёт с места</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Закрыто</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Решено</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Оспорено</value></data>
+  <data name="AppealUnderReview" xml:space="preserve"><value>Ваша апелляция рассматривается инспектором.</value></data>
+
+  <data name="ReportRejected" xml:space="preserve"><value>Заявка отклонена</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Закрыто: {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Описание</value></data>
+
+  <data name="YourPhotos" xml:space="preserve"><value>Ваши фото ({0})</value></data>
+  <data name="YourPhotosCaption" xml:space="preserve"><value>Фото, приложенные к заявке.</value></data>
+  <data name="AltReportPhoto" xml:space="preserve"><value>Фото заявки {0}</value></data>
+
+  <data name="InspectorPhotos" xml:space="preserve"><value>Фото проверки инспектора ({0})</value></data>
+  <data name="InspectorPhotosCaption" xml:space="preserve"><value>Фото, сделанные инспектором при подтверждении свалки.</value></data>
+  <data name="AltInspectorPhoto" xml:space="preserve"><value>Фото инспектора</value></data>
+
+  <data name="BeforeCleanup" xml:space="preserve"><value>До уборки ({0})</value></data>
+  <data name="BeforeCleanupCaption" xml:space="preserve"><value>Состояние участка к прибытию бригады.</value></data>
+  <data name="AltBeforeCleanup" xml:space="preserve"><value>До уборки</value></data>
+
+  <data name="AfterCleanup" xml:space="preserve"><value>После уборки ({0})</value></data>
+  <data name="AfterCleanupCaption" xml:space="preserve"><value>Состояние участка после уборки. &lt;strong&gt;Именно это было заявлено как решение.&lt;/strong&gt;</value></data>
+  <data name="AltAfterCleanup" xml:space="preserve"><value>После уборки</value></data>
+
+  <data name="Resolution" xml:space="preserve"><value>Решение</value></data>
+  <data name="CleanedUpBy" xml:space="preserve"><value>Убрала бригада &lt;strong&gt;{0}&lt;/strong&gt;</value></data>
+  <data name="CleanupCompleted" xml:space="preserve"><value>Уборка завершена {0}</value></data>
+  <data name="VerifiedByInspectorOn" xml:space="preserve"><value>Проверено инспектором &lt;strong&gt;{0}&lt;/strong&gt; {1}</value></data>
+  <data name="VerifiedOn" xml:space="preserve"><value>Проверено {0}</value></data>
+
+  <data name="YourAppeal" xml:space="preserve"><value>Ваша апелляция</value></data>
+  <data name="Filed" xml:space="preserve"><value>Подано {0}</value></data>
+  <data name="AltAppealPhoto" xml:space="preserve"><value>Фото апелляции {0}</value></data>
+  <data name="WaitingForReview" xml:space="preserve"><value>Ожидает рассмотрения инспектором.</value></data>
+  <data name="AppealUpheld" xml:space="preserve"><value>Апелляция удовлетворена — уборка будет повторена</value></data>
+  <data name="AppealDismissed" xml:space="preserve"><value>Апелляция отклонена</value></data>
+  <data name="ReviewedOn" xml:space="preserve"><value>Рассмотрено {0}</value></data>
+
+  <data name="Location" xml:space="preserve"><value>Местоположение</value></data>
+  <data name="ActivityTimeline" xml:space="preserve"><value>История действий</value></data>
+  <data name="AltPhotoModal" xml:space="preserve"><value>Фото заявки</value></data>
+
+  <data name="ModalBodyExplain" xml:space="preserve"><value>Объясните, что осталось не так. Инспектор повторно осмотрит место. У вас есть 7 дней с момента решения, чтобы подать апелляцию.</value></data>
+  <data name="ModalReasonLabel" xml:space="preserve"><value>Причина</value></data>
+  <data name="ModalReasonHelp" xml:space="preserve"><value>От 10 до 500 символов.</value></data>
+  <data name="ModalPhotosLabel" xml:space="preserve"><value>Фото (по желанию, до 5)</value></data>
+  <data name="ModalPhotosHelp" xml:space="preserve"><value>JPEG, PNG или WEBP. До 5 МБ за файл.</value></data>
+  <data name="ModalSubmitButton" xml:space="preserve"><value>Подать апелляцию</value></data>
+</root>

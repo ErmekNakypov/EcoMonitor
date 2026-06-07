@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Билдирүүнүн чоо-жайы</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Таштанды жөнүндө билдирүү</value></data>
+
+  <data name="ReportedAndUpdated" xml:space="preserve"><value>Берилген {0} ({1}) · жаңыланган {2}</value></data>
+
+  <data name="AppealButton" xml:space="preserve"><value>Чечим менен макул эмесмин</value></data>
+  <data name="AppealTimeRemaining" xml:space="preserve"><value>Даттанууга {0}к {1}с калды</value></data>
+
+  <data name="Progress" xml:space="preserve"><value>Жүрүшү</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Берилген</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>Каралууда</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Тастыкталган</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Тазалоо</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Инспектордун текшерүүсүн күтөт</value></data>
+  <data name="Step4SubFlagged" xml:space="preserve"><value>Инспектор жайдан билдирүүнү карайт</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Жабылган</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Чечилген</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Даттанган</value></data>
+  <data name="AppealUnderReview" xml:space="preserve"><value>Сиздин даттанууңуз инспектор тарабынан каралууда.</value></data>
+
+  <data name="ReportRejected" xml:space="preserve"><value>Билдирүү четке кагылды</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Жабылган: {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Сүрөттөмө</value></data>
+
+  <data name="YourPhotos" xml:space="preserve"><value>Сиздин сүрөттөр ({0})</value></data>
+  <data name="YourPhotosCaption" xml:space="preserve"><value>Билдирүүгө тиркелген сүрөттөр.</value></data>
+  <data name="AltReportPhoto" xml:space="preserve"><value>Билдирүү сүрөтү {0}</value></data>
+
+  <data name="InspectorPhotos" xml:space="preserve"><value>Инспектордун текшерүү сүрөттөрү ({0})</value></data>
+  <data name="InspectorPhotosCaption" xml:space="preserve"><value>Инспектор таштандыны тастыктаганда тарткан сүрөттөр.</value></data>
+  <data name="AltInspectorPhoto" xml:space="preserve"><value>Инспектор сүрөтү</value></data>
+
+  <data name="BeforeCleanup" xml:space="preserve"><value>Тазалоого чейин ({0})</value></data>
+  <data name="BeforeCleanupCaption" xml:space="preserve"><value>Бригада келгенге чейинки абалы.</value></data>
+  <data name="AltBeforeCleanup" xml:space="preserve"><value>Тазалоого чейин</value></data>
+
+  <data name="AfterCleanup" xml:space="preserve"><value>Тазалоодон кийин ({0})</value></data>
+  <data name="AfterCleanupCaption" xml:space="preserve"><value>Тазалоодон кийинки абалы. &lt;strong&gt;Чечилди деп ушул билдирилген.&lt;/strong&gt;</value></data>
+  <data name="AltAfterCleanup" xml:space="preserve"><value>Тазалоодон кийин</value></data>
+
+  <data name="Resolution" xml:space="preserve"><value>Чечим</value></data>
+  <data name="CleanedUpBy" xml:space="preserve"><value>Тазалаган бригада: &lt;strong&gt;{0}&lt;/strong&gt;</value></data>
+  <data name="CleanupCompleted" xml:space="preserve"><value>Тазалоо аяктады {0}</value></data>
+  <data name="VerifiedByInspectorOn" xml:space="preserve"><value>&lt;strong&gt;{0}&lt;/strong&gt; инспектор {1} текшерген</value></data>
+  <data name="VerifiedOn" xml:space="preserve"><value>Текшерилген {0}</value></data>
+
+  <data name="YourAppeal" xml:space="preserve"><value>Сиздин даттанууңуз</value></data>
+  <data name="Filed" xml:space="preserve"><value>Берилген {0}</value></data>
+  <data name="AltAppealPhoto" xml:space="preserve"><value>Даттануу сүрөтү {0}</value></data>
+  <data name="WaitingForReview" xml:space="preserve"><value>Инспектордун кароосун күтөт.</value></data>
+  <data name="AppealUpheld" xml:space="preserve"><value>Даттануу канааттандырылды — тазалоо кайра жасалат</value></data>
+  <data name="AppealDismissed" xml:space="preserve"><value>Даттануу четке кагылды</value></data>
+  <data name="ReviewedOn" xml:space="preserve"><value>Каралган {0}</value></data>
+
+  <data name="Location" xml:space="preserve"><value>Жайгашкан жери</value></data>
+  <data name="ActivityTimeline" xml:space="preserve"><value>Аракеттер тарыхы</value></data>
+  <data name="AltPhotoModal" xml:space="preserve"><value>Билдирүү сүрөтү</value></data>
+
+  <data name="ModalBodyExplain" xml:space="preserve"><value>Эмне туура эмес экенин түшүндүрүңүз. Инспектор жайды кайра карайт. Чечимден кийин даттанууга 7 күн убакыт бар.</value></data>
+  <data name="ModalReasonLabel" xml:space="preserve"><value>Себеби</value></data>
+  <data name="ModalReasonHelp" xml:space="preserve"><value>10–500 символ.</value></data>
+  <data name="ModalPhotosLabel" xml:space="preserve"><value>Сүрөттөр (милдеттүү эмес, 5ке чейин)</value></data>
+  <data name="ModalPhotosHelp" xml:space="preserve"><value>JPEG, PNG же WEBP. Ар бири эң көп 5 МБ.</value></data>
+  <data name="ModalSubmitButton" xml:space="preserve"><value>Даттанууну жөнөтүү</value></data>
+</root>

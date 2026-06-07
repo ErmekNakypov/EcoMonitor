@@ -1,13 +1,15 @@
 @model ReportDetailsViewModel
 @using EcoMonitor.Domain.Enums
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
     var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
-    if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
-    ViewData["Title"] = "Report details";
+    if (string.IsNullOrWhiteSpace(headline)) headline = Localizer["FallbackHeadline"].Value;
+    ViewData["Title"] = Localizer["Title"].Value;
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home") },
-        new BreadcrumbItem { Label = "My reports", Url = Url.Action("Reports", "Citizen") },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Home"].Value,      Url = Url.Action("Index", "Home") },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.MyReports"].Value, Url = Url.Action("Reports", "Citizen") },
         new BreadcrumbItem { Label = headline });
 
     int currentStage = Model.Status switch
@@ -49,7 +51,8 @@
         return string.Empty;
     }
 
-    string Stage5Label = Model.Status == DumpsiteStatus.Closed ? "Closed" : "Resolved";
+    // Per-status stage-5 label is picked here so the markup stays branch-free.
+    string stage5LabelKey = Model.Status == DumpsiteStatus.Closed ? "Step5Closed" : "Step5Resolved";
 
     var remaining = Model.AppealTimeRemaining;
 }
@@ -80,8 +83,10 @@
                 </div>
                 <h1 class="h3 fw-700 mt-2 mb-1">@headline</h1>
                 <p class="text-muted small mb-0">
-                    Reported @DateHelpers.FormatRelative(Model.CreatedAt) (@DateHelpers.FormatShort(Model.CreatedAt))
-                    &middot; updated @DateHelpers.FormatRelative(Model.UpdatedAt)
+                    @Localizer["ReportedAndUpdated",
+                        DateHelpers.FormatRelative(Model.CreatedAt),
+                        DateHelpers.FormatShort(Model.CreatedAt),
+                        DateHelpers.FormatRelative(Model.UpdatedAt)]
                 </p>
             </div>
             @if (Model.CanAppeal && Model.AppealedAt is null)
@@ -90,12 +95,12 @@
                     <button type="button" class="btn btn-outline-danger"
                             data-bs-toggle="modal" data-bs-target="#appeal-modal">
                         <i class="bi bi-flag-fill me-1"></i>
-                        Appeal this resolution
+                        @Localizer["AppealButton"]
                     </button>
                     @if (remaining is { } left)
                     {
                         <div class="text-muted small mt-1 text-end">
-                            @Math.Max(0, (int)left.TotalDays)d @left.Hours h left to appeal
+                            @Localizer["AppealTimeRemaining", Math.Max(0, (int)left.TotalDays), left.Hours]
                         </div>
                     }
                 </div>
@@ -103,41 +108,41 @@
         </div>
 
         <div class="auth-card mb-4">
-            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <h2 class="h6 fw-700 mb-3">@Localizer["Progress"]</h2>
             <div class="status-stepper">
                 <div class="status-step @StepClass(1)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 1 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)1)</span>
-                    <div class="status-step-label">Submitted</div>
+                    <div class="status-step-label">@Localizer["Step1Submitted"]</div>
                 </div>
                 <div class="status-step @StepClass(2)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 2 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)2)</span>
-                    <div class="status-step-label">In review</div>
+                    <div class="status-step-label">@Localizer["Step2InReview"]</div>
                 </div>
                 <div class="status-step @StepClass(3)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 3 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)3)</span>
-                    <div class="status-step-label">Confirmed</div>
+                    <div class="status-step-label">@Localizer["Step3Confirmed"]</div>
                 </div>
                 <div class="status-step @StepClass(4)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 4 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)4)</span>
                     <div class="status-step-label">
-                        Cleanup
+                        @Localizer["Step4Cleanup"]
                         @if (Model.Status == DumpsiteStatus.AwaitingVerification)
                         {
-                            <div class="text-muted small mt-1">Awaiting inspector verification</div>
+                            <div class="text-muted small mt-1">@Localizer["Step4SubAwaitingVerification"]</div>
                         }
                         else if (Model.Status == DumpsiteStatus.FlaggedByCleanupCrew)
                         {
-                            <div class="text-muted small mt-1">Inspector reviewing site report</div>
+                            <div class="text-muted small mt-1">@Localizer["Step4SubFlagged"]</div>
                         }
                     </div>
                 </div>
                 <div class="status-step @StepClass(5)">
                     <span class="status-step-bullet">5</span>
                     <div class="status-step-label">
-                        @Stage5Label
+                        @Localizer[stage5LabelKey]
                         @if (Model.Status == DumpsiteStatus.Appealed)
                         {
-                            <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
+                            <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">@Localizer["Step5BadgeAppealed"]</span>
                         }
                     </div>
                 </div>
@@ -145,7 +150,7 @@
             @if (Model.Status == DumpsiteStatus.Appealed)
             {
                 <div class="alert alert-info small mb-0 mt-3">
-                    <i class="bi bi-flag-fill me-1"></i> Your appeal is under review by an inspector.
+                    <i class="bi bi-flag-fill me-1"></i> @Localizer["AppealUnderReview"]
                 </div>
             }
         </div>
@@ -155,14 +160,14 @@
             <div class="alert-rejected mb-4">
                 <i class="bi bi-x-circle-fill"></i>
                 <div>
-                    <div class="fw-700">Report rejected</div>
+                    <div class="fw-700">@Localizer["ReportRejected"]</div>
                     @if (!string.IsNullOrWhiteSpace(Model.RejectionReason))
                     {
                         <div style="font-size:0.875rem;margin-top:0.25rem;">@Model.RejectionReason</div>
                     }
                     @if (Model.ResolvedAt.HasValue)
                     {
-                        <div class="text-muted small mt-2">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</div>
+                        <div class="text-muted small mt-2">@Localizer["ClosedOn", DateHelpers.FormatShort(Model.ResolvedAt.Value)]</div>
                     }
                 </div>
             </div>
@@ -171,21 +176,21 @@
         <div class="row g-4">
             <div class="col-md-7">
                 <div class="auth-card mb-4">
-                    <h2 class="h6 fw-700 mb-2">Description</h2>
+                    <h2 class="h6 fw-700 mb-2">@Localizer["DescriptionHeading"]</h2>
                     <p class="mb-0">@Model.Description</p>
                 </div>
 
                 @if (Model.PhotoPaths.Count > 0)
                 {
                     <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-1">Your photos (@Model.PhotoPaths.Count)</h2>
-                        <p class="text-muted small mb-3">Photos you submitted with this report.</p>
+                        <h2 class="h6 fw-700 mb-1">@Localizer["YourPhotos", Model.PhotoPaths.Count]</h2>
+                        <p class="text-muted small mb-3">@Localizer["YourPhotosCaption"]</p>
                         <div class="photo-gallery">
                             @for (int i = 0; i < Model.PhotoPaths.Count; i++)
                             {
                                 var path = Model.PhotoPaths[i];
                                 <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                    <img src="@path" alt="Report photo @(i + 1)" />
+                                    <img src="@path" alt="@Localizer["AltReportPhoto", i + 1]" />
                                 </a>
                             }
                         </div>
@@ -195,13 +200,13 @@
                 @if (Model.InspectionPhotos.Count > 0)
                 {
                     <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-1">Inspector verification photos (@Model.InspectionPhotos.Count)</h2>
-                        <p class="text-muted small mb-3">Photos taken by the inspector when confirming the dumpsite.</p>
+                        <h2 class="h6 fw-700 mb-1">@Localizer["InspectorPhotos", Model.InspectionPhotos.Count]</h2>
+                        <p class="text-muted small mb-3">@Localizer["InspectorPhotosCaption"]</p>
                         <div class="photo-gallery">
                             @foreach (var path in Model.InspectionPhotos)
                             {
                                 <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                    <img src="@path" alt="Inspector photo" />
+                                    <img src="@path" alt="@Localizer["AltInspectorPhoto"]" />
                                 </a>
                             }
                         </div>
@@ -211,13 +216,13 @@
                 @if (Model.BeforeCleanupPhotos.Count > 0)
                 {
                     <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-1">Before cleanup (@Model.BeforeCleanupPhotos.Count)</h2>
-                        <p class="text-muted small mb-3">State of the site when the cleanup crew arrived.</p>
+                        <h2 class="h6 fw-700 mb-1">@Localizer["BeforeCleanup", Model.BeforeCleanupPhotos.Count]</h2>
+                        <p class="text-muted small mb-3">@Localizer["BeforeCleanupCaption"]</p>
                         <div class="photo-gallery">
                             @foreach (var path in Model.BeforeCleanupPhotos)
                             {
                                 <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                    <img src="@path" alt="Before cleanup" />
+                                    <img src="@path" alt="@Localizer["AltBeforeCleanup"]" />
                                 </a>
                             }
                         </div>
@@ -227,13 +232,16 @@
                 @if (Model.AfterCleanupPhotos.Count > 0)
                 {
                     <div class="auth-card photo-section-highlight mb-4">
-                        <h2 class="h6 fw-700 mb-1">After cleanup (@Model.AfterCleanupPhotos.Count)</h2>
-                        <p class="text-muted small mb-3">State of the site after cleanup. <strong>This is what was reported as resolved.</strong></p>
+                        <h2 class="h6 fw-700 mb-1">@Localizer["AfterCleanup", Model.AfterCleanupPhotos.Count]</h2>
+                        @* AfterCleanupCaption contains a <strong>...</strong> emphasis span
+                           kept inside the resource value; IHtmlLocalizer renders it without
+                           re-encoding so the bold passes through. *@
+                        <p class="text-muted small mb-3">@Localizer["AfterCleanupCaption"]</p>
                         <div class="photo-gallery">
                             @foreach (var path in Model.AfterCleanupPhotos)
                             {
                                 <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                    <img src="@path" alt="After cleanup" />
+                                    <img src="@path" alt="@Localizer["AltAfterCleanup"]" />
                                 </a>
                             }
                         </div>
@@ -244,7 +252,7 @@
                     && Model.ResolvedAt.HasValue)
                 {
                     <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-2">Resolution</h2>
+                        <h2 class="h6 fw-700 mb-2">@Localizer["Resolution"]</h2>
                         @if (!string.IsNullOrWhiteSpace(Model.ResolutionNotes))
                         {
                             <p class="mb-2">@Model.ResolutionNotes</p>
@@ -252,19 +260,19 @@
                         <div class="resolution-meta">
                             @if (!string.IsNullOrEmpty(Model.CleanupCrewName))
                             {
-                                <div><i class="bi bi-people-fill me-1"></i> Cleaned up by <strong>@Model.CleanupCrewName</strong></div>
+                                <div><i class="bi bi-people-fill me-1"></i> @Localizer["CleanedUpBy", Model.CleanupCrewName]</div>
                             }
                             @if (Model.CleanupCompletedAt.HasValue)
                             {
-                                <div><i class="bi bi-clock me-1"></i> Cleanup completed @DateHelpers.FormatShort(Model.CleanupCompletedAt.Value)</div>
+                                <div><i class="bi bi-clock me-1"></i> @Localizer["CleanupCompleted", DateHelpers.FormatShort(Model.CleanupCompletedAt.Value)]</div>
                             }
                             @if (!string.IsNullOrEmpty(Model.VerifiedByInspectorName))
                             {
-                                <div><i class="bi bi-shield-check me-1"></i> Verified by inspector <strong>@Model.VerifiedByInspectorName</strong> on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</div>
+                                <div><i class="bi bi-shield-check me-1"></i> @Localizer["VerifiedByInspectorOn", Model.VerifiedByInspectorName, DateHelpers.FormatShort(Model.ResolvedAt.Value)]</div>
                             }
                             else
                             {
-                                <div><i class="bi bi-shield-check me-1"></i> Verified @DateHelpers.FormatShort(Model.ResolvedAt.Value)</div>
+                                <div><i class="bi bi-shield-check me-1"></i> @Localizer["VerifiedOn", DateHelpers.FormatShort(Model.ResolvedAt.Value)]</div>
                             }
                         </div>
                     </div>
@@ -274,8 +282,8 @@
                 {
                     <div class="auth-card mb-4" style="border-left:4px solid #DC2626;">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h2 class="h6 fw-700 mb-0">Your appeal</h2>
-                            <span class="text-muted small">Filed @DateHelpers.FormatShort(Model.AppealedAt.Value)</span>
+                            <h2 class="h6 fw-700 mb-0">@Localizer["YourAppeal"]</h2>
+                            <span class="text-muted small">@Localizer["Filed", DateHelpers.FormatShort(Model.AppealedAt.Value)]</span>
                         </div>
                         @if (!string.IsNullOrWhiteSpace(Model.AppealReason))
                         {
@@ -288,7 +296,7 @@
                                 {
                                     var path = Model.AppealPhotos[i];
                                     <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                        <img src="@path" alt="Appeal photo @(i + 1)" />
+                                        <img src="@path" alt="@Localizer["AltAppealPhoto", i + 1]" />
                                     </a>
                                 }
                             </div>
@@ -297,20 +305,20 @@
                         {
                             <p class="text-muted small mb-0">
                                 <i class="bi bi-hourglass-split me-1"></i>
-                                Waiting for an inspector to review.
+                                @Localizer["WaitingForReview"]
                             </p>
                         }
                         else
                         {
                             var outcomeClass = Model.AppealOutcome == AppealOutcome.Upheld ? "text-success" : "text-secondary";
-                            var outcomeLabel = Model.AppealOutcome == AppealOutcome.Upheld ? "Appeal upheld — cleanup will be redone" : "Appeal dismissed";
+                            var outcomeLabelKey = Model.AppealOutcome == AppealOutcome.Upheld ? "AppealUpheld" : "AppealDismissed";
                             <div class="mt-2 pt-2 border-top">
-                                <strong class="@outcomeClass d-block mb-1">@outcomeLabel</strong>
+                                <strong class="@outcomeClass d-block mb-1">@Localizer[outcomeLabelKey]</strong>
                                 @if (!string.IsNullOrWhiteSpace(Model.AppealResolutionNotes))
                                 {
                                     <p class="mb-1">@Model.AppealResolutionNotes</p>
                                 }
-                                <p class="text-muted small mb-0">Reviewed @DateHelpers.FormatShort(Model.AppealReviewedAt.Value)</p>
+                                <p class="text-muted small mb-0">@Localizer["ReviewedOn", DateHelpers.FormatShort(Model.AppealReviewedAt.Value)]</p>
                             </div>
                         }
                     </div>
@@ -319,13 +327,13 @@
 
             <div class="col-md-5">
                 <div class="auth-card mb-4">
-                    <h2 class="h6 fw-700 mb-3">Location</h2>
+                    <h2 class="h6 fw-700 mb-3">@Localizer["Location"]</h2>
                     <div id="details-map"></div>
                     <p class="text-muted small mb-0 mt-2">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</p>
                 </div>
 
                 <div class="auth-card">
-                    <h2 class="h6 fw-700 mb-3"><i class="bi bi-clock-history me-1"></i>Activity timeline</h2>
+                    <h2 class="h6 fw-700 mb-3"><i class="bi bi-clock-history me-1"></i>@Localizer["ActivityTimeline"]</h2>
                     @await Html.PartialAsync("_ReportTimeline", Model.Events)
                 </div>
             </div>
@@ -337,7 +345,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-body p-0">
-                <img id="photo-modal-img" src="" alt="Report photo" class="w-100 rounded" />
+                <img id="photo-modal-img" src="" alt="@Localizer["AltPhotoModal"]" class="w-100 rounded" />
             </div>
         </div>
     </div>
@@ -352,32 +360,31 @@
                 @Html.AntiForgeryToken()
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Appeal this resolution</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title">@Localizer["AppealButton"]</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@SharedLocalizer["Common.Close"]"></button>
                     </div>
                     <div class="modal-body">
                         <p class="text-muted small">
-                            Explain what's still wrong. An inspector will revisit the site. You have 7 days from
-                            the resolution to appeal.
+                            @Localizer["ModalBodyExplain"]
                         </p>
                         <div class="mb-3">
-                            <label for="appeal-reason" class="form-label fw-700">Reason</label>
+                            <label for="appeal-reason" class="form-label fw-700">@Localizer["ModalReasonLabel"]</label>
                             <textarea id="appeal-reason" name="appealReason" class="form-control"
                                       rows="4" minlength="10" maxlength="500" required></textarea>
-                            <div class="form-text">10–500 characters.</div>
+                            <div class="form-text">@Localizer["ModalReasonHelp"]</div>
                         </div>
                         <div class="mb-2">
-                            <label for="appeal-photos" class="form-label fw-700">Photos (optional, up to 5)</label>
+                            <label for="appeal-photos" class="form-label fw-700">@Localizer["ModalPhotosLabel"]</label>
                             <input id="appeal-photos" name="appealPhotos" type="file" class="form-control"
                                    accept="image/jpeg,image/png,image/webp" multiple />
-                            <div class="form-text">JPEG, PNG, or WEBP. Max 5 MB each.</div>
+                            <div class="form-text">@Localizer["ModalPhotosHelp"]</div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@SharedLocalizer["Common.Cancel"]</button>
                         <button type="submit" class="btn btn-danger">
                             <i class="bi bi-flag-fill me-1"></i>
-                            Submit appeal
+                            @Localizer["ModalSubmitButton"]
                         </button>
                     </div>
                 </div>

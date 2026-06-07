@@ -26,6 +26,5 @@
   <data name="LocationPrefix" xml:space="preserve"><value>Location: </value></data>
   <data name="LocationError" xml:space="preserve"><value>Could not determine your location.</value></data>
 
-  <data name="CancelButton" xml:space="preserve"><value>Cancel</value></data>
   <data name="SubmitButton" xml:space="preserve"><value>Submit report</value></data>
 </root>

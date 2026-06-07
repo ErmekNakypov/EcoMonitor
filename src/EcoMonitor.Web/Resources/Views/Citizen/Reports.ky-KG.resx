@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Badge" xml:space="preserve"><value>Сиздин билдирүүлөр</value></data>
+  <data name="TotalCount" xml:space="preserve"><value>баары: {0}</value></data>
+
+  <data name="TabActive" xml:space="preserve"><value>Активдүү</value></data>
+  <data name="TabResolved" xml:space="preserve"><value>Чечилген</value></data>
+  <data name="TabRejected" xml:space="preserve"><value>Четке кагылган</value></data>
+  <data name="TabAll" xml:space="preserve"><value>Баары</value></data>
+
+  <data name="EmptyDefaultTitle" xml:space="preserve"><value>Сиз азырынча билдирүү берген жоксуз</value></data>
+  <data name="EmptyDefaultSubtitle" xml:space="preserve"><value>Биринчи билдирүүңүздү жөнөтсөңүз, ал бул жерде көрүнөт — жүрүшүн көзөмөлдөңүз.</value></data>
+  <data name="EmptyDefaultCta" xml:space="preserve"><value>Биринчи билдирүүнү берүү</value></data>
+
+  <data name="EmptyActiveTitle" xml:space="preserve"><value>Активдүү билдирүүлөр жок</value></data>
+  <data name="EmptyActiveSubtitle" xml:space="preserve"><value>Каралып жаткан, тазаланып жаткан же даттанылган билдирүүлөр бул жерде көрүнөт.</value></data>
+  <data name="EmptyResolvedTitle" xml:space="preserve"><value>Чечилген билдирүүлөр азырынча жок</value></data>
+  <data name="EmptyResolvedSubtitle" xml:space="preserve"><value>Инспектор тазалоону тастыктагандан кийин билдирүү бул жерде көрүнөт.</value></data>
+  <data name="EmptyRejectedTitle" xml:space="preserve"><value>Четке кагылган билдирүүлөр жок</value></data>
+  <data name="EmptyRejectedSubtitle" xml:space="preserve"><value>Инспектор иш-аракет көрбөөнү чечкен билдирүүлөр бул жерде көрүнөт.</value></data>
+
+  <data name="AltReportPhoto" xml:space="preserve"><value>Билдирүү сүрөтү</value></data>
+  <data name="ReportedAt" xml:space="preserve"><value>Берилген {0}</value></data>
+  <data name="ViewDetails" xml:space="preserve"><value>Толугураак</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Билдирүүлөр боюнча барактар</value></data>
+</root>

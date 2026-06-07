@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Report details</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Dumpsite report</value></data>
+
+  <data name="ReportedAndUpdated" xml:space="preserve"><value>Reported {0} ({1}) · updated {2}</value></data>
+
+  <data name="AppealButton" xml:space="preserve"><value>Appeal this resolution</value></data>
+  <data name="AppealTimeRemaining" xml:space="preserve"><value>{0}d {1}h left to appeal</value></data>
+
+  <data name="Progress" xml:space="preserve"><value>Progress</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Submitted</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>In review</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Confirmed</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Cleanup</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Awaiting inspector verification</value></data>
+  <data name="Step4SubFlagged" xml:space="preserve"><value>Inspector reviewing site report</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Closed</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Appealed</value></data>
+  <data name="AppealUnderReview" xml:space="preserve"><value>Your appeal is under review by an inspector.</value></data>
+
+  <data name="ReportRejected" xml:space="preserve"><value>Report rejected</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Closed on {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Description</value></data>
+
+  <data name="YourPhotos" xml:space="preserve"><value>Your photos ({0})</value></data>
+  <data name="YourPhotosCaption" xml:space="preserve"><value>Photos you submitted with this report.</value></data>
+  <data name="AltReportPhoto" xml:space="preserve"><value>Report photo {0}</value></data>
+
+  <data name="InspectorPhotos" xml:space="preserve"><value>Inspector verification photos ({0})</value></data>
+  <data name="InspectorPhotosCaption" xml:space="preserve"><value>Photos taken by the inspector when confirming the dumpsite.</value></data>
+  <data name="AltInspectorPhoto" xml:space="preserve"><value>Inspector photo</value></data>
+
+  <data name="BeforeCleanup" xml:space="preserve"><value>Before cleanup ({0})</value></data>
+  <data name="BeforeCleanupCaption" xml:space="preserve"><value>State of the site when the cleanup crew arrived.</value></data>
+  <data name="AltBeforeCleanup" xml:space="preserve"><value>Before cleanup</value></data>
+
+  <data name="AfterCleanup" xml:space="preserve"><value>After cleanup ({0})</value></data>
+  <data name="AfterCleanupCaption" xml:space="preserve"><value>State of the site after cleanup. &lt;strong&gt;This is what was reported as resolved.&lt;/strong&gt;</value></data>
+  <data name="AltAfterCleanup" xml:space="preserve"><value>After cleanup</value></data>
+
+  <data name="Resolution" xml:space="preserve"><value>Resolution</value></data>
+  <data name="CleanedUpBy" xml:space="preserve"><value>Cleaned up by &lt;strong&gt;{0}&lt;/strong&gt;</value></data>
+  <data name="CleanupCompleted" xml:space="preserve"><value>Cleanup completed {0}</value></data>
+  <data name="VerifiedByInspectorOn" xml:space="preserve"><value>Verified by inspector &lt;strong&gt;{0}&lt;/strong&gt; on {1}</value></data>
+  <data name="VerifiedOn" xml:space="preserve"><value>Verified {0}</value></data>
+
+  <data name="YourAppeal" xml:space="preserve"><value>Your appeal</value></data>
+  <data name="Filed" xml:space="preserve"><value>Filed {0}</value></data>
+  <data name="AltAppealPhoto" xml:space="preserve"><value>Appeal photo {0}</value></data>
+  <data name="WaitingForReview" xml:space="preserve"><value>Waiting for an inspector to review.</value></data>
+  <data name="AppealUpheld" xml:space="preserve"><value>Appeal upheld — cleanup will be redone</value></data>
+  <data name="AppealDismissed" xml:space="preserve"><value>Appeal dismissed</value></data>
+  <data name="ReviewedOn" xml:space="preserve"><value>Reviewed {0}</value></data>
+
+  <data name="Location" xml:space="preserve"><value>Location</value></data>
+  <data name="ActivityTimeline" xml:space="preserve"><value>Activity timeline</value></data>
+  <data name="AltPhotoModal" xml:space="preserve"><value>Report photo</value></data>
+
+  <data name="ModalBodyExplain" xml:space="preserve"><value>Explain what's still wrong. An inspector will revisit the site. You have 7 days from the resolution to appeal.</value></data>
+  <data name="ModalReasonLabel" xml:space="preserve"><value>Reason</value></data>
+  <data name="ModalReasonHelp" xml:space="preserve"><value>10–500 characters.</value></data>
+  <data name="ModalPhotosLabel" xml:space="preserve"><value>Photos (optional, up to 5)</value></data>
+  <data name="ModalPhotosHelp" xml:space="preserve"><value>JPEG, PNG, or WEBP. Max 5 MB each.</value></data>
+  <data name="ModalSubmitButton" xml:space="preserve"><value>Submit appeal</value></data>
+</root>

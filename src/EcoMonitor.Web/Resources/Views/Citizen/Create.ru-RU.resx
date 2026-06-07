@@ -26,6 +26,5 @@
   <data name="LocationPrefix" xml:space="preserve"><value>Место: </value></data>
   <data name="LocationError" xml:space="preserve"><value>Не удалось определить ваше местоположение.</value></data>
 
-  <data name="CancelButton" xml:space="preserve"><value>Отмена</value></data>
   <data name="SubmitButton" xml:space="preserve"><value>Отправить заявку</value></data>
 </root>

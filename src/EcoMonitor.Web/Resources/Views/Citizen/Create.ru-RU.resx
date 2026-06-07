@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BreadcrumbNew" xml:space="preserve"><value>Новая заявка</value></data>
+
+  <data name="Heading" xml:space="preserve"><value>Сообщить о несанкционированной свалке</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Отметьте место, опишите, что видите, прикрепите фото.</value></data>
+
+  <data name="DescriptionLabel" xml:space="preserve"><value>Описание</value></data>
+  <data name="DescriptionPlaceholder" xml:space="preserve"><value>Что вы видели? Примерный размер, вид мусора, любые особенности.</value></data>
+
+  <data name="PhotosLabel" xml:space="preserve"><value>Фото</value></data>
+  <data name="PhotosHelp" xml:space="preserve"><value>JPEG, PNG или WEBP. До 5 фото, по 5 МБ.</value></data>
+
+  <data name="LocationLabel" xml:space="preserve"><value>Местоположение</value></data>
+  <data name="MapPickerHint" xml:space="preserve"><value>Кликните на карте, чтобы отметить место.</value></data>
+  <data name="MapPickerLongHint" xml:space="preserve"><value>Кликните на карте, чтобы отметить место, или используйте кнопку определения.</value></data>
+  <data name="UseMyLocation" xml:space="preserve"><value>Моё местоположение</value></data>
+
+  <data name="DistrictRoutedPrefix" xml:space="preserve"><value>Заявка будет направлена в район: </value></data>
+  <data name="DistrictOutside" xml:space="preserve"><value>Это место за пределами обозначенных районов — заявку рассмотрит общегородской инспектор.</value></data>
+  <data name="LocationPrefix" xml:space="preserve"><value>Место: </value></data>
+  <data name="LocationError" xml:space="preserve"><value>Не удалось определить ваше местоположение.</value></data>
+
+  <data name="CancelButton" xml:space="preserve"><value>Отмена</value></data>
+  <data name="SubmitButton" xml:space="preserve"><value>Отправить заявку</value></data>
+</root>

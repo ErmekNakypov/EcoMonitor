@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Менин такта</value></data>
+  <data name="Badge" xml:space="preserve"><value>Тургун</value></data>
+  <data name="Heading" xml:space="preserve"><value>Сиздин салымыңыз</value></data>
+  <data name="WelcomeBack" xml:space="preserve"><value>Кош келдиңиз, {0}</value></data>
+
+  <data name="CtaBadge" xml:space="preserve"><value>Аракетке</value></data>
+  <data name="CtaTitle" xml:space="preserve"><value>Уруксатсыз таштандыны байкадыңызбы?</value></data>
+  <data name="CtaSubtitle" xml:space="preserve"><value>Сүрөт тартып, жайын белгилеңиз — инспектор иштетет. Ар бир билдирүү Бишкекти тазараак кылат.</value></data>
+  <data name="CtaButton" xml:space="preserve"><value>Билдирүү</value></data>
+
+  <data name="TelegramHint" xml:space="preserve"><value>Telegram аркылуу да билдирүүгө болот:</value></data>
+
+  <data name="YourReports" xml:space="preserve"><value>Сиздин билдирүүлөрүңүз</value></data>
+  <data name="ViewAll" xml:space="preserve"><value>Баары ({0})</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Билдирүүлөр азырынча жок</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Билдирүү жөнөтсөңүз, ал бул жерде көрүнөт — жүрүшүн көзөмөлдөңүз.</value></data>
+</root>

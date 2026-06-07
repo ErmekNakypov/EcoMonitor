@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BreadcrumbNew" xml:space="preserve"><value>Жаңы билдирүү</value></data>
+
+  <data name="Heading" xml:space="preserve"><value>Уруксатсыз таштанды жөнүндө билдирүү</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Жайын белгилеңиз, көргөнүңүздү сүрөттөңүз, сүрөт тиркеңиз.</value></data>
+
+  <data name="DescriptionLabel" xml:space="preserve"><value>Сүрөттөмө</value></data>
+  <data name="DescriptionPlaceholder" xml:space="preserve"><value>Эмне көрдүңүз? Болжолдуу өлчөмү, таштандынын түрү, башка майда-чүйдөлөр.</value></data>
+
+  <data name="PhotosLabel" xml:space="preserve"><value>Сүрөттөр</value></data>
+  <data name="PhotosHelp" xml:space="preserve"><value>JPEG, PNG же WEBP. Эң көп 5 сүрөт, ар бири 5 МБ.</value></data>
+
+  <data name="LocationLabel" xml:space="preserve"><value>Жайгашкан жери</value></data>
+  <data name="MapPickerHint" xml:space="preserve"><value>Жайын белгилөө үчүн картадан чыкылдатыңыз.</value></data>
+  <data name="MapPickerLongHint" xml:space="preserve"><value>Жайын белгилөө үчүн картадан чыкылдатыңыз же геолокация баскычын колдонуңуз.</value></data>
+  <data name="UseMyLocation" xml:space="preserve"><value>Менин жайым</value></data>
+
+  <data name="DistrictRoutedPrefix" xml:space="preserve"><value>Билдирүү багытталат: </value></data>
+  <data name="DistrictOutside" xml:space="preserve"><value>Бул жер белгиленген райондордон тышкары — жалпы инспектор карайт.</value></data>
+  <data name="LocationPrefix" xml:space="preserve"><value>Жай: </value></data>
+  <data name="LocationError" xml:space="preserve"><value>Сиздин жайыңыз аныкталган жок.</value></data>
+
+  <data name="CancelButton" xml:space="preserve"><value>Жокко чыгаруу</value></data>
+  <data name="SubmitButton" xml:space="preserve"><value>Билдирүү жөнөтүү</value></data>
+</root>

@@ -1,10 +1,15 @@
 @model CreateReportViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Report a dumpsite";
+    // Page title doubles as the navbar's "Report dumpsite" label — reuse
+    // the existing Nav.ReportDumpsite shared key instead of duplicating
+    // that literal in this view's resource file.
+    ViewData["Title"] = SharedLocalizer["Nav.ReportDumpsite"].Value;
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home") },
-        new BreadcrumbItem { Label = "My reports", Url = Url.Action("Reports", "Citizen") },
-        new BreadcrumbItem { Label = "New report" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Home"].Value,        Url = Url.Action("Index", "Home") },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.MyReports"].Value,   Url = Url.Action("Reports", "Citizen") },
+        new BreadcrumbItem { Label = Localizer["BreadcrumbNew"].Value });
 }
 
 <section class="py-5">
@@ -13,10 +18,10 @@
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-camera"></i>
-                <span>Report a dumpsite</span>
+                <span>@SharedLocalizer["Nav.ReportDumpsite"]</span>
             </span>
-            <h1 class="h2 fw-700 mt-3 mb-1">Report an unauthorized dumpsite</h1>
-            <p class="text-muted mb-0">Pin the location, describe what you see, attach photos.</p>
+            <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+            <p class="text-muted mb-0">@Localizer["Subtitle"]</p>
         </div>
 
         <form asp-controller="Citizen" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
@@ -26,17 +31,20 @@
                 <div class="col-md-7">
                     <div class="auth-card">
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label fw-500"></label>
+                            @* Plain <label> with explicit text instead of asp-for so we
+                               can localise without touching the view model's
+                               [Display(Name = …)] attribute (separate concern). *@
+                            <label class="form-label fw-500" for="Description">@Localizer["DescriptionLabel"]</label>
                             <textarea asp-for="Description" rows="5" class="form-control"
-                                      placeholder="What did you see? Approximate size, type of waste, anything noteworthy."></textarea>
+                                      placeholder="@Localizer["DescriptionPlaceholder"]"></textarea>
                             <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-500" for="photos-input">Photos</label>
+                            <label class="form-label fw-500" for="photos-input">@Localizer["PhotosLabel"]</label>
                             <input id="photos-input" name="photos" type="file" multiple accept="image/jpeg,image/png,image/webp"
                                    class="form-control" />
-                            <div class="form-text">JPEG, PNG, or WEBP. Up to 5 photos, 5 MB each.</div>
+                            <div class="form-text">@Localizer["PhotosHelp"]</div>
                             <ul id="photos-list" class="list-unstyled mt-2 mb-0"></ul>
                         </div>
 
@@ -44,8 +52,8 @@
                         <input type="hidden" name="Longitude" id="Longitude" value="" />
 
                         <div class="mb-3">
-                            <span class="form-label fw-500 d-block">Location</span>
-                            <span id="coords-text" class="text-muted small">Click on the map to set the location.</span>
+                            <span class="form-label fw-500 d-block">@Localizer["LocationLabel"]</span>
+                            <span id="coords-text" class="text-muted small">@Localizer["MapPickerHint"]</span>
                             @* Client-side PREVIEW only. Authoritative district routing is done
                                server-side in SubmitDumpsiteReportHandler via IDistrictResolver; the
                                server wins on disagreement and the preview never crosses the wire. *@
@@ -55,9 +63,9 @@
                         </div>
 
                         <div class="d-flex gap-2 justify-content-between align-items-center">
-                            <a asp-controller="Citizen" asp-action="Reports" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                            <a asp-controller="Citizen" asp-action="Reports" class="btn btn-outline-secondary btn-lg">@Localizer["CancelButton"]</a>
                             <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
-                                <i class="bi bi-send me-2"></i>Submit report
+                                <i class="bi bi-send me-2"></i>@Localizer["SubmitButton"]
                             </button>
                         </div>
                     </div>
@@ -66,9 +74,9 @@
                 <div class="col-md-5">
                     <div id="dumpsite-map"></div>
                     <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 mt-3">
-                        <span class="text-muted small">Click on the map to set the location, or use the locate button.</span>
+                        <span class="text-muted small">@Localizer["MapPickerLongHint"]</span>
                         <button type="button" id="locate-btn" class="btn btn-outline-secondary">
-                            <i class="bi bi-geo-alt-fill me-2"></i>Use my location
+                            <i class="bi bi-geo-alt-fill me-2"></i>@Localizer["UseMyLocation"]
                         </button>
                     </div>
                 </div>
@@ -80,8 +88,23 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="~/js/districts-overlay.js" asp-append-version="true"></script>
+    @* JSON-encoded i18n bridge for the inline script below.
+       Going through System.Text.Json.JsonSerializer.Serialize gives us
+       proper escaping for Cyrillic, quotes, backslashes and newlines —
+       writing the strings as bare JS literals would break the moment
+       a translation contained an apostrophe or a Unicode character
+       outside the BMP. *@
+    <script>
+        window.__createReportI18n = {
+            districtRoutedPrefix: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["DistrictRoutedPrefix"].Value)),
+            districtOutside:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["DistrictOutside"].Value)),
+            locationPrefix:       @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["LocationPrefix"].Value)),
+            locationError:        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["LocationError"].Value))
+        };
+    </script>
     <script>
         (function () {
+            const i18n = window.__createReportI18n;
             const map = L.map('dumpsite-map').setView([42.8746, 74.5698], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -128,10 +151,10 @@
                 }
                 const d = districtsOverlay.getDistrictForPoint(lat, lng);
                 if (d) {
-                    districtHint.textContent = 'Your report will be routed to: ' + (d.name_ru || d.name_en || d.code);
+                    districtHint.textContent = i18n.districtRoutedPrefix + (d.name_ru || d.name_en || d.code);
                     districtHint.style.color = d.color || '';
                 } else {
-                    districtHint.textContent = 'This location is outside the mapped districts; a general inspector will review it.';
+                    districtHint.textContent = i18n.districtOutside;
                     districtHint.style.color = '';
                 }
             }
@@ -139,7 +162,7 @@
             function updateInputs(latlng) {
                 latInput.value = latlng.lat.toString();
                 lngInput.value = latlng.lng.toString();
-                coordText.textContent = 'Location: ' + latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
+                coordText.textContent = i18n.locationPrefix + latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
                 coordText.classList.remove('text-muted');
                 coordText.classList.add('text-body');
                 updateDistrictHint(latlng.lat, latlng.lng);
@@ -165,7 +188,7 @@
 
             map.on('locationfound', function (e) { placeMarker(e.latlng); });
             map.on('locationerror', function () {
-                alert('Could not determine your location.');
+                alert(i18n.locationError);
             });
 
             document.getElementById('photos-input').addEventListener('change', function () {

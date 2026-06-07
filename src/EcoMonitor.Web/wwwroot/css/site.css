@@ -1889,3 +1889,75 @@ tr.clickable-row:hover {
 .reporter-stat-pending   .reporter-stat-value { color: #F59E0B; }
 .reporter-stat-confirmed .reporter-stat-value { color: #059669; }
 .reporter-stat-rejected  .reporter-stat-value { color: #DC2626; }
+
+/* =====================================================================
+   STEP 4 — Key-screen polish (citizen report form, inspector queue, /Live).
+   Skill rules applied here:
+     - ONE radius for cards (10-12px) — currently .auth-card was 24px,
+       .feature-card 24px, .stat-card 16px, .cta-card 24px, .report-card
+       18px, .report-thumb 14px. All retightened to var(--em-radius-card)
+       (12px) via cascade override, so the citizen create form, inspector
+       queue, login/register, dashboard stats, etc. all use the same
+       card shape without touching markup.
+     - ONE soft elevation shadow. Replaces per-class ad-hoc shadows with
+       var(--em-shadow-soft) (and -strong on hover).
+     - Hairline borders from var(--em-line) — not raw hex.
+     - Focus rings already brand-coloured via tokens.css.
+     - No new hues introduced; only the radius / shadow scale changes.
+   ===================================================================== */
+
+.auth-card,
+.feature-card,
+.cta-card,
+.report-card,
+.map-stat-card,
+.stat-card {
+  border-radius: var(--em-radius-card);
+}
+
+.report-thumb,
+.report-thumb-placeholder {
+  border-radius: 8px;        /* photo thumbs: tighter than card radius */
+}
+
+.auth-card {
+  box-shadow: var(--em-shadow-soft);
+  border-color: var(--em-line);
+}
+
+.feature-card:hover,
+.stat-card:hover,
+.report-card:hover {
+  box-shadow: var(--em-shadow-soft-strong);
+}
+
+.report-card {
+  border-color: var(--em-line);
+}
+
+/* Inspector queue toolbar — light brand-aware refinement. */
+.queue-toolbar {
+  border-radius: var(--em-radius-card);
+}
+
+.filter-chip {
+  border-color: var(--em-line);
+  border-radius: var(--em-radius-pill);   /* explicitly pill — semantic chip */
+}
+
+/* Citizen report-form map picker — give the Leaflet container itself the
+   same card-radius + hairline so it sits visually with .auth-card. */
+#dumpsite-map {
+  height: 380px;
+  border-radius: var(--em-radius-card);
+  border: var(--em-border-hairline);
+  overflow: hidden;
+}
+
+/* Tabular figures across all stat-style KPI numbers. */
+.stat-card .stat-value,
+.map-stat-card .stat-value,
+.reporter-stat-value {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}

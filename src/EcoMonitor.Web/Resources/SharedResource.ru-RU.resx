@@ -12,7 +12,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Language" xml:space="preserve">
-    <value>Язык</value>
-  </data>
+
+  <data name="Language" xml:space="preserve"><value>Язык</value></data>
+
+  <data name="Nav.Home" xml:space="preserve"><value>Главная</value></data>
+  <data name="Nav.Dashboard" xml:space="preserve"><value>Панель</value></data>
+  <data name="Nav.Map" xml:space="preserve"><value>Карта</value></data>
+  <data name="Nav.Live" xml:space="preserve"><value>Эфир</value></data>
+
+  <data name="Nav.Containers" xml:space="preserve"><value>Контейнеры</value></data>
+  <data name="Nav.Users" xml:space="preserve"><value>Пользователи</value></data>
+  <data name="Nav.Reports" xml:space="preserve"><value>Заявки</value></data>
+
+  <data name="Nav.System" xml:space="preserve"><value>Система</value></data>
+  <data name="Nav.System.IotDevices" xml:space="preserve"><value>IoT-устройства</value></data>
+  <data name="Nav.System.TelegramBot" xml:space="preserve"><value>Telegram-бот</value></data>
+  <data name="Nav.System.EmailDiagnostics" xml:space="preserve"><value>Email-диагностика</value></data>
+  <data name="Nav.System.Diagnostics" xml:space="preserve"><value>Диагностика системы</value></data>
+
+  <data name="Nav.Queue" xml:space="preserve"><value>Очередь</value></data>
+  <data name="Nav.MyReports" xml:space="preserve"><value>Мои заявки</value></data>
+  <data name="Nav.Verification" xml:space="preserve"><value>Проверка</value></data>
+  <data name="Nav.Appeals" xml:space="preserve"><value>Апелляции</value></data>
+  <data name="Nav.Flagged" xml:space="preserve"><value>Спорные</value></data>
+
+  <data name="Nav.CleanupQueue" xml:space="preserve"><value>Очередь уборки</value></data>
+  <data name="Nav.MyCleanups" xml:space="preserve"><value>Мои уборки</value></data>
+
+  <data name="Nav.ReportDumpsite" xml:space="preserve"><value>Сообщить о свалке</value></data>
+
+  <data name="Nav.SignIn" xml:space="preserve"><value>Войти</value></data>
+  <data name="Nav.GetStarted" xml:space="preserve"><value>Начать</value></data>
+  <data name="Nav.SignOut" xml:space="preserve"><value>Выйти</value></data>
+  <data name="Nav.NoRoles" xml:space="preserve"><value>Нет ролей</value></data>
+
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>Открыть меню</value></data>
 </root>

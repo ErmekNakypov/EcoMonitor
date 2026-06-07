@@ -12,7 +12,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Language" xml:space="preserve">
-    <value>Language</value>
-  </data>
+
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+
+  <data name="Nav.Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav.Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="Nav.Map" xml:space="preserve"><value>Map</value></data>
+  <data name="Nav.Live" xml:space="preserve"><value>Live</value></data>
+
+  <data name="Nav.Containers" xml:space="preserve"><value>Containers</value></data>
+  <data name="Nav.Users" xml:space="preserve"><value>Users</value></data>
+  <data name="Nav.Reports" xml:space="preserve"><value>Reports</value></data>
+
+  <data name="Nav.System" xml:space="preserve"><value>System</value></data>
+  <data name="Nav.System.IotDevices" xml:space="preserve"><value>IoT devices</value></data>
+  <data name="Nav.System.TelegramBot" xml:space="preserve"><value>Telegram bot</value></data>
+  <data name="Nav.System.EmailDiagnostics" xml:space="preserve"><value>Email diagnostics</value></data>
+  <data name="Nav.System.Diagnostics" xml:space="preserve"><value>System diagnostics</value></data>
+
+  <data name="Nav.Queue" xml:space="preserve"><value>Queue</value></data>
+  <data name="Nav.MyReports" xml:space="preserve"><value>My reports</value></data>
+  <data name="Nav.Verification" xml:space="preserve"><value>Verification</value></data>
+  <data name="Nav.Appeals" xml:space="preserve"><value>Appeals</value></data>
+  <data name="Nav.Flagged" xml:space="preserve"><value>Flagged</value></data>
+
+  <data name="Nav.CleanupQueue" xml:space="preserve"><value>Cleanup queue</value></data>
+  <data name="Nav.MyCleanups" xml:space="preserve"><value>My cleanups</value></data>
+
+  <data name="Nav.ReportDumpsite" xml:space="preserve"><value>Report dumpsite</value></data>
+
+  <data name="Nav.SignIn" xml:space="preserve"><value>Sign in</value></data>
+  <data name="Nav.GetStarted" xml:space="preserve"><value>Get started</value></data>
+  <data name="Nav.SignOut" xml:space="preserve"><value>Sign out</value></data>
+  <data name="Nav.NoRoles" xml:space="preserve"><value>No roles</value></data>
+
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>Toggle navigation</value></data>
 </root>

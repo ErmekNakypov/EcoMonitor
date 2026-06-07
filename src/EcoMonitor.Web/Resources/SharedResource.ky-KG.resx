@@ -12,7 +12,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Language" xml:space="preserve">
-    <value>Тил</value>
-  </data>
+
+  <data name="Language" xml:space="preserve"><value>Тил</value></data>
+
+  <data name="Nav.Home" xml:space="preserve"><value>Башкы бет</value></data>
+  <data name="Nav.Dashboard" xml:space="preserve"><value>Башкы такта</value></data>
+  <data name="Nav.Map" xml:space="preserve"><value>Карта</value></data>
+  <data name="Nav.Live" xml:space="preserve"><value>Эфир</value></data>
+
+  <data name="Nav.Containers" xml:space="preserve"><value>Контейнерлер</value></data>
+  <data name="Nav.Users" xml:space="preserve"><value>Колдонуучулар</value></data>
+  <data name="Nav.Reports" xml:space="preserve"><value>Билдирүүлөр</value></data>
+
+  <data name="Nav.System" xml:space="preserve"><value>Тутум</value></data>
+  <data name="Nav.System.IotDevices" xml:space="preserve"><value>IoT түзмөктөр</value></data>
+  <data name="Nav.System.TelegramBot" xml:space="preserve"><value>Telegram-бот</value></data>
+  <data name="Nav.System.EmailDiagnostics" xml:space="preserve"><value>Email диагностикасы</value></data>
+  <data name="Nav.System.Diagnostics" xml:space="preserve"><value>Тутум диагностикасы</value></data>
+
+  <data name="Nav.Queue" xml:space="preserve"><value>Кезек</value></data>
+  <data name="Nav.MyReports" xml:space="preserve"><value>Менин билдирүүлөрүм</value></data>
+  <data name="Nav.Verification" xml:space="preserve"><value>Текшерүү</value></data>
+  <data name="Nav.Appeals" xml:space="preserve"><value>Даттануулар</value></data>
+  <data name="Nav.Flagged" xml:space="preserve"><value>Талаштуу</value></data>
+
+  <data name="Nav.CleanupQueue" xml:space="preserve"><value>Тазалоо кезеги</value></data>
+  <data name="Nav.MyCleanups" xml:space="preserve"><value>Менин тазалоолорум</value></data>
+
+  <data name="Nav.ReportDumpsite" xml:space="preserve"><value>Таштандыга билдирүү</value></data>
+
+  <data name="Nav.SignIn" xml:space="preserve"><value>Кирүү</value></data>
+  <data name="Nav.GetStarted" xml:space="preserve"><value>Баштоо</value></data>
+  <data name="Nav.SignOut" xml:space="preserve"><value>Чыгуу</value></data>
+  <data name="Nav.NoRoles" xml:space="preserve"><value>Ролдор жок</value></data>
+
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>Менюну ачуу</value></data>
 </root>

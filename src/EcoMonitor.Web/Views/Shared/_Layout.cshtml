@@ -70,7 +70,7 @@
                     <span>EcoMonitor</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="@SharedLocalizer["Nav.ToggleNavigation"]">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
@@ -79,32 +79,32 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Dashboard") ? "active" : "")" asp-area="" asp-controller="Dashboard" asp-action="Index">
-                                    <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+                                    <i class="bi bi-speedometer2"></i><span>@SharedLocalizer["Nav.Dashboard"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-area="" asp-controller="Map" asp-action="Index">
-                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                    <i class="bi bi-geo-alt"></i><span>@SharedLocalizer["Nav.Map"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-link--live @(IsActive(null, "Live") ? "active" : "")" asp-area="" asp-controller="Live" asp-action="Index">
-                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                    <i class="bi bi-broadcast"></i><span>@SharedLocalizer["Nav.Live"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive("Admin", "Containers") ? "active" : "")" asp-area="Admin" asp-controller="Containers" asp-action="Index">
-                                    <i class="bi bi-trash3"></i><span>Containers</span>
+                                    <i class="bi bi-trash3"></i><span>@SharedLocalizer["Nav.Containers"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive("Admin", "Users") ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index">
-                                    <i class="bi bi-people"></i><span>Users</span>
+                                    <i class="bi bi-people"></i><span>@SharedLocalizer["Nav.Users"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive("Admin", "Reports") ? "active" : "")" asp-area="Admin" asp-controller="Reports" asp-action="Index">
-                                    <i class="bi bi-flag"></i><span>Reports</span>
+                                    <i class="bi bi-flag"></i><span>@SharedLocalizer["Nav.Reports"]</span>
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
@@ -117,28 +117,28 @@
                                 <a class="nav-link dropdown-toggle @(systemActive ? "active" : "")"
                                    href="#" role="button" id="systemMenu"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-gear"></i><span>System</span>
+                                    <i class="bi bi-gear"></i><span>@SharedLocalizer["Nav.System"]</span>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="systemMenu">
                                     <li>
                                         <a class="dropdown-item" asp-area="Admin" asp-controller="Devices" asp-action="Index">
-                                            <i class="bi bi-cpu me-2"></i>IoT devices
+                                            <i class="bi bi-cpu me-2"></i>@SharedLocalizer["Nav.System.IotDevices"]
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" asp-area="Admin" asp-controller="Telegram" asp-action="Index">
-                                            <i class="bi bi-telegram me-2"></i>Telegram bot
+                                            <i class="bi bi-telegram me-2"></i>@SharedLocalizer["Nav.System.TelegramBot"]
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" asp-area="Admin" asp-controller="Email" asp-action="Index">
-                                            <i class="bi bi-envelope me-2"></i>Email diagnostics
+                                            <i class="bi bi-envelope me-2"></i>@SharedLocalizer["Nav.System.EmailDiagnostics"]
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider" /></li>
                                     <li>
                                         <a class="dropdown-item" asp-area="Admin" asp-controller="Diagnostics" asp-action="Index">
-                                            <i class="bi bi-tools me-2"></i>System diagnostics
+                                            <i class="bi bi-tools me-2"></i>@SharedLocalizer["Nav.System.Diagnostics"]
                                         </a>
                                     </li>
                                 </ul>
@@ -148,44 +148,44 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="bi bi-house"></i><span>Home</span>
+                                    <i class="bi bi-house"></i><span>@SharedLocalizer["Nav.Home"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 navbar-cta" asp-controller="Inspector" asp-action="Queue">
-                                    <i class="bi bi-inboxes"></i><span>Queue</span>
+                                    <i class="bi bi-inboxes"></i><span>@SharedLocalizer["Nav.Queue"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Inspector", "MyReports") ? "active" : "")" asp-controller="Inspector" asp-action="MyReports">
-                                    <i class="bi bi-clipboard-check"></i><span>My reports</span>
+                                    <i class="bi bi-clipboard-check"></i><span>@SharedLocalizer["Nav.MyReports"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Inspector", "Verification") ? "active" : "")" asp-controller="Inspector" asp-action="Verification">
-                                    <i class="bi bi-shield-check"></i><span>Verification</span>
+                                    <i class="bi bi-shield-check"></i><span>@SharedLocalizer["Nav.Verification"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Inspector", "Appeals") ? "active" : "")" asp-controller="Inspector" asp-action="Appeals">
-                                    <i class="bi bi-exclamation-octagon"></i><span>Appeals</span>
+                                    <i class="bi bi-exclamation-octagon"></i><span>@SharedLocalizer["Nav.Appeals"]</span>
                                     @await Component.InvokeAsync("PendingAppealsBadge")
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Inspector", "Flagged") ? "active" : "")" asp-controller="Inspector" asp-action="Flagged">
-                                    <i class="bi bi-flag-fill"></i><span>Flagged</span>
+                                    <i class="bi bi-flag-fill"></i><span>@SharedLocalizer["Nav.Flagged"]</span>
                                     @await Component.InvokeAsync("PendingFlagsBadge")
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
-                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                    <i class="bi bi-geo-alt"></i><span>@SharedLocalizer["Nav.Map"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-link--live @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
-                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                    <i class="bi bi-broadcast"></i><span>@SharedLocalizer["Nav.Live"]</span>
                                 </a>
                             </li>
                         }
@@ -193,29 +193,29 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="bi bi-house"></i><span>Home</span>
+                                    <i class="bi bi-house"></i><span>@SharedLocalizer["Nav.Home"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 navbar-cta"
                                    asp-area="CleanupCrew" asp-controller="Reports" asp-action="Queue">
-                                    <i class="bi bi-bucket"></i><span>Cleanup queue</span>
+                                    <i class="bi bi-bucket"></i><span>@SharedLocalizer["Nav.CleanupQueue"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive("CleanupCrew", "Reports", "MyReports") ? "active" : "")"
                                    asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports">
-                                    <i class="bi bi-clipboard-check"></i><span>My cleanups</span>
+                                    <i class="bi bi-clipboard-check"></i><span>@SharedLocalizer["Nav.MyCleanups"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
-                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                    <i class="bi bi-geo-alt"></i><span>@SharedLocalizer["Nav.Map"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-link--live @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
-                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                    <i class="bi bi-broadcast"></i><span>@SharedLocalizer["Nav.Live"]</span>
                                 </a>
                             </li>
                         }
@@ -223,27 +223,27 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="bi bi-house"></i><span>Home</span>
+                                    <i class="bi bi-house"></i><span>@SharedLocalizer["Nav.Home"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
-                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                    <i class="bi bi-geo-alt"></i><span>@SharedLocalizer["Nav.Map"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-link--live @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
-                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                    <i class="bi bi-broadcast"></i><span>@SharedLocalizer["Nav.Live"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 navbar-cta" asp-controller="Citizen" asp-action="Create">
-                                    <i class="bi bi-plus-circle"></i><span>Report dumpsite</span>
+                                    <i class="bi bi-plus-circle"></i><span>@SharedLocalizer["Nav.ReportDumpsite"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Citizen", "Reports", "Details") ? "active" : "")" asp-controller="Citizen" asp-action="Reports">
-                                    <i class="bi bi-list-check"></i><span>My reports</span>
+                                    <i class="bi bi-list-check"></i><span>@SharedLocalizer["Nav.MyReports"]</span>
                                 </a>
                             </li>
                         }
@@ -251,17 +251,17 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Home") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="bi bi-house"></i><span>Home</span>
+                                    <i class="bi bi-house"></i><span>@SharedLocalizer["Nav.Home"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(IsActive(null, "Map") ? "active" : "")" asp-controller="Map" asp-action="Index">
-                                    <i class="bi bi-geo-alt"></i><span>Map</span>
+                                    <i class="bi bi-geo-alt"></i><span>@SharedLocalizer["Nav.Map"]</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-link--live @(IsActive(null, "Live") ? "active" : "")" asp-controller="Live" asp-action="Index">
-                                    <i class="bi bi-broadcast"></i><span>Live</span>
+                                    <i class="bi bi-broadcast"></i><span>@SharedLocalizer["Nav.Live"]</span>
                                 </a>
                             </li>
                         }
@@ -290,11 +290,11 @@
                         @if (!isSignedIn)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Sign in</a>
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">@SharedLocalizer["Nav.SignIn"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Register">
-                                    <span>Get started</span>
+                                    <span>@SharedLocalizer["Nav.GetStarted"]</span>
                                 </a>
                             </li>
                         }
@@ -308,7 +308,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                     <li>
                                         <span class="dropdown-item-text small text-muted">
-                                            @(roleNames.Count > 0 ? string.Join(", ", roleNames) : "No roles")
+                                            @(roleNames.Count > 0 ? string.Join(", ", roleNames) : SharedLocalizer["Nav.NoRoles"].Value)
                                         </span>
                                     </li>
                                     <li><hr class="dropdown-divider" /></li>
@@ -316,7 +316,7 @@
                                         <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                                             <button type="submit" class="dropdown-item">
                                                 <i class="bi bi-box-arrow-right me-2"></i>
-                                                <span>Sign out</span>
+                                                <span>@SharedLocalizer["Nav.SignOut"]</span>
                                             </button>
                                         </form>
                                     </li>

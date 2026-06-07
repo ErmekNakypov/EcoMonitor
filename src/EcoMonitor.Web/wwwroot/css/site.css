@@ -1551,20 +1551,39 @@ tr.clickable-row:hover {
   opacity: 0.6;
 }
 
-/* Empty-state partial */
+/* Empty-state partial — skill step 6: "small line icon, one sentence,
+   primary action". Tightened from a 96px filled disc to a 64px hairline
+   circle, icon-only-glyph weight, brand-tint-04 wash (lighter than the
+   previous --brand-icon-bg). Subtitle inherits ink-muted; CTA uses the
+   standard .btn-primary (already tokenised). */
+.empty-state {
+  padding-block: var(--em-space-7);
+}
 .empty-state .empty-icon {
-  width: 96px;
-  height: 96px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: var(--brand-icon-bg);
+  background: var(--em-brand-tint-04);
+  border: var(--em-border-hairline);
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-
 .empty-state .empty-icon i {
-  font-size: 2.5rem;
-  color: var(--brand-primary);
+  font-size: 1.6rem;
+  color: var(--em-brand);
+}
+.empty-state h3 {
+  font-family: var(--em-font-display);
+  font-size: var(--em-text-xl);
+  margin-bottom: var(--em-space-2);
+}
+.empty-state p {
+  color: var(--em-ink-muted);
+  font-size: var(--em-text-sm);
+  margin-bottom: var(--em-space-5);
+  max-width: 420px;
+  margin-inline: auto;
 }
 
 /* Toasts */

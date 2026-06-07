@@ -195,9 +195,12 @@
   --bs-btn-focus-shadow-rgb: 45, 106, 79;
 }
 
-/* Link focus also brand-green, not bs-blue. */
-a:focus-visible,
-.btn:focus-visible {
+/* Keyboard focus ring — brand-green across every interactive primitive,
+   not just <a> and .btn. Skill rule: "focus is visible by keyboard."
+   Using :where() so the selector specificity stays at 0,0,0 and per-page
+   overrides remain trivial. */
+:where(a, button, .btn, .nav-link, .filter-chip, .lang-toggle, .dropdown-item,
+       .form-control, .form-select, .form-check-input, [tabindex]):focus-visible {
   outline: 2px solid var(--em-brand);
   outline-offset: 2px;
   box-shadow: none;

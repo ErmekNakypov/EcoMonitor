@@ -14,7 +14,9 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--em-font-body);
+  font-size: var(--em-text-base);
+  line-height: var(--em-leading-normal);
   background-color: var(--brand-bg);
   color: var(--brand-text);
   -webkit-font-smoothing: antialiased;
@@ -22,9 +24,19 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--em-font-display);
   color: var(--brand-text);
   letter-spacing: -0.01em;
+  line-height: var(--em-leading-tight);
 }
+
+/* Hierarchy — page title clearly larger than card titles. */
+h1, .h1 { font-size: var(--em-text-page-title); }
+h2, .h2 { font-size: var(--em-text-3xl); }
+h3, .h3 { font-size: var(--em-text-2xl); line-height: var(--em-leading-card); }
+h4, .h4 { font-size: var(--em-text-xl);  line-height: var(--em-leading-card); }
+h5, .h5 { font-size: var(--em-text-lg);  line-height: var(--em-leading-card); }
+h6, .h6 { font-size: var(--em-text-base); line-height: var(--em-leading-card); }
 
 .fw-700 { font-weight: 700; }
 .fw-800 { font-weight: 800; }

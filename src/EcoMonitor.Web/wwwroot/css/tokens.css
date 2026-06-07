@@ -91,6 +91,33 @@
   --em-transition-fast: 150ms ease-out;
   --em-transition-norm: 200ms ease-out;
 
+  /* ---------- Typography ----------------------------------------------------
+     Two faces, both with full Cyrillic (Russian U+0400-045F + Kyrgyz).
+       --em-font-body    : Golos Text — quiet, Russian-native, screen UI.
+       --em-font-display : Onest      — characterful display + tabular nums.
+     PT Root UI listed as a Cyrillic-capable web fallback before system fonts;
+     system-ui only kicks in if both web fonts and PT Root UI fail to load.
+     The skill explicitly warns against Inter-everywhere — both faces here
+     replace Inter without falling back to system-ui as a primary. */
+  --em-font-body:    'Golos Text', 'PT Root UI', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --em-font-display: 'Onest', 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --em-font-mono:    ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* Body 15-16px (skill); line-height 1.55. Tighter for headings. */
+  --em-text-base:        16px;
+  --em-text-sm:          14px;
+  --em-text-xs:          12px;
+  --em-text-lg:          18px;
+  --em-text-xl:          20px;
+  --em-text-2xl:         24px;
+  --em-text-3xl:         32px;
+  --em-text-page-title:  clamp(28px, 4vw, 44px);  /* page H1, scales with width */
+
+  --em-leading-tight:    1.15;   /* h1, h2 */
+  --em-leading-card:     1.25;   /* card titles, h3 */
+  --em-leading-normal:   1.55;   /* body */
+  --em-leading-relaxed:  1.65;   /* long-form paragraphs */
+
   /* ---------- Legacy aliases — keep existing site.css and views unchanged ---------- */
   /* (These match the values that used to live in site.css :root.) */
   --brand-primary:        var(--em-brand);
@@ -127,6 +154,16 @@
   --bs-secondary-color:  var(--em-ink-muted);
   --bs-tertiary-bg:      var(--em-surface-2);
   --bs-light-rgb:        248, 249, 250;
+
+  /* Typography bridge — overrides Bootstrap's default Helvetica/system stack
+     across body, headings, code, and form-control. */
+  --bs-body-font-family:    var(--em-font-body);
+  --bs-body-font-size:      var(--em-text-base);
+  --bs-body-line-height:    var(--em-leading-normal);
+  --bs-headings-font-family: var(--em-font-display);
+  --bs-headings-line-height: var(--em-leading-tight);
+  --bs-headings-font-weight: 700;
+  --bs-font-monospace:      var(--em-font-mono);
 }
 
 /* ---------- Themed Bootstrap primitives (variables only — no overrides) ----------
@@ -171,4 +208,22 @@ a:focus-visible,
 .form-check-input:focus {
   border-color: var(--em-brand-soft);
   box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.18);
+}
+
+/* ---------- Tabular figures ----------
+   Numbers in tables and KPIs need same-width digits so columns align
+   without jitter as values update (skill rule). Applied automatically to
+   the project's KPI / stat / live-tile values; .em-tabular available as
+   a utility for any table cell. */
+.em-tabular,
+.stat-value,
+.live-tile__value,
+.live-advisory__text,
+table tbody td.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+table tbody td.num {
+  text-align: right;
 }

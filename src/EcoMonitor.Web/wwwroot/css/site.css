@@ -1961,3 +1961,97 @@ tr.clickable-row:hover {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
 }
+
+/* =====================================================================
+   STEP 5 — Leaflet theming.
+   Restyles popups, controls, attribution and tooltips through the token
+   radius / border / shadow scale. District polygons already use each
+   district's ColorHex at fillOpacity 0.15 (Map) / 0.12 (Citizen create)
+   with weight: 2 — both within the skill's 0.08-0.15 band, so no JS
+   change needed. Custom div-icon markers already use AqiHelper colours
+   (air stations) and brand greens (route stops) — no default blue pins
+   anywhere in the project.
+   ===================================================================== */
+
+/* Popups */
+.leaflet-popup-content-wrapper {
+  background-color: var(--em-surface);
+  color: var(--em-ink);
+  border: var(--em-border-hairline);
+  border-radius: var(--em-radius-card);
+  box-shadow: var(--em-shadow-soft);
+  padding: var(--em-space-1);
+}
+.leaflet-popup-content {
+  margin: var(--em-space-3);
+  font-family: var(--em-font-body);
+  font-size: var(--em-text-sm);
+  line-height: var(--em-leading-normal);
+}
+.leaflet-popup-tip {
+  background: var(--em-surface);
+  border: var(--em-border-hairline);
+}
+.leaflet-popup-close-button {
+  color: var(--em-ink-muted) !important;
+  font-weight: 400;
+}
+.leaflet-popup-close-button:hover {
+  color: var(--em-brand) !important;
+  background: transparent;
+}
+
+/* Zoom + control bars */
+.leaflet-bar {
+  border: var(--em-border-hairline);
+  border-radius: var(--em-radius-control);
+  box-shadow: var(--em-shadow-soft);
+  overflow: hidden;   /* clip the children's square corners */
+}
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background-color: var(--em-surface);
+  color: var(--em-ink);
+  border-bottom: 1px solid var(--em-line);
+  font-family: var(--em-font-display);
+}
+.leaflet-bar a:last-child { border-bottom: 0; }
+.leaflet-bar a:hover {
+  background-color: var(--em-brand-tint-04);
+  color: var(--em-brand);
+}
+.leaflet-bar a.leaflet-disabled {
+  background-color: var(--em-surface-2);
+  color: var(--em-ink-faint);
+}
+
+/* Attribution — quieter, no default Bootstrap-y link colour */
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--em-ink-muted);
+  font-size: var(--em-text-xs);
+  font-family: var(--em-font-body);
+  border-top-left-radius: var(--em-radius-control);
+}
+.leaflet-control-attribution a { color: var(--em-brand); }
+
+/* Tooltips (used by district polygons + air-station markers) */
+.leaflet-tooltip {
+  background: var(--em-surface);
+  color: var(--em-ink);
+  border: var(--em-border-hairline);
+  border-radius: var(--em-radius-control);
+  box-shadow: var(--em-shadow-soft);
+  font-family: var(--em-font-body);
+  font-size: var(--em-text-sm);
+  padding: var(--em-space-1) var(--em-space-2);
+}
+.leaflet-tooltip-top::before,
+.leaflet-tooltip-bottom::before,
+.leaflet-tooltip-left::before,
+.leaflet-tooltip-right::before {
+  border-top-color: var(--em-line);
+  border-right-color: var(--em-line);
+  border-bottom-color: var(--em-line);
+  border-left-color: var(--em-line);
+}

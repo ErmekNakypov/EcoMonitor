@@ -1,6 +1,10 @@
 @model LoginViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Sign in";
+    // Page title doubles as the submit button label and the navbar's
+    // anonymous "Sign in" link — single source of truth via Nav.SignIn.
+    ViewData["Title"] = SharedLocalizer["Nav.SignIn"].Value;
 }
 
 <section class="py-5">
@@ -8,10 +12,10 @@
         <div class="auth-card">
             <span class="hero-badge mb-3">
                 <i class="bi bi-shield-lock"></i>
-                <span>Welcome back</span>
+                <span>@Localizer["Badge"]</span>
             </span>
-            <h1 class="h3 fw-700 mb-2 mt-3">Sign in to EcoMonitor</h1>
-            <p class="text-muted mb-4">Continue monitoring your city's environment.</p>
+            <h1 class="h3 fw-700 mb-2 mt-3">@Localizer["Heading"]</h1>
+            <p class="text-muted mb-4">@Localizer["Subtitle"]</p>
 
             <form asp-area="" asp-action="Login" asp-controller="Account" method="post" novalidate>
                 <input asp-for="ReturnUrl" type="hidden" />
@@ -19,16 +23,21 @@
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-500"></label>
+                    @* Plain <label for=…> with explicit text instead of asp-for so this
+                       commit can localise the visible label without touching the view
+                       model's [Display(Name = …)] attribute. Validation-message
+                       localisation is a separate concern slated for a later step
+                       (DataAnnotationLocalizerProvider wiring). *@
+                    <label class="form-label fw-500" for="Email">@Localizer["EmailLabel"]</label>
                     <input asp-for="Email" class="form-control form-control-lg" autocomplete="email" />
                     <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-500"></label>
+                    <label class="form-label fw-500" for="Password">@Localizer["PasswordLabel"]</label>
                     <div class="input-group input-group-lg">
                         <input asp-for="Password" class="form-control" autocomplete="current-password" />
-                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="Toggle password visibility">
+                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="@SharedLocalizer["Common.TogglePasswordVisibility"]">
                             <i class="bi bi-eye" data-icon-for="Password"></i>
                         </button>
                     </div>
@@ -37,16 +46,16 @@
 
                 <div class="form-check mb-4">
                     <input asp-for="RememberMe" class="form-check-input" />
-                    <label asp-for="RememberMe" class="form-check-label"></label>
+                    <label class="form-check-label" for="RememberMe">@Localizer["RememberMeLabel"]</label>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg w-100">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign in
+                    <i class="bi bi-box-arrow-in-right me-2"></i>@SharedLocalizer["Nav.SignIn"]
                 </button>
             </form>
 
             <p class="text-center text-muted mt-4 mb-0 small">
-                Don't have an account? <a asp-area="" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+                @Localizer["NoAccountPrompt"] <a asp-area="" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["RegisterLink"]</a>
             </p>
         </div>
     </div>

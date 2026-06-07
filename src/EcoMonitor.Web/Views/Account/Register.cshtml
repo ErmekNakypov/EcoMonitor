@@ -1,6 +1,8 @@
 @model RegisterViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Create account";
+    ViewData["Title"] = Localizer["Title"].Value;
 }
 
 <section class="py-5">
@@ -8,10 +10,10 @@
         <div class="auth-card">
             <span class="hero-badge mb-3">
                 <i class="bi bi-person-plus"></i>
-                <span>Join EcoMonitor</span>
+                <span>@Localizer["Badge"]</span>
             </span>
-            <h1 class="h3 fw-700 mb-2 mt-3">Create your account</h1>
-            <p class="text-muted mb-4">Help make Bishkek cleaner.</p>
+            <h1 class="h3 fw-700 mb-2 mt-3">@Localizer["Heading"]</h1>
+            <p class="text-muted mb-4">@Localizer["Subtitle"]</p>
 
             <form asp-area="" asp-action="Register" asp-controller="Account" method="post" novalidate>
                 <input asp-for="ReturnUrl" type="hidden" />
@@ -19,22 +21,22 @@
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                 <div class="mb-3">
-                    <label asp-for="FullName" class="form-label fw-500"></label>
+                    <label class="form-label fw-500" for="FullName">@Localizer["FullNameLabel"]</label>
                     <input asp-for="FullName" class="form-control form-control-lg" autocomplete="name" />
                     <span asp-validation-for="FullName" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-500"></label>
+                    <label class="form-label fw-500" for="Email">@Localizer["EmailLabel"]</label>
                     <input asp-for="Email" class="form-control form-control-lg" autocomplete="email" />
                     <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-500"></label>
+                    <label class="form-label fw-500" for="Password">@Localizer["PasswordLabel"]</label>
                     <div class="input-group input-group-lg">
                         <input asp-for="Password" class="form-control" autocomplete="new-password" />
-                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="Toggle password visibility">
+                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="@SharedLocalizer["Common.TogglePasswordVisibility"]">
                             <i class="bi bi-eye" data-icon-for="Password"></i>
                         </button>
                     </div>
@@ -42,10 +44,10 @@
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="ConfirmPassword" class="form-label fw-500"></label>
+                    <label class="form-label fw-500" for="ConfirmPassword">@Localizer["ConfirmPasswordLabel"]</label>
                     <div class="input-group input-group-lg">
                         <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
-                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="ConfirmPassword" aria-label="Toggle password visibility">
+                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="ConfirmPassword" aria-label="@SharedLocalizer["Common.TogglePasswordVisibility"]">
                             <i class="bi bi-eye" data-icon-for="ConfirmPassword"></i>
                         </button>
                     </div>
@@ -53,12 +55,12 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg w-100">
-                    <i class="bi bi-person-plus me-2"></i>Create account
+                    <i class="bi bi-person-plus me-2"></i>@Localizer["SubmitButton"]
                 </button>
             </form>
 
             <p class="text-center text-muted mt-4 mb-0 small">
-                Already have an account? <a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Sign in</a>
+                @Localizer["HaveAccountPrompt"] <a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">@SharedLocalizer["Nav.SignIn"]</a>
             </p>
         </div>
     </div>

@@ -1,8 +1,10 @@
+using System.Globalization;
 using EcoMonitor.Domain.Constants;
 using EcoMonitor.Infrastructure.Identity;
 using EcoMonitor.Web.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcoMonitor.Web.Controllers;
@@ -45,6 +47,18 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             _logger.LogInformation("User {Email} signed in", model.Email);
+
+            // Apply the user's stored UI-language preference to the culture
+            // cookie so the next request renders in their language. This
+            // lets a previously-set preference survive cookie clears and
+            // overrides any Accept-Language header the browser would have
+            // sent otherwise. Lookup is best-effort — failure here must
+            // never block sign-in, so any miss falls through silently.
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user is not null)
+            {
+                ApplyPreferredLanguageCookie(user.PreferredLanguage);
+            }
 
             if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
             {
@@ -148,5 +162,31 @@ public class AccountController : Controller
     public IActionResult AccessDenied()
     {
         return View();
+    }
+
+    // Maps the short ApplicationUser.PreferredLanguage codes ("ru", "en",
+    // "ky") to the matching ASP.NET Core culture cookie value. Unknown
+    // codes are a no-op — the existing cookie (or the default ru-RU
+    // fallback) keeps applying.
+    private void ApplyPreferredLanguageCookie(string? preferredLanguage)
+    {
+        var culture = preferredLanguage switch
+        {
+            "ru" => "ru-RU",
+            "en" => "en-US",
+            "ky" => "ky-KG",
+            _    => null
+        };
+        if (culture is null) return;
+
+        Response.Cookies.Append(
+            CookieRequestCultureProvider.DefaultCookieName,
+            CookieRequestCultureProvider.MakeCookieValue(
+                new RequestCulture(new CultureInfo(culture))),
+            new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddYears(1),
+                IsEssential = true
+            });
     }
 }

@@ -1,5 +1,6 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Mvc.Localization.IHtmlLocalizer<SharedResource> SharedLocalizer
 @functions {
     bool IsActive(string? area, string controller, params string[] actions)
     {
@@ -267,15 +268,22 @@
                     </ul>
 
                     <ul class="navbar-nav align-items-md-center gap-md-2">
+                        @{
+                            // returnUrl threaded into each SetCulture link so the dropdown
+                            // reloads the user back on the same page in the new culture.
+                            // Falls back to "/" on the off chance Request.Path is empty.
+                            var localizationReturnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+                            if (string.IsNullOrEmpty(localizationReturnUrl)) localizationReturnUrl = "/";
+                        }
                         <li class="nav-item dropdown">
                             <button type="button" class="lang-toggle dropdown-toggle" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-translate"></i>
-                                <span>Language</span>
+                                <span>@SharedLocalizer["Language"]</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                                <li><a class="dropdown-item" href="#" data-culture="ru-RU">Русский</a></li>
-                                <li><a class="dropdown-item" href="#" data-culture="en-US">English</a></li>
-                                <li><a class="dropdown-item" href="#" data-culture="ky-KG">Кыргызча</a></li>
+                                <li><a class="dropdown-item" asp-controller="Localization" asp-action="SetCulture" asp-route-culture="ru-RU" asp-route-returnUrl="@localizationReturnUrl" data-culture="ru-RU">Русский</a></li>
+                                <li><a class="dropdown-item" asp-controller="Localization" asp-action="SetCulture" asp-route-culture="en-US" asp-route-returnUrl="@localizationReturnUrl" data-culture="en-US">English</a></li>
+                                <li><a class="dropdown-item" asp-controller="Localization" asp-action="SetCulture" asp-route-culture="ky-KG" asp-route-returnUrl="@localizationReturnUrl" data-culture="ky-KG">Кыргызча</a></li>
                             </ul>
                         </li>
 

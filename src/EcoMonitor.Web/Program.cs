@@ -34,11 +34,27 @@ try
         new CultureInfo("ky-KG")
     };
 
+    // Sets up IStringLocalizer / IViewLocalizer to load .resx files from the
+    // "Resources" folder under the web project root. Required for the rest of
+    // the localization pipeline (AddViewLocalization + .resx) to work.
+    builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
     builder.Services.Configure<RequestLocalizationOptions>(options =>
     {
         options.DefaultRequestCulture = new RequestCulture("ru-RU");
         options.SupportedCultures = supportedCultures;
         options.SupportedUICultures = supportedCultures;
+
+        // Resolution order: cookie (set by /Localization/SetCulture or on
+        // login from ApplicationUser.PreferredLanguage), then Accept-Language
+        // from the browser. Query-string and form providers (the framework
+        // defaults) are intentionally dropped — culture should be a sticky
+        // user preference, not something a link can change for one request.
+        options.RequestCultureProviders = new List<IRequestCultureProvider>
+        {
+            new CookieRequestCultureProvider(),
+            new AcceptLanguageHeaderRequestCultureProvider()
+        };
     });
 
     builder.Services.AddControllersWithViews(options =>

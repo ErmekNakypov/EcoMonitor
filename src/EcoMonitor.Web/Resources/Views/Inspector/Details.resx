@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Page chrome -->
+  <data name="Title" xml:space="preserve"><value>Report details</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Dumpsite report</value></data>
+  <!-- Format: "{0} ({1})" — {0} relative time, {1} absolute short date. -->
+  <data name="HeaderTimeFormat" xml:space="preserve"><value>{0} ({1})</value></data>
+  <!-- Assignment indicator under the headline. -->
+  <data name="AssignedUnassigned" xml:space="preserve"><value>Unassigned</value></data>
+  <data name="AssignedToYou" xml:space="preserve"><value>Assigned to you</value></data>
+  <data name="AssignedToOther" xml:space="preserve"><value>Assigned to {0}</value></data>
+  <!-- {0} = district-assigned inspector full name. Includes leading middot
+       and <strong> markup; IHtmlLocalizer renders the value verbatim. -->
+  <data name="DistrictInspectorSuffix" xml:space="preserve"><value> · District inspector: &lt;strong&gt;{0}&lt;/strong&gt;</value></data>
+
+  <!-- Submission channel card -->
+  <data name="ChannelTelegramTitle" xml:space="preserve"><value>Submitted via Telegram bot</value></data>
+  <data name="ChannelTelegramUserIdSuffix" xml:space="preserve"><value>Telegram user ID: {0}</value></data>
+  <data name="ChannelWebTitle" xml:space="preserve"><value>Submitted via web</value></data>
+  <data name="ChannelWebBy" xml:space="preserve"><value>By {0}</value></data>
+  <data name="AnonymousFallback" xml:space="preserve"><value>(anonymous)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(unknown)</value></data>
+
+  <!-- Cleanup-crew flag callout -->
+  <data name="CleanupCrewFlaggedTitle" xml:space="preserve"><value>Cleanup crew flagged this report</value></data>
+  <data name="CrewLabel" xml:space="preserve"><value>Crew:</value></data>
+  <data name="ReasonLabel" xml:space="preserve"><value>Reason:</value></data>
+  <data name="NotesLabel" xml:space="preserve"><value>Notes:</value></data>
+  <data name="FlaggedOn" xml:space="preserve"><value>Flagged {0}</value></data>
+  <data name="PreviouslyReassigned" xml:space="preserve"><value>Previously reassigned {0}×</value></data>
+
+  <!-- Auto-triage callout (three branches) -->
+  <data name="AutoTriageFlaggedTitle" xml:space="preserve"><value>Auto-triage flagged this report</value></data>
+  <data name="AutoTriageFooter" xml:space="preserve"><value>As inspector, please verify the situation before confirming or rejecting.</value></data>
+  <data name="PreTriageTitle" xml:space="preserve"><value>Pre-triage report</value></data>
+  <data name="PreTriageBody" xml:space="preserve"><value>Submitted before the auto-triage system was active. Manual review required.</value></data>
+  <data name="ManualReviewTitle" xml:space="preserve"><value>Manual review required</value></data>
+  <data name="ManualReviewBody" xml:space="preserve"><value>No triage reason recorded. Please review manually.</value></data>
+
+  <!-- Reporter card -->
+  <data name="ReporterLabel" xml:space="preserve"><value>Reporter</value></data>
+  <data name="ReporterStatTotal" xml:space="preserve"><value>Total</value></data>
+  <data name="ReporterStatInProgress" xml:space="preserve"><value>In progress</value></data>
+  <data name="ReporterStatResolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="ReporterStatRejected" xml:space="preserve"><value>Rejected</value></data>
+
+  <!-- Status stepper -->
+  <data name="ProgressHeading" xml:space="preserve"><value>Progress</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Submitted</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>In review</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Confirmed</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Cleanup</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Awaiting inspector verification</value></data>
+  <data name="Step4SubFlaggedAwaitingDecision" xml:space="preserve"><value>Flagged — awaiting decision</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Closed</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Appealed</value></data>
+
+  <!-- Rejected banner -->
+  <data name="RejectedBannerTitle" xml:space="preserve"><value>Rejected</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Closed on {0}</value></data>
+
+  <!-- Body cards -->
+  <data name="DescriptionHeading" xml:space="preserve"><value>Description</value></data>
+  <data name="InspectorObservationsHeading" xml:space="preserve"><value>Inspector observations</value></data>
+
+  <data name="FlagEvidenceHeading" xml:space="preserve"><value>Flag evidence — from crew ({0})</value></data>
+  <data name="FlagEvidenceCaption" xml:space="preserve"><value>Photos the cleanup crew took on site to support their flag.</value></data>
+  <data name="FlagEvidenceAlt" xml:space="preserve"><value>Flag evidence</value></data>
+
+  <data name="CitizenPhotosHeading" xml:space="preserve"><value>Citizen photos ({0})</value></data>
+  <data name="CitizenPhotoAlt" xml:space="preserve"><value>Citizen photo {0}</value></data>
+
+  <data name="InspectionPhotosHeading" xml:space="preserve"><value>Inspector verification photos ({0})</value></data>
+  <data name="InspectionPhotoAlt" xml:space="preserve"><value>Inspector photo</value></data>
+
+  <data name="BeforeCleanupHeading" xml:space="preserve"><value>Before cleanup ({0})</value></data>
+  <data name="BeforeCleanupAlt" xml:space="preserve"><value>Before cleanup</value></data>
+
+  <data name="AfterCleanupHeading" xml:space="preserve"><value>After cleanup ({0})</value></data>
+  <data name="AfterCleanupAlt" xml:space="preserve"><value>After cleanup</value></data>
+
+  <data name="CleanupCrewNotesHeading" xml:space="preserve"><value>Cleanup crew notes</value></data>
+  <data name="ResolutionHeading" xml:space="preserve"><value>Resolution</value></data>
+  <data name="RejectionReasonHeading" xml:space="preserve"><value>Rejection reason</value></data>
+  <data name="ResolvedOn" xml:space="preserve"><value>Resolved on {0}</value></data>
+
+  <!-- Citizen appeal card -->
+  <data name="CitizenAppealHeading" xml:space="preserve"><value>Citizen appeal</value></data>
+  <data name="FiledOn" xml:space="preserve"><value>Filed {0}</value></data>
+  <data name="AppealReasonPrefix" xml:space="preserve"><value>Reason:</value></data>
+  <data name="AppealPhotosCaption" xml:space="preserve"><value>Appeal photos ({0})</value></data>
+  <data name="AppealPhotoAlt" xml:space="preserve"><value>Appeal photo</value></data>
+  <data name="AppealDecisionPrefix" xml:space="preserve"><value>Decision: {0}</value></data>
+  <data name="AppealOutcomeUpheld" xml:space="preserve"><value>Upheld</value></data>
+  <data name="AppealOutcomeDismissed" xml:space="preserve"><value>Dismissed</value></data>
+  <data name="ReviewedOn" xml:space="preserve"><value>Reviewed {0}</value></data>
+
+  <!-- Sidebar — Location, Activity timeline, Photo modal -->
+  <data name="LocationHeading" xml:space="preserve"><value>Location</value></data>
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>Activity timeline</value></data>
+  <data name="PhotoModalAlt" xml:space="preserve"><value>Report photo</value></data>
+
+  <!-- Action panel -->
+  <data name="ActionsHeading" xml:space="preserve"><value>Actions</value></data>
+  <data name="TakeReportButton" xml:space="preserve"><value>Take this report</value></data>
+  <data name="ConfirmWithPhotosButton" xml:space="preserve"><value>Confirm with photos</value></data>
+  <data name="RejectButton" xml:space="preserve"><value>Reject</value></data>
+  <data name="InCleanupQueueMessage" xml:space="preserve"><value>This report is now in the cleanup queue.</value></data>
+  <!-- Inline emphasis: keep <strong>{0}</strong>; {0} HTML-encoded automatically. -->
+  <data name="CrewTakenMessage" xml:space="preserve"><value>Crew member &lt;strong&gt;{0}&lt;/strong&gt; has taken it.</value></data>
+  <data name="AwaitingCleanupCrewMessage" xml:space="preserve"><value>A cleanup crew member will pick it up.</value></data>
+  <data name="CleanupInProgressMessage" xml:space="preserve"><value>Cleanup in progress.</value></data>
+  <data name="CleanupStartedAt" xml:space="preserve"><value>Started {0}.</value></data>
+  <data name="VerifyAndCloseButton" xml:space="preserve"><value>Verify and close</value></data>
+  <data name="SendBackForReworkButton" xml:space="preserve"><value>Send back for rework</value></data>
+  <data name="ReviewFlagInstruction" xml:space="preserve"><value>Review the crew's evidence and the citizen's report, then choose:</value></data>
+  <data name="RejectCrewCorrectButton" xml:space="preserve"><value>Reject (crew is correct)</value></data>
+  <data name="SendBackToSameCrewButton" xml:space="preserve"><value>Send back to same crew</value></data>
+  <data name="ReassignButton" xml:space="preserve"><value>Reassign to another crew</value></data>
+  <data name="UpholdAppealButton" xml:space="preserve"><value>Uphold appeal — redo cleanup</value></data>
+  <data name="DismissAppealButton" xml:space="preserve"><value>Dismiss appeal</value></data>
+  <data name="ReportClosedMessage" xml:space="preserve"><value>This report is closed.</value></data>
+  <data name="HandledByOtherMessage" xml:space="preserve"><value>This report is being handled by {0}.</value></data>
+
+  <!-- Confirm modal -->
+  <data name="ConfirmModalTitle" xml:space="preserve"><value>Confirm dumpsite</value></data>
+  <data name="ConfirmModalBody" xml:space="preserve"><value>Upload at least one photo proving the dumpsite exists at the reported location.</value></data>
+  <data name="ConfirmPhotosLabel" xml:space="preserve"><value>Inspection photos</value></data>
+  <data name="ConfirmObservationsLabel" xml:space="preserve"><value>Observations (optional)</value></data>
+  <data name="ConfirmObservationsPlaceholder" xml:space="preserve"><value>Estimated volume, type of waste, accessibility, hazards…</value></data>
+  <data name="ConfirmSubmitButton" xml:space="preserve"><value>Confirm and send to cleanup queue</value></data>
+
+  <!-- Reject modal -->
+  <data name="RejectModalTitle" xml:space="preserve"><value>Reject report</value></data>
+  <data name="RejectModalBody" xml:space="preserve"><value>Tell the citizen and your colleagues why this report is being rejected.</value></data>
+  <data name="RejectReasonLabel" xml:space="preserve"><value>Reason</value></data>
+  <data name="CharRange10to1000" xml:space="preserve"><value>10–1000 characters.</value></data>
+  <data name="RejectSubmitButton" xml:space="preserve"><value>Reject report</value></data>
+
+  <!-- Verify modal -->
+  <data name="VerifyModalTitle" xml:space="preserve"><value>Verify cleanup and close</value></data>
+  <data name="VerifyModalBody" xml:space="preserve"><value>Confirm the cleanup is complete and add a short note for the citizen.</value></data>
+  <data name="VerifyNotesLabel" xml:space="preserve"><value>Verification notes</value></data>
+  <data name="VerifySubmitButton" xml:space="preserve"><value>Verify and close</value></data>
+
+  <!-- Rework modal -->
+  <data name="ReworkModalTitle" xml:space="preserve"><value>Send back for rework</value></data>
+  <data name="ReworkModalBody" xml:space="preserve"><value>Tell the cleanup crew what needs to be done before this can be closed.</value></data>
+  <data name="ReworkReasonLabel" xml:space="preserve"><value>What needs rework</value></data>
+  <data name="ReworkSubmitButton" xml:space="preserve"><value>Send back</value></data>
+
+  <!-- Reject-flagged modal (review-flag branch) -->
+  <data name="RejectFlaggedModalTitle" xml:space="preserve"><value>Reject report</value></data>
+  <data name="RejectFlaggedModalBody" xml:space="preserve"><value>Agreed with the crew: the report is invalid. Citizen will be notified.</value></data>
+  <data name="DecisionNotesLabel" xml:space="preserve"><value>Decision notes</value></data>
+  <data name="CharRange10to500" xml:space="preserve"><value>10–500 characters.</value></data>
+  <data name="RejectFlaggedSubmitButton" xml:space="preserve"><value>Reject report</value></data>
+
+  <!-- Confirm-back modal -->
+  <data name="ConfirmBackModalTitle" xml:space="preserve"><value>Send back to same crew</value></data>
+  <data name="ConfirmBackModalBody" xml:space="preserve"><value>The dumpsite exists. The same crew will re-check the site.</value></data>
+  <data name="ConfirmBackNotesHelp" xml:space="preserve"><value>10–500 characters. Tell the crew what to look for again.</value></data>
+  <data name="ConfirmBackSubmitButton" xml:space="preserve"><value>Send back</value></data>
+
+  <!-- Reassign modal -->
+  <data name="ReassignModalTitle" xml:space="preserve"><value>Reassign to another crew</value></data>
+  <data name="ReassignModalBody" xml:space="preserve"><value>Return the report to the cleanup queue. Any other crew can take it.</value></data>
+  <data name="ReassignSubmitButton" xml:space="preserve"><value>Reassign</value></data>
+
+  <!-- Uphold appeal modal -->
+  <data name="UpholdModalTitle" xml:space="preserve"><value>Uphold appeal</value></data>
+  <data name="UpholdModalBody" xml:space="preserve"><value>The cleanup will return to the in-progress queue. Tell the citizen why the appeal was accepted and what the crew should redo.</value></data>
+  <data name="UpholdNotesLabel" xml:space="preserve"><value>Resolution notes</value></data>
+  <data name="UpholdSubmitButton" xml:space="preserve"><value>Uphold and reopen cleanup</value></data>
+
+  <!-- Dismiss appeal modal -->
+  <data name="DismissModalTitle" xml:space="preserve"><value>Dismiss appeal</value></data>
+  <data name="DismissModalBody" xml:space="preserve"><value>The report stays resolved. Explain to the citizen why the appeal was not accepted.</value></data>
+  <data name="DismissExplanationLabel" xml:space="preserve"><value>Explanation</value></data>
+  <data name="DismissSubmitButton" xml:space="preserve"><value>Dismiss appeal</value></data>
+</root>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Детали заявки</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Заявка о свалке</value></data>
+  <data name="HeaderTimeFormat" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="AssignedUnassigned" xml:space="preserve"><value>Не назначено</value></data>
+  <data name="AssignedToYou" xml:space="preserve"><value>Назначено вам</value></data>
+  <data name="AssignedToOther" xml:space="preserve"><value>Назначено: {0}</value></data>
+  <data name="DistrictInspectorSuffix" xml:space="preserve"><value> · Районный инспектор: &lt;strong&gt;{0}&lt;/strong&gt;</value></data>
+
+  <data name="ChannelTelegramTitle" xml:space="preserve"><value>Отправлено через Telegram-бот</value></data>
+  <data name="ChannelTelegramUserIdSuffix" xml:space="preserve"><value>Telegram ID: {0}</value></data>
+  <data name="ChannelWebTitle" xml:space="preserve"><value>Отправлено через сайт</value></data>
+  <data name="ChannelWebBy" xml:space="preserve"><value>Автор: {0}</value></data>
+  <data name="AnonymousFallback" xml:space="preserve"><value>(анонимно)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(неизвестно)</value></data>
+
+  <data name="CleanupCrewFlaggedTitle" xml:space="preserve"><value>Бригада уборки пометила заявку</value></data>
+  <data name="CrewLabel" xml:space="preserve"><value>Бригада:</value></data>
+  <data name="ReasonLabel" xml:space="preserve"><value>Причина:</value></data>
+  <data name="NotesLabel" xml:space="preserve"><value>Заметки:</value></data>
+  <data name="FlaggedOn" xml:space="preserve"><value>Помечено {0}</value></data>
+  <data name="PreviouslyReassigned" xml:space="preserve"><value>Ранее переназначено {0}×</value></data>
+
+  <data name="AutoTriageFlaggedTitle" xml:space="preserve"><value>Автотриаж пометил заявку</value></data>
+  <data name="AutoTriageFooter" xml:space="preserve"><value>Инспектору необходимо проверить ситуацию до подтверждения или отклонения.</value></data>
+  <data name="PreTriageTitle" xml:space="preserve"><value>Заявка до триажа</value></data>
+  <data name="PreTriageBody" xml:space="preserve"><value>Отправлено до запуска системы автотриажа. Требуется ручная проверка.</value></data>
+  <data name="ManualReviewTitle" xml:space="preserve"><value>Требуется ручная проверка</value></data>
+  <data name="ManualReviewBody" xml:space="preserve"><value>Причина триажа не указана. Проверьте вручную.</value></data>
+
+  <data name="ReporterLabel" xml:space="preserve"><value>Заявитель</value></data>
+  <data name="ReporterStatTotal" xml:space="preserve"><value>Всего</value></data>
+  <data name="ReporterStatInProgress" xml:space="preserve"><value>В работе</value></data>
+  <data name="ReporterStatResolved" xml:space="preserve"><value>Решено</value></data>
+  <data name="ReporterStatRejected" xml:space="preserve"><value>Отклонено</value></data>
+
+  <data name="ProgressHeading" xml:space="preserve"><value>Ход рассмотрения</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Подано</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>На рассмотрении</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Подтверждено</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Уборка</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Ожидает проверки инспектором</value></data>
+  <data name="Step4SubFlaggedAwaitingDecision" xml:space="preserve"><value>Помечено — ожидает решения</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Закрыто</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Решено</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Оспорено</value></data>
+
+  <data name="RejectedBannerTitle" xml:space="preserve"><value>Отклонено</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Закрыто: {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Описание</value></data>
+  <data name="InspectorObservationsHeading" xml:space="preserve"><value>Наблюдения инспектора</value></data>
+
+  <data name="FlagEvidenceHeading" xml:space="preserve"><value>Доказательства от бригады ({0})</value></data>
+  <data name="FlagEvidenceCaption" xml:space="preserve"><value>Фото, сделанные бригадой на месте в подтверждение пометки.</value></data>
+  <data name="FlagEvidenceAlt" xml:space="preserve"><value>Доказательство пометки</value></data>
+
+  <data name="CitizenPhotosHeading" xml:space="preserve"><value>Фото от жителя ({0})</value></data>
+  <data name="CitizenPhotoAlt" xml:space="preserve"><value>Фото жителя {0}</value></data>
+
+  <data name="InspectionPhotosHeading" xml:space="preserve"><value>Фото проверки инспектора ({0})</value></data>
+  <data name="InspectionPhotoAlt" xml:space="preserve"><value>Фото инспектора</value></data>
+
+  <data name="BeforeCleanupHeading" xml:space="preserve"><value>До уборки ({0})</value></data>
+  <data name="BeforeCleanupAlt" xml:space="preserve"><value>До уборки</value></data>
+
+  <data name="AfterCleanupHeading" xml:space="preserve"><value>После уборки ({0})</value></data>
+  <data name="AfterCleanupAlt" xml:space="preserve"><value>После уборки</value></data>
+
+  <data name="CleanupCrewNotesHeading" xml:space="preserve"><value>Заметки бригады уборки</value></data>
+  <data name="ResolutionHeading" xml:space="preserve"><value>Решение</value></data>
+  <data name="RejectionReasonHeading" xml:space="preserve"><value>Причина отклонения</value></data>
+  <data name="ResolvedOn" xml:space="preserve"><value>Решено: {0}</value></data>
+
+  <data name="CitizenAppealHeading" xml:space="preserve"><value>Апелляция жителя</value></data>
+  <data name="FiledOn" xml:space="preserve"><value>Подано {0}</value></data>
+  <data name="AppealReasonPrefix" xml:space="preserve"><value>Причина:</value></data>
+  <data name="AppealPhotosCaption" xml:space="preserve"><value>Фото к апелляции ({0})</value></data>
+  <data name="AppealPhotoAlt" xml:space="preserve"><value>Фото апелляции</value></data>
+  <data name="AppealDecisionPrefix" xml:space="preserve"><value>Решение: {0}</value></data>
+  <data name="AppealOutcomeUpheld" xml:space="preserve"><value>Удовлетворена</value></data>
+  <data name="AppealOutcomeDismissed" xml:space="preserve"><value>Отклонена</value></data>
+  <data name="ReviewedOn" xml:space="preserve"><value>Рассмотрено {0}</value></data>
+
+  <data name="LocationHeading" xml:space="preserve"><value>Местоположение</value></data>
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>История действий</value></data>
+  <data name="PhotoModalAlt" xml:space="preserve"><value>Фото заявки</value></data>
+
+  <data name="ActionsHeading" xml:space="preserve"><value>Действия</value></data>
+  <data name="TakeReportButton" xml:space="preserve"><value>Взять заявку</value></data>
+  <data name="ConfirmWithPhotosButton" xml:space="preserve"><value>Подтвердить с фото</value></data>
+  <data name="RejectButton" xml:space="preserve"><value>Отклонить</value></data>
+  <data name="InCleanupQueueMessage" xml:space="preserve"><value>Заявка сейчас в очереди уборки.</value></data>
+  <data name="CrewTakenMessage" xml:space="preserve"><value>Член бригады &lt;strong&gt;{0}&lt;/strong&gt; взял её в работу.</value></data>
+  <data name="AwaitingCleanupCrewMessage" xml:space="preserve"><value>Член бригады уборки её возьмёт.</value></data>
+  <data name="CleanupInProgressMessage" xml:space="preserve"><value>Уборка идёт.</value></data>
+  <data name="CleanupStartedAt" xml:space="preserve"><value>Начата {0}.</value></data>
+  <data name="VerifyAndCloseButton" xml:space="preserve"><value>Проверить и закрыть</value></data>
+  <data name="SendBackForReworkButton" xml:space="preserve"><value>Отправить на доработку</value></data>
+  <data name="ReviewFlagInstruction" xml:space="preserve"><value>Изучите доказательства бригады и заявку жителя, затем выберите:</value></data>
+  <data name="RejectCrewCorrectButton" xml:space="preserve"><value>Отклонить (бригада права)</value></data>
+  <data name="SendBackToSameCrewButton" xml:space="preserve"><value>Вернуть той же бригаде</value></data>
+  <data name="ReassignButton" xml:space="preserve"><value>Переназначить другой бригаде</value></data>
+  <data name="UpholdAppealButton" xml:space="preserve"><value>Удовлетворить апелляцию — повторить уборку</value></data>
+  <data name="DismissAppealButton" xml:space="preserve"><value>Отклонить апелляцию</value></data>
+  <data name="ReportClosedMessage" xml:space="preserve"><value>Заявка закрыта.</value></data>
+  <data name="HandledByOtherMessage" xml:space="preserve"><value>Заявкой занимается {0}.</value></data>
+
+  <data name="ConfirmModalTitle" xml:space="preserve"><value>Подтвердить свалку</value></data>
+  <data name="ConfirmModalBody" xml:space="preserve"><value>Загрузите хотя бы одно фото, подтверждающее наличие свалки в указанном месте.</value></data>
+  <data name="ConfirmPhotosLabel" xml:space="preserve"><value>Фото инспекции</value></data>
+  <data name="ConfirmObservationsLabel" xml:space="preserve"><value>Наблюдения (по желанию)</value></data>
+  <data name="ConfirmObservationsPlaceholder" xml:space="preserve"><value>Примерный объём, вид мусора, подъезд, риски…</value></data>
+  <data name="ConfirmSubmitButton" xml:space="preserve"><value>Подтвердить и отправить в очередь уборки</value></data>
+
+  <data name="RejectModalTitle" xml:space="preserve"><value>Отклонить заявку</value></data>
+  <data name="RejectModalBody" xml:space="preserve"><value>Объясните жителю и коллегам, почему заявка отклоняется.</value></data>
+  <data name="RejectReasonLabel" xml:space="preserve"><value>Причина</value></data>
+  <data name="CharRange10to1000" xml:space="preserve"><value>От 10 до 1000 символов.</value></data>
+  <data name="RejectSubmitButton" xml:space="preserve"><value>Отклонить заявку</value></data>
+
+  <data name="VerifyModalTitle" xml:space="preserve"><value>Проверить уборку и закрыть</value></data>
+  <data name="VerifyModalBody" xml:space="preserve"><value>Подтвердите, что уборка завершена, и оставьте короткую заметку для жителя.</value></data>
+  <data name="VerifyNotesLabel" xml:space="preserve"><value>Заметки проверки</value></data>
+  <data name="VerifySubmitButton" xml:space="preserve"><value>Проверить и закрыть</value></data>
+
+  <data name="ReworkModalTitle" xml:space="preserve"><value>Отправить на доработку</value></data>
+  <data name="ReworkModalBody" xml:space="preserve"><value>Расскажите бригаде, что нужно сделать перед закрытием.</value></data>
+  <data name="ReworkReasonLabel" xml:space="preserve"><value>Что доработать</value></data>
+  <data name="ReworkSubmitButton" xml:space="preserve"><value>Отправить обратно</value></data>
+
+  <data name="RejectFlaggedModalTitle" xml:space="preserve"><value>Отклонить заявку</value></data>
+  <data name="RejectFlaggedModalBody" xml:space="preserve"><value>Согласны с бригадой: заявка некорректна. Житель получит уведомление.</value></data>
+  <data name="DecisionNotesLabel" xml:space="preserve"><value>Заметки по решению</value></data>
+  <data name="CharRange10to500" xml:space="preserve"><value>От 10 до 500 символов.</value></data>
+  <data name="RejectFlaggedSubmitButton" xml:space="preserve"><value>Отклонить заявку</value></data>
+
+  <data name="ConfirmBackModalTitle" xml:space="preserve"><value>Вернуть той же бригаде</value></data>
+  <data name="ConfirmBackModalBody" xml:space="preserve"><value>Свалка существует. Та же бригада повторно осмотрит место.</value></data>
+  <data name="ConfirmBackNotesHelp" xml:space="preserve"><value>От 10 до 500 символов. Подскажите бригаде, на что обратить внимание.</value></data>
+  <data name="ConfirmBackSubmitButton" xml:space="preserve"><value>Отправить обратно</value></data>
+
+  <data name="ReassignModalTitle" xml:space="preserve"><value>Переназначить другой бригаде</value></data>
+  <data name="ReassignModalBody" xml:space="preserve"><value>Вернуть заявку в очередь уборки. Её может взять любая другая бригада.</value></data>
+  <data name="ReassignSubmitButton" xml:space="preserve"><value>Переназначить</value></data>
+
+  <data name="UpholdModalTitle" xml:space="preserve"><value>Удовлетворить апелляцию</value></data>
+  <data name="UpholdModalBody" xml:space="preserve"><value>Уборка вернётся в очередь в работе. Объясните жителю, почему апелляция принята и что бригаде нужно переделать.</value></data>
+  <data name="UpholdNotesLabel" xml:space="preserve"><value>Заметки решения</value></data>
+  <data name="UpholdSubmitButton" xml:space="preserve"><value>Удовлетворить и возобновить уборку</value></data>
+
+  <data name="DismissModalTitle" xml:space="preserve"><value>Отклонить апелляцию</value></data>
+  <data name="DismissModalBody" xml:space="preserve"><value>Заявка остаётся решённой. Объясните жителю, почему апелляция не принята.</value></data>
+  <data name="DismissExplanationLabel" xml:space="preserve"><value>Пояснение</value></data>
+  <data name="DismissSubmitButton" xml:space="preserve"><value>Отклонить апелляцию</value></data>
+</root>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Билдирүүнүн чоо-жайы</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Таштанды жөнүндө билдирүү</value></data>
+  <data name="HeaderTimeFormat" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="AssignedUnassigned" xml:space="preserve"><value>Дайындалган эмес</value></data>
+  <data name="AssignedToYou" xml:space="preserve"><value>Сизге дайындалган</value></data>
+  <data name="AssignedToOther" xml:space="preserve"><value>Дайындалган: {0}</value></data>
+  <data name="DistrictInspectorSuffix" xml:space="preserve"><value> · Райондук инспектор: &lt;strong&gt;{0}&lt;/strong&gt;</value></data>
+
+  <data name="ChannelTelegramTitle" xml:space="preserve"><value>Telegram-бот аркылуу жөнөтүлгөн</value></data>
+  <data name="ChannelTelegramUserIdSuffix" xml:space="preserve"><value>Telegram ID: {0}</value></data>
+  <data name="ChannelWebTitle" xml:space="preserve"><value>Сайт аркылуу жөнөтүлгөн</value></data>
+  <data name="ChannelWebBy" xml:space="preserve"><value>Берген: {0}</value></data>
+  <data name="AnonymousFallback" xml:space="preserve"><value>(аноним)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(белгисиз)</value></data>
+
+  <data name="CleanupCrewFlaggedTitle" xml:space="preserve"><value>Тазалоо бригадасы билдирүүнү белгиледи</value></data>
+  <data name="CrewLabel" xml:space="preserve"><value>Бригада:</value></data>
+  <data name="ReasonLabel" xml:space="preserve"><value>Себеби:</value></data>
+  <data name="NotesLabel" xml:space="preserve"><value>Эскертүүлөр:</value></data>
+  <data name="FlaggedOn" xml:space="preserve"><value>Белгиленген {0}</value></data>
+  <data name="PreviouslyReassigned" xml:space="preserve"><value>Мурда кайра дайындалган {0}×</value></data>
+
+  <data name="AutoTriageFlaggedTitle" xml:space="preserve"><value>Автотриаж билдирүүнү белгиледи</value></data>
+  <data name="AutoTriageFooter" xml:space="preserve"><value>Инспектор тастыктоо же четке кагуу алдында жагдайды текшерсин.</value></data>
+  <data name="PreTriageTitle" xml:space="preserve"><value>Триажга чейинки билдирүү</value></data>
+  <data name="PreTriageBody" xml:space="preserve"><value>Автотриаж тутуму иштетилгенге чейин жөнөтүлгөн. Кол менен текшерүү талап кылынат.</value></data>
+  <data name="ManualReviewTitle" xml:space="preserve"><value>Кол менен текшерүү талап кылынат</value></data>
+  <data name="ManualReviewBody" xml:space="preserve"><value>Триаждын себеби көрсөтүлгөн эмес. Кол менен карап чыгыңыз.</value></data>
+
+  <data name="ReporterLabel" xml:space="preserve"><value>Билдирүүчү</value></data>
+  <data name="ReporterStatTotal" xml:space="preserve"><value>Баары</value></data>
+  <data name="ReporterStatInProgress" xml:space="preserve"><value>Иштеп жатат</value></data>
+  <data name="ReporterStatResolved" xml:space="preserve"><value>Чечилген</value></data>
+  <data name="ReporterStatRejected" xml:space="preserve"><value>Четке кагылган</value></data>
+
+  <data name="ProgressHeading" xml:space="preserve"><value>Жүрүшү</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Берилген</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>Каралууда</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Тастыкталган</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Тазалоо</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Инспектордун текшерүүсүн күтөт</value></data>
+  <data name="Step4SubFlaggedAwaitingDecision" xml:space="preserve"><value>Белгиленген — чечим күтүлүүдө</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Жабылган</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Чечилген</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Даттанган</value></data>
+
+  <data name="RejectedBannerTitle" xml:space="preserve"><value>Четке кагылды</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Жабылган: {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Сүрөттөмө</value></data>
+  <data name="InspectorObservationsHeading" xml:space="preserve"><value>Инспектордун байкоолору</value></data>
+
+  <data name="FlagEvidenceHeading" xml:space="preserve"><value>Бригаданын далилдери ({0})</value></data>
+  <data name="FlagEvidenceCaption" xml:space="preserve"><value>Бригада белгилөөнү тастыктоо үчүн жайында тарткан сүрөттөр.</value></data>
+  <data name="FlagEvidenceAlt" xml:space="preserve"><value>Белгилөө далили</value></data>
+
+  <data name="CitizenPhotosHeading" xml:space="preserve"><value>Тургундун сүрөттөрү ({0})</value></data>
+  <data name="CitizenPhotoAlt" xml:space="preserve"><value>Тургундун сүрөтү {0}</value></data>
+
+  <data name="InspectionPhotosHeading" xml:space="preserve"><value>Инспектордун текшерүү сүрөттөрү ({0})</value></data>
+  <data name="InspectionPhotoAlt" xml:space="preserve"><value>Инспектор сүрөтү</value></data>
+
+  <data name="BeforeCleanupHeading" xml:space="preserve"><value>Тазалоого чейин ({0})</value></data>
+  <data name="BeforeCleanupAlt" xml:space="preserve"><value>Тазалоого чейин</value></data>
+
+  <data name="AfterCleanupHeading" xml:space="preserve"><value>Тазалоодон кийин ({0})</value></data>
+  <data name="AfterCleanupAlt" xml:space="preserve"><value>Тазалоодон кийин</value></data>
+
+  <data name="CleanupCrewNotesHeading" xml:space="preserve"><value>Тазалоо бригадасынын эскертүүлөрү</value></data>
+  <data name="ResolutionHeading" xml:space="preserve"><value>Чечим</value></data>
+  <data name="RejectionReasonHeading" xml:space="preserve"><value>Четке кагуунун себеби</value></data>
+  <data name="ResolvedOn" xml:space="preserve"><value>Чечилген: {0}</value></data>
+
+  <data name="CitizenAppealHeading" xml:space="preserve"><value>Тургундун даттануусу</value></data>
+  <data name="FiledOn" xml:space="preserve"><value>Берилген {0}</value></data>
+  <data name="AppealReasonPrefix" xml:space="preserve"><value>Себеби:</value></data>
+  <data name="AppealPhotosCaption" xml:space="preserve"><value>Даттануу сүрөттөрү ({0})</value></data>
+  <data name="AppealPhotoAlt" xml:space="preserve"><value>Даттануу сүрөтү</value></data>
+  <data name="AppealDecisionPrefix" xml:space="preserve"><value>Чечим: {0}</value></data>
+  <data name="AppealOutcomeUpheld" xml:space="preserve"><value>Канааттандырылды</value></data>
+  <data name="AppealOutcomeDismissed" xml:space="preserve"><value>Четке кагылды</value></data>
+  <data name="ReviewedOn" xml:space="preserve"><value>Каралган {0}</value></data>
+
+  <data name="LocationHeading" xml:space="preserve"><value>Жайгашкан жери</value></data>
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>Аракеттер тарыхы</value></data>
+  <data name="PhotoModalAlt" xml:space="preserve"><value>Билдирүү сүрөтү</value></data>
+
+  <data name="ActionsHeading" xml:space="preserve"><value>Аракеттер</value></data>
+  <data name="TakeReportButton" xml:space="preserve"><value>Билдирүүнү алуу</value></data>
+  <data name="ConfirmWithPhotosButton" xml:space="preserve"><value>Сүрөттөр менен тастыктоо</value></data>
+  <data name="RejectButton" xml:space="preserve"><value>Четке кагуу</value></data>
+  <data name="InCleanupQueueMessage" xml:space="preserve"><value>Билдирүү азыр тазалоо кезегинде.</value></data>
+  <data name="CrewTakenMessage" xml:space="preserve"><value>Бригаданын мүчөсү &lt;strong&gt;{0}&lt;/strong&gt; алып кетти.</value></data>
+  <data name="AwaitingCleanupCrewMessage" xml:space="preserve"><value>Тазалоо бригадасынын мүчөсү аны алат.</value></data>
+  <data name="CleanupInProgressMessage" xml:space="preserve"><value>Тазалоо жүрүп жатат.</value></data>
+  <data name="CleanupStartedAt" xml:space="preserve"><value>Башталган {0}.</value></data>
+  <data name="VerifyAndCloseButton" xml:space="preserve"><value>Текшерип жабуу</value></data>
+  <data name="SendBackForReworkButton" xml:space="preserve"><value>Кайра иштөөгө жөнөтүү</value></data>
+  <data name="ReviewFlagInstruction" xml:space="preserve"><value>Бригаданын далилдерин жана тургундун билдирүүсүн карап чыгып, тандаңыз:</value></data>
+  <data name="RejectCrewCorrectButton" xml:space="preserve"><value>Четке кагуу (бригада туура)</value></data>
+  <data name="SendBackToSameCrewButton" xml:space="preserve"><value>Ошол эле бригадага кайтаруу</value></data>
+  <data name="ReassignButton" xml:space="preserve"><value>Башка бригадага дайындоо</value></data>
+  <data name="UpholdAppealButton" xml:space="preserve"><value>Даттанууну канааттандыруу — кайра тазалоо</value></data>
+  <data name="DismissAppealButton" xml:space="preserve"><value>Даттанууну четке кагуу</value></data>
+  <data name="ReportClosedMessage" xml:space="preserve"><value>Билдирүү жабылды.</value></data>
+  <data name="HandledByOtherMessage" xml:space="preserve"><value>Билдирүү менен {0} иштеп жатат.</value></data>
+
+  <data name="ConfirmModalTitle" xml:space="preserve"><value>Таштандыны тастыктоо</value></data>
+  <data name="ConfirmModalBody" xml:space="preserve"><value>Көрсөтүлгөн жерде таштанды бар экенин ырастаган эң аз бир сүрөт жүктөңүз.</value></data>
+  <data name="ConfirmPhotosLabel" xml:space="preserve"><value>Текшерүү сүрөттөрү</value></data>
+  <data name="ConfirmObservationsLabel" xml:space="preserve"><value>Байкоолор (милдеттүү эмес)</value></data>
+  <data name="ConfirmObservationsPlaceholder" xml:space="preserve"><value>Болжолдуу көлөмү, таштандынын түрү, жетүү, коркунучтар…</value></data>
+  <data name="ConfirmSubmitButton" xml:space="preserve"><value>Тастыктап, тазалоо кезегине жөнөтүү</value></data>
+
+  <data name="RejectModalTitle" xml:space="preserve"><value>Билдирүүнү четке кагуу</value></data>
+  <data name="RejectModalBody" xml:space="preserve"><value>Билдирүүнүн эмне үчүн четке кагылып жатканын тургундарга жана кесиптештериңизге түшүндүрүңүз.</value></data>
+  <data name="RejectReasonLabel" xml:space="preserve"><value>Себеби</value></data>
+  <data name="CharRange10to1000" xml:space="preserve"><value>10–1000 символ.</value></data>
+  <data name="RejectSubmitButton" xml:space="preserve"><value>Билдирүүнү четке кагуу</value></data>
+
+  <data name="VerifyModalTitle" xml:space="preserve"><value>Тазалоону текшерип жабуу</value></data>
+  <data name="VerifyModalBody" xml:space="preserve"><value>Тазалоо аяктаганын ырастап, тургунга кыска эскертүү калтырыңыз.</value></data>
+  <data name="VerifyNotesLabel" xml:space="preserve"><value>Текшерүү эскертүүлөрү</value></data>
+  <data name="VerifySubmitButton" xml:space="preserve"><value>Текшерип жабуу</value></data>
+
+  <data name="ReworkModalTitle" xml:space="preserve"><value>Кайра иштөөгө жөнөтүү</value></data>
+  <data name="ReworkModalBody" xml:space="preserve"><value>Жабылыш үчүн эмне иштешин керектигин бригадага айтыңыз.</value></data>
+  <data name="ReworkReasonLabel" xml:space="preserve"><value>Эмнени кайра иштөө керек</value></data>
+  <data name="ReworkSubmitButton" xml:space="preserve"><value>Кайра жөнөтүү</value></data>
+
+  <data name="RejectFlaggedModalTitle" xml:space="preserve"><value>Билдирүүнү четке кагуу</value></data>
+  <data name="RejectFlaggedModalBody" xml:space="preserve"><value>Бригада менен макулсуз: билдирүү жараксыз. Тургунга билдирүү жөнөтүлөт.</value></data>
+  <data name="DecisionNotesLabel" xml:space="preserve"><value>Чечим эскертүүлөрү</value></data>
+  <data name="CharRange10to500" xml:space="preserve"><value>10–500 символ.</value></data>
+  <data name="RejectFlaggedSubmitButton" xml:space="preserve"><value>Билдирүүнү четке кагуу</value></data>
+
+  <data name="ConfirmBackModalTitle" xml:space="preserve"><value>Ошол эле бригадага кайтаруу</value></data>
+  <data name="ConfirmBackModalBody" xml:space="preserve"><value>Таштанды бар. Ошол эле бригада жайды кайра карайт.</value></data>
+  <data name="ConfirmBackNotesHelp" xml:space="preserve"><value>10–500 символ. Бригадага эмнеге көңүл буруу керектигин түшүндүрүңүз.</value></data>
+  <data name="ConfirmBackSubmitButton" xml:space="preserve"><value>Кайра жөнөтүү</value></data>
+
+  <data name="ReassignModalTitle" xml:space="preserve"><value>Башка бригадага дайындоо</value></data>
+  <data name="ReassignModalBody" xml:space="preserve"><value>Билдирүүнү тазалоо кезегине кайтаруу. Аны башка бригада ала алат.</value></data>
+  <data name="ReassignSubmitButton" xml:space="preserve"><value>Кайра дайындоо</value></data>
+
+  <data name="UpholdModalTitle" xml:space="preserve"><value>Даттанууну канааттандыруу</value></data>
+  <data name="UpholdModalBody" xml:space="preserve"><value>Тазалоо иштей турган кезекке кайтат. Тургунга даттануунун кабыл алынганын жана бригада эмнени кайра иштеши керектигин түшүндүрүңүз.</value></data>
+  <data name="UpholdNotesLabel" xml:space="preserve"><value>Чечим эскертүүлөрү</value></data>
+  <data name="UpholdSubmitButton" xml:space="preserve"><value>Канааттандырып, тазалоону кайра ачуу</value></data>
+
+  <data name="DismissModalTitle" xml:space="preserve"><value>Даттанууну четке кагуу</value></data>
+  <data name="DismissModalBody" xml:space="preserve"><value>Билдирүү чечилген бойдон калат. Тургунга даттануу кабыл алынбаганын түшүндүрүңүз.</value></data>
+  <data name="DismissExplanationLabel" xml:space="preserve"><value>Түшүндүрмө</value></data>
+  <data name="DismissSubmitButton" xml:space="preserve"><value>Даттанууну четке кагуу</value></data>
+</root>

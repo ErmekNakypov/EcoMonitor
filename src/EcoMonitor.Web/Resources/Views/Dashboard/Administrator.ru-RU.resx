@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Панель администратора</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Администратор</value></data>
+  <data name="Heading" xml:space="preserve"><value>Обзор операций</value></data>
+  <data name="WelcomeBack" xml:space="preserve"><value>С возвращением, {0}</value></data>
+
+  <data name="AnalyticsHeading" xml:space="preserve"><value>Аналитика</value></data>
+  <data name="Chart1Title" xml:space="preserve"><value>Поданные заявки</value></data>
+  <data name="Chart1Subtitle" xml:space="preserve"><value>За 30 дней</value></data>
+  <data name="Chart2Title" xml:space="preserve"><value>Заявки по статусу</value></data>
+  <data name="Chart2Subtitle" xml:space="preserve"><value>За всё время</value></data>
+  <data name="Chart3Title" xml:space="preserve"><value>Среднее качество воздуха (US AQI)</value></data>
+  <data name="Chart3Subtitle" xml:space="preserve"><value>За 7 дней</value></data>
+
+  <data name="StatTotalUsersLabel" xml:space="preserve"><value>Всего пользователей</value></data>
+  <data name="StatTotalUsersCaption" xml:space="preserve"><value>По всем ролям</value></data>
+  <data name="StatTotalReportsLabel" xml:space="preserve"><value>Всего заявок</value></data>
+  <data name="StatTotalReportsCaption" xml:space="preserve"><value>От жителей</value></data>
+  <data name="StatTotalContainersLabel" xml:space="preserve"><value>Всего контейнеров</value></data>
+  <data name="StatTotalContainersCaption" xml:space="preserve"><value>По всему городу</value></data>
+
+  <data name="StatAutoTriageLabel" xml:space="preserve"><value>Доля автотриажа</value></data>
+  <data name="StatAutoTriageNoData" xml:space="preserve"><value>За последние 30 дней заявок нет.</value></data>
+  <data name="StatAutoTriageCaption" xml:space="preserve"><value>{0} из {1} автоматически подтверждено (30д) · {2} отправлено инспектору</value></data>
+
+  <data name="StatAppealsLabel" xml:space="preserve"><value>Доля апелляций</value></data>
+  <data name="StatAppealsNoData" xml:space="preserve"><value>За последние 30 дней решённых заявок нет.</value></data>
+  <data name="StatAppealsCaption" xml:space="preserve"><value>{0} из {1} решённых заявок оспорено (30д)</value></data>
+
+  <data name="StatFlagsLabel" xml:space="preserve"><value>Доля пометок бригад</value></data>
+  <data name="StatFlagsNoData" xml:space="preserve"><value>За последние 30 дней уборки не назначались.</value></data>
+  <data name="StatFlagsCaption" xml:space="preserve"><value>{0} из {1} подтверждённых заявок помечено на месте (30д)</value></data>
+
+  <data name="DistrictHeading" xml:space="preserve"><value>Заявки по районам (за 30 дней)</value></data>
+  <data name="DistrictTotalSuffix" xml:space="preserve"><value>всего: {0}</value></data>
+  <data name="DistrictDetailSuffix" xml:space="preserve"><value> · решено {0}, в работе {1}, отклонено {2}</value></data>
+
+  <data name="QuickActionsHeading" xml:space="preserve"><value>Быстрые действия</value></data>
+  <data name="QuickActionManageUsers" xml:space="preserve"><value>Пользователи</value></data>
+  <data name="QuickActionManageContainers" xml:space="preserve"><value>Контейнеры</value></data>
+  <data name="QuickActionPublicMap" xml:space="preserve"><value>Карта города</value></data>
+  <data name="QuickActionViewReports" xml:space="preserve"><value>Все заявки</value></data>
+
+  <data name="JsChartDatasetReports" xml:space="preserve"><value>Заявки</value></data>
+  <data name="JsChartDatasetAqi" xml:space="preserve"><value>Средний AQI</value></data>
+  <data name="JsChartLoadFailed" xml:space="preserve"><value>Не удалось загрузить аналитику.</value></data>
+  <data name="JsChartStatusEmpty" xml:space="preserve"><value>Заявок ещё нет.</value></data>
+  <data name="JsChartAqiEmpty" xml:space="preserve"><value>За последние 7 дней замеров воздуха нет.</value></data>
+  <data name="JsTooltipStationSingular" xml:space="preserve"><value> станция сообщает</value></data>
+  <data name="JsTooltipStationsPlural" xml:space="preserve"><value> станций сообщают</value></data>
+</root>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Page chrome -->
+  <data name="Title" xml:space="preserve"><value>Administrator dashboard</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Administrator</value></data>
+  <data name="Heading" xml:space="preserve"><value>Operations overview</value></data>
+  <data name="WelcomeBack" xml:space="preserve"><value>Welcome back, {0}</value></data>
+
+  <!-- Analytics section -->
+  <data name="AnalyticsHeading" xml:space="preserve"><value>Analytics</value></data>
+  <data name="Chart1Title" xml:space="preserve"><value>Reports submitted</value></data>
+  <data name="Chart1Subtitle" xml:space="preserve"><value>Last 30 days</value></data>
+  <data name="Chart2Title" xml:space="preserve"><value>Reports by status</value></data>
+  <data name="Chart2Subtitle" xml:space="preserve"><value>All time</value></data>
+  <data name="Chart3Title" xml:space="preserve"><value>Average air quality (US AQI)</value></data>
+  <data name="Chart3Subtitle" xml:space="preserve"><value>Last 7 days</value></data>
+
+  <!-- Stat strip — six items. Three plain totals + three rates with
+       semantic dots. The {0}/{1}/{2} format strings on the rate
+       captions interpolate model values; the *NoData fallbacks fire
+       when the divisor is 0. -->
+  <data name="StatTotalUsersLabel" xml:space="preserve"><value>Total users</value></data>
+  <data name="StatTotalUsersCaption" xml:space="preserve"><value>Across all roles</value></data>
+  <data name="StatTotalReportsLabel" xml:space="preserve"><value>Total reports</value></data>
+  <data name="StatTotalReportsCaption" xml:space="preserve"><value>Citizen submissions</value></data>
+  <data name="StatTotalContainersLabel" xml:space="preserve"><value>Total containers</value></data>
+  <data name="StatTotalContainersCaption" xml:space="preserve"><value>Tracked across the city</value></data>
+
+  <data name="StatAutoTriageLabel" xml:space="preserve"><value>Auto-triage rate</value></data>
+  <data name="StatAutoTriageNoData" xml:space="preserve"><value>No reports in the last 30 days.</value></data>
+  <!-- {0} = auto-confirmed count, {1} = total, {2} = sent-to-inspector count -->
+  <data name="StatAutoTriageCaption" xml:space="preserve"><value>{0} of {1} auto-confirmed (30d) · {2} sent to inspector review</value></data>
+
+  <data name="StatAppealsLabel" xml:space="preserve"><value>Citizen appeal rate</value></data>
+  <data name="StatAppealsNoData" xml:space="preserve"><value>No resolved reports in the last 30 days.</value></data>
+  <!-- {0} = appealed count, {1} = total resolved -->
+  <data name="StatAppealsCaption" xml:space="preserve"><value>{0} of {1} resolved reports appealed (30d)</value></data>
+
+  <data name="StatFlagsLabel" xml:space="preserve"><value>Crew flag rate</value></data>
+  <data name="StatFlagsNoData" xml:space="preserve"><value>No cleanups dispatched in the last 30 days.</value></data>
+  <!-- {0} = flagged count, {1} = total confirmed -->
+  <data name="StatFlagsCaption" xml:space="preserve"><value>{0} of {1} confirmed reports flagged on site (30d)</value></data>
+
+  <!-- District breakdown -->
+  <data name="DistrictHeading" xml:space="preserve"><value>Reports by district (last 30 days)</value></data>
+  <!-- {0} = total -->
+  <data name="DistrictTotalSuffix" xml:space="preserve"><value>{0} total</value></data>
+  <!-- Middot leads the suffix. {0} resolved, {1} in progress, {2} rejected -->
+  <data name="DistrictDetailSuffix" xml:space="preserve"><value> · {0} resolved, {1} in progress, {2} rejected</value></data>
+
+  <!-- Quick actions -->
+  <data name="QuickActionsHeading" xml:space="preserve"><value>Quick actions</value></data>
+  <data name="QuickActionManageUsers" xml:space="preserve"><value>Manage users</value></data>
+  <data name="QuickActionManageContainers" xml:space="preserve"><value>Manage containers</value></data>
+  <data name="QuickActionPublicMap" xml:space="preserve"><value>Public map</value></data>
+  <data name="QuickActionViewReports" xml:space="preserve"><value>View all reports</value></data>
+
+  <!-- JS i18n bridge — strings emitted via window.__dashboardI18n -->
+  <data name="JsChartDatasetReports" xml:space="preserve"><value>Reports</value></data>
+  <data name="JsChartDatasetAqi" xml:space="preserve"><value>Avg US AQI</value></data>
+  <data name="JsChartLoadFailed" xml:space="preserve"><value>Failed to load analytics data.</value></data>
+  <data name="JsChartStatusEmpty" xml:space="preserve"><value>No reports submitted yet.</value></data>
+  <data name="JsChartAqiEmpty" xml:space="preserve"><value>No air quality readings in the last 7 days.</value></data>
+  <!-- Pluralised station-count tooltip. JS picks singular vs plural
+       by `s === 1`. Russian has 3 plural forms but we use the
+       "many"/"few" forms as best-effort; the translation is slightly
+       off for counts 2–4 in Russian and the user should refine. -->
+  <data name="JsTooltipStationSingular" xml:space="preserve"><value> station reporting</value></data>
+  <data name="JsTooltipStationsPlural" xml:space="preserve"><value> stations reporting</value></data>
+</root>

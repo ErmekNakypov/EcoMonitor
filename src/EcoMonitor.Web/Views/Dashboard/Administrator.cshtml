@@ -1,6 +1,7 @@
 @model AdministratorDashboardViewModel
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Administrator dashboard";
+    ViewData["Title"] = Localizer["Title"].Value;
 }
 
 <section class="py-5">
@@ -9,10 +10,10 @@
             <div>
                 <span class="hero-badge mb-2">
                     <i class="bi bi-shield-check"></i>
-                    <span>Administrator</span>
+                    <span>@Localizer["BadgeRole"]</span>
                 </span>
-                <h1 class="h2 fw-700 mt-3 mb-1">Operations overview</h1>
-                <p class="text-muted mb-0">Welcome back, @Model.FullName</p>
+                <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+                <p class="text-muted mb-0">@Localizer["WelcomeBack", Model.FullName]</p>
             </div>
             <div class="text-muted small mt-3 mt-sm-0">@DateTime.Now.ToString("dddd, d MMMM yyyy")</div>
         </div>
@@ -20,14 +21,14 @@
         <section class="analytics-section mb-5">
             <h2 class="section-title">
                 <i class="bi bi-bar-chart-line"></i>
-                <span>Analytics</span>
+                <span>@Localizer["AnalyticsHeading"]</span>
             </h2>
             <div class="row g-4">
                 <div class="col-lg-6">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <h3>Reports submitted</h3>
-                            <span class="chart-subtitle">Last 30 days</span>
+                            <h3>@Localizer["Chart1Title"]</h3>
+                            <span class="chart-subtitle">@Localizer["Chart1Subtitle"]</span>
                         </div>
                         <div class="chart-body">
                             <canvas id="chart-reports-by-day"></canvas>
@@ -37,8 +38,8 @@
                 <div class="col-lg-6">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <h3>Reports by status</h3>
-                            <span class="chart-subtitle">All time</span>
+                            <h3>@Localizer["Chart2Title"]</h3>
+                            <span class="chart-subtitle">@Localizer["Chart2Subtitle"]</span>
                         </div>
                         <div class="chart-body">
                             <canvas id="chart-status-breakdown"></canvas>
@@ -48,8 +49,8 @@
                 <div class="col-lg-12">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <h3>Average air quality (US AQI)</h3>
-                            <span class="chart-subtitle">Last 7 days</span>
+                            <h3>@Localizer["Chart3Title"]</h3>
+                            <span class="chart-subtitle">@Localizer["Chart3Subtitle"]</span>
                         </div>
                         <div class="chart-body">
                             <canvas id="chart-aqi-by-day"></canvas>
@@ -67,68 +68,68 @@
            the three rate stats get a single semantic dot before the label. *@
         <div class="stat-strip mb-5">
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Total users</span>
+                <span class="stat-strip__label">@Localizer["StatTotalUsersLabel"]</span>
                 <div class="stat-strip__value">@Model.TotalUsers</div>
-                <span class="stat-strip__caption">Across all roles</span>
+                <span class="stat-strip__caption">@Localizer["StatTotalUsersCaption"]</span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Total reports</span>
+                <span class="stat-strip__label">@Localizer["StatTotalReportsLabel"]</span>
                 <div class="stat-strip__value">@Model.TotalReports</div>
-                <span class="stat-strip__caption">Citizen submissions</span>
+                <span class="stat-strip__caption">@Localizer["StatTotalReportsCaption"]</span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Total containers</span>
+                <span class="stat-strip__label">@Localizer["StatTotalContainersLabel"]</span>
                 <div class="stat-strip__value">@Model.TotalContainers</div>
-                <span class="stat-strip__caption">Tracked across the city</span>
+                <span class="stat-strip__caption">@Localizer["StatTotalContainersCaption"]</span>
             </div>
             <div class="stat-strip__item">
                 <span class="stat-strip__label">
                     <span class="stat-strip__dot" style="background: var(--em-ok);"></span>
-                    Auto-triage rate
+                    @Localizer["StatAutoTriageLabel"]
                 </span>
                 <div class="stat-strip__value">@Model.AutoTriagePercentage30d.ToString("0.#")%</div>
                 <span class="stat-strip__caption">
                     @if (Model.AutoTriageTotal30d == 0)
                     {
-                        <text>No reports in the last 30 days.</text>
+                        @Localizer["StatAutoTriageNoData"]
                     }
                     else
                     {
-                        <text>@Model.AutoTriageAutoConfirmed30d of @Model.AutoTriageTotal30d auto-confirmed (30d) · @Model.AutoTriageReviewed30d sent to inspector review</text>
+                        @Localizer["StatAutoTriageCaption", Model.AutoTriageAutoConfirmed30d, Model.AutoTriageTotal30d, Model.AutoTriageReviewed30d]
                     }
                 </span>
             </div>
             <div class="stat-strip__item">
                 <span class="stat-strip__label">
                     <span class="stat-strip__dot" style="background: var(--em-danger);"></span>
-                    Citizen appeal rate
+                    @Localizer["StatAppealsLabel"]
                 </span>
                 <div class="stat-strip__value">@Model.AppealsPercentage30d.ToString("0.#")%</div>
                 <span class="stat-strip__caption">
                     @if (Model.AppealsTotalEligible30d == 0)
                     {
-                        <text>No resolved reports in the last 30 days.</text>
+                        @Localizer["StatAppealsNoData"]
                     }
                     else
                     {
-                        <text>@Model.AppealsAppealed30d of @Model.AppealsTotalEligible30d resolved reports appealed (30d)</text>
+                        @Localizer["StatAppealsCaption", Model.AppealsAppealed30d, Model.AppealsTotalEligible30d]
                     }
                 </span>
             </div>
             <div class="stat-strip__item">
                 <span class="stat-strip__label">
                     <span class="stat-strip__dot" style="background: var(--em-warn);"></span>
-                    Crew flag rate
+                    @Localizer["StatFlagsLabel"]
                 </span>
                 <div class="stat-strip__value">@Model.FlagsPercentage30d.ToString("0.#")%</div>
                 <span class="stat-strip__caption">
                     @if (Model.FlagsTotalEligible30d == 0)
                     {
-                        <text>No cleanups dispatched in the last 30 days.</text>
+                        @Localizer["StatFlagsNoData"]
                     }
                     else
                     {
-                        <text>@Model.FlagsFlagged30d of @Model.FlagsTotalEligible30d confirmed reports flagged on site (30d)</text>
+                        @Localizer["StatFlagsCaption", Model.FlagsFlagged30d, Model.FlagsTotalEligible30d]
                     }
                 </span>
             </div>
@@ -137,7 +138,7 @@
         @if (Model.DistrictBreakdown30d.Any())
         {
             <div class="auth-card mb-4">
-                <h2 class="h5 fw-700 mb-3"><i class="bi bi-bounding-box me-2"></i>Reports by district (last 30 days)</h2>
+                <h2 class="h5 fw-700 mb-3"><i class="bi bi-bounding-box me-2"></i>@Localizer["DistrictHeading"]</h2>
                 @{
                     var maxTotal = Math.Max(1, Model.DistrictBreakdown30d.Max(d => d.Total));
                 }
@@ -153,10 +154,10 @@
                                     </span>
                                 </span>
                                 <span class="text-muted small">
-                                    @slice.Total total
+                                    @Localizer["DistrictTotalSuffix", slice.Total]
                                     @if (slice.Resolved > 0 || slice.Rejected > 0 || slice.InProgress > 0)
                                     {
-                                        <text> &middot; @slice.Resolved resolved, @slice.InProgress in progress, @slice.Rejected rejected</text>
+                                        @Localizer["DistrictDetailSuffix", slice.Resolved, slice.InProgress, slice.Rejected]
                                     }
                                 </span>
                             </div>
@@ -170,30 +171,30 @@
         }
 
         <div class="auth-card">
-            <h2 class="h5 fw-700 mb-3">Quick actions</h2>
+            <h2 class="h5 fw-700 mb-3">@Localizer["QuickActionsHeading"]</h2>
             <div class="row g-3">
                 <div class="col-md-3">
                     <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="quick-link">
                         <i class="bi bi-people-fill"></i>
-                        <span>Manage users</span>
+                        <span>@Localizer["QuickActionManageUsers"]</span>
                     </a>
                 </div>
                 <div class="col-md-3">
                     <a asp-area="Admin" asp-controller="Containers" asp-action="Index" class="quick-link">
                         <i class="bi bi-trash3"></i>
-                        <span>Manage containers</span>
+                        <span>@Localizer["QuickActionManageContainers"]</span>
                     </a>
                 </div>
                 <div class="col-md-3">
                     <a asp-area="" asp-controller="Map" asp-action="Index" class="quick-link">
                         <i class="bi bi-map"></i>
-                        <span>Public map</span>
+                        <span>@Localizer["QuickActionPublicMap"]</span>
                     </a>
                 </div>
                 <div class="col-md-3">
                     <a asp-area="Admin" asp-controller="Reports" asp-action="Index" class="quick-link">
                         <i class="bi bi-flag"></i>
-                        <span>View all reports</span>
+                        <span>@Localizer["QuickActionViewReports"]</span>
                     </a>
                 </div>
             </div>
@@ -202,6 +203,24 @@
 </section>
 
 @section Scripts {
+    @* JSON i18n bridge for the inline analytics JS. The seven strings
+       below are referenced as window.__dashboardI18n.<key> inside the
+       Chart.js setup and the fetch error / empty-state handlers.
+       Russian pluralization on JsTooltipStations* uses two forms
+       (singular vs many); counts 2–4 in Russian technically take a
+       third form ("few") which is not handled — translator should
+       refine if exact pluralization matters. *@
+    <script>
+        window.__dashboardI18n = {
+            datasetReports:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsChartDatasetReports"].Value)),
+            datasetAqi:        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsChartDatasetAqi"].Value)),
+            loadFailed:        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsChartLoadFailed"].Value)),
+            statusEmpty:       @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsChartStatusEmpty"].Value)),
+            aqiEmpty:          @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsChartAqiEmpty"].Value)),
+            stationSingular:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsTooltipStationSingular"].Value)),
+            stationsPlural:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsTooltipStationsPlural"].Value))
+        };
+    </script>
     <script>
         (function initAnalytics() {
             if (typeof Chart === 'undefined') {
@@ -209,6 +228,7 @@
                 return;
             }
 
+            var i18n = window.__dashboardI18n;
             var BRAND_PRIMARY = '#2D6A4F';
             var BRAND_ACCENT = '#74C69D';
             var TEXT_MUTED = '#6C757D';
@@ -241,9 +261,9 @@
                 })
                 .catch(function (err) {
                     console.error('Analytics load failed', err);
-                    showEmpty('chart-reports-by-day', 'Failed to load analytics data.');
-                    showEmpty('chart-status-breakdown', 'Failed to load analytics data.');
-                    showEmpty('chart-aqi-by-day', 'Failed to load analytics data.');
+                    showEmpty('chart-reports-by-day', i18n.loadFailed);
+                    showEmpty('chart-status-breakdown', i18n.loadFailed);
+                    showEmpty('chart-aqi-by-day', i18n.loadFailed);
                 });
 
             function renderReportsByDay(rows) {
@@ -257,7 +277,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Reports',
+                            label: i18n.datasetReports,
                             data: values,
                             borderColor: BRAND_PRIMARY,
                             backgroundColor: 'rgba(45, 106, 79, 0.12)',
@@ -295,7 +315,7 @@
                 if (!canvas) return;
 
                 if (rows.length === 0) {
-                    showEmpty('chart-status-breakdown', 'No reports submitted yet.');
+                    showEmpty('chart-status-breakdown', i18n.statusEmpty);
                     return;
                 }
 
@@ -334,7 +354,7 @@
 
                 var hasAny = rows.some(function (r) { return r.avgAqiUs !== null && r.avgAqiUs !== undefined; });
                 if (!hasAny) {
-                    showEmpty('chart-aqi-by-day', 'No air quality readings in the last 7 days.');
+                    showEmpty('chart-aqi-by-day', i18n.aqiEmpty);
                     return;
                 }
 
@@ -347,7 +367,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Avg US AQI',
+                            label: i18n.datasetAqi,
                             data: aqi,
                             borderColor: BRAND_ACCENT,
                             backgroundColor: 'rgba(116, 198, 157, 0.18)',
@@ -370,7 +390,7 @@
                                 callbacks: {
                                     afterLabel: function (ctx) {
                                         var s = stations[ctx.dataIndex];
-                                        return s + (s === 1 ? ' station reporting' : ' stations reporting');
+                                        return s + (s === 1 ? i18n.stationSingular : i18n.stationsPlural);
                                     }
                                 }
                             }

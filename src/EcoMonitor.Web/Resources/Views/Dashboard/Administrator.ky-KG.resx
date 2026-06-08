@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Администратордун такта</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Администратор</value></data>
+  <data name="Heading" xml:space="preserve"><value>Операцияларга обзор</value></data>
+  <data name="WelcomeBack" xml:space="preserve"><value>Кош келдиңиз, {0}</value></data>
+
+  <data name="AnalyticsHeading" xml:space="preserve"><value>Аналитика</value></data>
+  <data name="Chart1Title" xml:space="preserve"><value>Берилген билдирүүлөр</value></data>
+  <data name="Chart1Subtitle" xml:space="preserve"><value>Акыркы 30 күн</value></data>
+  <data name="Chart2Title" xml:space="preserve"><value>Билдирүүлөр статусу боюнча</value></data>
+  <data name="Chart2Subtitle" xml:space="preserve"><value>Бүт убакыт</value></data>
+  <data name="Chart3Title" xml:space="preserve"><value>Орточо аба сапаты (US AQI)</value></data>
+  <data name="Chart3Subtitle" xml:space="preserve"><value>Акыркы 7 күн</value></data>
+
+  <data name="StatTotalUsersLabel" xml:space="preserve"><value>Бардык колдонуучулар</value></data>
+  <data name="StatTotalUsersCaption" xml:space="preserve"><value>Бардык ролдор боюнча</value></data>
+  <data name="StatTotalReportsLabel" xml:space="preserve"><value>Бардык билдирүүлөр</value></data>
+  <data name="StatTotalReportsCaption" xml:space="preserve"><value>Тургундардан</value></data>
+  <data name="StatTotalContainersLabel" xml:space="preserve"><value>Бардык контейнерлер</value></data>
+  <data name="StatTotalContainersCaption" xml:space="preserve"><value>Шаар боюнча</value></data>
+
+  <data name="StatAutoTriageLabel" xml:space="preserve"><value>Автотриаж үлүшү</value></data>
+  <data name="StatAutoTriageNoData" xml:space="preserve"><value>Акыркы 30 күндө билдирүүлөр жок.</value></data>
+  <data name="StatAutoTriageCaption" xml:space="preserve"><value>{0}/{1} автоматтык тастыкталды (30к) · {2} инспекторго жөнөтүлдү</value></data>
+
+  <data name="StatAppealsLabel" xml:space="preserve"><value>Даттануулар үлүшү</value></data>
+  <data name="StatAppealsNoData" xml:space="preserve"><value>Акыркы 30 күндө чечилген билдирүүлөр жок.</value></data>
+  <data name="StatAppealsCaption" xml:space="preserve"><value>{0}/{1} чечилген билдирүүгө даттанылды (30к)</value></data>
+
+  <data name="StatFlagsLabel" xml:space="preserve"><value>Бригаданын белгилөө үлүшү</value></data>
+  <data name="StatFlagsNoData" xml:space="preserve"><value>Акыркы 30 күндө тазалоо тапшырылган жок.</value></data>
+  <data name="StatFlagsCaption" xml:space="preserve"><value>{0}/{1} тастыкталган билдирүү жайында белгиленди (30к)</value></data>
+
+  <data name="DistrictHeading" xml:space="preserve"><value>Райондор боюнча билдирүүлөр (30 күн)</value></data>
+  <data name="DistrictTotalSuffix" xml:space="preserve"><value>баары: {0}</value></data>
+  <data name="DistrictDetailSuffix" xml:space="preserve"><value> · чечилген {0}, иштеп жатат {1}, четке кагылган {2}</value></data>
+
+  <data name="QuickActionsHeading" xml:space="preserve"><value>Тез аракеттер</value></data>
+  <data name="QuickActionManageUsers" xml:space="preserve"><value>Колдонуучулар</value></data>
+  <data name="QuickActionManageContainers" xml:space="preserve"><value>Контейнерлер</value></data>
+  <data name="QuickActionPublicMap" xml:space="preserve"><value>Шаардын картасы</value></data>
+  <data name="QuickActionViewReports" xml:space="preserve"><value>Бардык билдирүүлөр</value></data>
+
+  <data name="JsChartDatasetReports" xml:space="preserve"><value>Билдирүүлөр</value></data>
+  <data name="JsChartDatasetAqi" xml:space="preserve"><value>Орточо AQI</value></data>
+  <data name="JsChartLoadFailed" xml:space="preserve"><value>Аналитиканы жүктөө мүмкүн болгон жок.</value></data>
+  <data name="JsChartStatusEmpty" xml:space="preserve"><value>Билдирүүлөр азырынча жок.</value></data>
+  <data name="JsChartAqiEmpty" xml:space="preserve"><value>Акыркы 7 күндө аба ченөөлөрү жок.</value></data>
+  <data name="JsTooltipStationSingular" xml:space="preserve"><value> станция билдирүүдө</value></data>
+  <data name="JsTooltipStationsPlural" xml:space="preserve"><value> станция билдирүүдө</value></data>
+</root>

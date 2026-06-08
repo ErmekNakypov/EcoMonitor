@@ -31,10 +31,10 @@
                 <div class="col-md-7">
                     <div class="auth-card">
                         <div class="mb-3">
-                            @* Plain <label> with explicit text instead of asp-for so we
-                               can localise without touching the view model's
-                               [Display(Name = …)] attribute (separate concern). *@
-                            <label class="form-label fw-500" for="Description">@Localizer["DescriptionLabel"]</label>
+                            @* asp-for renders [Display(Name="Description")] via
+                               DataAnnotationLocalizerProvider; per-VM translation lives in
+                               Resources/Models/Citizen/CreateReportViewModel.{culture}.resx. *@
+                            <label asp-for="Description" class="form-label fw-500"></label>
                             <textarea asp-for="Description" rows="5" class="form-control"
                                       placeholder="@Localizer["DescriptionPlaceholder"]"></textarea>
                             <span asp-validation-for="Description" class="text-danger small"></span>

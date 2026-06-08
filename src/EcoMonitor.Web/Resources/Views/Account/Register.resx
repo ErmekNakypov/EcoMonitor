@@ -10,11 +10,6 @@
   <data name="Heading" xml:space="preserve"><value>Create your account</value></data>
   <data name="Subtitle" xml:space="preserve"><value>Help make Bishkek cleaner.</value></data>
 
-  <data name="FullNameLabel" xml:space="preserve"><value>Full name</value></data>
-  <data name="EmailLabel" xml:space="preserve"><value>Email</value></data>
-  <data name="PasswordLabel" xml:space="preserve"><value>Password</value></data>
-  <data name="ConfirmPasswordLabel" xml:space="preserve"><value>Confirm password</value></data>
-
   <data name="SubmitButton" xml:space="preserve"><value>Create account</value></data>
   <data name="HaveAccountPrompt" xml:space="preserve"><value>Already have an account?</value></data>
 </root>

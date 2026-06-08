@@ -4,9 +4,13 @@ namespace EcoMonitor.Web.Models.Account;
 
 public class RegisterViewModel
 {
+    // [Display(Name)] and explicit ErrorMessage values are resource KEYS,
+    // not literal labels. DataAnnotationLocalizerProvider looks them up
+    // in Resources/Models/Account/RegisterViewModel.{culture}.resx. The
+    // user-visible text lives in the .resx files.
     [Required]
     [StringLength(200, MinimumLength = 2)]
-    [Display(Name = "Full name")]
+    [Display(Name = "FullName")]
     public string FullName { get; set; } = string.Empty;
 
     [Required]
@@ -16,14 +20,14 @@ public class RegisterViewModel
 
     [Required]
     [DataType(DataType.Password)]
-    [StringLength(100, ErrorMessage = "Password must be at most 100 characters.")]
+    [StringLength(100, ErrorMessage = "PasswordMaxLength")]
     [Display(Name = "Password")]
     public string Password { get; set; } = string.Empty;
 
     [Required]
     [DataType(DataType.Password)]
-    [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
-    [Display(Name = "Confirm password")]
+    [Compare(nameof(Password), ErrorMessage = "PasswordsDoNotMatch")]
+    [Display(Name = "ConfirmPassword")]
     public string ConfirmPassword { get; set; } = string.Empty;
 
     public string? ReturnUrl { get; set; }

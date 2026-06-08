@@ -5,10 +5,5 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Badge" xml:space="preserve"><value>Кош келдиңиз</value></data>
-  <data name="Heading" xml:space="preserve"><value>EcoMonitor'го кирүү</value></data>
-  <data name="Subtitle" xml:space="preserve"><value>Шаарыңыздын экологиясын көзөмөлдөөнү улантыңыз.</value></data>
-
-  <data name="NoAccountPrompt" xml:space="preserve"><value>Аккаунт жокпу?</value></data>
-  <data name="RegisterLink" xml:space="preserve"><value>Катталуу</value></data>
+  <data name="Description" xml:space="preserve"><value>Описание</value></data>
 </root>

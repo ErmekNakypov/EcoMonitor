@@ -9,10 +9,6 @@
   <data name="Heading" xml:space="preserve"><value>Sign in to EcoMonitor</value></data>
   <data name="Subtitle" xml:space="preserve"><value>Continue monitoring your city's environment.</value></data>
 
-  <data name="EmailLabel" xml:space="preserve"><value>Email</value></data>
-  <data name="PasswordLabel" xml:space="preserve"><value>Password</value></data>
-  <data name="RememberMeLabel" xml:space="preserve"><value>Remember me</value></data>
-
   <data name="NoAccountPrompt" xml:space="preserve"><value>Don't have an account?</value></data>
   <data name="RegisterLink" xml:space="preserve"><value>Register</value></data>
 </root>

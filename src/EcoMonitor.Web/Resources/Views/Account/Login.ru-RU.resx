@@ -9,10 +9,6 @@
   <data name="Heading" xml:space="preserve"><value>Вход в EcoMonitor</value></data>
   <data name="Subtitle" xml:space="preserve"><value>Продолжайте следить за экологией вашего города.</value></data>
 
-  <data name="EmailLabel" xml:space="preserve"><value>Электронная почта</value></data>
-  <data name="PasswordLabel" xml:space="preserve"><value>Пароль</value></data>
-  <data name="RememberMeLabel" xml:space="preserve"><value>Запомнить меня</value></data>
-
   <data name="NoAccountPrompt" xml:space="preserve"><value>Нет аккаунта?</value></data>
   <data name="RegisterLink" xml:space="preserve"><value>Зарегистрироваться</value></data>
 </root>

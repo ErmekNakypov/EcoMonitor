@@ -20,20 +20,22 @@
 
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
+                @* asp-for renders [Display(Name=…)] via DataAnnotationLocalizerProvider;
+                   translations live in Resources/Models/Account/RegisterViewModel.{culture}.resx. *@
                 <div class="mb-3">
-                    <label class="form-label fw-500" for="FullName">@Localizer["FullNameLabel"]</label>
+                    <label asp-for="FullName" class="form-label fw-500"></label>
                     <input asp-for="FullName" class="form-control form-control-lg" autocomplete="name" />
                     <span asp-validation-for="FullName" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-500" for="Email">@Localizer["EmailLabel"]</label>
+                    <label asp-for="Email" class="form-label fw-500"></label>
                     <input asp-for="Email" class="form-control form-control-lg" autocomplete="email" />
                     <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-500" for="Password">@Localizer["PasswordLabel"]</label>
+                    <label asp-for="Password" class="form-label fw-500"></label>
                     <div class="input-group input-group-lg">
                         <input asp-for="Password" class="form-control" autocomplete="new-password" />
                         <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="@SharedLocalizer["Common.TogglePasswordVisibility"]">
@@ -44,7 +46,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label fw-500" for="ConfirmPassword">@Localizer["ConfirmPasswordLabel"]</label>
+                    <label asp-for="ConfirmPassword" class="form-label fw-500"></label>
                     <div class="input-group input-group-lg">
                         <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
                         <button type="button" class="btn btn-outline-secondary password-toggle" data-target="ConfirmPassword" aria-label="@SharedLocalizer["Common.TogglePasswordVisibility"]">

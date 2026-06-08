@@ -66,7 +66,20 @@ try
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     })
     .AddViewLocalization()
-    .AddDataAnnotationsLocalization();
+    .AddDataAnnotationsLocalization(options =>
+    {
+        // Route every view-model's [Display(Name=…)] and [Required] /
+        // [StringLength] / [Compare] / etc. ErrorMessage lookups to a
+        // resource bucket dedicated to that view-model. With
+        // ResourcesPath="Resources" the framework resolves
+        // EcoMonitor.Web.Models.Account.LoginViewModel to
+        // Resources/Models/Account/LoginViewModel.{culture}.resx.
+        // Per-VM scoping (over a single shared bucket) keeps form keys
+        // co-located with the form and avoids cross-form key collisions
+        // when two unrelated fields both happen to be called "Email".
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+            factory.Create(type);
+    });
 
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);

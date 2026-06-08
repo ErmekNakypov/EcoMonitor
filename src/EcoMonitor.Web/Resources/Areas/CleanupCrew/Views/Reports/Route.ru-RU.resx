@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="DefaultTitle" xml:space="preserve"><value>Маршрут уборки</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Оптимизировано эвристикой ближайшего соседа по расстояниям Хаверсина.</value></data>
+  <data name="OriginHintGeo" xml:space="preserve"><value>Маршрут от вашего текущего местоположения.</value></data>
+  <data name="OriginHintFallback" xml:space="preserve"><value>Маршрут от первой выбранной остановки (геолокация недоступна).</value></data>
+  <data name="BackToQueueButton" xml:space="preserve"><value>Назад в очередь</value></data>
+
+  <data name="StatStopsLabel" xml:space="preserve"><value>Остановки</value></data>
+  <data name="StatStopsCaption" xml:space="preserve"><value>Выбрано для этого маршрута</value></data>
+  <data name="StatDistanceLabel" xml:space="preserve"><value>Общее расстояние</value></data>
+  <data name="StatDistanceUnit" xml:space="preserve"><value>км</value></data>
+  <data name="StatDistanceCaption" xml:space="preserve"><value>По дугам большого круга, порядок ближайшего соседа</value></data>
+  <data name="StatTimeLabel" xml:space="preserve"><value>Расчётное время</value></data>
+  <data name="StatTimeUnit" xml:space="preserve"><value>мин</value></data>
+  <data name="StatTimeCaption" xml:space="preserve"><value>При 25 км/ч в среднем по городу</value></data>
+
+  <data name="VisitOrderHeading" xml:space="preserve"><value>Порядок посещения</value></data>
+  <data name="OriginRowTitle" xml:space="preserve"><value>Старт: ваше текущее местоположение</value></data>
+  <data name="OpenButton" xml:space="preserve"><value>Открыть</value></data>
+</root>

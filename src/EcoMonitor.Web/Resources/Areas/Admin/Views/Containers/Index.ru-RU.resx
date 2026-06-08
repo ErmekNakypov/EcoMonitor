@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Контейнеры для отходов</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Управление контейнерами</value></data>
+  <data name="Heading" xml:space="preserve"><value>Контейнеры для отходов</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>всего: {0} · страница {1} из {2}</value></data>
+  <data name="ViewOnMapButton" xml:space="preserve"><value>Показать на карте</value></data>
+  <data name="AddButton" xml:space="preserve"><value>Добавить контейнер</value></data>
+
+  <data name="SearchLabel" xml:space="preserve"><value>Поиск</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Код или адрес</value></data>
+  <data name="TypeLabel" xml:space="preserve"><value>Тип</value></data>
+  <data name="TypeAll" xml:space="preserve"><value>Все типы</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Статус</value></data>
+  <data name="StatusAll" xml:space="preserve"><value>Все статусы</value></data>
+
+  <data name="EmptyFilteredTitle" xml:space="preserve"><value>Контейнеры не найдены</value></data>
+  <data name="EmptyFilteredSubtitle" xml:space="preserve"><value>Снимите фильтры или добавьте новый контейнер.</value></data>
+  <data name="EmptyFilteredCta" xml:space="preserve"><value>Добавить контейнер</value></data>
+
+  <data name="EmptyFirstTimeTitle" xml:space="preserve"><value>В системе пока нет контейнеров</value></data>
+  <data name="EmptyFirstTimeBody" xml:space="preserve"><value>Контейнеры можно импортировать из OpenStreetMap (Overpass API) — в Бишкеке нанесено около 150 точек — либо добавить вручную по одному.</value></data>
+  <data name="ImportFromOsmButton" xml:space="preserve"><value>Импортировать из OpenStreetMap</value></data>
+  <data name="AddManuallyButton" xml:space="preserve"><value>Добавить вручную</value></data>
+  <data name="OsmImportTip" xml:space="preserve"><value>Подсказка: импорт из OSM может занять 30–60 секунд и зависит от доступности публичного Overpass API.</value></data>
+
+  <data name="TableCode" xml:space="preserve"><value>Код</value></data>
+  <data name="TableAddress" xml:space="preserve"><value>Адрес</value></data>
+  <data name="TableType" xml:space="preserve"><value>Тип</value></data>
+  <data name="TableCapacity" xml:space="preserve"><value>Объём</value></data>
+  <data name="TableStatus" xml:space="preserve"><value>Статус</value></data>
+  <data name="TableInstalled" xml:space="preserve"><value>Установлен</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Действия</value></data>
+
+  <data name="CapacityCell" xml:space="preserve"><value>{0} л</value></data>
+
+  <data name="ActionEdit" xml:space="preserve"><value>Редактировать</value></data>
+  <data name="ActionRemove" xml:space="preserve"><value>Удалить</value></data>
+
+  <data name="ConfirmRemoveTitle" xml:space="preserve"><value>Удалить контейнер</value></data>
+  <data name="ConfirmRemoveMessage" xml:space="preserve"><value>Отметить {0} как удалённый? Запись останется в базе для истории, но пропадёт с активной карты.</value></data>
+
+  <data name="ModalDefaultTitle" xml:space="preserve"><value>Подтвердить</value></data>
+  <data name="ModalDefaultMessage" xml:space="preserve"><value>Вы уверены?</value></data>
+  <data name="ModalDefaultButtonText" xml:space="preserve"><value>Подтвердить</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Постраничная навигация по контейнерам</value></data>
+</root>

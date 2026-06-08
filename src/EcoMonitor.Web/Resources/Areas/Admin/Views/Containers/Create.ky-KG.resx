@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Контейнер кошуу</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Контейнер кошуу</value></data>
+  <data name="Heading" xml:space="preserve"><value>Таштанды контейнерин кошуу</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Жайын белгилеңиз жана маалыматты толтуруңуз.</value></data>
+
+  <data name="AutoGenerateButton" xml:space="preserve"><value>Автоматтык түзүү</value></data>
+  <data name="AddressPlaceholder" xml:space="preserve"><value>мисалы, Чүй проспекти 100</value></data>
+  <data name="CapacityFieldLabel" xml:space="preserve"><value>Көлөмү (л)</value></data>
+
+  <data name="LocationLabel" xml:space="preserve"><value>Жайгашкан жери</value></data>
+  <data name="MapPickerHint" xml:space="preserve"><value>Жайын белгилөө үчүн картадан чыкылдатыңыз.</value></data>
+  <data name="MapPickerLongHint" xml:space="preserve"><value>Жайын белгилөө үчүн картадан чыкылдатыңыз же геолокация баскычын колдонуңуз.</value></data>
+  <data name="UseMyLocationButton" xml:space="preserve"><value>Менин жайым</value></data>
+
+  <data name="SubmitButton" xml:space="preserve"><value>Контейнер кошуу</value></data>
+
+  <data name="JsLocationPrefix" xml:space="preserve"><value>Жай: </value></data>
+  <data name="JsLocationError" xml:space="preserve"><value>Сиздин жайыңыз аныкталган жок.</value></data>
+</root>

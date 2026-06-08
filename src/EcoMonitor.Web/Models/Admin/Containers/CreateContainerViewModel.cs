@@ -5,6 +5,9 @@ namespace EcoMonitor.Web.Models.Admin.Containers;
 
 public class CreateContainerViewModel
 {
+    // [Display(Name)] values are resource KEYS routed through
+    // DataAnnotationLocalizerProvider to
+    // Resources/Models/Admin/Containers/CreateContainerViewModel.{culture}.resx.
     [Required]
     [StringLength(50, MinimumLength = 1)]
     [Display(Name = "Code")]
@@ -31,6 +34,6 @@ public class CreateContainerViewModel
 
     [Required]
     [DataType(DataType.Date)]
-    [Display(Name = "Installed at")]
+    [Display(Name = "InstalledAt")]
     public DateTime InstalledAt { get; set; } = DateTime.UtcNow.Date;
 }

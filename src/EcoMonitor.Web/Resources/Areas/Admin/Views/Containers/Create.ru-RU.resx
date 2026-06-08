@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Добавить контейнер</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Добавление контейнера</value></data>
+  <data name="Heading" xml:space="preserve"><value>Добавить контейнер для отходов</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Отметьте место и заполните данные.</value></data>
+
+  <data name="AutoGenerateButton" xml:space="preserve"><value>Сгенерировать</value></data>
+  <data name="AddressPlaceholder" xml:space="preserve"><value>например, Чуйский проспект 100</value></data>
+  <data name="CapacityFieldLabel" xml:space="preserve"><value>Объём (л)</value></data>
+
+  <data name="LocationLabel" xml:space="preserve"><value>Местоположение</value></data>
+  <data name="MapPickerHint" xml:space="preserve"><value>Кликните на карте, чтобы отметить место.</value></data>
+  <data name="MapPickerLongHint" xml:space="preserve"><value>Кликните на карте, чтобы отметить место, или используйте кнопку определения.</value></data>
+  <data name="UseMyLocationButton" xml:space="preserve"><value>Моё местоположение</value></data>
+
+  <data name="SubmitButton" xml:space="preserve"><value>Добавить контейнер</value></data>
+
+  <data name="JsLocationPrefix" xml:space="preserve"><value>Место: </value></data>
+  <data name="JsLocationError" xml:space="preserve"><value>Не удалось определить ваше местоположение.</value></data>
+</root>

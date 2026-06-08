@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Containers map</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Containers map</value></data>
+  <data name="Heading" xml:space="preserve"><value>All containers</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Real-time view of waste container network</value></data>
+
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Map</value></data>
+
+  <!-- Legend (5 ContainerType labels duplicated from enum displays —
+       enum displays are kept English; this bundle holds the user-facing
+       legend strings that translators can localise without touching
+       the enum mapper). -->
+  <data name="LegendHeading" xml:space="preserve"><value>Container types</value></data>
+  <data name="LegendGeneral" xml:space="preserve"><value>General waste</value></data>
+  <data name="LegendPlastic" xml:space="preserve"><value>Plastic</value></data>
+  <data name="LegendGlass" xml:space="preserve"><value>Glass</value></data>
+  <data name="LegendPaper" xml:space="preserve"><value>Paper</value></data>
+  <data name="LegendOrganic" xml:space="preserve"><value>Organic</value></data>
+
+  <!-- JS popup line prefixes. The popup shows the container's code,
+       address, type/capacity, status, and installed-date. The "Status:"
+       and "Installed:" prefixes go through the i18n bridge. -->
+  <data name="JsPopupStatusPrefix" xml:space="preserve"><value>Status: </value></data>
+  <data name="JsPopupInstalledPrefix" xml:space="preserve"><value>Installed: </value></data>
+</root>

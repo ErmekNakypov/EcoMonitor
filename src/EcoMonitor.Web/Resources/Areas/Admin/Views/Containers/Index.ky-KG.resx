@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Таштанды контейнерлери</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Контейнерлерди башкаруу</value></data>
+  <data name="Heading" xml:space="preserve"><value>Таштанды контейнерлери</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>баары: {0} · {1}-бет {2} барактан</value></data>
+  <data name="ViewOnMapButton" xml:space="preserve"><value>Картадан көрүү</value></data>
+  <data name="AddButton" xml:space="preserve"><value>Контейнер кошуу</value></data>
+
+  <data name="SearchLabel" xml:space="preserve"><value>Издөө</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Код же дареги</value></data>
+  <data name="TypeLabel" xml:space="preserve"><value>Түрү</value></data>
+  <data name="TypeAll" xml:space="preserve"><value>Бардык түрлөр</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Статусу</value></data>
+  <data name="StatusAll" xml:space="preserve"><value>Бардык статустар</value></data>
+
+  <data name="EmptyFilteredTitle" xml:space="preserve"><value>Контейнерлер табылган жок</value></data>
+  <data name="EmptyFilteredSubtitle" xml:space="preserve"><value>Чыпкаларды алып салыңыз же жаңы контейнер кошуңуз.</value></data>
+  <data name="EmptyFilteredCta" xml:space="preserve"><value>Контейнер кошуу</value></data>
+
+  <data name="EmptyFirstTimeTitle" xml:space="preserve"><value>Тутумда азырынча контейнер жок</value></data>
+  <data name="EmptyFirstTimeBody" xml:space="preserve"><value>Контейнерлерди OpenStreetMap'тан (Overpass API) импорттосо болот — Бишкекте 150 чамасында чекит белгиленген — же бирден кол менен кошсо болот.</value></data>
+  <data name="ImportFromOsmButton" xml:space="preserve"><value>OpenStreetMap'тан импорт</value></data>
+  <data name="AddManuallyButton" xml:space="preserve"><value>Кол менен кошуу</value></data>
+  <data name="OsmImportTip" xml:space="preserve"><value>Эскертүү: OSM импорту 30–60 секунд талап кылышы мүмкүн жана коомдук Overpass API'нин жеткиликтүүлүгүнө көз каранды.</value></data>
+
+  <data name="TableCode" xml:space="preserve"><value>Код</value></data>
+  <data name="TableAddress" xml:space="preserve"><value>Дареги</value></data>
+  <data name="TableType" xml:space="preserve"><value>Түрү</value></data>
+  <data name="TableCapacity" xml:space="preserve"><value>Көлөмү</value></data>
+  <data name="TableStatus" xml:space="preserve"><value>Статусу</value></data>
+  <data name="TableInstalled" xml:space="preserve"><value>Орнотулган</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Аракеттер</value></data>
+
+  <data name="CapacityCell" xml:space="preserve"><value>{0} л</value></data>
+
+  <data name="ActionEdit" xml:space="preserve"><value>Түзөтүү</value></data>
+  <data name="ActionRemove" xml:space="preserve"><value>Алып салуу</value></data>
+
+  <data name="ConfirmRemoveTitle" xml:space="preserve"><value>Контейнерди алып салуу</value></data>
+  <data name="ConfirmRemoveMessage" xml:space="preserve"><value>{0} алынды деп белгилөөнү? Жазуу базада тарых үчүн калат, бирок активдүү картадан жоголот.</value></data>
+
+  <data name="ModalDefaultTitle" xml:space="preserve"><value>Тастыктоо</value></data>
+  <data name="ModalDefaultMessage" xml:space="preserve"><value>Чындап белгилейсизби?</value></data>
+  <data name="ModalDefaultButtonText" xml:space="preserve"><value>Тастыктоо</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Контейнерлер боюнча барактар</value></data>
+</root>

@@ -12,6 +12,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Areas.Admin.Controllers;
 
@@ -21,11 +22,16 @@ namespace EcoMonitor.Web.Areas.Admin.Controllers;
 public class ContainersController : Controller
 {
     private readonly IMediator _mediator;
+    private readonly IStringLocalizer<ContainersController> _localizer;
     private readonly ILogger<ContainersController> _logger;
 
-    public ContainersController(IMediator mediator, ILogger<ContainersController> logger)
+    public ContainersController(
+        IMediator mediator,
+        IStringLocalizer<ContainersController> localizer,
+        ILogger<ContainersController> logger)
     {
         _mediator = mediator;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -84,7 +90,7 @@ public class ContainersController : Controller
                 model.Capacity,
                 model.InstalledAt));
 
-            TempData["SuccessMessage"] = $"Container {model.Code} created.";
+            TempData["SuccessMessage"] = _localizer["CreateSuccess", model.Code].Value;
             return RedirectToAction(nameof(Index));
         }
         catch (ValidationException ex)
@@ -156,7 +162,7 @@ public class ContainersController : Controller
                 model.Status,
                 model.InstalledAt));
 
-            TempData["SuccessMessage"] = $"Container {model.Code} updated.";
+            TempData["SuccessMessage"] = _localizer["UpdateSuccess", model.Code].Value;
             return RedirectToAction(nameof(Index));
         }
         catch (NotFoundException)
@@ -185,7 +191,7 @@ public class ContainersController : Controller
         try
         {
             await _mediator.Send(new DeleteWasteContainerCommand(id));
-            TempData["SuccessMessage"] = "Container marked as removed.";
+            TempData["SuccessMessage"] = _localizer["DeleteSuccess"].Value;
         }
         catch (NotFoundException)
         {

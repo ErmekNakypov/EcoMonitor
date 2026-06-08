@@ -35,9 +35,12 @@ public class EditContainerViewModel
     [Display(Name = "Status")]
     public ContainerStatus Status { get; set; }
 
+    // [Display(Name)] values are resource KEYS routed through
+    // DataAnnotationLocalizerProvider to
+    // Resources/Models/Admin/Containers/EditContainerViewModel.{culture}.resx.
     [Required]
     [DataType(DataType.Date)]
-    [Display(Name = "Installed at")]
+    [Display(Name = "InstalledAt")]
     public DateTime InstalledAt { get; set; }
 
     public bool IsImported { get; set; }

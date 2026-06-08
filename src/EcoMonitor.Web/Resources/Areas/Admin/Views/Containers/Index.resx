@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Waste containers</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Container management</value></data>
+  <data name="Heading" xml:space="preserve"><value>Waste containers</value></data>
+  <!-- {0} = total count, {1} = current page, {2} = total pages -->
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} total · page {1} of {2}</value></data>
+  <data name="ViewOnMapButton" xml:space="preserve"><value>View on map</value></data>
+  <data name="AddButton" xml:space="preserve"><value>Add container</value></data>
+
+  <!-- Filter -->
+  <data name="SearchLabel" xml:space="preserve"><value>Search</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Code or address</value></data>
+  <data name="TypeLabel" xml:space="preserve"><value>Type</value></data>
+  <data name="TypeAll" xml:space="preserve"><value>All types</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Status</value></data>
+  <data name="StatusAll" xml:space="preserve"><value>All statuses</value></data>
+
+  <!-- Two empty-state branches: filtered-out vs first-time-empty -->
+  <data name="EmptyFilteredTitle" xml:space="preserve"><value>No containers match these filters</value></data>
+  <data name="EmptyFilteredSubtitle" xml:space="preserve"><value>Try removing filters or add a new container.</value></data>
+  <data name="EmptyFilteredCta" xml:space="preserve"><value>Add a container</value></data>
+
+  <data name="EmptyFirstTimeTitle" xml:space="preserve"><value>No containers in the system yet</value></data>
+  <data name="EmptyFirstTimeBody" xml:space="preserve"><value>You can import waste containers from OpenStreetMap (Overpass API) — about 150 points are mapped in Bishkek — or add them manually one by one.</value></data>
+  <data name="ImportFromOsmButton" xml:space="preserve"><value>Import from OpenStreetMap</value></data>
+  <data name="AddManuallyButton" xml:space="preserve"><value>Add manually</value></data>
+  <data name="OsmImportTip" xml:space="preserve"><value>Tip: import from OSM may take 30–60 seconds and depends on availability of the public Overpass API.</value></data>
+
+  <!-- Table headers -->
+  <data name="TableCode" xml:space="preserve"><value>Code</value></data>
+  <data name="TableAddress" xml:space="preserve"><value>Address</value></data>
+  <data name="TableType" xml:space="preserve"><value>Type</value></data>
+  <data name="TableCapacity" xml:space="preserve"><value>Capacity</value></data>
+  <data name="TableStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="TableInstalled" xml:space="preserve"><value>Installed</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Actions</value></data>
+
+  <!-- {0} = capacity number in litres -->
+  <data name="CapacityCell" xml:space="preserve"><value>{0} L</value></data>
+
+  <!-- Row actions -->
+  <data name="ActionEdit" xml:space="preserve"><value>Edit</value></data>
+  <data name="ActionRemove" xml:space="preserve"><value>Remove</value></data>
+
+  <!-- Remove-container confirmation modal -->
+  <data name="ConfirmRemoveTitle" xml:space="preserve"><value>Remove container</value></data>
+  <!-- {0} = container code -->
+  <data name="ConfirmRemoveMessage" xml:space="preserve"><value>Mark {0} as removed? It will stay in the database for history but disappear from the active map.</value></data>
+
+  <!-- Modal defaults -->
+  <data name="ModalDefaultTitle" xml:space="preserve"><value>Confirm</value></data>
+  <data name="ModalDefaultMessage" xml:space="preserve"><value>Are you sure?</value></data>
+  <data name="ModalDefaultButtonText" xml:space="preserve"><value>Confirm</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Containers pagination</value></data>
+</root>

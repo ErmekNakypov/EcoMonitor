@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Add container</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Add container</value></data>
+  <data name="Heading" xml:space="preserve"><value>Add a waste container</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Pin the location and fill in the details.</value></data>
+
+  <data name="AutoGenerateButton" xml:space="preserve"><value>Auto-generate</value></data>
+  <data name="AddressPlaceholder" xml:space="preserve"><value>e.g. Чуйский проспект 100</value></data>
+  <!-- Inline label for the Capacity (litres) field — the [Display(Name)]
+       on the VM is "Capacity" and the view appends the unit "(L)" so
+       translators control the unit format. -->
+  <data name="CapacityFieldLabel" xml:space="preserve"><value>Capacity (L)</value></data>
+
+  <data name="LocationLabel" xml:space="preserve"><value>Location</value></data>
+  <data name="MapPickerHint" xml:space="preserve"><value>Click on the map to set the location.</value></data>
+  <data name="MapPickerLongHint" xml:space="preserve"><value>Click on the map to set the location, or use the locate button.</value></data>
+  <data name="UseMyLocationButton" xml:space="preserve"><value>Use my location</value></data>
+
+  <data name="SubmitButton" xml:space="preserve"><value>Add container</value></data>
+
+  <!-- JS i18n bridge -->
+  <data name="JsLocationPrefix" xml:space="preserve"><value>Location: </value></data>
+  <data name="JsLocationError" xml:space="preserve"><value>Could not determine your location.</value></data>
+</root>

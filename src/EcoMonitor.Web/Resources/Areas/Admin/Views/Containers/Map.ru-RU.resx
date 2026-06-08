@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Карта контейнеров</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Карта контейнеров</value></data>
+  <data name="Heading" xml:space="preserve"><value>Все контейнеры</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Сеть контейнеров для отходов в реальном времени</value></data>
+
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Карта</value></data>
+
+  <data name="LegendHeading" xml:space="preserve"><value>Типы контейнеров</value></data>
+  <data name="LegendGeneral" xml:space="preserve"><value>Бытовые отходы</value></data>
+  <data name="LegendPlastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="LegendGlass" xml:space="preserve"><value>Стекло</value></data>
+  <data name="LegendPaper" xml:space="preserve"><value>Бумага</value></data>
+  <data name="LegendOrganic" xml:space="preserve"><value>Органика</value></data>
+
+  <data name="JsPopupStatusPrefix" xml:space="preserve"><value>Статус: </value></data>
+  <data name="JsPopupInstalledPrefix" xml:space="preserve"><value>Установлен: </value></data>
+</root>

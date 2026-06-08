@@ -1,11 +1,13 @@
 @model EditContainerViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Edit container";
+    ViewData["Title"] = Localizer["Title"].Value;
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "Containers", Url = Url.Action("Index", "Containers", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value,  Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Containers"].Value, Url = Url.Action("Index", "Containers", new { area = "Admin" }) },
         new BreadcrumbItem { Label = Model.Code },
-        new BreadcrumbItem { Label = "Edit" });
+        new BreadcrumbItem { Label = Localizer["BreadcrumbLeaf"].Value });
 }
 
 <section class="py-5">
@@ -14,25 +16,26 @@
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-pencil-square"></i>
-                <span>Edit container</span>
+                <span>@Localizer["BadgeRole"]</span>
             </span>
             <h1 class="h2 fw-700 mt-3 mb-1">
-                Edit @Model.Code
+                @Localizer["HeadingFormat", Model.Code]
                 @if (Model.IsImported)
                 {
-                    <span class="role-badge role-badge-inspector ms-2" title="Imported from OpenStreetMap">
-                        <i class="bi bi-cloud-download me-1"></i>Imported from OSM
+                    <span class="role-badge role-badge-inspector ms-2" title="@Localizer["ImportedBadgeTitle"]">
+                        <i class="bi bi-cloud-download me-1"></i>@Localizer["ImportedBadge"]
                     </span>
                 }
             </h1>
-            <p class="text-muted mb-0">Update the container's details, status, or move its pin.</p>
+            <p class="text-muted mb-0">@Localizer["Subtitle"]</p>
             @if (Model.IsImported && Model.OsmId.HasValue)
             {
                 <p class="text-muted small mt-2 mb-0">
                     <i class="bi bi-info-circle me-1"></i>
-                    Linked to OpenStreetMap node
-                    <a href="https://www.openstreetmap.org/node/@Model.OsmId" target="_blank" rel="noopener">#@Model.OsmId</a>.
-                    Editing is allowed but may be overwritten on next import.
+                    @* The {0} placeholder is the OSM node id; the surrounding
+                       link wraps the placeholder so translators control where
+                       it appears in the sentence. *@
+                    @Localizer["ImportedNoteFormat", Model.OsmId]
                 </p>
             }
         </div>
@@ -44,6 +47,9 @@
             <div class="row g-4">
                 <div class="col-md-7">
                     <div class="auth-card">
+                        @* Labels flow through DataAnnotationLocalizerProvider — VM
+                           [Display(Name=…)] keys resolve in
+                           Resources/Models/Admin/Containers/EditContainerViewModel.{culture}.resx. *@
                         <div class="mb-3">
                             <label asp-for="Code" class="form-label fw-500"></label>
                             <input asp-for="Code" class="form-control form-control-lg" />
@@ -79,7 +85,7 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label asp-for="Capacity" class="form-label fw-500">Capacity (L)</label>
+                                <label asp-for="Capacity" class="form-label fw-500">@Localizer["CapacityFieldLabel"]</label>
                                 <input asp-for="Capacity" type="number" min="1" max="10000" step="1" class="form-control form-control-lg" />
                                 <span asp-validation-for="Capacity" class="text-danger small"></span>
                             </div>
@@ -94,14 +100,14 @@
                         <input type="hidden" name="Longitude" id="Longitude" value="@Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
 
                         <div class="mb-4">
-                            <span class="form-label fw-500 d-block">Location</span>
+                            <span class="form-label fw-500 d-block">@Localizer["LocationLabel"]</span>
                             <span id="coords-text" class="text-muted small">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</span>
                         </div>
 
                         <div class="d-flex gap-2 justify-content-end">
-                            <a asp-area="Admin" asp-controller="Containers" asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                            <a asp-area="Admin" asp-controller="Containers" asp-action="Index" class="btn btn-outline-secondary btn-lg">@SharedLocalizer["Common.Cancel"]</a>
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-check2 me-2"></i>Save changes
+                                <i class="bi bi-check2 me-2"></i>@Localizer["SaveButton"]
                             </button>
                         </div>
                     </div>
@@ -110,9 +116,9 @@
                 <div class="col-md-5">
                     <div id="dumpsite-map"></div>
                     <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 mt-3">
-                        <span class="text-muted small">Click on the map or drag the marker to move the container.</span>
+                        <span class="text-muted small">@Localizer["MapPickerHint"]</span>
                         <button type="button" id="locate-btn" class="btn btn-outline-secondary" data-no-loading>
-                            <i class="bi bi-geo-alt-fill me-2"></i>Use my location
+                            <i class="bi bi-geo-alt-fill me-2"></i>@Localizer["UseMyLocationButton"]
                         </button>
                     </div>
                 </div>
@@ -123,8 +129,15 @@
 
 @section Scripts {
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    @* JSON i18n bridge for the one runtime JS string (geolocation-failure alert). *@
+    <script>
+        window.__containersEditI18n = {
+            locationError: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsLocationError"].Value))
+        };
+    </script>
     <script>
         (function () {
+            const i18n = window.__containersEditI18n;
             const lat = @Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
             const lng = @Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
@@ -151,7 +164,7 @@
                 map.locate({ setView: true, maxZoom: 16 });
             });
             map.on('locationfound', function (e) { marker.setLatLng(e.latlng); updateInputs(e.latlng); });
-            map.on('locationerror', function () { alert('Could not determine your location.'); });
+            map.on('locationerror', function () { alert(i18n.locationError); });
         })();
     </script>
 }

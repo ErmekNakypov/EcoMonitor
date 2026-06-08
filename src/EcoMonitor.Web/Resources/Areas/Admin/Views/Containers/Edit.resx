@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Edit container</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Edit container</value></data>
+  <!-- {0} = container code -->
+  <data name="HeadingFormat" xml:space="preserve"><value>Edit {0}</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Update the container's details, status, or move its pin.</value></data>
+
+  <data name="ImportedBadge" xml:space="preserve"><value>Imported from OSM</value></data>
+  <data name="ImportedBadgeTitle" xml:space="preserve"><value>Imported from OpenStreetMap</value></data>
+  <!-- {0} = OSM node id -->
+  <data name="ImportedNoteFormat" xml:space="preserve"><value>Linked to OpenStreetMap node #{0}. Editing is allowed but may be overwritten on next import.</value></data>
+
+  <data name="CapacityFieldLabel" xml:space="preserve"><value>Capacity (L)</value></data>
+
+  <data name="LocationLabel" xml:space="preserve"><value>Location</value></data>
+  <data name="MapPickerHint" xml:space="preserve"><value>Click on the map or drag the marker to move the container.</value></data>
+  <data name="UseMyLocationButton" xml:space="preserve"><value>Use my location</value></data>
+
+  <data name="SaveButton" xml:space="preserve"><value>Save changes</value></data>
+
+  <!-- Breadcrumb leaf is shorter than Title. -->
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Edit</value></data>
+
+  <!-- JS i18n bridge -->
+  <data name="JsLocationError" xml:space="preserve"><value>Could not determine your location.</value></data>
+</root>

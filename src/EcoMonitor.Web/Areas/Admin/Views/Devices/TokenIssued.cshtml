@@ -1,11 +1,13 @@
 @model TokenIssuedViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Token issued";
+    ViewData["Title"] = Localizer["Title"].Value;
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "IoT devices", Url = Url.Action("Index", "Devices", new { area = "Admin" }) },
-        new BreadcrumbItem { Label = "Token issued" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.System.IotDevices"].Value, Url = Url.Action("Index", "Devices", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = Localizer["BreadcrumbLeaf"].Value });
 }
 
 <section class="py-5">
@@ -15,63 +17,69 @@
         <div class="mb-4">
             <span class="hero-badge mb-2" style="background:#FEF3C7;color:#92400E;">
                 <i class="bi bi-exclamation-triangle-fill"></i>
-                <span>Show once</span>
+                <span>@Localizer["BadgeShowOnce"]</span>
             </span>
-            <h1 class="h2 fw-700 mt-3 mb-1">Device token issued</h1>
+            <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
             <p class="text-muted mb-0">
-                Copy this token now and store it securely on your device. It will not be shown again.
+                @Localizer["Subtitle"]
             </p>
         </div>
 
         <div class="auth-card mb-3" style="max-width: 820px;">
             <dl class="row mb-0 small">
-                <dt class="col-sm-3 text-muted fw-500">Device</dt>
+                <dt class="col-sm-3 text-muted fw-500">@Localizer["DeviceLabel"]</dt>
                 <dd class="col-sm-9 mb-1">@Model.DeviceName</dd>
 
-                <dt class="col-sm-3 text-muted fw-500">Device ID</dt>
+                <dt class="col-sm-3 text-muted fw-500">@Localizer["DeviceCodeLabel"]</dt>
                 <dd class="col-sm-9 mb-0"><code>@Model.DeviceCode</code></dd>
             </dl>
         </div>
 
         <div class="auth-card mb-3" style="max-width: 820px;">
-            <label class="form-label fw-500" for="token">JWT bearer token</label>
+            <label class="form-label fw-500" for="token">@Localizer["TokenLabel"]</label>
             <div class="d-flex gap-2 align-items-stretch">
                 <textarea id="token" class="form-control font-monospace" rows="6" readonly>@Model.Token</textarea>
                 <button type="button" id="copy-btn" class="btn btn-outline-secondary" style="white-space: nowrap;">
-                    <i class="bi bi-clipboard me-1"></i>Copy
+                    <i class="bi bi-clipboard me-1"></i>@Localizer["CopyButton"]
                 </button>
             </div>
             <div class="alert mt-3 mb-0" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;border-radius:8px;padding:12px 16px;">
                 <i class="bi bi-shield-exclamation me-2"></i>
-                Treat this token like a password. Anyone holding it can post readings as this device.
-                Use HTTPS in production. We only stored a SHA-256 hash; we cannot show this value again.
+                @Localizer["SecurityWarning"]
             </div>
         </div>
 
         <div class="auth-card" style="max-width: 820px;">
-            <h2 class="h6 fw-700 mb-2">How to use it</h2>
-            <p class="small text-muted mb-2">Send readings via HTTP POST with the <code>Authorization: Bearer &lt;token&gt;</code> header:</p>
+            <h2 class="h6 fw-700 mb-2">@Localizer["HowToHeading"]</h2>
+            <p class="small text-muted mb-2">@Localizer["HowToIntro"]</p>
             <pre class="bg-light p-3 rounded small mb-3" style="overflow-x:auto;"><code>curl -X POST <span class="text-muted">https://&lt;your-host&gt;</span>/api/v1/sensors/readings \
   -H "Authorization: Bearer @(Model.Token.Length > 24 ? Model.Token.Substring(0, 24) + "..." : Model.Token)" \
   -H "Content-Type: application/json" \
   -d '{"measuredAt":"2026-05-11T10:00:00Z","pm25":18.4,"pm10":42.1,"temperature":17.5,"humidity":62,"pressure":1013}'</code></pre>
             <p class="small text-muted mb-0">
-                A Python mock script is provided at <code>tools/sensor-mock/sensor_mock.py</code> — set
-                <code>DEVICE_ID</code> and <code>DEVICE_TOKEN</code> environment variables and run it.
+                @Localizer["MockScriptHint"]
             </p>
         </div>
 
         <div class="mt-4">
             <a asp-action="Index" class="btn btn-primary">
-                <i class="bi bi-check2 me-2"></i>I've stored the token
+                <i class="bi bi-check2 me-2"></i>@Localizer["AcknowledgeButton"]
             </a>
         </div>
     </div>
 </section>
 
 @section Scripts {
+    @* JSON i18n bridge — "Copied" label swapped in after a successful
+       clipboard write; need to read it from server-rendered Razor. *@
+    <script>
+        window.__tokenIssuedI18n = {
+            copiedLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["CopiedButton"].Value))
+        };
+    </script>
     <script>
         (function () {
+            var i18n = window.__tokenIssuedI18n;
             var btn = document.getElementById('copy-btn');
             var ta = document.getElementById('token');
             if (!btn || !ta) return;
@@ -79,7 +87,7 @@
                 try {
                     await navigator.clipboard.writeText(ta.value);
                     var original = btn.innerHTML;
-                    btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Copied';
+                    btn.innerHTML = '<i class="bi bi-check2 me-1"></i>' + i18n.copiedLabel;
                     setTimeout(function () { btn.innerHTML = original; }, 1800);
                 } catch (e) {
                     ta.select();

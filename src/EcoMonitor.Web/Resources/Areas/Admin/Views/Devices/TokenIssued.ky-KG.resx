@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Токен чыгарылды</value></data>
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Токен чыгарылды</value></data>
+  <data name="BadgeShowOnce" xml:space="preserve"><value>Бир гана жолу көрсөтүлөт</value></data>
+  <data name="Heading" xml:space="preserve"><value>Түзмөктүн токени чыгарылды</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Бул токенди азыр көчүрүп алып, түзмөгүңүздө кооптуу жерде сактаңыз. Кайра көрсөтүлбөйт.</value></data>
+
+  <data name="DeviceLabel" xml:space="preserve"><value>Түзмөк</value></data>
+  <data name="DeviceCodeLabel" xml:space="preserve"><value>Түзмөктүн ID</value></data>
+  <data name="TokenLabel" xml:space="preserve"><value>JWT bearer-токени</value></data>
+
+  <data name="CopyButton" xml:space="preserve"><value>Көчүрүү</value></data>
+  <data name="CopiedButton" xml:space="preserve"><value>Көчүрүлдү</value></data>
+
+  <data name="SecurityWarning" xml:space="preserve"><value>Бул токенди сырсөз катары карап мамиле кылыңыз. Аны колдонгон ар бир адам ушул түзмөктүн атынан өлчөөлөрдү жөнөтө алат. Өндүрүштө HTTPS колдонуңуз. Биз SHA-256 хэшин гана сакташ үчүн, бул маанини кайра көрсөтө албайбыз.</value></data>
+
+  <data name="HowToHeading" xml:space="preserve"><value>Аны кантип колдонуу керек</value></data>
+  <data name="HowToIntro" xml:space="preserve"><value>Өлчөөлөрдү HTTP POST аркылуу &lt;code&gt;Authorization: Bearer &amp;lt;token&amp;gt;&lt;/code&gt; башаты менен жөнөтүңүз:</value></data>
+  <data name="MockScriptHint" xml:space="preserve"><value>Python-скрипт-имитатор &lt;code&gt;tools/sensor-mock/sensor_mock.py&lt;/code&gt; жолунда жайгашкан — &lt;code&gt;DEVICE_ID&lt;/code&gt; жана &lt;code&gt;DEVICE_TOKEN&lt;/code&gt; чөйрө өзгөрмөлөрүн коюп, аны иштетиңиз.</value></data>
+
+  <data name="AcknowledgeButton" xml:space="preserve"><value>Мен токенди сактап алдым</value></data>
+</root>

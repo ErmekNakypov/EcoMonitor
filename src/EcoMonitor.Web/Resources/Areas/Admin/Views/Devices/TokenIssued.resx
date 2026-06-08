@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Token issued</value></data>
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Token issued</value></data>
+  <data name="BadgeShowOnce" xml:space="preserve"><value>Show once</value></data>
+  <data name="Heading" xml:space="preserve"><value>Device token issued</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Copy this token now and store it securely on your device. It will not be shown again.</value></data>
+
+  <data name="DeviceLabel" xml:space="preserve"><value>Device</value></data>
+  <data name="DeviceCodeLabel" xml:space="preserve"><value>Device ID</value></data>
+  <data name="TokenLabel" xml:space="preserve"><value>JWT bearer token</value></data>
+
+  <data name="CopyButton" xml:space="preserve"><value>Copy</value></data>
+  <data name="CopiedButton" xml:space="preserve"><value>Copied</value></data>
+
+  <data name="SecurityWarning" xml:space="preserve"><value>Treat this token like a password. Anyone holding it can post readings as this device. Use HTTPS in production. We only stored a SHA-256 hash; we cannot show this value again.</value></data>
+
+  <data name="HowToHeading" xml:space="preserve"><value>How to use it</value></data>
+  <!-- "Authorization: Bearer &lt;token&gt;" is a literal HTTP header value that must remain in English. -->
+  <data name="HowToIntro" xml:space="preserve"><value>Send readings via HTTP POST with the &lt;code&gt;Authorization: Bearer &amp;lt;token&amp;gt;&lt;/code&gt; header:</value></data>
+  <!-- Both &lt;code&gt; spans wrap literal identifiers/environment names that must remain in English. -->
+  <data name="MockScriptHint" xml:space="preserve"><value>A Python mock script is provided at &lt;code&gt;tools/sensor-mock/sensor_mock.py&lt;/code&gt; — set &lt;code&gt;DEVICE_ID&lt;/code&gt; and &lt;code&gt;DEVICE_TOKEN&lt;/code&gt; environment variables and run it.</value></data>
+
+  <data name="AcknowledgeButton" xml:space="preserve"><value>I've stored the token</value></data>
+</root>

@@ -1,10 +1,12 @@
 @model DeviceListViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "IoT devices";
+    ViewData["Title"] = SharedLocalizer["Nav.System.IotDevices"].Value;
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "IoT devices" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.System.IotDevices"].Value });
 
     string StatusPill(IotDeviceStatus s) => s switch
     {
@@ -23,14 +25,14 @@
             <div>
                 <span class="hero-badge mb-2">
                     <i class="bi bi-cpu"></i>
-                    <span>IoT devices</span>
+                    <span>@Localizer["BadgeRole"]</span>
                 </span>
-                <h1 class="h2 fw-700 mt-3 mb-1">Sensor devices</h1>
-                <p class="text-muted mb-0">@Model.TotalCount registered &middot; tokens stored as SHA-256 hashes only</p>
+                <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+                <p class="text-muted mb-0">@Localizer["HeaderSummary", Model.TotalCount]</p>
             </div>
             <div class="mt-3 mt-sm-0">
                 <a asp-area="Admin" asp-controller="Devices" asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-2"></i>Register device
+                    <i class="bi bi-plus-circle me-2"></i>@Localizer["RegisterButton"]
                 </a>
             </div>
         </div>
@@ -41,9 +43,9 @@
                 var emptyState = new EmptyStateViewModel
                 {
                     Icon = "bi-cpu",
-                    Title = "No devices registered yet",
-                    Subtitle = "Register a sensor to issue a JWT token and start receiving readings.",
-                    CtaText = "Register a device",
+                    Title = Localizer["EmptyTitle"].Value,
+                    Subtitle = Localizer["EmptySubtitle"].Value,
+                    CtaText = Localizer["EmptyCta"].Value,
                     CtaUrl = Url.Action("Create", "Devices", new { area = "Admin" }),
                     CtaIcon = "bi-plus-circle"
                 };
@@ -55,12 +57,12 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Device ID</th>
-                                <th>Status</th>
-                                <th>Last seen</th>
-                                <th>Location</th>
-                                <th class="text-end">Actions</th>
+                                <th>@Localizer["TableName"]</th>
+                                <th>@Localizer["TableDeviceId"]</th>
+                                <th>@Localizer["TableStatus"]</th>
+                                <th>@Localizer["TableLastSeen"]</th>
+                                <th>@Localizer["TableLocation"]</th>
+                                <th class="text-end">@Localizer["TableActions"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,8 +75,8 @@
                                         <span class="@StatusPill(d.Status)">@d.Status.GetDisplayName()</span>
                                         @if (d.IsOffline)
                                         {
-                                            <span class="ms-2 small text-warning" title="No reading in the last 30 minutes">
-                                                <i class="bi bi-exclamation-triangle"></i> offline
+                                            <span class="ms-2 small text-warning" title="@Localizer["OfflineTitle"]">
+                                                <i class="bi bi-exclamation-triangle"></i> @Localizer["OfflineLabel"]
                                             </span>
                                         }
                                     </td>
@@ -85,7 +87,7 @@
                                         }
                                         else
                                         {
-                                            <span class="text-muted">Never</span>
+                                            <span class="text-muted">@Localizer["LastSeenNever"]</span>
                                         }
                                     </td>
                                     <td class="text-muted small">@d.Latitude.ToString("F4"), @d.Longitude.ToString("F4")</td>
@@ -100,18 +102,18 @@
                                                     <a class="dropdown-item"
                                                        asp-area="Admin" asp-controller="Devices"
                                                        asp-action="Edit" asp-route-id="@d.Id">
-                                                        <i class="bi bi-pencil me-2"></i>Edit
+                                                        <i class="bi bi-pencil me-2"></i>@Localizer["ActionEdit"]
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <button type="button" class="dropdown-item"
                                                             data-bs-toggle="modal" data-bs-target="#confirmModal"
                                                             data-confirm-url="@Url.Action("RegenerateToken", "Devices", new { area = "Admin", id = d.Id })"
-                                                            data-confirm-title="Regenerate token"
-                                                            data-confirm-message="Generate a new JWT for @d.DeviceId? The old token will stop working immediately. The new token is shown only once."
+                                                            data-confirm-title="@Localizer["ConfirmRegenerateTitle"]"
+                                                            data-confirm-message="@Localizer["ConfirmRegenerateMessage", d.DeviceId]"
                                                             data-confirm-button-class="btn btn-primary"
-                                                            data-confirm-button-text="Regenerate">
-                                                        <i class="bi bi-arrow-repeat me-2"></i>Regenerate token
+                                                            data-confirm-button-text="@Localizer["ConfirmRegenerateButton"]">
+                                                        <i class="bi bi-arrow-repeat me-2"></i>@Localizer["ActionRegenerateToken"]
                                                     </button>
                                                 </li>
                                                 <li><hr class="dropdown-divider" /></li>
@@ -119,11 +121,11 @@
                                                     <button type="button" class="dropdown-item"
                                                             data-bs-toggle="modal" data-bs-target="#confirmModal"
                                                             data-confirm-url="@Url.Action("Delete", "Devices", new { area = "Admin", id = d.Id })"
-                                                            data-confirm-title="Decommission device"
-                                                            data-confirm-message="Decommission @d.DeviceId? Its token will stop working but historical readings stay in the database."
+                                                            data-confirm-title="@Localizer["ConfirmDecommissionTitle"]"
+                                                            data-confirm-message="@Localizer["ConfirmDecommissionMessage", d.DeviceId]"
                                                             data-confirm-button-class="btn btn-danger"
-                                                            data-confirm-button-text="Decommission">
-                                                        <i class="bi bi-trash me-2"></i>Decommission
+                                                            data-confirm-button-text="@Localizer["ActionDecommission"]">
+                                                        <i class="bi bi-trash me-2"></i>@Localizer["ActionDecommission"]
                                                     </button>
                                                 </li>
                                             </ul>
@@ -145,13 +147,13 @@
             <form id="confirmForm" method="post">
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
-                    <h2 id="confirmTitle" class="h5 fw-700 modal-title mb-0">Confirm</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h2 id="confirmTitle" class="h5 fw-700 modal-title mb-0">@Localizer["ModalDefaultTitle"]</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@SharedLocalizer["Common.Cancel"]"></button>
                 </div>
-                <div class="modal-body" id="confirmMessage">Are you sure?</div>
+                <div class="modal-body" id="confirmMessage">@Localizer["ModalDefaultMessage"]</div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" id="confirmButton" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@SharedLocalizer["Common.Cancel"]</button>
+                    <button type="submit" id="confirmButton" class="btn btn-primary">@Localizer["ModalDefaultButtonText"]</button>
                 </div>
             </form>
         </div>
@@ -159,8 +161,18 @@
 </div>
 
 @section Scripts {
+    @* JSON i18n bridge — modal defaults fall back to these localised
+       strings if a trigger button forgot to set its data-confirm-* attrs. *@
+    <script>
+        window.__devicesIndexI18n = {
+            defaultTitle:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ModalDefaultTitle"].Value)),
+            defaultMessage:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ModalDefaultMessage"].Value)),
+            defaultButtonText: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ModalDefaultButtonText"].Value))
+        };
+    </script>
     <script>
         (function () {
+            var i18n = window.__devicesIndexI18n;
             var modalEl = document.getElementById('confirmModal');
             if (!modalEl) return;
             var form = document.getElementById('confirmForm');
@@ -172,9 +184,9 @@
                 var trigger = event.relatedTarget;
                 if (!trigger) return;
                 form.action = trigger.dataset.confirmUrl || form.action;
-                titleEl.textContent = trigger.dataset.confirmTitle || 'Confirm';
-                messageEl.textContent = trigger.dataset.confirmMessage || 'Are you sure?';
-                buttonEl.textContent = trigger.dataset.confirmButtonText || 'Confirm';
+                titleEl.textContent = trigger.dataset.confirmTitle || i18n.defaultTitle;
+                messageEl.textContent = trigger.dataset.confirmMessage || i18n.defaultMessage;
+                buttonEl.textContent = trigger.dataset.confirmButtonText || i18n.defaultButtonText;
                 buttonEl.className = trigger.dataset.confirmButtonClass || 'btn btn-primary';
             });
         })();

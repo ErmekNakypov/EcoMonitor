@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Түзмөктү каттоо</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>IoT түзмөктөр</value></data>
+  <data name="Heading" xml:space="preserve"><value>Жаңы IoT-сенсор</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Түзмөктү каттап, ага JWT-токен чыгарыңыз. Токен кийинки экранда бир гана жолу көрсөтүлөт.</value></data>
+
+  <data name="NamePlaceholder" xml:space="preserve"><value>Чүй проспекти, 100 даректеги сенсор</value></data>
+  <data name="DescriptionLabel" xml:space="preserve"><value>Сүрөттөмө (милдеттүү эмес)</value></data>
+  <data name="DescriptionPlaceholder" xml:space="preserve"><value>Имараттын кире беришине, көчө деңгээлинен 3 м бийикке орнотулган</value></data>
+
+  <data name="SubmitButton" xml:space="preserve"><value>Каттап, токен чыгаруу</value></data>
+</root>

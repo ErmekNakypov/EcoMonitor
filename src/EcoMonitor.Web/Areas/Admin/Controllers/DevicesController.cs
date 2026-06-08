@@ -7,6 +7,7 @@ using EcoMonitor.Web.Models.Admin.Devices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Areas.Admin.Controllers;
 
@@ -20,15 +21,18 @@ public class DevicesController : Controller
     private readonly IApplicationDbContext _db;
     private readonly IJwtTokenService _jwt;
     private readonly ILogger<DevicesController> _logger;
+    private readonly IStringLocalizer<DevicesController> _localizer;
 
     public DevicesController(
         IApplicationDbContext db,
         IJwtTokenService jwt,
-        ILogger<DevicesController> logger)
+        ILogger<DevicesController> logger,
+        IStringLocalizer<DevicesController> localizer)
     {
         _db = db;
         _jwt = jwt;
         _logger = logger;
+        _localizer = localizer;
     }
 
     [HttpGet("")]
@@ -101,7 +105,7 @@ public class DevicesController : Controller
         if (string.IsNullOrEmpty(token))
         {
             // Token was already shown once; do not re-display it.
-            TempData["ErrorMessage"] = "The token has already been displayed and is no longer available. Use \"Regenerate token\" if you need a new one.";
+            TempData["ErrorMessage"] = _localizer["TokenAlreadyDisplayed"].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -151,7 +155,7 @@ public class DevicesController : Controller
 
         await _db.SaveChangesAsync(ct);
 
-        TempData["SuccessMessage"] = $"Device {device.DeviceId} updated.";
+        TempData["SuccessMessage"] = _localizer["UpdateSuccess", device.DeviceId].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -187,7 +191,7 @@ public class DevicesController : Controller
         device.Status = IotDeviceStatus.Decommissioned;
         await _db.SaveChangesAsync(ct);
 
-        TempData["SuccessMessage"] = $"Device {device.DeviceId} decommissioned.";
+        TempData["SuccessMessage"] = _localizer["DeleteSuccess", device.DeviceId].Value;
         return RedirectToAction(nameof(Index));
     }
 

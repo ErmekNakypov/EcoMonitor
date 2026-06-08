@@ -1,26 +1,26 @@
 @model MyCleanupReportsResult
 @using EcoMonitor.Domain.Enums
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "My cleanups";
+    // Browser tab title doubles as navbar / breadcrumb link.
+    ViewData["Title"] = SharedLocalizer["Nav.MyCleanups"].Value;
     var tab = (string)(ViewBag.Tab ?? "active");
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home", new { area = "" }) },
-        new BreadcrumbItem { Label = "My cleanups" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Home"].Value,        Url = Url.Action("Index", "Home", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.MyCleanups"].Value });
 
     string TabClass(string t) => tab == t ? "nav-link active" : "nav-link";
 
-    string EmptyTitle = tab switch
+    // Per-tab empty-state copy lives in this view's resx; the controller
+    // doesn't know which tab the user is viewing. Tuple-of-keys
+    // pattern (same as Citizen Reports list).
+    var (emptyTitleKey, emptySubtitleKey) = tab switch
     {
-        "completed" => "No completed cleanups yet",
-        "all" => "You haven't taken any cleanup tasks yet",
-        _ => "Nothing in progress"
-    };
-    string EmptySubtitle = tab switch
-    {
-        "completed" => "Your finished work will appear here once an inspector verifies a cleanup.",
-        "all" => "Take a report from the queue to start your first cleanup.",
-        _ => "Take a report from the queue to start a cleanup."
+        "completed" => ("EmptyCompletedTitle", "EmptyCompletedSubtitle"),
+        "all"       => ("EmptyAllTitle",       "EmptyAllSubtitle"),
+        _           => ("EmptyActiveTitle",    "EmptyActiveSubtitle")
     };
 }
 
@@ -32,36 +32,36 @@
             <div>
                 <span class="hero-badge mb-2">
                     <i class="bi bi-clipboard-check"></i>
-                    <span>Cleanup crew</span>
+                    <span>@Localizer["BadgeRole"]</span>
                 </span>
-                <h1 class="h2 fw-700 mt-3 mb-1">My cleanup assignments</h1>
-                <p class="text-muted mb-0">@Model.OverallCount total</p>
+                <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+                <p class="text-muted mb-0">@Localizer["HeaderSummary", Model.OverallCount]</p>
             </div>
         </div>
 
         <div class="d-flex gap-2 mb-3">
             <a asp-area="CleanupCrew" asp-controller="Reports" asp-action="Queue" class="filter-chip">
-                <i class="bi bi-inboxes"></i><span>Queue</span>
+                <i class="bi bi-inboxes"></i><span>@SharedLocalizer["Nav.Queue"]</span>
             </a>
             <a asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" class="filter-chip active">
-                <i class="bi bi-clipboard-check"></i><span>My cleanups</span>
+                <i class="bi bi-clipboard-check"></i><span>@SharedLocalizer["Nav.MyCleanups"]</span>
             </a>
         </div>
 
         <ul class="nav nav-pills role-tabs mb-3" role="tablist">
             <li class="nav-item">
                 <a class="@TabClass("active")" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" asp-route-tab="active">
-                    Active <span class="role-tab-count">@Model.ActiveCount</span>
+                    @Localizer["TabActive"] <span class="role-tab-count">@Model.ActiveCount</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="@TabClass("completed")" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" asp-route-tab="completed">
-                    Completed <span class="role-tab-count">@Model.CompletedCount</span>
+                    @Localizer["TabCompleted"] <span class="role-tab-count">@Model.CompletedCount</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="@TabClass("all")" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports" asp-route-tab="all">
-                    All <span class="role-tab-count">@Model.OverallCount</span>
+                    @Localizer["TabAll"] <span class="role-tab-count">@Model.OverallCount</span>
                 </a>
             </li>
         </ul>
@@ -71,8 +71,8 @@
             var emptyState = new EmptyStateViewModel
             {
                 Icon = "bi-clipboard",
-                Title = EmptyTitle,
-                Subtitle = EmptySubtitle
+                Title = Localizer[emptyTitleKey].Value,
+                Subtitle = Localizer[emptySubtitleKey].Value
             };
             <div class="auth-card">
                 <partial name="_EmptyState" model="emptyState" />
@@ -83,12 +83,20 @@
             <div class="d-flex flex-column gap-3">
                 @foreach (var item in Model.Items)
                 {
+                    // Status-conditional footnote: picks one of four per-view
+                    // format-string keys and the relevant timestamp. null when
+                    // no relevant date is available — the meta row drops the
+                    // footnote span in that case.
                     string? footnote = item.Status switch
                     {
-                        DumpsiteStatus.Resolved when item.ResolvedAt.HasValue => $"Resolved {DateHelpers.FormatRelative(item.ResolvedAt.Value)}",
-                        DumpsiteStatus.Closed when item.ClosedAt.HasValue => $"Closed {DateHelpers.FormatRelative(item.ClosedAt.Value)}",
-                        DumpsiteStatus.Appealed when item.CleanupCompletedAt.HasValue => $"Returned for rework {DateHelpers.FormatRelative(item.UpdatedAt)}",
-                        DumpsiteStatus.AwaitingVerification when item.CleanupCompletedAt.HasValue => $"Submitted {DateHelpers.FormatRelative(item.CleanupCompletedAt.Value)}",
+                        DumpsiteStatus.Resolved when item.ResolvedAt.HasValue
+                            => Localizer["FootnoteResolved", DateHelpers.FormatRelative(item.ResolvedAt.Value)].Value,
+                        DumpsiteStatus.Closed when item.ClosedAt.HasValue
+                            => Localizer["FootnoteClosed", DateHelpers.FormatRelative(item.ClosedAt.Value)].Value,
+                        DumpsiteStatus.Appealed when item.CleanupCompletedAt.HasValue
+                            => Localizer["FootnoteReworkReturned", DateHelpers.FormatRelative(item.UpdatedAt)].Value,
+                        DumpsiteStatus.AwaitingVerification when item.CleanupCompletedAt.HasValue
+                            => Localizer["FootnoteSubmittedForVerification", DateHelpers.FormatRelative(item.CleanupCompletedAt.Value)].Value,
                         _ => null
                     };
 
@@ -97,7 +105,7 @@
                             <div class="col-md-2">
                                 @if (!string.IsNullOrEmpty(item.FirstPhotoPath))
                                 {
-                                    <img src="@item.FirstPhotoPath" alt="Report photo" class="report-thumb" />
+                                    <img src="@item.FirstPhotoPath" alt="@Localizer["ReportPhotoAlt"]" class="report-thumb" />
                                 }
                                 else
                                 {
@@ -111,7 +119,7 @@
                                 <p class="mb-2 fw-500">@item.ShortDescription</p>
                                 <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
                                     <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
-                                    <span><i class="bi bi-clock me-1"></i>Updated @DateHelpers.FormatRelative(item.UpdatedAt)</span>
+                                    <span><i class="bi bi-clock me-1"></i>@Localizer["UpdatedAt", DateHelpers.FormatRelative(item.UpdatedAt)]</span>
                                     @if (!string.IsNullOrEmpty(footnote))
                                     {
                                         <span><i class="bi bi-check2-circle me-1"></i>@footnote</span>
@@ -120,7 +128,7 @@
                             </div>
                             <div class="col-md-3 text-md-end">
                                 <a asp-area="CleanupCrew" asp-controller="Reports" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">
-                                    Open <i class="bi bi-arrow-right ms-1"></i>
+                                    @Localizer["OpenButton"] <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
                             </div>
                         </div>
@@ -130,11 +138,11 @@
 
             @if (Model.TotalPages > 1)
             {
-                <nav class="mt-4" aria-label="My cleanups pagination">
+                <nav class="mt-4" aria-label="@Localizer["PaginationAriaLabel"]">
                     <ul class="pagination justify-content-center">
                         <li class="page-item @(Model.Page <= 1 ? "disabled" : string.Empty)">
                             <a class="page-link" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports"
-                               asp-route-page="@(Model.Page - 1)" asp-route-tab="@tab">Previous</a>
+                               asp-route-page="@(Model.Page - 1)" asp-route-tab="@tab">@SharedLocalizer["Common.Previous"]</a>
                         </li>
                         @for (int p = 1; p <= Model.TotalPages; p++)
                         {
@@ -145,7 +153,7 @@
                         }
                         <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : string.Empty)">
                             <a class="page-link" asp-area="CleanupCrew" asp-controller="Reports" asp-action="MyReports"
-                               asp-route-page="@(Model.Page + 1)" asp-route-tab="@tab">Next</a>
+                               asp-route-page="@(Model.Page + 1)" asp-route-tab="@tab">@SharedLocalizer["Common.Next"]</a>
                         </li>
                     </ul>
                 </nav>

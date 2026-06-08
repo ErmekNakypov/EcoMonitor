@@ -53,4 +53,5 @@
   <data name="Common.Previous" xml:space="preserve"><value>Артка</value></data>
   <data name="Common.Next" xml:space="preserve"><value>Алдыга</value></data>
   <data name="Common.TogglePasswordVisibility" xml:space="preserve"><value>Сырсөздү көрсөтүү же жашыруу</value></data>
+  <data name="Common.Apply" xml:space="preserve"><value>Колдонуу</value></data>
 </root>

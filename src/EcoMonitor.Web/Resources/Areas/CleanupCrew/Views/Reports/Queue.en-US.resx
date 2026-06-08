@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Cleanup crew</value></data>
+  <data name="Heading" xml:space="preserve"><value>Confirmed reports awaiting cleanup</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} in queue · oldest first</value></data>
+
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Search by description…</value></data>
+  <data name="SortOldestFirst" xml:space="preserve"><value>Oldest first</value></data>
+  <data name="SortNewestFirst" xml:space="preserve"><value>Newest first</value></data>
+  <data name="SourceAll" xml:space="preserve"><value>All sources</value></data>
+  <data name="SourceWeb" xml:space="preserve"><value>Web only</value></data>
+  <data name="SourceTelegram" xml:space="preserve"><value>Telegram only</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>All clear</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>No reports are waiting for cleanup right now.</value></data>
+
+  <data name="RouteHint" xml:space="preserve"><value>Tick 2–15 reports to plan a cleanup route.</value></data>
+  <data name="RouteSelectedCount" xml:space="preserve"><value>{0} selected</value></data>
+  <data name="RouteBuildButton" xml:space="preserve"><value>Build cleanup route</value></data>
+  <data name="RouteCheckboxAria" xml:space="preserve"><value>Select report for route</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Report photo</value></data>
+  <data name="ConfirmedAt" xml:space="preserve"><value>Confirmed {0}</value></data>
+  <data name="OpenButton" xml:space="preserve"><value>Open</value></data>
+</root>

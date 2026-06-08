@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Cleanup crew</value></data>
+  <data name="Heading" xml:space="preserve"><value>My cleanup assignments</value></data>
+  <!-- {0} = total report count across all tabs. -->
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} total</value></data>
+
+  <data name="TabActive" xml:space="preserve"><value>Active</value></data>
+  <data name="TabCompleted" xml:space="preserve"><value>Completed</value></data>
+  <data name="TabAll" xml:space="preserve"><value>All</value></data>
+
+  <data name="EmptyActiveTitle" xml:space="preserve"><value>Nothing in progress</value></data>
+  <data name="EmptyActiveSubtitle" xml:space="preserve"><value>Take a report from the queue to start a cleanup.</value></data>
+  <data name="EmptyCompletedTitle" xml:space="preserve"><value>No completed cleanups yet</value></data>
+  <data name="EmptyCompletedSubtitle" xml:space="preserve"><value>Your finished work will appear here once an inspector verifies a cleanup.</value></data>
+  <data name="EmptyAllTitle" xml:space="preserve"><value>You haven't taken any cleanup tasks yet</value></data>
+  <data name="EmptyAllSubtitle" xml:space="preserve"><value>Take a report from the queue to start your first cleanup.</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Report photo</value></data>
+  <!-- Card meta-row strings; each takes {0} = a formatted relative time. -->
+  <data name="UpdatedAt" xml:space="preserve"><value>Updated {0}</value></data>
+  <data name="FootnoteResolved" xml:space="preserve"><value>Resolved {0}</value></data>
+  <data name="FootnoteClosed" xml:space="preserve"><value>Closed {0}</value></data>
+  <data name="FootnoteReworkReturned" xml:space="preserve"><value>Returned for rework {0}</value></data>
+  <data name="FootnoteSubmittedForVerification" xml:space="preserve"><value>Submitted {0}</value></data>
+
+  <data name="OpenButton" xml:space="preserve"><value>Open</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>My cleanups pagination</value></data>
+</root>

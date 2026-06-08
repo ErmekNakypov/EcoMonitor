@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="TakeSuccess" xml:space="preserve"><value>Заявка взята в работу. Она в вашей очереди.</value></data>
+
+  <data name="ConfirmMissingPhoto" xml:space="preserve"><value>Прикрепите хотя бы одно фото инспекции.</value></data>
+  <data name="ConfirmSuccess" xml:space="preserve"><value>Заявка подтверждена. Она в очереди уборки.</value></data>
+
+  <data name="RejectShortReason" xml:space="preserve"><value>Причина должна быть не короче 10 символов.</value></data>
+  <data name="RejectSuccess" xml:space="preserve"><value>Заявка отклонена.</value></data>
+
+  <data name="ResolveShortNotes" xml:space="preserve"><value>Заметки решения должны быть не короче 10 символов.</value></data>
+  <data name="ResolveSuccess" xml:space="preserve"><value>Заявка отмечена как решённая.</value></data>
+
+  <data name="RejectCleanupShortReason" xml:space="preserve"><value>Причина доработки должна быть не короче 10 символов.</value></data>
+  <data name="RejectCleanupSuccess" xml:space="preserve"><value>Заявка отправлена бригаде уборки на доработку.</value></data>
+
+  <data name="RejectFlaggedSuccess" xml:space="preserve"><value>Заявка отклонена. Житель уведомлён.</value></data>
+  <data name="ConfirmBackSuccess" xml:space="preserve"><value>Заявка возвращена той же бригаде уборки.</value></data>
+  <data name="ReassignSuccess" xml:space="preserve"><value>Заявка переназначена другой бригаде.</value></data>
+
+  <data name="UpholdAppealSuccess" xml:space="preserve"><value>Апелляция удовлетворена. Заявка возвращена в очередь уборки.</value></data>
+  <data name="DismissAppealSuccess" xml:space="preserve"><value>Апелляция отклонена. Заявка остаётся решённой.</value></data>
+
+  <data name="RouteTooFewReports" xml:space="preserve"><value>Выберите минимум 2 заявки для маршрута.</value></data>
+  <data name="RouteTooManyReports" xml:space="preserve"><value>Не более 15 заявок в маршруте.</value></data>
+  <data name="InspectionRouteTitle" xml:space="preserve"><value>Маршрут проверки</value></data>
+</root>

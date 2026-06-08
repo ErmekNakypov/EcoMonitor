@@ -29,6 +29,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Controllers;
 
@@ -39,17 +40,20 @@ public class InspectorController : Controller
     private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IApplicationDbContext _dbContext;
+    private readonly IStringLocalizer<InspectorController> _localizer;
     private readonly ILogger<InspectorController> _logger;
 
     public InspectorController(
         IMediator mediator,
         UserManager<ApplicationUser> userManager,
         IApplicationDbContext dbContext,
+        IStringLocalizer<InspectorController> localizer,
         ILogger<InspectorController> logger)
     {
         _mediator = mediator;
         _userManager = userManager;
         _dbContext = dbContext;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -107,7 +111,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new RejectFlaggedReportCommand(id, CurrentUserId(), decisionNotes ?? string.Empty));
-            TempData["SuccessMessage"] = "Report rejected. Citizen has been notified.";
+            TempData["SuccessMessage"] = _localizer["RejectFlaggedSuccess"].Value;
         }
         catch (NotFoundException) { return NotFound(); }
         catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
@@ -122,7 +126,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new ConfirmReportBackCommand(id, CurrentUserId(), decisionNotes ?? string.Empty));
-            TempData["SuccessMessage"] = "Report returned to the same cleanup crew.";
+            TempData["SuccessMessage"] = _localizer["ConfirmBackSuccess"].Value;
         }
         catch (NotFoundException) { return NotFound(); }
         catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
@@ -137,7 +141,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new ReassignToAnotherCrewCommand(id, CurrentUserId(), decisionNotes ?? string.Empty));
-            TempData["SuccessMessage"] = "Report reassigned to another crew.";
+            TempData["SuccessMessage"] = _localizer["ReassignSuccess"].Value;
         }
         catch (NotFoundException) { return NotFound(); }
         catch (DomainException ex) { TempData["ErrorMessage"] = ex.Message; }
@@ -155,18 +159,18 @@ public class InspectorController : Controller
     {
         if (selectedIds is null || selectedIds.Count < 2)
         {
-            TempData["ErrorMessage"] = "Select at least 2 reports to build a route.";
+            TempData["ErrorMessage"] = _localizer["RouteTooFewReports"].Value;
             return RedirectToAction(nameof(Queue));
         }
         if (selectedIds.Count > 15)
         {
-            TempData["ErrorMessage"] = "Maximum 15 reports per route.";
+            TempData["ErrorMessage"] = _localizer["RouteTooManyReports"].Value;
             return RedirectToAction(nameof(Queue));
         }
         var route = await _mediator.Send(
             new BuildRouteForReportsQuery(selectedIds, startLat, startLng), ct);
         ViewBag.BackUrl = Url.Action(nameof(Queue), "Inspector");
-        ViewBag.PageTitle = "Inspection route";
+        ViewBag.PageTitle = _localizer["InspectionRouteTitle"].Value;
         ViewBag.DetailsController = "Inspector";
         ViewBag.DetailsArea = "";
         return View("Route", route);
@@ -200,7 +204,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new UpholdAppealCommand(id, CurrentUserId(), resolutionNotes ?? string.Empty));
-            TempData["SuccessMessage"] = "Appeal upheld. Report returned to the cleanup queue.";
+            TempData["SuccessMessage"] = _localizer["UpholdAppealSuccess"].Value;
         }
         catch (NotFoundException)
         {
@@ -224,7 +228,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new DismissAppealCommand(id, CurrentUserId(), resolutionNotes ?? string.Empty));
-            TempData["SuccessMessage"] = "Appeal dismissed. Report remains resolved.";
+            TempData["SuccessMessage"] = _localizer["DismissAppealSuccess"].Value;
         }
         catch (NotFoundException)
         {
@@ -341,7 +345,7 @@ public class InspectorController : Controller
         try
         {
             await _mediator.Send(new TakeReportCommand(id, CurrentUserId()));
-            TempData["SuccessMessage"] = "Report taken. It is now in your queue.";
+            TempData["SuccessMessage"] = _localizer["TakeSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -362,7 +366,7 @@ public class InspectorController : Controller
     {
         if (model.Photos is null || model.Photos.Count == 0)
         {
-            TempData["ErrorMessage"] = "Attach at least one inspection photo.";
+            TempData["ErrorMessage"] = _localizer["ConfirmMissingPhoto"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -381,7 +385,7 @@ public class InspectorController : Controller
                 CurrentUserId(),
                 model.Observations ?? string.Empty,
                 uploaded));
-            TempData["SuccessMessage"] = "Report confirmed. It is now in the cleanup queue.";
+            TempData["SuccessMessage"] = _localizer["ConfirmSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -405,14 +409,14 @@ public class InspectorController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["ErrorMessage"] = "Rework reason must be at least 10 characters.";
+            TempData["ErrorMessage"] = _localizer["RejectCleanupShortReason"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
         try
         {
             await _mediator.Send(new RejectCleanupCommand(id, CurrentUserId(), model.Reason));
-            TempData["SuccessMessage"] = "Report sent back to the cleanup crew for rework.";
+            TempData["SuccessMessage"] = _localizer["RejectCleanupSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -432,14 +436,14 @@ public class InspectorController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["ErrorMessage"] = "Reason must be at least 10 characters.";
+            TempData["ErrorMessage"] = _localizer["RejectShortReason"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
         try
         {
             await _mediator.Send(new RejectReportCommand(id, CurrentUserId(), model.Reason));
-            TempData["SuccessMessage"] = "Report rejected.";
+            TempData["SuccessMessage"] = _localizer["RejectSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)
@@ -468,14 +472,14 @@ public class InspectorController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["ErrorMessage"] = "Resolution notes must be at least 10 characters.";
+            TempData["ErrorMessage"] = _localizer["ResolveShortNotes"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
         try
         {
             await _mediator.Send(new ResolveReportCommand(id, CurrentUserId(), model.Notes));
-            TempData["SuccessMessage"] = "Report marked as resolved.";
+            TempData["SuccessMessage"] = _localizer["ResolveSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException)

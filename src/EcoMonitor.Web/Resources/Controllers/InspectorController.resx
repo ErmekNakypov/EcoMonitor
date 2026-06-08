@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- TempData success / error messages set by
+       Controllers.InspectorController. Surface in the alert-success /
+       alert-danger banners on the Queue, Details, MyReports and Route
+       views. Forwarded DomainException / ValidationException messages
+       (ex.Message, ex.Errors.Select(...)) are NOT localised by this
+       commit — they come from the Application / Domain layer and
+       need separate work there. -->
+
+  <!-- Take -->
+  <data name="TakeSuccess" xml:space="preserve"><value>Report taken. It is now in your queue.</value></data>
+
+  <!-- Confirm -->
+  <data name="ConfirmMissingPhoto" xml:space="preserve"><value>Attach at least one inspection photo.</value></data>
+  <data name="ConfirmSuccess" xml:space="preserve"><value>Report confirmed. It is now in the cleanup queue.</value></data>
+
+  <!-- Reject (initial inspector review) -->
+  <data name="RejectShortReason" xml:space="preserve"><value>Reason must be at least 10 characters.</value></data>
+  <data name="RejectSuccess" xml:space="preserve"><value>Report rejected.</value></data>
+
+  <!-- Resolve (verify cleanup) -->
+  <data name="ResolveShortNotes" xml:space="preserve"><value>Resolution notes must be at least 10 characters.</value></data>
+  <data name="ResolveSuccess" xml:space="preserve"><value>Report marked as resolved.</value></data>
+
+  <!-- RejectCleanup (send back for rework) -->
+  <data name="RejectCleanupShortReason" xml:space="preserve"><value>Rework reason must be at least 10 characters.</value></data>
+  <data name="RejectCleanupSuccess" xml:space="preserve"><value>Report sent back to the cleanup crew for rework.</value></data>
+
+  <!-- Review-flag branch — three outcomes -->
+  <data name="RejectFlaggedSuccess" xml:space="preserve"><value>Report rejected. Citizen has been notified.</value></data>
+  <data name="ConfirmBackSuccess" xml:space="preserve"><value>Report returned to the same cleanup crew.</value></data>
+  <data name="ReassignSuccess" xml:space="preserve"><value>Report reassigned to another crew.</value></data>
+
+  <!-- Citizen-appeal branch — two outcomes -->
+  <data name="UpholdAppealSuccess" xml:space="preserve"><value>Appeal upheld. Report returned to the cleanup queue.</value></data>
+  <data name="DismissAppealSuccess" xml:space="preserve"><value>Appeal dismissed. Report remains resolved.</value></data>
+
+  <!-- BuildRoute — TempData errors + ViewBag.PageTitle for the Route
+       view. After this commit the view's Route.DefaultTitle fallback
+       is only used on unusual entry paths. -->
+  <data name="RouteTooFewReports" xml:space="preserve"><value>Select at least 2 reports to build a route.</value></data>
+  <data name="RouteTooManyReports" xml:space="preserve"><value>Maximum 15 reports per route.</value></data>
+  <data name="InspectionRouteTitle" xml:space="preserve"><value>Inspection route</value></data>
+</root>

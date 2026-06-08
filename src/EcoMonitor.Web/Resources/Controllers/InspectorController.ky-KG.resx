@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="TakeSuccess" xml:space="preserve"><value>Билдирүү алынды. Ал сиздин кезегиңизде.</value></data>
+
+  <data name="ConfirmMissingPhoto" xml:space="preserve"><value>Эң аз бир текшерүү сүрөтү тиркеңиз.</value></data>
+  <data name="ConfirmSuccess" xml:space="preserve"><value>Билдирүү тастыкталды. Ал тазалоо кезегинде.</value></data>
+
+  <data name="RejectShortReason" xml:space="preserve"><value>Себеби кеминде 10 символ болушу керек.</value></data>
+  <data name="RejectSuccess" xml:space="preserve"><value>Билдирүү четке кагылды.</value></data>
+
+  <data name="ResolveShortNotes" xml:space="preserve"><value>Чечим эскертүүлөрү кеминде 10 символ болушу керек.</value></data>
+  <data name="ResolveSuccess" xml:space="preserve"><value>Билдирүү чечилди деп белгиленди.</value></data>
+
+  <data name="RejectCleanupShortReason" xml:space="preserve"><value>Кайра иштөөнүн себеби кеминде 10 символ болушу керек.</value></data>
+  <data name="RejectCleanupSuccess" xml:space="preserve"><value>Билдирүү тазалоо бригадасына кайра иштөөгө жөнөтүлдү.</value></data>
+
+  <data name="RejectFlaggedSuccess" xml:space="preserve"><value>Билдирүү четке кагылды. Тургунга кабарланды.</value></data>
+  <data name="ConfirmBackSuccess" xml:space="preserve"><value>Билдирүү ошол эле тазалоо бригадасына кайтарылды.</value></data>
+  <data name="ReassignSuccess" xml:space="preserve"><value>Билдирүү башка бригадага кайра дайындалды.</value></data>
+
+  <data name="UpholdAppealSuccess" xml:space="preserve"><value>Даттануу канааттандырылды. Билдирүү тазалоо кезегине кайтарылды.</value></data>
+  <data name="DismissAppealSuccess" xml:space="preserve"><value>Даттануу четке кагылды. Билдирүү чечилген бойдон калат.</value></data>
+
+  <data name="RouteTooFewReports" xml:space="preserve"><value>Маршрут түзүү үчүн эң аз 2 билдирүү тандаңыз.</value></data>
+  <data name="RouteTooManyReports" xml:space="preserve"><value>Бир маршрутта эң көп 15 билдирүү.</value></data>
+  <data name="InspectionRouteTitle" xml:space="preserve"><value>Текшерүү маршруту</value></data>
+</root>

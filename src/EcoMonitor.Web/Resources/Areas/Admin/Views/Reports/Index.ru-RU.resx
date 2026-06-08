@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Все обращения граждан</value></data>
+  <data name="Heading" xml:space="preserve"><value>Обращения</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>Всего: {0} · страница {1} из {2}</value></data>
+
+  <data name="ChipAll" xml:space="preserve"><value>Все</value></data>
+  <data name="ChipNew" xml:space="preserve"><value>Новые</value></data>
+  <data name="ChipInReview" xml:space="preserve"><value>На проверке</value></data>
+  <data name="ChipConfirmed" xml:space="preserve"><value>Подтверждены</value></data>
+  <data name="ChipResolved" xml:space="preserve"><value>Решены</value></data>
+  <data name="ChipRejected" xml:space="preserve"><value>Отклонены</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Здесь пока нет обращений</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Попробуйте другой фильтр по статусу или загляните позже, когда поступят новые обращения от граждан.</value></data>
+
+  <data name="TableStatus" xml:space="preserve"><value>Статус</value></data>
+  <data name="TableDescription" xml:space="preserve"><value>Описание</value></data>
+  <data name="TableReporter" xml:space="preserve"><value>Заявитель</value></data>
+  <data name="TableAssignedTo" xml:space="preserve"><value>Назначен</value></data>
+  <data name="TablePhotos" xml:space="preserve"><value>Фото</value></data>
+  <data name="TableWhen" xml:space="preserve"><value>Когда</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Действия</value></data>
+
+  <data name="TelegramUserFallback" xml:space="preserve"><value>Пользователь Telegram</value></data>
+  <data name="UnknownReporter" xml:space="preserve"><value>(неизвестно)</value></data>
+
+  <data name="PhotoCountSingular" xml:space="preserve"><value>{0} фото</value></data>
+  <data name="PhotoCountPlural" xml:space="preserve"><value>{0} фото</value></data>
+
+  <data name="ReportedAgo" xml:space="preserve"><value>Подано {0}</value></data>
+  <data name="UpdatedAgo" xml:space="preserve"><value>Обновлено {0}</value></data>
+
+  <data name="ViewButton" xml:space="preserve"><value>Открыть</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Постраничная навигация по обращениям</value></data>
+</root>

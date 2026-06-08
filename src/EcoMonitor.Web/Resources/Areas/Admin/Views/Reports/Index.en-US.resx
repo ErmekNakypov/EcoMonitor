@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>All citizen reports</value></data>
+  <data name="Heading" xml:space="preserve"><value>Reports</value></data>
+  <!-- {0} = total count, {1} = current page, {2} = total pages. -->
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} total · page {1} of {2}</value></data>
+
+  <!-- Filter chips. ChipAll is the no-filter pill. -->
+  <data name="ChipAll" xml:space="preserve"><value>All</value></data>
+  <data name="ChipNew" xml:space="preserve"><value>New</value></data>
+  <data name="ChipInReview" xml:space="preserve"><value>In review</value></data>
+  <data name="ChipConfirmed" xml:space="preserve"><value>Confirmed</value></data>
+  <data name="ChipResolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="ChipRejected" xml:space="preserve"><value>Rejected</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>No reports here</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Try a different status filter, or check back when citizens submit new reports.</value></data>
+
+  <data name="TableStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="TableDescription" xml:space="preserve"><value>Description</value></data>
+  <data name="TableReporter" xml:space="preserve"><value>Reporter</value></data>
+  <data name="TableAssignedTo" xml:space="preserve"><value>Assigned to</value></data>
+  <data name="TablePhotos" xml:space="preserve"><value>Photos</value></data>
+  <data name="TableWhen" xml:space="preserve"><value>When</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Actions</value></data>
+
+  <data name="TelegramUserFallback" xml:space="preserve"><value>Telegram user</value></data>
+  <data name="UnknownReporter" xml:space="preserve"><value>(unknown)</value></data>
+
+  <!-- Photo-count hover title. We use 2 forms — single vs. plural — to
+       cover English. Russian / Kyrgyz have richer plural categories; this
+       is a documented simplification. -->
+  <data name="PhotoCountSingular" xml:space="preserve"><value>{0} photo</value></data>
+  <data name="PhotoCountPlural" xml:space="preserve"><value>{0} photos</value></data>
+
+  <!-- {0} = relative time ("2 hours ago"). -->
+  <data name="ReportedAgo" xml:space="preserve"><value>Reported {0}</value></data>
+  <data name="UpdatedAgo" xml:space="preserve"><value>Updated {0}</value></data>
+
+  <data name="ViewButton" xml:space="preserve"><value>View</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Reports pagination</value></data>
+</root>

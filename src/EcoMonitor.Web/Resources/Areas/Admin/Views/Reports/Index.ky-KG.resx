@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Жарандардын бардык кайрылуулары</value></data>
+  <data name="Heading" xml:space="preserve"><value>Кайрылуулар</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>Бардыгы: {0} · {2} ичинен {1}-бет</value></data>
+
+  <data name="ChipAll" xml:space="preserve"><value>Бардыгы</value></data>
+  <data name="ChipNew" xml:space="preserve"><value>Жаңы</value></data>
+  <data name="ChipInReview" xml:space="preserve"><value>Текшерүүдө</value></data>
+  <data name="ChipConfirmed" xml:space="preserve"><value>Ырасталган</value></data>
+  <data name="ChipResolved" xml:space="preserve"><value>Чечилген</value></data>
+  <data name="ChipRejected" xml:space="preserve"><value>Четке кагылган</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Бул жерде кайрылуулар жок</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Башка статус чыпкасын колдонуп көрүңүз же жарандардан жаңы кайрылуулар келгенде кайра кириңиз.</value></data>
+
+  <data name="TableStatus" xml:space="preserve"><value>Статусу</value></data>
+  <data name="TableDescription" xml:space="preserve"><value>Сүрөттөмө</value></data>
+  <data name="TableReporter" xml:space="preserve"><value>Кайрылуучу</value></data>
+  <data name="TableAssignedTo" xml:space="preserve"><value>Дайындалган</value></data>
+  <data name="TablePhotos" xml:space="preserve"><value>Сүрөттөр</value></data>
+  <data name="TableWhen" xml:space="preserve"><value>Качан</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Аракеттер</value></data>
+
+  <data name="TelegramUserFallback" xml:space="preserve"><value>Telegram колдонуучусу</value></data>
+  <data name="UnknownReporter" xml:space="preserve"><value>(белгисиз)</value></data>
+
+  <data name="PhotoCountSingular" xml:space="preserve"><value>{0} сүрөт</value></data>
+  <data name="PhotoCountPlural" xml:space="preserve"><value>{0} сүрөт</value></data>
+
+  <data name="ReportedAgo" xml:space="preserve"><value>{0} жөнөтүлгөн</value></data>
+  <data name="UpdatedAgo" xml:space="preserve"><value>{0} жаңыланган</value></data>
+
+  <data name="ViewButton" xml:space="preserve"><value>Ачуу</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Кайрылуулар боюнча беттөө</value></data>
+</root>

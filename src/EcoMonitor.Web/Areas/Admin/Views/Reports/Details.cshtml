@@ -1,16 +1,20 @@
 @model AdminReportViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
+    var fallbackHeadline = Localizer["FallbackHeadline"].Value;
     var headline = Model.Description.Length > 80 ? Model.Description[..80] + "…" : Model.Description;
-    if (string.IsNullOrWhiteSpace(headline)) headline = "Dumpsite report";
-    ViewData["Title"] = "Report details";
+    if (string.IsNullOrWhiteSpace(headline)) headline = fallbackHeadline;
+    ViewData["Title"] = Localizer["Title"].Value;
 
-    static string TruncateForBreadcrumb(string text, int max) =>
-        string.IsNullOrEmpty(text) ? "Report" :
+    var breadcrumbFallback = Localizer["BreadcrumbFallback"].Value;
+    string TruncateForBreadcrumb(string text, int max) =>
+        string.IsNullOrEmpty(text) ? breadcrumbFallback :
         text.Length > max ? text[..max] + "…" : text;
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "Reports", Url = Url.Action("Index", "Reports", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Reports"].Value, Url = Url.Action("Index", "Reports", new { area = "Admin" }) },
         new BreadcrumbItem { Label = TruncateForBreadcrumb(Model.Description, 40) });
 
     int currentStage = Model.Status switch
@@ -52,7 +56,7 @@
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-flag-fill"></i>
-                <span>Report details</span>
+                <span>@Localizer["BadgeRole"]</span>
             </span>
             <div class="mt-3 mb-2 d-flex flex-wrap gap-2">
                 <partial name="_StatusBadge" model="Model.Status" />
@@ -68,54 +72,56 @@
             <p class="text-muted small mb-0">
                 @if (Model.Source == ReportSource.Telegram)
                 {
-                    var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName) ? "(anonymous)" : "@" + Model.TelegramUserName;
-                    <text>Reported via Telegram by <span class="fw-500">@handle</span></text>
+                    var handle = string.IsNullOrWhiteSpace(Model.TelegramUserName)
+                        ? Localizer["AnonymousFallback"].Value
+                        : "@" + Model.TelegramUserName;
+                    @Localizer["ReportedViaTelegramBy", handle]
                 }
                 else
                 {
-                    <text>Reported by <span class="fw-500">@(Model.ReporterFullName ?? "(unknown)")</span> (@Model.ReporterEmail)</text>
+                    var reporterName = Model.ReporterFullName ?? Localizer["UnknownFallback"].Value;
+                    @Localizer["ReportedByEmail", reporterName, Model.ReporterEmail ?? string.Empty]
                 }
-                on @DateHelpers.FormatShort(Model.CreatedAt),
-                last updated @DateHelpers.FormatRelative(Model.UpdatedAt)
+                @Localizer["ReportedAtSuffix", DateHelpers.FormatShort(Model.CreatedAt), DateHelpers.FormatRelative(Model.UpdatedAt)]
             </p>
         </div>
 
         <div class="auth-card mb-4">
-            <h2 class="h6 fw-700 mb-3">Progress</h2>
+            <h2 class="h6 fw-700 mb-3">@Localizer["ProgressHeading"]</h2>
             <div class="status-stepper">
                 <div class="status-step @StepClass(1)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 1 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)1)</span>
-                    <div class="status-step-label">Submitted</div>
+                    <div class="status-step-label">@Localizer["Step1Submitted"]</div>
                 </div>
                 <div class="status-step @StepClass(2)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 2 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)2)</span>
-                    <div class="status-step-label">In review</div>
+                    <div class="status-step-label">@Localizer["Step2InReview"]</div>
                 </div>
                 <div class="status-step @StepClass(3)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 3 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)3)</span>
-                    <div class="status-step-label">Confirmed</div>
+                    <div class="status-step-label">@Localizer["Step3Confirmed"]</div>
                 </div>
                 <div class="status-step @StepClass(4)">
                     <span class="status-step-bullet">@(isRejected && rejectionStage == 4 ? Html.Raw("<i class=\"bi bi-x-lg\"></i>") : (object)4)</span>
                     <div class="status-step-label">
-                        Cleanup
+                        @Localizer["Step4Cleanup"]
                         @if (Model.Status == DumpsiteStatus.FlaggedByCleanupCrew)
                         {
-                            <div class="text-muted small mt-1">Flagged — awaiting decision</div>
+                            <div class="text-muted small mt-1">@Localizer["Step4SubFlaggedAwaitingDecision"]</div>
                         }
                         else if (Model.Status == DumpsiteStatus.AwaitingVerification)
                         {
-                            <div class="text-muted small mt-1">Awaiting inspector verification</div>
+                            <div class="text-muted small mt-1">@Localizer["Step4SubAwaitingVerification"]</div>
                         }
                     </div>
                 </div>
                 <div class="status-step @StepClass(5)">
                     <span class="status-step-bullet">5</span>
                     <div class="status-step-label">
-                        @(Model.Status == DumpsiteStatus.Closed ? "Closed" : "Resolved")
+                        @(Model.Status == DumpsiteStatus.Closed ? Localizer["Step5Closed"].Value : Localizer["Step5Resolved"].Value)
                         @if (Model.Status == DumpsiteStatus.Appealed)
                         {
-                            <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">Appealed</span>
+                            <span class="badge ms-1" style="background:#FEE2E2;color:#991B1B;">@Localizer["Step5BadgeAppealed"]</span>
                         }
                     </div>
                 </div>
@@ -127,14 +133,14 @@
             <div class="alert-rejected mb-4">
                 <i class="bi bi-x-circle-fill"></i>
                 <div>
-                    <div class="fw-700">Report rejected</div>
+                    <div class="fw-700">@Localizer["ReportRejected"]</div>
                     @if (!string.IsNullOrWhiteSpace(Model.ResolutionNotes))
                     {
                         <div style="font-size:0.875rem;margin-top:0.25rem;">@Model.ResolutionNotes</div>
                     }
                     @if (Model.ResolvedAt.HasValue)
                     {
-                        <div class="text-muted small mt-2">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</div>
+                        <div class="text-muted small mt-2">@Localizer["ClosedOn", DateHelpers.FormatShort(Model.ResolvedAt.Value)]</div>
                     }
                 </div>
             </div>
@@ -143,15 +149,15 @@
         <div class="row g-4">
             <div class="col-md-7">
                 <div class="auth-card mb-4">
-                    <h2 class="h6 fw-700 mb-2">Description</h2>
+                    <h2 class="h6 fw-700 mb-2">@Localizer["DescriptionHeading"]</h2>
                     <p class="mb-0">@Model.Description</p>
                 </div>
 
                 <div class="auth-card mb-4">
-                    <h2 class="h6 fw-700 mb-3">Photos (@Model.PhotoPaths.Count)</h2>
+                    <h2 class="h6 fw-700 mb-3">@Localizer["PhotosHeading", Model.PhotoPaths.Count]</h2>
                     @if (Model.PhotoPaths.Count == 0)
                     {
-                        <p class="text-muted mb-0">No photos attached.</p>
+                        <p class="text-muted mb-0">@Localizer["NoPhotosAttached"]</p>
                     }
                     else
                     {
@@ -160,7 +166,7 @@
                             {
                                 var path = Model.PhotoPaths[i];
                                 <a href="#" class="photo-tile" data-bs-toggle="modal" data-bs-target="#photo-modal" data-photo-src="@path">
-                                    <img src="@path" alt="Report photo @(i + 1)" />
+                                    <img src="@path" alt="@Localizer["AltReportPhoto", i + 1]" />
                                 </a>
                             }
                         </div>
@@ -170,11 +176,11 @@
                 @if ((Model.Status == DumpsiteStatus.Resolved || Model.Status == DumpsiteStatus.Rejected) && !string.IsNullOrWhiteSpace(Model.ResolutionNotes))
                 {
                     <div class="auth-card mb-4">
-                        <h2 class="h6 fw-700 mb-2">@(Model.Status == DumpsiteStatus.Rejected ? "Rejection reason" : "Resolution")</h2>
+                        <h2 class="h6 fw-700 mb-2">@(Model.Status == DumpsiteStatus.Rejected ? Localizer["RejectionReasonHeading"].Value : Localizer["ResolutionHeading"].Value)</h2>
                         <p class="mb-2">@Model.ResolutionNotes</p>
                         @if (Model.ResolvedAt.HasValue)
                         {
-                            <p class="text-muted small mb-0">Closed on @DateHelpers.FormatShort(Model.ResolvedAt.Value)</p>
+                            <p class="text-muted small mb-0">@Localizer["ClosedOn", DateHelpers.FormatShort(Model.ResolvedAt.Value)]</p>
                         }
                     </div>
                 }
@@ -182,18 +188,18 @@
 
             <div class="col-md-5">
                 <div class="auth-card mb-3">
-                    <h2 class="h6 fw-700 mb-3">Location</h2>
+                    <h2 class="h6 fw-700 mb-3">@Localizer["LocationHeading"]</h2>
                     <div id="details-map"></div>
                     <dl class="row mt-3 mb-0 small">
-                        <dt class="col-5 text-muted fw-500">Coordinates</dt>
+                        <dt class="col-5 text-muted fw-500">@Localizer["CoordinatesLabel"]</dt>
                         <dd class="col-7 mb-1">@Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</dd>
-                        <dt class="col-5 text-muted fw-500">Photos</dt>
-                        <dd class="col-7 mb-0">@Model.PhotoPaths.Count attached</dd>
+                        <dt class="col-5 text-muted fw-500">@Localizer["PhotosLabel"]</dt>
+                        <dd class="col-7 mb-0">@Localizer["PhotosAttachedFormat", Model.PhotoPaths.Count]</dd>
                     </dl>
                 </div>
 
                 <div class="auth-card mb-3">
-                    <h2 class="h6 fw-700 mb-3">Reporter</h2>
+                    <h2 class="h6 fw-700 mb-3">@Localizer["ReporterHeading"]</h2>
                     @if (Model.Source == ReportSource.Telegram)
                     {
                         <div class="d-flex align-items-start gap-3">
@@ -202,14 +208,14 @@
                                 <div class="fw-500">
                                     @if (string.IsNullOrWhiteSpace(Model.TelegramUserName))
                                     {
-                                        <text>Telegram user</text>
+                                        <text>@Localizer["TelegramUserFallback"]</text>
                                     }
                                     else
                                     {
                                         <text>@@@Model.TelegramUserName</text>
                                     }
                                 </div>
-                                <div class="text-muted small">Submitted via the Telegram bot</div>
+                                <div class="text-muted small">@Localizer["SubmittedViaTelegramBot"]</div>
                             </div>
                         </div>
                     }
@@ -218,11 +224,11 @@
                         <div class="d-flex align-items-start gap-3">
                             <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--brand-primary);"></i>
                             <div>
-                                <div class="fw-500">@(Model.ReporterFullName ?? "(unknown)")</div>
+                                <div class="fw-500">@(Model.ReporterFullName ?? Localizer["UnknownFallback"].Value)</div>
                                 <div class="text-muted small mb-1">@Model.ReporterEmail</div>
                                 @if (Model.ReporterRegisteredAt.HasValue)
                                 {
-                                    <div class="text-muted small">Registered @DateHelpers.FormatRelative(Model.ReporterRegisteredAt.Value)</div>
+                                    <div class="text-muted small">@Localizer["RegisteredAgo", DateHelpers.FormatRelative(Model.ReporterRegisteredAt.Value)]</div>
                                 }
                             </div>
                         </div>
@@ -230,11 +236,11 @@
                 </div>
 
                 <div class="auth-card mb-3">
-                    <h2 class="h6 fw-700 mb-3">Assigned inspector</h2>
+                    <h2 class="h6 fw-700 mb-3">@Localizer["AssignedInspectorHeading"]</h2>
                     @if (Model.AssignedInspectorId is null)
                     {
                         <p class="text-muted mb-0">
-                            <i class="bi bi-person-dash me-2"></i>Not assigned yet.
+                            <i class="bi bi-person-dash me-2"></i>@Localizer["NotAssignedYet"]
                         </p>
                     }
                     else
@@ -242,7 +248,7 @@
                         <div class="d-flex align-items-start gap-3">
                             <i class="bi bi-person-check" style="font-size: 2rem; color: var(--brand-primary);"></i>
                             <div>
-                                <div class="fw-500">@(Model.AssignedInspectorFullName ?? "(unknown)")</div>
+                                <div class="fw-500">@(Model.AssignedInspectorFullName ?? Localizer["UnknownFallback"].Value)</div>
                                 <div class="text-muted small">@Model.AssignedInspectorEmail</div>
                             </div>
                         </div>
@@ -250,7 +256,7 @@
                 </div>
 
                 <div class="auth-card mb-3">
-                    <h2 class="h6 fw-700 mb-3"><i class="bi bi-clock-history me-1"></i>Activity timeline</h2>
+                    <h2 class="h6 fw-700 mb-3"><i class="bi bi-clock-history me-1"></i>@Localizer["ActivityTimelineHeading"]</h2>
                     @await Html.PartialAsync("_ReportTimeline", Model.Events)
                 </div>
             </div>
@@ -258,7 +264,7 @@
 
         <div class="mt-4">
             <a asp-area="Admin" asp-controller="Reports" asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Back to all reports
+                <i class="bi bi-arrow-left me-2"></i>@Localizer["BackButton"]
             </a>
         </div>
     </div>
@@ -268,7 +274,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-body p-0">
-                <img id="photo-modal-img" src="" alt="Report photo" class="w-100 rounded" />
+                <img id="photo-modal-img" src="" alt="@Localizer["AltPhotoModal"]" class="w-100 rounded" />
             </div>
         </div>
     </div>

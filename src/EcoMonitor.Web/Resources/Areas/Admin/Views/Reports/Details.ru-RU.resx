@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Детали обращения</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Детали обращения</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Сообщение о свалке</value></data>
+  <data name="BreadcrumbFallback" xml:space="preserve"><value>Обращение</value></data>
+
+  <data name="AnonymousFallback" xml:space="preserve"><value>(аноним)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(неизвестно)</value></data>
+  <data name="TelegramUserFallback" xml:space="preserve"><value>Пользователь Telegram</value></data>
+  <data name="ReportedViaTelegramBy" xml:space="preserve"><value>Подано через Telegram пользователем &lt;span class="fw-500"&gt;{0}&lt;/span&gt;</value></data>
+  <data name="ReportedByEmail" xml:space="preserve"><value>Заявитель: &lt;span class="fw-500"&gt;{0}&lt;/span&gt; ({1})</value></data>
+  <data name="ReportedAtSuffix" xml:space="preserve"><value>{0}, обновлено {1}</value></data>
+
+  <data name="ProgressHeading" xml:space="preserve"><value>Прогресс</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Подано</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>На проверке</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Подтверждено</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Уборка</value></data>
+  <data name="Step4SubFlaggedAwaitingDecision" xml:space="preserve"><value>Помечено бригадой — ожидает решения</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Ожидает проверки инспектора</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Закрыто</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Решено</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Обжаловано</value></data>
+
+  <data name="ReportRejected" xml:space="preserve"><value>Обращение отклонено</value></data>
+  <data name="ClosedOn" xml:space="preserve"><value>Закрыто {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Описание</value></data>
+  <data name="PhotosHeading" xml:space="preserve"><value>Фотографии ({0})</value></data>
+  <data name="NoPhotosAttached" xml:space="preserve"><value>Фотографии не приложены.</value></data>
+  <data name="AltReportPhoto" xml:space="preserve"><value>Фото обращения {0}</value></data>
+
+  <data name="ResolutionHeading" xml:space="preserve"><value>Решение</value></data>
+  <data name="RejectionReasonHeading" xml:space="preserve"><value>Причина отклонения</value></data>
+
+  <data name="LocationHeading" xml:space="preserve"><value>Местоположение</value></data>
+  <data name="CoordinatesLabel" xml:space="preserve"><value>Координаты</value></data>
+  <data name="PhotosLabel" xml:space="preserve"><value>Фото</value></data>
+  <data name="PhotosAttachedFormat" xml:space="preserve"><value>Приложено: {0}</value></data>
+
+  <data name="ReporterHeading" xml:space="preserve"><value>Заявитель</value></data>
+  <data name="SubmittedViaTelegramBot" xml:space="preserve"><value>Подано через Telegram-бота</value></data>
+  <data name="RegisteredAgo" xml:space="preserve"><value>Зарегистрирован {0}</value></data>
+
+  <data name="AssignedInspectorHeading" xml:space="preserve"><value>Назначенный инспектор</value></data>
+  <data name="NotAssignedYet" xml:space="preserve"><value>Пока не назначен.</value></data>
+
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>История действий</value></data>
+  <data name="AltPhotoModal" xml:space="preserve"><value>Фото обращения</value></data>
+
+  <data name="BackButton" xml:space="preserve"><value>Назад ко всем обращениям</value></data>
+</root>

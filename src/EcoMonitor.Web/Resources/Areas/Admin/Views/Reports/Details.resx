@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Report details</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Report details</value></data>
+  <data name="FallbackHeadline" xml:space="preserve"><value>Dumpsite report</value></data>
+  <!-- Breadcrumb leaf when no description / first 40 chars truncated. -->
+  <data name="BreadcrumbFallback" xml:space="preserve"><value>Report</value></data>
+
+  <!-- Reporter line: web vs. Telegram. The reporter name / handle is
+       wrapped in &lt;span class="fw-500"&gt;…&lt;/span&gt; — IHtmlLocalizer
+       passes the markup through, format-arg is auto-HTML-encoded. -->
+  <data name="AnonymousFallback" xml:space="preserve"><value>(anonymous)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(unknown)</value></data>
+  <data name="TelegramUserFallback" xml:space="preserve"><value>Telegram user</value></data>
+  <!-- {0} = "@" + handle (or AnonymousFallback). -->
+  <data name="ReportedViaTelegramBy" xml:space="preserve"><value>Reported via Telegram by &lt;span class="fw-500"&gt;{0}&lt;/span&gt;</value></data>
+  <!-- {0} = full name (or UnknownFallback), {1} = email. -->
+  <data name="ReportedByEmail" xml:space="preserve"><value>Reported by &lt;span class="fw-500"&gt;{0}&lt;/span&gt; ({1})</value></data>
+  <!-- Appended after either of the lines above. {0} = absolute date, {1} = relative time. -->
+  <data name="ReportedAtSuffix" xml:space="preserve"><value>on {0}, last updated {1}</value></data>
+
+  <data name="ProgressHeading" xml:space="preserve"><value>Progress</value></data>
+  <data name="Step1Submitted" xml:space="preserve"><value>Submitted</value></data>
+  <data name="Step2InReview" xml:space="preserve"><value>In review</value></data>
+  <data name="Step3Confirmed" xml:space="preserve"><value>Confirmed</value></data>
+  <data name="Step4Cleanup" xml:space="preserve"><value>Cleanup</value></data>
+  <data name="Step4SubFlaggedAwaitingDecision" xml:space="preserve"><value>Flagged — awaiting decision</value></data>
+  <data name="Step4SubAwaitingVerification" xml:space="preserve"><value>Awaiting inspector verification</value></data>
+  <data name="Step5Closed" xml:space="preserve"><value>Closed</value></data>
+  <data name="Step5Resolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="Step5BadgeAppealed" xml:space="preserve"><value>Appealed</value></data>
+
+  <data name="ReportRejected" xml:space="preserve"><value>Report rejected</value></data>
+  <!-- {0} = absolute short date. -->
+  <data name="ClosedOn" xml:space="preserve"><value>Closed on {0}</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Description</value></data>
+  <!-- {0} = photo count. -->
+  <data name="PhotosHeading" xml:space="preserve"><value>Photos ({0})</value></data>
+  <data name="NoPhotosAttached" xml:space="preserve"><value>No photos attached.</value></data>
+  <!-- {0} = 1-based index. -->
+  <data name="AltReportPhoto" xml:space="preserve"><value>Report photo {0}</value></data>
+
+  <data name="ResolutionHeading" xml:space="preserve"><value>Resolution</value></data>
+  <data name="RejectionReasonHeading" xml:space="preserve"><value>Rejection reason</value></data>
+
+  <data name="LocationHeading" xml:space="preserve"><value>Location</value></data>
+  <data name="CoordinatesLabel" xml:space="preserve"><value>Coordinates</value></data>
+  <data name="PhotosLabel" xml:space="preserve"><value>Photos</value></data>
+  <!-- {0} = photo count. -->
+  <data name="PhotosAttachedFormat" xml:space="preserve"><value>{0} attached</value></data>
+
+  <data name="ReporterHeading" xml:space="preserve"><value>Reporter</value></data>
+  <data name="SubmittedViaTelegramBot" xml:space="preserve"><value>Submitted via the Telegram bot</value></data>
+  <!-- {0} = relative time. -->
+  <data name="RegisteredAgo" xml:space="preserve"><value>Registered {0}</value></data>
+
+  <data name="AssignedInspectorHeading" xml:space="preserve"><value>Assigned inspector</value></data>
+  <data name="NotAssignedYet" xml:space="preserve"><value>Not assigned yet.</value></data>
+
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>Activity timeline</value></data>
+  <data name="AltPhotoModal" xml:space="preserve"><value>Report photo</value></data>
+
+  <data name="BackButton" xml:space="preserve"><value>Back to all reports</value></data>
+</root>

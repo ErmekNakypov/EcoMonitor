@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Controllers;
 
@@ -13,15 +14,18 @@ public class AccountController : Controller
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IStringLocalizer<AccountController> _localizer;
     private readonly ILogger<AccountController> _logger;
 
     public AccountController(
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
+        IStringLocalizer<AccountController> localizer,
         ILogger<AccountController> logger)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -70,15 +74,15 @@ public class AccountController : Controller
 
         if (result.IsLockedOut)
         {
-            ModelState.AddModelError(string.Empty, "Account is temporarily locked. Try again later.");
+            ModelState.AddModelError(string.Empty, _localizer["AccountLocked"]);
         }
         else if (result.IsNotAllowed)
         {
-            ModelState.AddModelError(string.Empty, "Sign-in is not allowed for this account.");
+            ModelState.AddModelError(string.Empty, _localizer["SignInNotAllowed"]);
         }
         else
         {
-            ModelState.AddModelError(string.Empty, "Invalid email or password.");
+            ModelState.AddModelError(string.Empty, _localizer["InvalidEmailOrPassword"]);
         }
 
         return View(model);

@@ -13,6 +13,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Controllers;
 
@@ -32,15 +33,18 @@ public class CitizenController : Controller
 
     private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IStringLocalizer<CitizenController> _localizer;
     private readonly ILogger<CitizenController> _logger;
 
     public CitizenController(
         IMediator mediator,
         UserManager<ApplicationUser> userManager,
+        IStringLocalizer<CitizenController> localizer,
         ILogger<CitizenController> logger)
     {
         _mediator = mediator;
         _userManager = userManager;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -97,19 +101,19 @@ public class CitizenController : Controller
 
         if (photos.Count > MaxPhotos)
         {
-            ModelState.AddModelError(string.Empty, $"You can attach at most {MaxPhotos} photos.");
+            ModelState.AddModelError(string.Empty, _localizer["TooManyPhotos", MaxPhotos]);
         }
 
         foreach (var file in photos)
         {
             if (!AllowedContentTypes.Contains(file.ContentType))
             {
-                ModelState.AddModelError(string.Empty, $"{file.FileName}: only JPEG, PNG, or WEBP images are allowed.");
+                ModelState.AddModelError(string.Empty, _localizer["DisallowedImageType", file.FileName]);
             }
 
             if (file.Length > MaxPhotoBytes)
             {
-                ModelState.AddModelError(string.Empty, $"{file.FileName}: file is larger than 5 MB.");
+                ModelState.AddModelError(string.Empty, _localizer["FileTooLarge", file.FileName]);
             }
         }
 
@@ -136,7 +140,7 @@ public class CitizenController : Controller
                 Photos: uploaded));
 
             _logger.LogInformation("Citizen {Email} submitted report {ReportId}", User.Identity?.Name, reportId);
-            TempData["SuccessMessage"] = "Report submitted. Thank you for helping keep Bishkek clean.";
+            TempData["SuccessMessage"] = _localizer["ReportSubmitted"].Value;
             return RedirectToAction(nameof(Reports));
         }
         catch (ValidationException ex)
@@ -200,7 +204,7 @@ public class CitizenController : Controller
 
         if (appealPhotos.Count > MaxPhotos)
         {
-            TempData["ErrorMessage"] = $"You can attach at most {MaxPhotos} photos.";
+            TempData["ErrorMessage"] = _localizer["TooManyPhotos", MaxPhotos].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -208,13 +212,13 @@ public class CitizenController : Controller
         {
             if (!AllowedContentTypes.Contains(file.ContentType))
             {
-                TempData["ErrorMessage"] = $"{file.FileName}: only JPEG, PNG, or WEBP images are allowed.";
+                TempData["ErrorMessage"] = _localizer["DisallowedImageType", file.FileName].Value;
                 return RedirectToAction(nameof(Details), new { id });
             }
 
             if (file.Length > MaxPhotoBytes)
             {
-                TempData["ErrorMessage"] = $"{file.FileName}: file is larger than 5 MB.";
+                TempData["ErrorMessage"] = _localizer["FileTooLarge", file.FileName].Value;
                 return RedirectToAction(nameof(Details), new { id });
             }
         }
@@ -231,7 +235,7 @@ public class CitizenController : Controller
         {
             await _mediator.Send(new AppealReportCommand(id, CurrentUserId(), appealReason ?? string.Empty, uploaded));
             _logger.LogInformation("Citizen {Email} appealed report {ReportId}", User.Identity?.Name, id);
-            TempData["SuccessMessage"] = "Appeal submitted. An inspector will review it.";
+            TempData["SuccessMessage"] = _localizer["AppealSubmitted"].Value;
         }
         catch (ValidationException ex)
         {

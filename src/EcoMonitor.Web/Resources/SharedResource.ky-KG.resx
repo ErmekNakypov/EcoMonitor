@@ -18,7 +18,7 @@
   <data name="Nav.Home" xml:space="preserve"><value>Башкы бет</value></data>
   <data name="Nav.Dashboard" xml:space="preserve"><value>Башкы такта</value></data>
   <data name="Nav.Map" xml:space="preserve"><value>Карта</value></data>
-  <data name="Nav.Live" xml:space="preserve"><value>Эфир</value></data>
+  <data name="Nav.Live" xml:space="preserve"><value>Онлайн</value></data>
 
   <data name="Nav.Containers" xml:space="preserve"><value>Контейнерлер</value></data>
   <data name="Nav.Users" xml:space="preserve"><value>Колдонуучулар</value></data>

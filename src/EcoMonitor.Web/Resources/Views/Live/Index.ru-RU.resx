@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Датчики онлайн</value></data>
+  <data name="Heading" xml:space="preserve"><value>Датчики онлайн</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Показания с наших IoT-устройств в реальном времени. Обновления приходят с сервера сразу, как только датчик передал данные.</value></data>
+  <data name="BrowserTimePrefix" xml:space="preserve"><value>Время браузера:</value></data>
+
+  <data name="SectionAirQuality" xml:space="preserve"><value>Качество воздуха</value></data>
+  <data name="SectionContainerFill" xml:space="preserve"><value>Заполненность контейнера</value></data>
+
+  <data name="BadgeAwaitingData" xml:space="preserve"><value>ожидание данных</value></data>
+
+  <data name="StatusConnecting" xml:space="preserve"><value>подключение…</value></data>
+  <data name="StatusLive" xml:space="preserve"><value>онлайн</value></data>
+  <data name="StatusReconnecting" xml:space="preserve"><value>переподключение…</value></data>
+  <data name="StatusDisconnectedPolling" xml:space="preserve"><value>отключено — опрос</value></data>
+  <data name="StatusPollingFormat" xml:space="preserve"><value>опрос ({0})</value></data>
+
+  <data name="ReasonNoSignalR" xml:space="preserve"><value>SignalR недоступен</value></data>
+  <data name="ReasonSignalRReconnecting" xml:space="preserve"><value>SignalR переподключается</value></data>
+  <data name="ReasonSignalRClosed" xml:space="preserve"><value>SignalR закрыт</value></data>
+  <data name="ReasonSignalRSlow" xml:space="preserve"><value>SignalR медленный</value></data>
+  <data name="ReasonSignalRFailed" xml:space="preserve"><value>SignalR не запустился</value></data>
+  <data name="ReasonSignalRThrew" xml:space="preserve"><value>SignalR упал с ошибкой</value></data>
+
+  <data name="TileLabelTemp" xml:space="preserve"><value>Темп.</value></data>
+  <data name="TileLabelHumidity" xml:space="preserve"><value>Влажн.</value></data>
+
+  <data name="TileLabelDistance" xml:space="preserve"><value>Расстояние до мусора</value></data>
+  <data name="TileLabelBinHeight" xml:space="preserve"><value>Высота бака</value></data>
+
+  <data name="AdvisoryLabel" xml:space="preserve"><value>Рекомендация</value></data>
+
+  <data name="ChartWindowCaption" xml:space="preserve"><value>Последние 60 минут</value></data>
+  <data name="LastUpdatedPrefix" xml:space="preserve"><value>Обновлено:</value></data>
+  <data name="NoDataYet" xml:space="preserve"><value>данных пока нет</value></data>
+
+  <data name="BandAirGood" xml:space="preserve"><value>Чистый воздух</value></data>
+  <data name="BandAirModerate" xml:space="preserve"><value>Умеренный</value></data>
+  <data name="BandAirHazardous" xml:space="preserve"><value>Опасный</value></data>
+
+  <data name="BandFillGood" xml:space="preserve"><value>В норме</value></data>
+  <data name="BandFillModerate" xml:space="preserve"><value>Почти полный — запланировать вывоз</value></data>
+  <data name="BandFillHazardous" xml:space="preserve"><value>Полный — нужен вывоз</value></data>
+
+  <data name="ChartLegendPm25" xml:space="preserve"><value>PM2.5 мкг/м³</value></data>
+  <data name="ChartLegendPm10" xml:space="preserve"><value>PM10 мкг/м³</value></data>
+  <data name="ChartLegendFill" xml:space="preserve"><value>Заполненность, %</value></data>
+
+  <data name="GaugeLabelFilled" xml:space="preserve"><value>Заполнено</value></data>
+  <data name="GaugeLabelEmpty" xml:space="preserve"><value>Пусто</value></data>
+
+  <data name="LegendHeading" xml:space="preserve"><value>Уровни.</value></data>
+  <data name="LegendItemGood" xml:space="preserve"><value>норма</value></data>
+  <data name="LegendItemModerate" xml:space="preserve"><value>умеренный / почти полный</value></data>
+  <data name="LegendItemHazardous" xml:space="preserve"><value>опасный / полный</value></data>
+  <data name="LegendSource" xml:space="preserve"><value>Пороги по воздуху основаны на &lt;a href="https://www.who.int/publications/i/item/9789240034228" target="_blank" rel="noopener"&gt;Руководстве ВОЗ по качеству воздуха 2021&lt;/a&gt; (PM2.5 ≤ 15 / ≤ 35 мкг/м³ · PM10 ≤ 45 / ≤ 75 мкг/м³, эталон — среднесуточное значение). Пороги по контейнерам — операционные (≥ 70 % почти полный, ≥ 90 % полный).</value></data>
+</root>

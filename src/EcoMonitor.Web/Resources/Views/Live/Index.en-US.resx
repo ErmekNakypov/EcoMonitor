@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Page chrome (server-rendered into the DOM at first paint so there's
+       no English flash before the JS bridge takes over). -->
+  <data name="Title" xml:space="preserve"><value>Live sensors</value></data>
+  <data name="Heading" xml:space="preserve"><value>Live sensors</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Real-time readings from our IoT devices. Updates are pushed by the server as soon as a sensor reports.</value></data>
+  <!-- "Browser time: " prefix; the time portion is locale-formatted by
+       Date.toLocaleTimeString() at runtime. -->
+  <data name="BrowserTimePrefix" xml:space="preserve"><value>Browser time:</value></data>
+
+  <!-- Section labels above the device-name H2. -->
+  <data name="SectionAirQuality" xml:space="preserve"><value>Air quality</value></data>
+  <data name="SectionContainerFill" xml:space="preserve"><value>Container fill level</value></data>
+
+  <!-- Status (band) badge — initial "awaiting data" before any reading
+       arrives, then JS swaps in one of the Band labels below. -->
+  <data name="BadgeAwaitingData" xml:space="preserve"><value>awaiting data</value></data>
+
+  <!-- Connection-status pill labels. JS toggles through these. -->
+  <data name="StatusConnecting" xml:space="preserve"><value>connecting…</value></data>
+  <data name="StatusLive" xml:space="preserve"><value>live</value></data>
+  <data name="StatusReconnecting" xml:space="preserve"><value>reconnecting…</value></data>
+  <data name="StatusDisconnectedPolling" xml:space="preserve"><value>disconnected — polling</value></data>
+  <!-- "polling ({0})" — {0} is one of the Reason* keys. -->
+  <data name="StatusPollingFormat" xml:space="preserve"><value>polling ({0})</value></data>
+
+  <!-- Internal "why are we falling back to polling" reasons. Short
+       diagnostic phrases shown in the connection-status label. -->
+  <data name="ReasonNoSignalR" xml:space="preserve"><value>no SignalR</value></data>
+  <data name="ReasonSignalRReconnecting" xml:space="preserve"><value>signalR reconnecting</value></data>
+  <data name="ReasonSignalRClosed" xml:space="preserve"><value>signalR closed</value></data>
+  <data name="ReasonSignalRSlow" xml:space="preserve"><value>signalR slow</value></data>
+  <data name="ReasonSignalRFailed" xml:space="preserve"><value>signalR failed</value></data>
+  <data name="ReasonSignalRThrew" xml:space="preserve"><value>signalR threw</value></data>
+
+  <!-- Air tile labels. PM2.5 / PM10 stay as literal scientific notation. -->
+  <data name="TileLabelTemp" xml:space="preserve"><value>Temp</value></data>
+  <data name="TileLabelHumidity" xml:space="preserve"><value>Humidity</value></data>
+
+  <!-- Fill tile labels. -->
+  <data name="TileLabelDistance" xml:space="preserve"><value>Distance to trash</value></data>
+  <data name="TileLabelBinHeight" xml:space="preserve"><value>Bin height</value></data>
+
+  <!-- Advisory box -->
+  <data name="AdvisoryLabel" xml:space="preserve"><value>Recommendation</value></data>
+
+  <!-- Chart captions. {0} = the time-window in minutes (60 here). -->
+  <data name="ChartWindowCaption" xml:space="preserve"><value>Last 60 minutes</value></data>
+  <data name="LastUpdatedPrefix" xml:space="preserve"><value>Last updated:</value></data>
+  <data name="NoDataYet" xml:space="preserve"><value>no data yet</value></data>
+
+  <!-- Air band labels — set on the badge by JS when a reading lands. -->
+  <data name="BandAirGood" xml:space="preserve"><value>Good air</value></data>
+  <data name="BandAirModerate" xml:space="preserve"><value>Moderate</value></data>
+  <data name="BandAirHazardous" xml:space="preserve"><value>Hazardous</value></data>
+
+  <!-- Fill band labels — set on the badge by JS. -->
+  <data name="BandFillGood" xml:space="preserve"><value>OK</value></data>
+  <data name="BandFillModerate" xml:space="preserve"><value>Nearly full — schedule pickup</value></data>
+  <data name="BandFillHazardous" xml:space="preserve"><value>Full — needs pickup</value></data>
+
+  <!-- Chart legend strings — used as dataset labels in Chart.js so they
+       show up in the legend row beneath each chart. -->
+  <data name="ChartLegendPm25" xml:space="preserve"><value>PM2.5 µg/m³</value></data>
+  <data name="ChartLegendPm10" xml:space="preserve"><value>PM10 µg/m³</value></data>
+  <data name="ChartLegendFill" xml:space="preserve"><value>Fill %</value></data>
+
+  <!-- Gauge segment labels — Chart.js doughnut data labels. Never visible
+       in this layout (tooltip is disabled) but exposed in the
+       accessibility tree, so they still need translating. -->
+  <data name="GaugeLabelFilled" xml:space="preserve"><value>Filled</value></data>
+  <data name="GaugeLabelEmpty" xml:space="preserve"><value>Empty</value></data>
+
+  <!-- Legend block under the cards. -->
+  <data name="LegendHeading" xml:space="preserve"><value>Bands.</value></data>
+  <data name="LegendItemGood" xml:space="preserve"><value>good</value></data>
+  <data name="LegendItemModerate" xml:space="preserve"><value>moderate / nearly full</value></data>
+  <data name="LegendItemHazardous" xml:space="preserve"><value>hazardous / full</value></data>
+  <!-- Long WHO caption with inline link. The &lt;a href=…&gt;WHO Air
+       Quality Guidelines 2021&lt;/a&gt; markup is preserved verbatim and
+       rendered via IViewLocalizer's LocalizedHtmlString. Translators must
+       keep the &lt;a&gt;…&lt;/a&gt; pair intact. -->
+  <data name="LegendSource" xml:space="preserve"><value>Air thresholds based on &lt;a href="https://www.who.int/publications/i/item/9789240034228" target="_blank" rel="noopener"&gt;WHO Air Quality Guidelines 2021&lt;/a&gt; (PM2.5 ≤ 15 / ≤ 35 µg/m³ · PM10 ≤ 45 / ≤ 75 µg/m³, 24-hour mean reference). Container thresholds are operational (≥ 70 % nearly full, ≥ 90 % full).</value></data>
+</root>

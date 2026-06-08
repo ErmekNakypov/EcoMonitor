@@ -1,7 +1,8 @@
 @model LiveDashboardViewModel
+@inject IViewLocalizer Localizer
 @using System.Globalization
 @{
-    ViewData["Title"] = "Live sensors";
+    ViewData["Title"] = Localizer["Title"].Value;
     var airId = Model.AirStationId.ToString();
     var containerId = Model.ContainerId.ToString();
 }
@@ -10,8 +11,8 @@
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
             <div>
-                <h1 class="h3 fw-700 mb-1">Live sensors</h1>
-                <p class="text-muted mb-0 small">Real-time readings from our IoT devices. Updates are pushed by the server as soon as a sensor reports.</p>
+                <h1 class="h3 fw-700 mb-1">@Localizer["Heading"]</h1>
+                <p class="text-muted mb-0 small">@Localizer["Subtitle"]</p>
             </div>
             <div class="text-md-end small text-muted">
                 <span id="live-clock">—</span>
@@ -24,15 +25,15 @@
                 <div id="air-card" class="auth-card live-card h-100">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <div class="text-muted text-uppercase small fw-600">Air quality</div>
+                            <div class="text-muted text-uppercase small fw-600">@Localizer["SectionAirQuality"]</div>
                             <h2 class="h5 fw-700 mb-0 d-flex align-items-center gap-2">
                                 <span>@Model.AirDeviceName</span>
-                                <span id="air-band-badge" class="live-band-badge live-band-badge--idle">awaiting data</span>
+                                <span id="air-band-badge" class="live-band-badge live-band-badge--idle">@Localizer["BadgeAwaitingData"]</span>
                             </h2>
                         </div>
                         <div class="d-flex align-items-center gap-2 small">
                             <span id="air-status-dot" class="live-dot live-dot--idle" aria-hidden="true"></span>
-                            <span id="air-status-label" class="text-muted">connecting…</span>
+                            <span id="air-status-label" class="text-muted">@Localizer["StatusConnecting"]</span>
                         </div>
                     </div>
 
@@ -53,14 +54,14 @@
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="live-tile">
-                                <div class="live-tile__label">Temp</div>
+                                <div class="live-tile__label">@Localizer["TileLabelTemp"]</div>
                                 <div class="live-tile__value" id="air-temp">—</div>
                                 <div class="live-tile__unit">°C</div>
                             </div>
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="live-tile">
-                                <div class="live-tile__label">Humidity</div>
+                                <div class="live-tile__label">@Localizer["TileLabelHumidity"]</div>
                                 <div class="live-tile__value" id="air-humidity">—</div>
                                 <div class="live-tile__unit">%</div>
                             </div>
@@ -72,14 +73,14 @@
                        Air Quality Guidelines bands. The text is updated on
                        every SignalR push from window.AIR_ADVISORIES. *@
                     <div class="live-advisory mb-3" id="air-advisory-box">
-                        <div class="live-advisory__label">Recommendation</div>
+                        <div class="live-advisory__label">@Localizer["AdvisoryLabel"]</div>
                         <div class="live-advisory__text" id="air-advisory">—</div>
                     </div>
 
-                    <div class="small text-muted mb-2">Last 60 minutes</div>
+                    <div class="small text-muted mb-2">@Localizer["ChartWindowCaption"]</div>
                     <canvas id="air-chart" height="140"></canvas>
                     <div class="small text-muted mt-2">
-                        Last updated: <span id="air-last-updated">no data yet</span>
+                        @Localizer["LastUpdatedPrefix"] <span id="air-last-updated">@Localizer["NoDataYet"]</span>
                     </div>
                 </div>
             </div>
@@ -89,15 +90,15 @@
                 <div id="fill-card" class="auth-card live-card h-100">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <div class="text-muted text-uppercase small fw-600">Container fill level</div>
+                            <div class="text-muted text-uppercase small fw-600">@Localizer["SectionContainerFill"]</div>
                             <h2 class="h5 fw-700 mb-0 d-flex align-items-center gap-2">
                                 <span>@Model.ContainerCode</span>
-                                <span id="fill-band-badge" class="live-band-badge live-band-badge--idle">awaiting data</span>
+                                <span id="fill-band-badge" class="live-band-badge live-band-badge--idle">@Localizer["BadgeAwaitingData"]</span>
                             </h2>
                         </div>
                         <div class="d-flex align-items-center gap-2 small">
                             <span id="fill-status-dot" class="live-dot live-dot--idle" aria-hidden="true"></span>
-                            <span id="fill-status-label" class="text-muted">connecting…</span>
+                            <span id="fill-status-label" class="text-muted">@Localizer["StatusConnecting"]</span>
                         </div>
                     </div>
 
@@ -113,22 +114,22 @@
                         </div>
                         <div class="col-md-7">
                             <div class="live-tile mb-2">
-                                <div class="live-tile__label">Distance to trash</div>
+                                <div class="live-tile__label">@Localizer["TileLabelDistance"]</div>
                                 <div class="live-tile__value" id="fill-distance">—</div>
                                 <div class="live-tile__unit">cm</div>
                             </div>
                             <div class="live-tile">
-                                <div class="live-tile__label">Bin height</div>
+                                <div class="live-tile__label">@Localizer["TileLabelBinHeight"]</div>
                                 <div class="live-tile__value" id="fill-height">—</div>
                                 <div class="live-tile__unit">cm</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="small text-muted mb-2">Last 60 minutes</div>
+                    <div class="small text-muted mb-2">@Localizer["ChartWindowCaption"]</div>
                     <canvas id="fill-chart" height="140"></canvas>
                     <div class="small text-muted mt-2">
-                        Last updated: <span id="fill-last-updated">no data yet</span>
+                        @Localizer["LastUpdatedPrefix"] <span id="fill-last-updated">@Localizer["NoDataYet"]</span>
                     </div>
                 </div>
             </div>
@@ -137,11 +138,11 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="live-legend small text-muted">
-                    <strong class="text-dark">Bands.</strong>
-                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--good"></span> good</span>
-                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--moderate"></span> moderate / nearly full</span>
-                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--hazardous"></span> hazardous / full</span>
-                    <span class="live-legend__source">Air thresholds based on <a href="https://www.who.int/publications/i/item/9789240034228" target="_blank" rel="noopener">WHO Air Quality Guidelines 2021</a> (PM2.5 ≤ 15 / ≤ 35 µg/m³ · PM10 ≤ 45 / ≤ 75 µg/m³, 24-hour mean reference). Container thresholds are operational (≥ 70 % nearly full, ≥ 90 % full).</span>
+                    <strong class="text-dark">@Localizer["LegendHeading"]</strong>
+                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--good"></span> @Localizer["LegendItemGood"]</span>
+                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--moderate"></span> @Localizer["LegendItemModerate"]</span>
+                    <span class="live-legend__item"><span class="live-legend__swatch live-legend__swatch--hazardous"></span> @Localizer["LegendItemHazardous"]</span>
+                    <span class="live-legend__source">@Localizer["LegendSource"]</span>
                 </div>
             </div>
         </div>
@@ -227,8 +228,43 @@
 <!-- broke time-scale chart creation downstream.                                                  -->
 <script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@@8.0.7/dist/browser/signalr.min.js"></script>
+
+@* JSON i18n bridge — every runtime string the JS below sets on the DOM
+   is rendered server-side here so the script body itself stays
+   locale-agnostic. The advisory strings still flow through the existing
+   AirAdvisory helper (already culture-aware on the server). *@
+<script>
+    window.__liveI18n = {
+        browserTimePrefix:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BrowserTimePrefix"].Value)),
+        awaitingData:         @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BadgeAwaitingData"].Value)),
+        statusLive:           @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["StatusLive"].Value)),
+        statusReconnecting:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["StatusReconnecting"].Value)),
+        statusDisconnected:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["StatusDisconnectedPolling"].Value)),
+        statusPollingFormat:  @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["StatusPollingFormat"].Value)),
+        reasonNoSignalR:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ReasonNoSignalR"].Value)),
+        reasonReconnecting:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ReasonSignalRReconnecting"].Value)),
+        reasonClosed:         @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ReasonSignalRClosed"].Value)),
+        reasonSlow:           @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ReasonSignalRSlow"].Value)),
+        reasonFailed:         @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ReasonSignalRFailed"].Value)),
+        reasonThrew:          @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ReasonSignalRThrew"].Value)),
+        noDataYet:            @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["NoDataYet"].Value)),
+        bandAirGood:          @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BandAirGood"].Value)),
+        bandAirModerate:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BandAirModerate"].Value)),
+        bandAirHazardous:     @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BandAirHazardous"].Value)),
+        bandFillGood:         @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BandFillGood"].Value)),
+        bandFillModerate:     @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BandFillModerate"].Value)),
+        bandFillHazardous:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["BandFillHazardous"].Value)),
+        chartLegendPm25:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ChartLegendPm25"].Value)),
+        chartLegendPm10:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ChartLegendPm10"].Value)),
+        chartLegendFill:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["ChartLegendFill"].Value)),
+        gaugeLabelFilled:     @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["GaugeLabelFilled"].Value)),
+        gaugeLabelEmpty:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["GaugeLabelEmpty"].Value))
+    };
+</script>
+
 <script>
 (function () {
+    const i18n = window.__liveI18n;
     const AIR_STATION_ID = '@airId';
     const CONTAINER_ID  = '@containerId';
     const WINDOW_MINUTES = 60;
@@ -270,8 +306,10 @@
     };
     const BAND = { GOOD: 'good', MODERATE: 'moderate', HAZARDOUS: 'hazardous' };
     const BAND_RANK = { good: 0, moderate: 1, hazardous: 2 };
-    const BAND_LABEL_AIR  = { good: 'Good air',  moderate: 'Moderate',                   hazardous: 'Hazardous' };
-    const BAND_LABEL_FILL = { good: 'OK',        moderate: 'Nearly full — schedule pickup', hazardous: 'Full — needs pickup' };
+    // Band labels pulled from the i18n bridge so the badge text matches the
+    // current UI culture without a flash.
+    const BAND_LABEL_AIR  = { good: i18n.bandAirGood,  moderate: i18n.bandAirModerate,  hazardous: i18n.bandAirHazardous };
+    const BAND_LABEL_FILL = { good: i18n.bandFillGood, moderate: i18n.bandFillModerate, hazardous: i18n.bandFillHazardous };
     const BAND_COLOR_GAUGE = { good: '#2D6A4F', moderate: '#B8860B', hazardous: '#B02A37' };
 
     function bandFor(value, moderate, hazardous) {
@@ -297,9 +335,9 @@
         return Number(v).toFixed(digits ?? 1);
     }
     function fmtTime(d) {
-        if (!d) return 'no data yet';
+        if (!d) return i18n.noDataYet;
         const t = (d instanceof Date) ? d : new Date(d);
-        if (isNaN(t.getTime())) return 'no data yet';
+        if (isNaN(t.getTime())) return i18n.noDataYet;
         return t.toLocaleTimeString();
     }
     function trimByTime(arr) {
@@ -307,7 +345,7 @@
         while (arr.length && arr[0].t.getTime() < cutoff) arr.shift();
     }
     function tickClock() {
-        document.getElementById('live-clock').textContent = 'Browser time: ' + new Date().toLocaleTimeString();
+        document.getElementById('live-clock').textContent = i18n.browserTimePrefix + ' ' + new Date().toLocaleTimeString();
     }
     setInterval(tickClock, 1000);
     tickClock();
@@ -350,15 +388,15 @@
         if (!airChart) {
             try {
                 airChart = makeLineChart('air-chart', [
-                    { label: 'PM2.5 µg/m³', data: [], parsing: false, borderColor: ACCENT,        backgroundColor: ACCENT_LIGHT, tension: 0.25, pointRadius: 2, fill: true },
-                    { label: 'PM10 µg/m³',  data: [], parsing: false, borderColor: ACCENT_PM10,   backgroundColor: 'transparent', tension: 0.25, pointRadius: 2, fill: false, borderDash: [4,4] }
+                    { label: i18n.chartLegendPm25, data: [], parsing: false, borderColor: ACCENT,        backgroundColor: ACCENT_LIGHT, tension: 0.25, pointRadius: 2, fill: true },
+                    { label: i18n.chartLegendPm10, data: [], parsing: false, borderColor: ACCENT_PM10,   backgroundColor: 'transparent', tension: 0.25, pointRadius: 2, fill: false, borderDash: [4,4] }
                 ]);
             } catch (e) { console.error('air chart init failed', e); airChart = null; }
         }
         if (!fillChart) {
             try {
                 fillChart = makeLineChart('fill-chart', [
-                    { label: 'Fill %', data: [], parsing: false, borderColor: ACCENT, backgroundColor: ACCENT_LIGHT, tension: 0.25, pointRadius: 2, fill: true }
+                    { label: i18n.chartLegendFill, data: [], parsing: false, borderColor: ACCENT, backgroundColor: ACCENT_LIGHT, tension: 0.25, pointRadius: 2, fill: true }
                 ]);
                 fillChart.options.scales.y.max = 100;
             } catch (e) { console.error('fill chart init failed', e); fillChart = null; }
@@ -369,7 +407,7 @@
                 fillGauge = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Filled', 'Empty'],
+                        labels: [i18n.gaugeLabelFilled, i18n.gaugeLabelEmpty],
                         datasets: [{
                             data: [0, 100],
                             backgroundColor: [ACCENT, '#E5E7EB'],
@@ -417,7 +455,7 @@
         applyBandClasses(document.getElementById('air-card'),      cardBand, 'live-card--');
         const badge = document.getElementById('air-band-badge');
         applyBandClasses(badge, cardBand, 'live-band-badge--');
-        if (badge) badge.textContent = cardBand ? BAND_LABEL_AIR[cardBand] : 'awaiting data';
+        if (badge) badge.textContent = cardBand ? BAND_LABEL_AIR[cardBand] : i18n.awaitingData;
 
         // Health advisory tracks the worst-of-two band. Strings are
         // server-rendered into AIR_ADVISORIES at page load (WHO 2021 basis).
@@ -457,7 +495,7 @@
         applyBandClasses(document.getElementById('fill-card'), fillBand, 'live-card--');
         const badge = document.getElementById('fill-band-badge');
         applyBandClasses(badge, fillBand, 'live-band-badge--');
-        if (badge) badge.textContent = fillBand ? BAND_LABEL_FILL[fillBand] : 'awaiting data';
+        if (badge) badge.textContent = fillBand ? BAND_LABEL_FILL[fillBand] : i18n.awaitingData;
 
         document.getElementById('fill-distance').textContent = fmtNum(p.distanceCm, 1);
         document.getElementById('fill-last-updated').textContent = fmtTime(t);
@@ -518,6 +556,12 @@
         lbl.textContent = label;
     }
 
+    // "polling (reason)" uses the i18n statusPollingFormat — "{0}" is the
+    // single argument we substitute here at runtime.
+    function pollingLabel(reason) {
+        return i18n.statusPollingFormat.replace('{0}', reason);
+    }
+
     let signalrConnected = false;
     let pollingActive = false;
     let airPollTimer = null;
@@ -534,8 +578,8 @@
     function startPolling(reason) {
         if (pollingActive) return;
         pollingActive = true;
-        status.air ('poll', 'polling (' + reason + ')');
-        status.fill('poll', 'polling (' + reason + ')');
+        status.air ('poll', pollingLabel(reason));
+        status.fill('poll', pollingLabel(reason));
 
         airPollTimer = setInterval(async () => {
             try {
@@ -565,7 +609,7 @@
     async function connectSignalR() {
         if (typeof signalR === 'undefined') {
             console.warn('SignalR client lib not loaded');
-            startPolling('no SignalR');
+            startPolling(i18n.reasonNoSignalR);
             return;
         }
         const conn = new signalR.HubConnectionBuilder()
@@ -591,26 +635,26 @@
 
         conn.onreconnecting(() => {
             signalrConnected = false;
-            status.air ('poll', 'reconnecting…');
-            status.fill('poll', 'reconnecting…');
-            startPolling('signalR reconnecting');
+            status.air ('poll', i18n.statusReconnecting);
+            status.fill('poll', i18n.statusReconnecting);
+            startPolling(i18n.reasonReconnecting);
         });
         conn.onreconnected(() => {
             signalrConnected = true;
             stopPolling();
-            status.air ('live', 'live');
-            status.fill('live', 'live');
+            status.air ('live', i18n.statusLive);
+            status.fill('live', i18n.statusLive);
         });
         conn.onclose(() => {
             signalrConnected = false;
-            startPolling('signalR closed');
-            status.air ('down', 'disconnected — polling');
-            status.fill('down', 'disconnected — polling');
+            startPolling(i18n.reasonClosed);
+            status.air ('down', i18n.statusDisconnected);
+            status.fill('down', i18n.statusDisconnected);
         });
 
         // Watchdog: if SignalR hasn't connected within FALLBACK_DELAY_MS, start polling anyway.
         const watchdog = setTimeout(() => {
-            if (!signalrConnected) startPolling('signalR slow');
+            if (!signalrConnected) startPolling(i18n.reasonSlow);
         }, FALLBACK_DELAY_MS);
 
         try {
@@ -618,11 +662,11 @@
             signalrConnected = true;
             clearTimeout(watchdog);
             stopPolling();
-            status.air ('live', 'live');
-            status.fill('live', 'live');
+            status.air ('live', i18n.statusLive);
+            status.fill('live', i18n.statusLive);
         } catch (err) {
             console.warn('SignalR start failed', err);
-            startPolling('signalR failed');
+            startPolling(i18n.reasonFailed);
         }
     }
 
@@ -653,7 +697,7 @@
             await connectSignalR();
         } catch (e) {
             console.error('connectSignalR threw', e);
-            startPolling('signalR threw');
+            startPolling(i18n.reasonThrew);
         }
     });
 })();

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Сенсорлор онлайн</value></data>
+  <data name="Heading" xml:space="preserve"><value>Сенсорлор онлайн</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Биздин IoT-түзмөктөрдөн реалдуу убакыттагы өлчөөлөр. Жаңылануулар сенсор маалымат бергенден баштап серверден дароо келет.</value></data>
+  <data name="BrowserTimePrefix" xml:space="preserve"><value>Браузердин убактысы:</value></data>
+
+  <data name="SectionAirQuality" xml:space="preserve"><value>Аба сапаты</value></data>
+  <data name="SectionContainerFill" xml:space="preserve"><value>Контейнердин толтурулушу</value></data>
+
+  <data name="BadgeAwaitingData" xml:space="preserve"><value>маалымат күтүүдө</value></data>
+
+  <data name="StatusConnecting" xml:space="preserve"><value>туташуу…</value></data>
+  <data name="StatusLive" xml:space="preserve"><value>онлайн</value></data>
+  <data name="StatusReconnecting" xml:space="preserve"><value>кайра туташуу…</value></data>
+  <data name="StatusDisconnectedPolling" xml:space="preserve"><value>үзүлдү — суроо-сурам</value></data>
+  <data name="StatusPollingFormat" xml:space="preserve"><value>суроо-сурам ({0})</value></data>
+
+  <data name="ReasonNoSignalR" xml:space="preserve"><value>SignalR жок</value></data>
+  <data name="ReasonSignalRReconnecting" xml:space="preserve"><value>SignalR кайра туташууда</value></data>
+  <data name="ReasonSignalRClosed" xml:space="preserve"><value>SignalR жабылды</value></data>
+  <data name="ReasonSignalRSlow" xml:space="preserve"><value>SignalR жай</value></data>
+  <data name="ReasonSignalRFailed" xml:space="preserve"><value>SignalR иштеген жок</value></data>
+  <data name="ReasonSignalRThrew" xml:space="preserve"><value>SignalR ката менен жыгылды</value></data>
+
+  <data name="TileLabelTemp" xml:space="preserve"><value>Темп.</value></data>
+  <data name="TileLabelHumidity" xml:space="preserve"><value>Нымдуулук</value></data>
+
+  <data name="TileLabelDistance" xml:space="preserve"><value>Таштандыга чейинки аралык</value></data>
+  <data name="TileLabelBinHeight" xml:space="preserve"><value>Контейнердин бийиктиги</value></data>
+
+  <data name="AdvisoryLabel" xml:space="preserve"><value>Сунуш</value></data>
+
+  <data name="ChartWindowCaption" xml:space="preserve"><value>Акыркы 60 мүнөт</value></data>
+  <data name="LastUpdatedPrefix" xml:space="preserve"><value>Жаңыланды:</value></data>
+  <data name="NoDataYet" xml:space="preserve"><value>азырынча маалымат жок</value></data>
+
+  <data name="BandAirGood" xml:space="preserve"><value>Таза аба</value></data>
+  <data name="BandAirModerate" xml:space="preserve"><value>Орточо</value></data>
+  <data name="BandAirHazardous" xml:space="preserve"><value>Коркунучтуу</value></data>
+
+  <data name="BandFillGood" xml:space="preserve"><value>Калыпта</value></data>
+  <data name="BandFillModerate" xml:space="preserve"><value>Дээрлик толду — алып кетүүнү пландаңыз</value></data>
+  <data name="BandFillHazardous" xml:space="preserve"><value>Толду — алып кетүү керек</value></data>
+
+  <data name="ChartLegendPm25" xml:space="preserve"><value>PM2.5 мкг/м³</value></data>
+  <data name="ChartLegendPm10" xml:space="preserve"><value>PM10 мкг/м³</value></data>
+  <data name="ChartLegendFill" xml:space="preserve"><value>Толуктугу, %</value></data>
+
+  <data name="GaugeLabelFilled" xml:space="preserve"><value>Толтурулган</value></data>
+  <data name="GaugeLabelEmpty" xml:space="preserve"><value>Бош</value></data>
+
+  <data name="LegendHeading" xml:space="preserve"><value>Деңгээлдер.</value></data>
+  <data name="LegendItemGood" xml:space="preserve"><value>норма</value></data>
+  <data name="LegendItemModerate" xml:space="preserve"><value>орточо / дээрлик толду</value></data>
+  <data name="LegendItemHazardous" xml:space="preserve"><value>коркунучтуу / толду</value></data>
+  <data name="LegendSource" xml:space="preserve"><value>Аба боюнча чектер &lt;a href="https://www.who.int/publications/i/item/9789240034228" target="_blank" rel="noopener"&gt;ДСУнун Аба сапаты боюнча 2021-жылдагы көрсөтмөлөрүнө&lt;/a&gt; (PM2.5 ≤ 15 / ≤ 35 мкг/м³ · PM10 ≤ 45 / ≤ 75 мкг/м³, эталон — суткалык орточо мааниси) негизделген. Контейнерлер боюнча чектер операциялык (≥ 70 % дээрлик толду, ≥ 90 % толду).</value></data>
+</root>

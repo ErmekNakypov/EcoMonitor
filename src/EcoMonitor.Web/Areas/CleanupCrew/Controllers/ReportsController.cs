@@ -16,6 +16,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Areas.CleanupCrew.Controllers;
 
@@ -26,15 +27,18 @@ public class ReportsController : Controller
 {
     private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IStringLocalizer<ReportsController> _localizer;
     private readonly ILogger<ReportsController> _logger;
 
     public ReportsController(
         IMediator mediator,
         UserManager<ApplicationUser> userManager,
+        IStringLocalizer<ReportsController> localizer,
         ILogger<ReportsController> logger)
     {
         _mediator = mediator;
         _userManager = userManager;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -78,7 +82,7 @@ public class ReportsController : Controller
         try
         {
             await _mediator.Send(new TakeForCleanupCommand(id, CurrentUserId()), ct);
-            TempData["SuccessMessage"] = "Report taken. Start cleanup when ready.";
+            TempData["SuccessMessage"] = _localizer["TakeSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException) { return NotFound(); }
@@ -96,7 +100,7 @@ public class ReportsController : Controller
     {
         if (model.BeforePhotos is null || model.BeforePhotos.Count == 0)
         {
-            TempData["ErrorMessage"] = "Attach at least one before-cleanup photo.";
+            TempData["ErrorMessage"] = _localizer["StartMissingBeforePhoto"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -105,7 +109,7 @@ public class ReportsController : Controller
         try
         {
             await _mediator.Send(new StartCleanupCommand(id, CurrentUserId(), uploaded), ct);
-            TempData["SuccessMessage"] = "Cleanup started. Upload after-photos when finished.";
+            TempData["SuccessMessage"] = _localizer["StartSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException) { return NotFound(); }
@@ -124,7 +128,7 @@ public class ReportsController : Controller
     {
         if (model.AfterPhotos is null || model.AfterPhotos.Count == 0)
         {
-            TempData["ErrorMessage"] = "Attach at least one after-cleanup photo.";
+            TempData["ErrorMessage"] = _localizer["CompleteMissingAfterPhoto"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -134,7 +138,7 @@ public class ReportsController : Controller
         {
             await _mediator.Send(new CompleteCleanupCommand(
                 id, CurrentUserId(), model.Notes ?? string.Empty, uploaded), ct);
-            TempData["SuccessMessage"] = "Cleanup completed. The inspector will verify your work.";
+            TempData["SuccessMessage"] = _localizer["CompleteSuccess"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (NotFoundException) { return NotFound(); }
@@ -156,18 +160,18 @@ public class ReportsController : Controller
     {
         if (selectedIds is null || selectedIds.Count < 2)
         {
-            TempData["ErrorMessage"] = "Select at least 2 reports to build a route.";
+            TempData["ErrorMessage"] = _localizer["RouteTooFewReports"].Value;
             return RedirectToAction(nameof(Queue));
         }
         if (selectedIds.Count > 15)
         {
-            TempData["ErrorMessage"] = "Maximum 15 reports per route.";
+            TempData["ErrorMessage"] = _localizer["RouteTooManyReports"].Value;
             return RedirectToAction(nameof(Queue));
         }
         var route = await _mediator.Send(
             new BuildRouteForReportsQuery(selectedIds, startLat, startLng), ct);
         ViewBag.BackUrl = Url.Action(nameof(Queue), "Reports", new { area = "CleanupCrew" });
-        ViewBag.PageTitle = "Cleanup route";
+        ViewBag.PageTitle = _localizer["CleanupRouteTitle"].Value;
         ViewBag.DetailsController = "Reports";
         ViewBag.DetailsArea = "CleanupCrew";
         return View("Route", route);
@@ -180,7 +184,7 @@ public class ReportsController : Controller
     {
         if (Photos is null || Photos.Count == 0)
         {
-            TempData["ErrorMessage"] = "Attach at least one evidence photo.";
+            TempData["ErrorMessage"] = _localizer["FlagMissingPhoto"].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -190,7 +194,7 @@ public class ReportsController : Controller
         {
             await _mediator.Send(new FlagCleanupCommand(
                 id, CurrentUserId(), Reason ?? string.Empty, AdditionalNotes, uploaded), ct);
-            TempData["SuccessMessage"] = "Report flagged. An inspector will review your evidence.";
+            TempData["SuccessMessage"] = _localizer["FlagSuccess"].Value;
             return RedirectToAction(nameof(MyReports));
         }
         catch (NotFoundException) { return NotFound(); }

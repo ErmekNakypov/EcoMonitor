@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="TakeSuccess" xml:space="preserve"><value>Билдирүү алынды. Даяр болсоңуз тазалоону баштаңыз.</value></data>
+
+  <data name="StartMissingBeforePhoto" xml:space="preserve"><value>Эң аз бир «чейинки» сүрөт тиркеңиз.</value></data>
+  <data name="StartSuccess" xml:space="preserve"><value>Тазалоо башталды. Бүткөндө «кийинки» сүрөттөрдү жүктөңүз.</value></data>
+
+  <data name="CompleteMissingAfterPhoto" xml:space="preserve"><value>Эң аз бир «кийинки» сүрөт тиркеңиз.</value></data>
+  <data name="CompleteSuccess" xml:space="preserve"><value>Тазалоо аяктады. Инспектор сиздин ишиңизди текшерет.</value></data>
+
+  <data name="RouteTooFewReports" xml:space="preserve"><value>Маршрут түзүү үчүн эң аз 2 билдирүү тандаңыз.</value></data>
+  <data name="RouteTooManyReports" xml:space="preserve"><value>Бир маршрутта эң көп 15 билдирүү.</value></data>
+  <data name="CleanupRouteTitle" xml:space="preserve"><value>Тазалоо маршруту</value></data>
+
+  <data name="FlagMissingPhoto" xml:space="preserve"><value>Эң аз бир далил сүрөт тиркеңиз.</value></data>
+  <data name="FlagSuccess" xml:space="preserve"><value>Билдирүү белгиленди. Инспектор далилдериңизди карайт.</value></data>
+</root>

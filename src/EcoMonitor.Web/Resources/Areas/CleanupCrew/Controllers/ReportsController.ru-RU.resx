@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="TakeSuccess" xml:space="preserve"><value>Заявка взята в работу. Начинайте уборку, когда будете готовы.</value></data>
+
+  <data name="StartMissingBeforePhoto" xml:space="preserve"><value>Прикрепите хотя бы одно фото «до».</value></data>
+  <data name="StartSuccess" xml:space="preserve"><value>Уборка начата. Загрузите фото «после», когда закончите.</value></data>
+
+  <data name="CompleteMissingAfterPhoto" xml:space="preserve"><value>Прикрепите хотя бы одно фото «после».</value></data>
+  <data name="CompleteSuccess" xml:space="preserve"><value>Уборка завершена. Инспектор проверит вашу работу.</value></data>
+
+  <data name="RouteTooFewReports" xml:space="preserve"><value>Выберите минимум 2 заявки для маршрута.</value></data>
+  <data name="RouteTooManyReports" xml:space="preserve"><value>Не более 15 заявок в маршруте.</value></data>
+  <data name="CleanupRouteTitle" xml:space="preserve"><value>Маршрут уборки</value></data>
+
+  <data name="FlagMissingPhoto" xml:space="preserve"><value>Прикрепите хотя бы одно фото-доказательство.</value></data>
+  <data name="FlagSuccess" xml:space="preserve"><value>Заявка помечена. Инспектор рассмотрит ваши доказательства.</value></data>
+</root>

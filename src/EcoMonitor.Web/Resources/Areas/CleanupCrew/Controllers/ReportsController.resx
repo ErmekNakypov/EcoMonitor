@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- TempData success / error messages set by
+       Areas.CleanupCrew.Controllers.ReportsController.
+       Surface in the alert-success / alert-danger banners on the
+       Queue and Details views. Forwarded DomainException messages
+       (ex.Message) are NOT localised by this commit — they come
+       from the domain layer and need separate work there. -->
+
+  <!-- Take -->
+  <data name="TakeSuccess" xml:space="preserve"><value>Report taken. Start cleanup when ready.</value></data>
+
+  <!-- StartCleanup -->
+  <data name="StartMissingBeforePhoto" xml:space="preserve"><value>Attach at least one before-cleanup photo.</value></data>
+  <data name="StartSuccess" xml:space="preserve"><value>Cleanup started. Upload after-photos when finished.</value></data>
+
+  <!-- CompleteCleanup -->
+  <data name="CompleteMissingAfterPhoto" xml:space="preserve"><value>Attach at least one after-cleanup photo.</value></data>
+  <data name="CompleteSuccess" xml:space="preserve"><value>Cleanup completed. The inspector will verify your work.</value></data>
+
+  <!-- BuildRoute — TempData errors + ViewBag.PageTitle for the
+       Route view (which already reads it as @title). After this
+       commit, the view's Route.DefaultTitle fallback is only used
+       on unusual entry paths where the controller didn't set the
+       ViewBag. -->
+  <data name="RouteTooFewReports" xml:space="preserve"><value>Select at least 2 reports to build a route.</value></data>
+  <data name="RouteTooManyReports" xml:space="preserve"><value>Maximum 15 reports per route.</value></data>
+  <data name="CleanupRouteTitle" xml:space="preserve"><value>Cleanup route</value></data>
+
+  <!-- Flag -->
+  <data name="FlagMissingPhoto" xml:space="preserve"><value>Attach at least one evidence photo.</value></data>
+  <data name="FlagSuccess" xml:space="preserve"><value>Report flagged. An inspector will review your evidence.</value></data>
+</root>

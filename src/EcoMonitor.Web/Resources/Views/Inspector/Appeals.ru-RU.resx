@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Апелляции жителей</value></data>
+  <data name="Heading" xml:space="preserve"><value>Закрытые заявки, оспоренные жителями</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>в ожидании: {0} · сначала старые</value></data>
+
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Поиск по описанию или причине апелляции…</value></data>
+  <data name="SortOldestFirst" xml:space="preserve"><value>Сначала старые</value></data>
+  <data name="SortNewestFirst" xml:space="preserve"><value>Сначала новые</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Сейчас апелляций нет</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Жители довольны последними решениями.</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Фото заявки</value></data>
+  <data name="AppealedAt" xml:space="preserve"><value>Апелляция подана {0}</value></data>
+  <data name="ReviewButton" xml:space="preserve"><value>Рассмотреть</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Постраничная навигация по апелляциям</value></data>
+</root>

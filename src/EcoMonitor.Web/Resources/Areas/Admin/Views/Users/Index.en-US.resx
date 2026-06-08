@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Page chrome — Title and Heading both share Nav.Users from
+       SharedResource; only the rest of the chrome is per-view. -->
+  <data name="BadgeRole" xml:space="preserve"><value>User management</value></data>
+  <!-- {0} = total count, {1} = current page, {2} = total pages -->
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} total · page {1} of {2}</value></data>
+  <data name="AddUserButton" xml:space="preserve"><value>Add user</value></data>
+
+  <!-- Filter form -->
+  <data name="SearchLabel" xml:space="preserve"><value>Search</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Email or full name</value></data>
+  <data name="RoleLabel" xml:space="preserve"><value>Role</value></data>
+  <data name="RoleAll" xml:space="preserve"><value>All roles</value></data>
+  <data name="RoleAdministrator" xml:space="preserve"><value>Administrator</value></data>
+  <data name="RoleInspector" xml:space="preserve"><value>Inspector</value></data>
+  <data name="RoleCitizen" xml:space="preserve"><value>Citizen</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Status</value></data>
+  <data name="StatusAll" xml:space="preserve"><value>All</value></data>
+  <data name="StatusActive" xml:space="preserve"><value>Active</value></data>
+  <data name="StatusInactive" xml:space="preserve"><value>Inactive</value></data>
+
+  <!-- Empty state -->
+  <data name="EmptyTitle" xml:space="preserve"><value>No users found</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Try removing filters or adding a new user.</value></data>
+
+  <!-- Table headers -->
+  <data name="TableEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="TableFullName" xml:space="preserve"><value>Full name</value></data>
+  <data name="TableRole" xml:space="preserve"><value>Role</value></data>
+  <data name="TableStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="TableCreated" xml:space="preserve"><value>Created</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Actions</value></data>
+  <data name="NoRoleLabel" xml:space="preserve"><value>No role</value></data>
+
+  <!-- Row action labels -->
+  <data name="ActionEdit" xml:space="preserve"><value>Edit</value></data>
+  <data name="ActionResetPassword" xml:space="preserve"><value>Reset password</value></data>
+  <data name="ActionDeactivate" xml:space="preserve"><value>Deactivate</value></data>
+  <data name="ActionActivate" xml:space="preserve"><value>Activate</value></data>
+
+  <!-- Toggle-active confirmation modal (driven by data-* attributes
+       on the trigger button; the JS show.bs.modal handler swaps the
+       title/message/button per row). -->
+  <data name="ConfirmActionDeactivateTitle" xml:space="preserve"><value>Deactivate user</value></data>
+  <data name="ConfirmActionActivateTitle" xml:space="preserve"><value>Activate user</value></data>
+  <!-- {0} = user's email -->
+  <data name="ConfirmActionDeactivateMessage" xml:space="preserve"><value>Are you sure you want to deactivate {0}? They will not be able to sign in.</value></data>
+  <data name="ConfirmActionActivateMessage" xml:space="preserve"><value>Are you sure you want to activate {0}? They will be able to sign in again.</value></data>
+
+  <!-- Modal fallbacks (JS uses these if the trigger had no data-* hints;
+       they shouldn't appear in practice but are here as a safety net). -->
+  <data name="ModalDefaultTitle" xml:space="preserve"><value>Confirm</value></data>
+  <data name="ModalDefaultMessage" xml:space="preserve"><value>Are you sure?</value></data>
+  <data name="ModalDefaultButtonText" xml:space="preserve"><value>Confirm</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Users pagination</value></data>
+</root>

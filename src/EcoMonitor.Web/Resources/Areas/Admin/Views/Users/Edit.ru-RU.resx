@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Редактировать пользователя</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Редактирование пользователя</value></data>
+  <data name="HeadingFormat" xml:space="preserve"><value>Редактирование {0}</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Обновите профиль, роль и статус аккаунта.</value></data>
+
+  <data name="EmailFieldLabel" xml:space="preserve"><value>Email</value></data>
+  <data name="EmailReadOnlyNote" xml:space="preserve"><value>только чтение</value></data>
+
+  <data name="IsActiveFootnote" xml:space="preserve"><value>Неактивные пользователи не могут войти.</value></data>
+
+  <data name="SaveButton" xml:space="preserve"><value>Сохранить</value></data>
+
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Редактирование</value></data>
+</root>

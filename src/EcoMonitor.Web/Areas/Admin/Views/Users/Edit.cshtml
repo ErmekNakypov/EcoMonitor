@@ -1,11 +1,13 @@
 @model EditUserViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Edit user";
+    ViewData["Title"] = Localizer["Title"].Value;
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "Users", Url = Url.Action("Index", "Users", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Users"].Value,     Url = Url.Action("Index", "Users", new { area = "Admin" }) },
         new BreadcrumbItem { Label = Model.Email },
-        new BreadcrumbItem { Label = "Edit" });
+        new BreadcrumbItem { Label = Localizer["BreadcrumbLeaf"].Value });
 }
 
 <section class="py-5">
@@ -14,10 +16,10 @@
         <div class="auth-card">
             <span class="hero-badge mb-3">
                 <i class="bi bi-pencil-square"></i>
-                <span>Edit user</span>
+                <span>@Localizer["BadgeRole"]</span>
             </span>
-            <h1 class="h3 fw-700 mt-3 mb-2">Edit @Model.Email</h1>
-            <p class="text-muted mb-4">Update the user's profile, role, and account status.</p>
+            <h1 class="h3 fw-700 mt-3 mb-2">@Localizer["HeadingFormat", Model.Email]</h1>
+            <p class="text-muted mb-4">@Localizer["Subtitle"]</p>
 
             <form asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
                 <input asp-for="Id" type="hidden" />
@@ -27,13 +29,16 @@
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-500">Email</label>
+                    <label class="form-label fw-500">@Localizer["EmailFieldLabel"]</label>
                     <div>
                         <span class="role-badge role-badge-citizen">@Model.Email</span>
-                        <span class="text-muted small ms-2">read-only</span>
+                        <span class="text-muted small ms-2">@Localizer["EmailReadOnlyNote"]</span>
                     </div>
                 </div>
 
+                @* Labels flow through DataAnnotationLocalizerProvider — VM
+                   [Display(Name=…)] keys resolve in
+                   Resources/Models/Admin/Users/EditUserViewModel.{culture}.resx. *@
                 <div class="mb-3">
                     <label asp-for="FullName" class="form-label fw-500"></label>
                     <input asp-for="FullName" class="form-control form-control-lg" autocomplete="name" />
@@ -54,16 +59,15 @@
                 <div class="form-check form-switch mb-4">
                     <input asp-for="IsActive" class="form-check-input" role="switch" />
                     <label asp-for="IsActive" class="form-check-label">
-                        Active
-                        <span class="text-muted small d-block">Inactive users cannot sign in.</span>
+                        <span class="text-muted small d-block">@Localizer["IsActiveFootnote"]</span>
                     </label>
                     <span asp-validation-for="IsActive" class="text-danger small d-block"></span>
                 </div>
 
                 <div class="d-flex gap-2 justify-content-end">
-                    <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                    <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="btn btn-outline-secondary btn-lg">@SharedLocalizer["Common.Cancel"]</a>
                     <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-check2 me-2"></i>Save changes
+                        <i class="bi bi-check2 me-2"></i>@Localizer["SaveButton"]
                     </button>
                 </div>
             </form>

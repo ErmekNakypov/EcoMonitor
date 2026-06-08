@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Areas.Admin.Controllers;
 
@@ -17,15 +18,18 @@ public class UsersController : Controller
 
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly IStringLocalizer<UsersController> _localizer;
     private readonly ILogger<UsersController> _logger;
 
     public UsersController(
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
+        IStringLocalizer<UsersController> localizer,
         ILogger<UsersController> logger)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -121,7 +125,7 @@ public class UsersController : Controller
     {
         if (string.IsNullOrWhiteSpace(model.Role) || !await _roleManager.RoleExistsAsync(model.Role))
         {
-            ModelState.AddModelError(nameof(model.Role), "Invalid role.");
+            ModelState.AddModelError(nameof(model.Role), _localizer["InvalidRole"]);
         }
 
         if (!ModelState.IsValid)
@@ -133,7 +137,7 @@ public class UsersController : Controller
         var existing = await _userManager.FindByEmailAsync(model.Email);
         if (existing is not null)
         {
-            ModelState.AddModelError(nameof(model.Email), "A user with this email already exists.");
+            ModelState.AddModelError(nameof(model.Email), _localizer["EmailExists"]);
             model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
         }
@@ -165,7 +169,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} created user {UserEmail} with role {Role}",
             User.Identity?.Name, user.Email, model.Role);
 
-        TempData["SuccessMessage"] = $"User {user.Email} created with role {model.Role}.";
+        TempData["SuccessMessage"] = _localizer["UserCreated", user.Email ?? string.Empty, model.Role].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -206,7 +210,7 @@ public class UsersController : Controller
 
         if (string.IsNullOrWhiteSpace(model.Role) || !await _roleManager.RoleExistsAsync(model.Role))
         {
-            ModelState.AddModelError(nameof(model.Role), "Invalid role.");
+            ModelState.AddModelError(nameof(model.Role), _localizer["InvalidRole"]);
         }
 
         if (!ModelState.IsValid)
@@ -235,7 +239,7 @@ public class UsersController : Controller
             var adminCount = (await _userManager.GetUsersInRoleAsync(RoleNames.Administrator)).Count;
             if (adminCount <= 1)
             {
-                ModelState.AddModelError(nameof(model.Role), "Cannot remove the last administrator.");
+                ModelState.AddModelError(nameof(model.Role), _localizer["LastAdmin"]);
                 model.CurrentRole = currentRole ?? string.Empty;
                 model.AvailableRoles = await GetAvailableRolesAsync();
                 return View(model);
@@ -244,7 +248,7 @@ public class UsersController : Controller
 
         if (!model.IsActive && isSelf)
         {
-            ModelState.AddModelError(nameof(model.IsActive), "You cannot deactivate your own account.");
+            ModelState.AddModelError(nameof(model.IsActive), _localizer["CannotDeactivateSelf"]);
             model.CurrentRole = currentRole ?? string.Empty;
             model.AvailableRoles = await GetAvailableRolesAsync();
             return View(model);
@@ -278,7 +282,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} updated user {UserEmail}; role={Role}, active={IsActive}",
             User.Identity?.Name, user.Email, model.Role, user.IsActive);
 
-        TempData["SuccessMessage"] = $"User {user.Email} updated.";
+        TempData["SuccessMessage"] = _localizer["UserUpdated", user.Email ?? string.Empty].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -332,7 +336,7 @@ public class UsersController : Controller
             "Admin {AdminEmail} reset password for user {UserEmail}",
             User.Identity?.Name, user.Email);
 
-        TempData["SuccessMessage"] = $"Password reset for {user.Email}.";
+        TempData["SuccessMessage"] = _localizer["PasswordReset", user.Email ?? string.Empty].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -351,7 +355,7 @@ public class UsersController : Controller
 
         if (user.IsActive && isSelf)
         {
-            TempData["ErrorMessage"] = "You cannot deactivate your own account.";
+            TempData["ErrorMessage"] = _localizer["CannotDeactivateSelf"].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -368,9 +372,9 @@ public class UsersController : Controller
             "Admin {AdminEmail} toggled active for user {UserEmail} to {IsActive}",
             User.Identity?.Name, user.Email, user.IsActive);
 
-        TempData["SuccessMessage"] = user.IsActive
-            ? $"User {user.Email} activated."
-            : $"User {user.Email} deactivated.";
+        TempData["SuccessMessage"] = (user.IsActive
+            ? _localizer["UserActivated", user.Email ?? string.Empty]
+            : _localizer["UserDeactivated", user.Email ?? string.Empty]).Value;
 
         return RedirectToAction(nameof(Index));
     }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Управление пользователями</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>всего: {0} · страница {1} из {2}</value></data>
+  <data name="AddUserButton" xml:space="preserve"><value>Добавить пользователя</value></data>
+
+  <data name="SearchLabel" xml:space="preserve"><value>Поиск</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Email или имя</value></data>
+  <data name="RoleLabel" xml:space="preserve"><value>Роль</value></data>
+  <data name="RoleAll" xml:space="preserve"><value>Все роли</value></data>
+  <data name="RoleAdministrator" xml:space="preserve"><value>Администратор</value></data>
+  <data name="RoleInspector" xml:space="preserve"><value>Инспектор</value></data>
+  <data name="RoleCitizen" xml:space="preserve"><value>Житель</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Статус</value></data>
+  <data name="StatusAll" xml:space="preserve"><value>Все</value></data>
+  <data name="StatusActive" xml:space="preserve"><value>Активен</value></data>
+  <data name="StatusInactive" xml:space="preserve"><value>Неактивен</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Пользователи не найдены</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Снимите фильтры или добавьте нового пользователя.</value></data>
+
+  <data name="TableEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="TableFullName" xml:space="preserve"><value>Полное имя</value></data>
+  <data name="TableRole" xml:space="preserve"><value>Роль</value></data>
+  <data name="TableStatus" xml:space="preserve"><value>Статус</value></data>
+  <data name="TableCreated" xml:space="preserve"><value>Создан</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Действия</value></data>
+  <data name="NoRoleLabel" xml:space="preserve"><value>Без роли</value></data>
+
+  <data name="ActionEdit" xml:space="preserve"><value>Редактировать</value></data>
+  <data name="ActionResetPassword" xml:space="preserve"><value>Сбросить пароль</value></data>
+  <data name="ActionDeactivate" xml:space="preserve"><value>Деактивировать</value></data>
+  <data name="ActionActivate" xml:space="preserve"><value>Активировать</value></data>
+
+  <data name="ConfirmActionDeactivateTitle" xml:space="preserve"><value>Деактивировать пользователя</value></data>
+  <data name="ConfirmActionActivateTitle" xml:space="preserve"><value>Активировать пользователя</value></data>
+  <data name="ConfirmActionDeactivateMessage" xml:space="preserve"><value>Действительно деактивировать {0}? Войти он больше не сможет.</value></data>
+  <data name="ConfirmActionActivateMessage" xml:space="preserve"><value>Действительно активировать {0}? Войти он сможет снова.</value></data>
+
+  <data name="ModalDefaultTitle" xml:space="preserve"><value>Подтвердить</value></data>
+  <data name="ModalDefaultMessage" xml:space="preserve"><value>Вы уверены?</value></data>
+  <data name="ModalDefaultButtonText" xml:space="preserve"><value>Подтвердить</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Постраничная навигация по пользователям</value></data>
+</root>

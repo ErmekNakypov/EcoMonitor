@@ -1,10 +1,12 @@
 @model CreateUserViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Add user";
+    ViewData["Title"] = Localizer["Title"].Value;
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "Users", Url = Url.Action("Index", "Users", new { area = "Admin" }) },
-        new BreadcrumbItem { Label = "Add user" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Users"].Value,     Url = Url.Action("Index", "Users", new { area = "Admin" }) },
+        new BreadcrumbItem { Label = Localizer["Title"].Value });
 }
 
 <section class="py-5">
@@ -13,14 +15,17 @@
         <div class="auth-card">
             <span class="hero-badge mb-3">
                 <i class="bi bi-person-plus"></i>
-                <span>Create user</span>
+                <span>@Localizer["BadgeRole"]</span>
             </span>
-            <h1 class="h3 fw-700 mt-3 mb-2">Add a new user</h1>
-            <p class="text-muted mb-4">The new user will be able to sign in immediately.</p>
+            <h1 class="h3 fw-700 mt-3 mb-2">@Localizer["Heading"]</h1>
+            <p class="text-muted mb-4">@Localizer["Subtitle"]</p>
 
             <form asp-area="Admin" asp-controller="Users" asp-action="Create" method="post" novalidate>
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
+                @* Labels flow through DataAnnotationLocalizerProvider — the
+                   VM's [Display(Name=…)] keys resolve in
+                   Resources/Models/Admin/Users/CreateUserViewModel.{culture}.resx. *@
                 <div class="mb-3">
                     <label asp-for="FullName" class="form-label fw-500"></label>
                     <input asp-for="FullName" class="form-control form-control-lg" autocomplete="name" />
@@ -37,7 +42,7 @@
                     <label asp-for="Password" class="form-label fw-500"></label>
                     <div class="input-group input-group-lg">
                         <input asp-for="Password" class="form-control" autocomplete="new-password" />
-                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="Toggle password visibility">
+                        <button type="button" class="btn btn-outline-secondary password-toggle" data-target="Password" aria-label="@SharedLocalizer["Common.TogglePasswordVisibility"]">
                             <i class="bi bi-eye" data-icon-for="Password"></i>
                         </button>
                     </div>
@@ -47,7 +52,7 @@
                 <div class="mb-3">
                     <label asp-for="Role" class="form-label fw-500"></label>
                     <select asp-for="Role" class="form-select form-select-lg">
-                        <option value="">Select a role…</option>
+                        <option value="">@Localizer["RolePlaceholder"]</option>
                         @foreach (var role in Model.AvailableRoles)
                         {
                             <option value="@role">@role</option>
@@ -59,15 +64,14 @@
                 <div class="form-check mb-4">
                     <input asp-for="SendWelcomeEmail" class="form-check-input" disabled />
                     <label asp-for="SendWelcomeEmail" class="form-check-label">
-                        Send welcome email
-                        <span class="text-muted small d-block">Email sending will be enabled later.</span>
+                        <span class="text-muted small d-block">@Localizer["SendWelcomeEmailFootnote"]</span>
                     </label>
                 </div>
 
                 <div class="d-flex gap-2 justify-content-end">
-                    <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                    <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="btn btn-outline-secondary btn-lg">@SharedLocalizer["Common.Cancel"]</a>
                     <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-person-plus me-2"></i>Create user
+                        <i class="bi bi-person-plus me-2"></i>@Localizer["SubmitButton"]
                     </button>
                 </div>
             </form>

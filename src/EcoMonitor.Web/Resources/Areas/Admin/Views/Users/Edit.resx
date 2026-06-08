@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Edit user</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Edit user</value></data>
+  <!-- {0} = user's email -->
+  <data name="HeadingFormat" xml:space="preserve"><value>Edit {0}</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Update the user's profile, role, and account status.</value></data>
+
+  <data name="EmailFieldLabel" xml:space="preserve"><value>Email</value></data>
+  <data name="EmailReadOnlyNote" xml:space="preserve"><value>read-only</value></data>
+
+  <data name="IsActiveFootnote" xml:space="preserve"><value>Inactive users cannot sign in.</value></data>
+
+  <data name="SaveButton" xml:space="preserve"><value>Save changes</value></data>
+
+  <!-- Breadcrumb leaf — shorter than Title for the breadcrumb pill. -->
+  <data name="BreadcrumbLeaf" xml:space="preserve"><value>Edit</value></data>
+</root>

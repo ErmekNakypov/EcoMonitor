@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Колдонуучуларды башкаруу</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>баары: {0} · {1}-бет {2} барактан</value></data>
+  <data name="AddUserButton" xml:space="preserve"><value>Колдонуучу кошуу</value></data>
+
+  <data name="SearchLabel" xml:space="preserve"><value>Издөө</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Email же аты</value></data>
+  <data name="RoleLabel" xml:space="preserve"><value>Ролу</value></data>
+  <data name="RoleAll" xml:space="preserve"><value>Бардык ролдор</value></data>
+  <data name="RoleAdministrator" xml:space="preserve"><value>Администратор</value></data>
+  <data name="RoleInspector" xml:space="preserve"><value>Инспектор</value></data>
+  <data name="RoleCitizen" xml:space="preserve"><value>Тургун</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Статусу</value></data>
+  <data name="StatusAll" xml:space="preserve"><value>Баары</value></data>
+  <data name="StatusActive" xml:space="preserve"><value>Активдүү</value></data>
+  <data name="StatusInactive" xml:space="preserve"><value>Активдүү эмес</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Колдонуучулар табылган жок</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Чыпкаларды алып салыңыз же жаңы колдонуучу кошуңуз.</value></data>
+
+  <data name="TableEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="TableFullName" xml:space="preserve"><value>Толук аты</value></data>
+  <data name="TableRole" xml:space="preserve"><value>Ролу</value></data>
+  <data name="TableStatus" xml:space="preserve"><value>Статусу</value></data>
+  <data name="TableCreated" xml:space="preserve"><value>Түзүлгөн</value></data>
+  <data name="TableActions" xml:space="preserve"><value>Аракеттер</value></data>
+  <data name="NoRoleLabel" xml:space="preserve"><value>Ролу жок</value></data>
+
+  <data name="ActionEdit" xml:space="preserve"><value>Түзөтүү</value></data>
+  <data name="ActionResetPassword" xml:space="preserve"><value>Сырсөздү жаңыртуу</value></data>
+  <data name="ActionDeactivate" xml:space="preserve"><value>Деактивдештирүү</value></data>
+  <data name="ActionActivate" xml:space="preserve"><value>Активдештирүү</value></data>
+
+  <data name="ConfirmActionDeactivateTitle" xml:space="preserve"><value>Колдонуучуну деактивдештирүү</value></data>
+  <data name="ConfirmActionActivateTitle" xml:space="preserve"><value>Колдонуучуну активдештирүү</value></data>
+  <data name="ConfirmActionDeactivateMessage" xml:space="preserve"><value>{0} колдонуучусун чындап деактивдештиресизби? Ал кире албай калат.</value></data>
+  <data name="ConfirmActionActivateMessage" xml:space="preserve"><value>{0} колдонуучусун чындап активдештиресизби? Ал кайра кире алат.</value></data>
+
+  <data name="ModalDefaultTitle" xml:space="preserve"><value>Тастыктоо</value></data>
+  <data name="ModalDefaultMessage" xml:space="preserve"><value>Чындап белгилейсизби?</value></data>
+  <data name="ModalDefaultButtonText" xml:space="preserve"><value>Тастыктоо</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Колдонуучулар боюнча барактар</value></data>
+</root>

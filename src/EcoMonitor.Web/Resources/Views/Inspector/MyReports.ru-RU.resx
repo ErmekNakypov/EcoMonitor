@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Назначенные мне заявки</value></data>
+  <data name="Heading" xml:space="preserve"><value>Заявки, назначенные мне</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>всего: {0}</value></data>
+
+  <data name="TabActive" xml:space="preserve"><value>Активные</value></data>
+  <data name="TabCompleted" xml:space="preserve"><value>Завершённые</value></data>
+  <data name="TabAll" xml:space="preserve"><value>Все</value></data>
+
+  <data name="EmptyActiveTitle" xml:space="preserve"><value>Сейчас активных заявок нет</value></data>
+  <data name="EmptyActiveSubtitle" xml:space="preserve"><value>Возьмите заявку из очереди или дождитесь апелляции.</value></data>
+  <data name="EmptyCompletedTitle" xml:space="preserve"><value>Завершённых заявок пока нет</value></data>
+  <data name="EmptyCompletedSubtitle" xml:space="preserve"><value>Заявки, которые вы закрыли, отклонили или отправили на уборку, появятся здесь.</value></data>
+  <data name="EmptyAllTitle" xml:space="preserve"><value>Вы пока не брали заявки</value></data>
+  <data name="EmptyAllSubtitle" xml:space="preserve"><value>Возьмите заявку из очереди, чтобы начать работу.</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Фото заявки</value></data>
+
+  <data name="RolesPlayedPrefix" xml:space="preserve"><value>Вы:</value></data>
+  <data name="RolePlayedReviewed" xml:space="preserve"><value>рассмотрено</value></data>
+  <data name="RolePlayedVerifiedCleanup" xml:space="preserve"><value>проверена уборка</value></data>
+  <data name="RolePlayedReviewedAppeal" xml:space="preserve"><value>рассмотрена апелляция</value></data>
+
+  <data name="UpdatedAt" xml:space="preserve"><value>Обновлено {0}</value></data>
+  <data name="FootnoteResolved" xml:space="preserve"><value>Решено {0}</value></data>
+  <data name="FootnoteClosed" xml:space="preserve"><value>Закрыто {0}</value></data>
+  <data name="FootnoteRejected" xml:space="preserve"><value>Отклонено {0}</value></data>
+
+  <data name="OpenButton" xml:space="preserve"><value>Открыть</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Постраничная навигация по моим заявкам</value></data>
+</root>

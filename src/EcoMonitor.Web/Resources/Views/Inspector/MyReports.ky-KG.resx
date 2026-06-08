@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Мага дайындалган билдирүүлөр</value></data>
+  <data name="Heading" xml:space="preserve"><value>Мага дайындалган билдирүүлөр</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>баары: {0}</value></data>
+
+  <data name="TabActive" xml:space="preserve"><value>Активдүү</value></data>
+  <data name="TabCompleted" xml:space="preserve"><value>Аяктаган</value></data>
+  <data name="TabAll" xml:space="preserve"><value>Баары</value></data>
+
+  <data name="EmptyActiveTitle" xml:space="preserve"><value>Учурда активдүү билдирүүлөр жок</value></data>
+  <data name="EmptyActiveSubtitle" xml:space="preserve"><value>Кезектен билдирүү алыңыз же даттанууну күтүңүз.</value></data>
+  <data name="EmptyCompletedTitle" xml:space="preserve"><value>Аяктаган билдирүүлөр азырынча жок</value></data>
+  <data name="EmptyCompletedSubtitle" xml:space="preserve"><value>Сиз жапкан, четке каккан же тазалоого жөнөткөн билдирүүлөр бул жерде көрүнөт.</value></data>
+  <data name="EmptyAllTitle" xml:space="preserve"><value>Сиз азырынча билдирүү алган жоксуз</value></data>
+  <data name="EmptyAllSubtitle" xml:space="preserve"><value>Иштей баштоо үчүн кезектен билдирүү алыңыз.</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Билдирүү сүрөтү</value></data>
+
+  <data name="RolesPlayedPrefix" xml:space="preserve"><value>Сиз:</value></data>
+  <data name="RolePlayedReviewed" xml:space="preserve"><value>каралды</value></data>
+  <data name="RolePlayedVerifiedCleanup" xml:space="preserve"><value>тазалоо текшерилди</value></data>
+  <data name="RolePlayedReviewedAppeal" xml:space="preserve"><value>даттануу каралды</value></data>
+
+  <data name="UpdatedAt" xml:space="preserve"><value>Жаңыланган {0}</value></data>
+  <data name="FootnoteResolved" xml:space="preserve"><value>Чечилген {0}</value></data>
+  <data name="FootnoteClosed" xml:space="preserve"><value>Жабылган {0}</value></data>
+  <data name="FootnoteRejected" xml:space="preserve"><value>Четке кагылган {0}</value></data>
+
+  <data name="OpenButton" xml:space="preserve"><value>Ачуу</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Менин билдирүүлөрүм боюнча барактар</value></data>
+</root>

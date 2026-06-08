@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Report queue</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Inspector queue</value></data>
+  <data name="Heading" xml:space="preserve"><value>New reports waiting for review</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} in queue · oldest first</value></data>
+
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Search by description…</value></data>
+  <data name="SortOldestFirst" xml:space="preserve"><value>Oldest first</value></data>
+  <data name="SortNewestFirst" xml:space="preserve"><value>Newest first</value></data>
+  <data name="SourceAll" xml:space="preserve"><value>All sources</value></data>
+  <data name="SourceWeb" xml:space="preserve"><value>Web only</value></data>
+  <data name="SourceTelegram" xml:space="preserve"><value>Telegram only</value></data>
+
+  <data name="DistrictToggleLabel" xml:space="preserve"><value>Show only reports in my district</value></data>
+  <data name="NoDistrictInfo" xml:space="preserve"><value>You are a city-wide inspector (no district assigned).</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>All caught up!</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>No new reports right now. Check back soon.</value></data>
+
+  <data name="RouteHint" xml:space="preserve"><value>Tick 2–15 reports to plan an inspection route.</value></data>
+  <data name="RouteSelectedCount" xml:space="preserve"><value>{0} selected</value></data>
+  <data name="RouteBuildButton" xml:space="preserve"><value>Build inspection route</value></data>
+  <data name="RouteCheckboxAria" xml:space="preserve"><value>Select report for route</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Report photo</value></data>
+  <data name="ReportedAt" xml:space="preserve"><value>Reported {0}</value></data>
+  <data name="OpenButton" xml:space="preserve"><value>Open</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Queue pagination</value></data>
+</root>

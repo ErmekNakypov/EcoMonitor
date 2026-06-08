@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Билдирүүлөр кезеги</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Инспектордун кезеги</value></data>
+  <data name="Heading" xml:space="preserve"><value>Карап чыгууну күткөн жаңы билдирүүлөр</value></data>
+  <data name="HeaderSummary" xml:space="preserve"><value>Кезекте {0} · алгач эскилери</value></data>
+
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Сүрөттөмө боюнча издөө…</value></data>
+  <data name="SortOldestFirst" xml:space="preserve"><value>Алгач эскилери</value></data>
+  <data name="SortNewestFirst" xml:space="preserve"><value>Алгач жаңылары</value></data>
+  <data name="SourceAll" xml:space="preserve"><value>Бардык булактар</value></data>
+  <data name="SourceWeb" xml:space="preserve"><value>Сайттан гана</value></data>
+  <data name="SourceTelegram" xml:space="preserve"><value>Telegram'дан гана</value></data>
+
+  <data name="DistrictToggleLabel" xml:space="preserve"><value>Менин районумдагы билдирүүлөрдү гана көрсөтүү</value></data>
+  <data name="NoDistrictInfo" xml:space="preserve"><value>Сиз — жалпы шаардык инспекторсуз (район дайындалган эмес).</value></data>
+
+  <data name="EmptyTitle" xml:space="preserve"><value>Бардыгы тартипте!</value></data>
+  <data name="EmptySubtitle" xml:space="preserve"><value>Учурда жаңы билдирүүлөр жок. Кийинчерээк карап коюңуз.</value></data>
+
+  <data name="RouteHint" xml:space="preserve"><value>Текшерүү маршрутун пландоо үчүн 2–15 билдирүүнү белгилеңиз.</value></data>
+  <data name="RouteSelectedCount" xml:space="preserve"><value>тандалган: {0}</value></data>
+  <data name="RouteBuildButton" xml:space="preserve"><value>Текшерүү маршрутун түзүү</value></data>
+  <data name="RouteCheckboxAria" xml:space="preserve"><value>Маршрут үчүн билдирүүнү тандоо</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Билдирүү сүрөтү</value></data>
+  <data name="ReportedAt" xml:space="preserve"><value>Берилген {0}</value></data>
+  <data name="OpenButton" xml:space="preserve"><value>Ачуу</value></data>
+
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>Кезек боюнча барактар</value></data>
+</root>

@@ -1,9 +1,11 @@
 @model QueueListViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Report queue";
+    ViewData["Title"] = Localizer["Title"].Value;
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home") },
-        new BreadcrumbItem { Label = "Queue" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Home"].Value,  Url = Url.Action("Index", "Home") },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Queue"].Value });
 }
 
 <section class="py-5">
@@ -13,35 +15,37 @@
             <div>
                 <span class="hero-badge mb-2">
                     <i class="bi bi-inboxes"></i>
-                    <span>Inspector queue</span>
+                    <span>@Localizer["BadgeRole"]</span>
                 </span>
-                <h1 class="h2 fw-700 mt-3 mb-1">New reports waiting for review</h1>
-                <p class="text-muted mb-0">@Model.TotalCount in queue &middot; oldest first</p>
+                <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+                <p class="text-muted mb-0">@Localizer["HeaderSummary", Model.TotalCount]</p>
             </div>
         </div>
 
         <div class="d-flex gap-2 mb-3">
+            @* Filter chips reuse Nav.Queue / Nav.MyReports so the chip text
+               stays in sync with the navbar links. *@
             <a asp-controller="Inspector" asp-action="Queue" class="filter-chip active">
-                <i class="bi bi-inboxes"></i><span>Queue</span>
+                <i class="bi bi-inboxes"></i><span>@SharedLocalizer["Nav.Queue"]</span>
             </a>
             <a asp-controller="Inspector" asp-action="MyReports" class="filter-chip">
-                <i class="bi bi-clipboard-check"></i><span>My reports</span>
+                <i class="bi bi-clipboard-check"></i><span>@SharedLocalizer["Nav.MyReports"]</span>
             </a>
         </div>
 
         <form method="get" asp-controller="Inspector" asp-action="Queue" class="queue-toolbar">
             <div class="filter-group">
-                <input type="search" name="search" placeholder="Search by description…" class="form-control" value="@ViewBag.Search" />
+                <input type="search" name="search" placeholder="@Localizer["SearchPlaceholder"]" class="form-control" value="@ViewBag.Search" />
                 <select name="sortBy" class="form-select">
-                    <option value="oldest" selected="@(ViewBag.Sort == "oldest" || string.IsNullOrEmpty((string?)ViewBag.Sort))">Oldest first</option>
-                    <option value="newest" selected="@(ViewBag.Sort == "newest")">Newest first</option>
+                    <option value="oldest" selected="@(ViewBag.Sort == "oldest" || string.IsNullOrEmpty((string?)ViewBag.Sort))">@Localizer["SortOldestFirst"]</option>
+                    <option value="newest" selected="@(ViewBag.Sort == "newest")">@Localizer["SortNewestFirst"]</option>
                 </select>
                 <select name="source" class="form-select">
-                    <option value="" selected="@(string.IsNullOrEmpty((string?)ViewBag.Source))">All sources</option>
-                    <option value="web" selected="@(ViewBag.Source == "web")">Web only</option>
-                    <option value="telegram" selected="@(ViewBag.Source == "telegram")">Telegram only</option>
+                    <option value="" selected="@(string.IsNullOrEmpty((string?)ViewBag.Source))">@Localizer["SourceAll"]</option>
+                    <option value="web" selected="@(ViewBag.Source == "web")">@Localizer["SourceWeb"]</option>
+                    <option value="telegram" selected="@(ViewBag.Source == "telegram")">@Localizer["SourceTelegram"]</option>
                 </select>
-                <button type="submit" class="btn btn-primary">Apply</button>
+                <button type="submit" class="btn btn-primary">@SharedLocalizer["Common.Apply"]</button>
             </div>
             @{
                 var hasDistrict = ViewBag.InspectorHasDistrict as bool? ?? false;
@@ -51,13 +55,13 @@
             {
                 <div class="form-check form-switch mt-2">
                     <input class="form-check-input" type="checkbox" id="districtFilter" name="myDistrictOnly" value="true" @(districtToggled ? "checked" : "")>
-                    <label class="form-check-label" for="districtFilter">Show only reports in my district</label>
+                    <label class="form-check-label" for="districtFilter">@Localizer["DistrictToggleLabel"]</label>
                 </div>
             }
             else
             {
                 <div class="text-muted small mt-2">
-                    <i class="bi bi-info-circle me-1"></i>You are a city-wide inspector (no district assigned).
+                    <i class="bi bi-info-circle me-1"></i>@Localizer["NoDistrictInfo"]
                 </div>
             }
         </form>
@@ -67,8 +71,8 @@
             var emptyState = new EmptyStateViewModel
             {
                 Icon = "bi-check2-circle",
-                Title = "All caught up!",
-                Subtitle = "No new reports right now. Check back soon."
+                Title = Localizer["EmptyTitle"].Value,
+                Subtitle = Localizer["EmptySubtitle"].Value
             };
             <div class="auth-card">
                 <partial name="_EmptyState" model="emptyState" />
@@ -85,12 +89,14 @@
                 <input type="hidden" name="startLng" id="route-start-lng" value="" />
                 <div class="route-select-bar">
                     <span class="text-muted small">
-                        <i class="bi bi-info-circle me-1"></i>Tick 2–15 reports to plan an inspection route.
+                        <i class="bi bi-info-circle me-1"></i>@Localizer["RouteHint"]
                     </span>
                     <div class="d-flex align-items-center gap-3">
-                        <span class="text-muted small" id="route-selected-count">0 selected</span>
+                        @* Initial render uses {0}=0; the JS counter updates it on
+                           every selection change via window.__queueI18n.selectedCount. *@
+                        <span class="text-muted small" id="route-selected-count">@Localizer["RouteSelectedCount", 0]</span>
                         <button type="submit" class="btn btn-primary btn-sm" id="route-build-btn" disabled>
-                            <i class="bi bi-signpost-split me-1"></i>Build inspection route
+                            <i class="bi bi-signpost-split me-1"></i>@Localizer["RouteBuildButton"]
                         </button>
                     </div>
                 </div>
@@ -101,12 +107,12 @@
                         <div class="report-card">
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-1 d-flex justify-content-center">
-                                    <input class="form-check-input route-checkbox" type="checkbox" name="selectedIds" value="@item.Id" aria-label="Select report for route" />
+                                    <input class="form-check-input route-checkbox" type="checkbox" name="selectedIds" value="@item.Id" aria-label="@Localizer["RouteCheckboxAria"]" />
                                 </div>
                                 <div class="col-md-2">
                                     @if (!string.IsNullOrEmpty(item.FirstPhotoPath))
                                     {
-                                        <img src="@item.FirstPhotoPath" alt="Report photo" class="report-thumb" />
+                                        <img src="@item.FirstPhotoPath" alt="@Localizer["ReportPhotoAlt"]" class="report-thumb" />
                                     }
                                     else
                                     {
@@ -119,7 +125,7 @@
                                     <p class="mb-2 fw-500">@item.ShortDescription</p>
                                     <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
                                         <span><i class="bi bi-geo-alt me-1"></i>@item.Latitude.ToString("F4"), @item.Longitude.ToString("F4")</span>
-                                        <span><i class="bi bi-clock me-1"></i>Reported @DateHelpers.FormatRelative(item.CreatedAt)</span>
+                                        <span><i class="bi bi-clock me-1"></i>@Localizer["ReportedAt", DateHelpers.FormatRelative(item.CreatedAt)]</span>
                                         <partial name="_SourceBadge" model="item.Source" />
                                         @if (!string.IsNullOrEmpty(item.DistrictNameRu))
                                         {
@@ -131,7 +137,7 @@
                                 </div>
                                 <div class="col-md-3 text-md-end">
                                     <a asp-controller="Inspector" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">
-                                        Open <i class="bi bi-arrow-right ms-1"></i>
+                                        @Localizer["OpenButton"] <i class="bi bi-arrow-right ms-1"></i>
                                     </a>
                                 </div>
                             </div>
@@ -142,10 +148,10 @@
 
             @if (Model.TotalPages > 1)
             {
-                <nav class="mt-4" aria-label="Queue pagination">
+                <nav class="mt-4" aria-label="@Localizer["PaginationAriaLabel"]">
                     <ul class="pagination justify-content-center">
                         <li class="page-item @(Model.Page <= 1 ? "disabled" : string.Empty)">
-                            <a class="page-link" asp-controller="Inspector" asp-action="Queue" asp-route-page="@(Model.Page - 1)">Previous</a>
+                            <a class="page-link" asp-controller="Inspector" asp-action="Queue" asp-route-page="@(Model.Page - 1)">@SharedLocalizer["Common.Previous"]</a>
                         </li>
                         @for (int p = 1; p <= Model.TotalPages; p++)
                         {
@@ -154,7 +160,7 @@
                             </li>
                         }
                         <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : string.Empty)">
-                            <a class="page-link" asp-controller="Inspector" asp-action="Queue" asp-route-page="@(Model.Page + 1)">Next</a>
+                            <a class="page-link" asp-controller="Inspector" asp-action="Queue" asp-route-page="@(Model.Page + 1)">@SharedLocalizer["Common.Next"]</a>
                         </li>
                     </ul>
                 </nav>
@@ -164,8 +170,18 @@
 </section>
 
 @section Scripts {
+    @* JSON-encoded i18n bridge for the inline counter script.
+       Raw format string passes through; JS does {0} substitution per
+       click so word order stays translator-controlled. Same pattern
+       as CleanupCrew/Queue. *@
+    <script>
+        window.__queueI18n = {
+            selectedCount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["RouteSelectedCount"].Value))
+        };
+    </script>
     <script>
         (function () {
+            const i18n = window.__queueI18n;
             const checkboxes = document.querySelectorAll('.route-checkbox');
             const btn = document.getElementById('route-build-btn');
             const counter = document.getElementById('route-selected-count');
@@ -175,7 +191,7 @@
             if (!btn || !counter) return;
             function update() {
                 const count = document.querySelectorAll('.route-checkbox:checked').length;
-                counter.textContent = count + ' selected';
+                counter.textContent = i18n.selectedCount.replace('{0}', count);
                 btn.disabled = count < 2 || count > 15;
             }
             checkboxes.forEach(cb => cb.addEventListener('change', update));

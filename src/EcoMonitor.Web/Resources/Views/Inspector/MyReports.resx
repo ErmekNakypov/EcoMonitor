@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>My assigned reports</value></data>
+  <data name="Heading" xml:space="preserve"><value>Reports assigned to me</value></data>
+  <!-- {0} = total report count across all tabs. -->
+  <data name="HeaderSummary" xml:space="preserve"><value>{0} total</value></data>
+
+  <data name="TabActive" xml:space="preserve"><value>Active</value></data>
+  <data name="TabCompleted" xml:space="preserve"><value>Completed</value></data>
+  <data name="TabAll" xml:space="preserve"><value>All</value></data>
+
+  <data name="EmptyActiveTitle" xml:space="preserve"><value>Nothing active right now</value></data>
+  <data name="EmptyActiveSubtitle" xml:space="preserve"><value>Pick up a report from the queue or wait for an appeal to come in.</value></data>
+  <data name="EmptyCompletedTitle" xml:space="preserve"><value>No completed reports yet</value></data>
+  <data name="EmptyCompletedSubtitle" xml:space="preserve"><value>Reports you have closed, rejected, or sent to cleanup will appear here.</value></data>
+  <data name="EmptyAllTitle" xml:space="preserve"><value>You haven't taken any reports yet</value></data>
+  <data name="EmptyAllSubtitle" xml:space="preserve"><value>Pick up a report from the queue to start handling cases.</value></data>
+
+  <data name="ReportPhotoAlt" xml:space="preserve"><value>Report photo</value></data>
+
+  <!-- Roles played by the inspector for this report. The view builds a
+       list of the applicable sub-keys and joins them with " · ", prefixed
+       by RolesPlayedPrefix. -->
+  <data name="RolesPlayedPrefix" xml:space="preserve"><value>You:</value></data>
+  <data name="RolePlayedReviewed" xml:space="preserve"><value>reviewed</value></data>
+  <data name="RolePlayedVerifiedCleanup" xml:space="preserve"><value>verified cleanup</value></data>
+  <data name="RolePlayedReviewedAppeal" xml:space="preserve"><value>reviewed appeal</value></data>
+
+  <data name="UpdatedAt" xml:space="preserve"><value>Updated {0}</value></data>
+  <!-- Status-conditional footnotes — each takes {0} = a formatted
+       relative time. -->
+  <data name="FootnoteResolved" xml:space="preserve"><value>Resolved {0}</value></data>
+  <data name="FootnoteClosed" xml:space="preserve"><value>Closed {0}</value></data>
+  <data name="FootnoteRejected" xml:space="preserve"><value>Rejected {0}</value></data>
+
+  <data name="OpenButton" xml:space="preserve"><value>Open</value></data>
+  <data name="PaginationAriaLabel" xml:space="preserve"><value>My reports pagination</value></data>
+</root>

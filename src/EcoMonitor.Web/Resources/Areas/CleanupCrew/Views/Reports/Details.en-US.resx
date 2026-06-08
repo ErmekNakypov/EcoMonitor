@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Cleanup details</value></data>
+  <data name="BreadcrumbReport" xml:space="preserve"><value>Report</value></data>
+  <data name="ReportedAt" xml:space="preserve"><value>Reported {0} ({1})</value></data>
+
+  <data name="ChannelTelegramTitle" xml:space="preserve"><value>Submitted via Telegram bot</value></data>
+  <data name="ChannelTelegramUserIdSuffix" xml:space="preserve"><value>Telegram user ID: {0}</value></data>
+  <data name="ChannelWebTitle" xml:space="preserve"><value>Submitted via web</value></data>
+  <data name="ChannelWebBy" xml:space="preserve"><value>By {0}</value></data>
+  <data name="AnonymousFallback" xml:space="preserve"><value>(anonymous)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(unknown)</value></data>
+
+  <data name="TriageAutoTitle" xml:space="preserve"><value>Auto-confirmed by triage system</value></data>
+  <data name="TriageAutoBody" xml:space="preserve"><value>Passed all auto-triage rules and reached the cleanup queue without manual review.</value></data>
+  <data name="TriageManualTitle" xml:space="preserve"><value>Confirmed by inspector after review</value></data>
+  <data name="TriageManualBody" xml:space="preserve"><value>Triage flag: {0}</value></data>
+
+  <data name="ReporterLabel" xml:space="preserve"><value>Reporter</value></data>
+  <data name="ReporterStatTotal" xml:space="preserve"><value>Total</value></data>
+  <data name="ReporterStatInProgress" xml:space="preserve"><value>In progress</value></data>
+  <data name="ReporterStatResolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="ReporterStatRejected" xml:space="preserve"><value>Rejected</value></data>
+
+  <data name="ConfirmedByInspectorHeading" xml:space="preserve"><value>Confirmed by inspector</value></data>
+  <data name="InspectorFallback" xml:space="preserve"><value>Inspector</value></data>
+
+  <data name="RecheckOnSiteTitle" xml:space="preserve"><value>Inspector reviewed your flag — please re-check on site</value></data>
+  <data name="RecheckOnSiteBody" xml:space="preserve"><value>The inspector confirmed the dumpsite exists. Look again before flagging a second time.</value></data>
+
+  <data name="PreviouslyFlaggedTitle" xml:space="preserve"><value>Previously flagged by another crew</value></data>
+  <data name="PreviouslyFlaggedBody" xml:space="preserve"><value>An inspector reviewed the flag and decided the dumpsite is valid. Please verify carefully before taking action.</value></data>
+
+  <data name="ReworkRequired" xml:space="preserve"><value>Rework required (attempt #{0})</value></data>
+  <data name="ReworkReturnedAt" xml:space="preserve"><value>Returned by citizen appeal {0} UTC</value></data>
+  <data name="InspectorNotePrefix" xml:space="preserve"><value>Inspector's note:</value></data>
+  <data name="CitizenReasonPrefix" xml:space="preserve"><value>Citizen's reason:</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Description from citizen</value></data>
+  <data name="CleanupNotesHeading" xml:space="preserve"><value>Cleanup notes</value></data>
+  <data name="CitizenAppealHeading" xml:space="preserve"><value>Citizen's appeal</value></data>
+  <data name="AppealedAt" xml:space="preserve"><value>Appealed {0} UTC</value></data>
+  <data name="InspectorAppealDecisionHeading" xml:space="preserve"><value>Inspector's appeal decision</value></data>
+  <data name="AppealUpheld" xml:space="preserve"><value>Appeal upheld</value></data>
+  <data name="AppealDismissed" xml:space="preserve"><value>Appeal dismissed</value></data>
+  <data name="AppealReviewedAtSuffix" xml:space="preserve"><value> · {0} UTC</value></data>
+
+  <data name="CitizenPhotosHeading" xml:space="preserve"><value>Citizen photos ({0})</value></data>
+  <data name="CitizenPhotoAlt" xml:space="preserve"><value>Citizen photo</value></data>
+  <data name="InspectorPhotosHeading" xml:space="preserve"><value>Inspector verification photos ({0})</value></data>
+  <data name="InspectorPhotoAlt" xml:space="preserve"><value>Inspector photo</value></data>
+  <data name="BeforeCleanupHeading" xml:space="preserve"><value>Before cleanup ({0})</value></data>
+  <data name="BeforeCleanupAlt" xml:space="preserve"><value>Before cleanup</value></data>
+  <data name="AfterCleanupHeading" xml:space="preserve"><value>After cleanup ({0})</value></data>
+  <data name="AfterCleanupAlt" xml:space="preserve"><value>After cleanup</value></data>
+  <data name="AppealPhotosHeading" xml:space="preserve"><value>Appeal photos from citizen ({0})</value></data>
+  <data name="AppealPhotosCaption" xml:space="preserve"><value>Photos the citizen attached to support their appeal.</value></data>
+  <data name="AppealPhotoAlt" xml:space="preserve"><value>Appeal photo</value></data>
+
+  <data name="LocationHeading" xml:space="preserve"><value>Location</value></data>
+  <data name="ActionsHeading" xml:space="preserve"><value>Actions</value></data>
+  <data name="TakeReportButton" xml:space="preserve"><value>Take this report</value></data>
+  <data name="StartCleanupButton" xml:space="preserve"><value>Start cleanup</value></data>
+  <data name="FlagButton" xml:space="preserve"><value>Cannot complete — flag for inspector</value></data>
+  <data name="MarkDoneButton" xml:space="preserve"><value>Mark cleanup done</value></data>
+  <data name="FlagWaitingMessage" xml:space="preserve"><value>You flagged this report. Waiting for an inspector to review.</value></data>
+  <data name="AwaitingVerificationMessage" xml:space="preserve"><value>Waiting for an inspector to verify the cleanup.</value></data>
+  <data name="HandledByOtherCrewMessage" xml:space="preserve"><value>This report is being handled by another cleanup crew member.</value></data>
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>Activity timeline</value></data>
+  <data name="PhotoModalAlt" xml:space="preserve"><value>Photo</value></data>
+
+  <data name="StartModalTitle" xml:space="preserve"><value>Start cleanup</value></data>
+  <data name="StartModalBody" xml:space="preserve"><value>Upload one or more "before" photos to document the site condition.</value></data>
+  <data name="StartModalPhotosLabel" xml:space="preserve"><value>Before photos</value></data>
+  <data name="StartModalSubmit" xml:space="preserve"><value>Start</value></data>
+
+  <data name="FlagModalTitle" xml:space="preserve"><value>Flag this report for inspector</value></data>
+  <data name="FlagModalBody" xml:space="preserve"><value>Use this if the reported dumpsite cannot be cleaned for any reason. An inspector will review your evidence and decide.</value></data>
+  <data name="FlagReasonLabel" xml:space="preserve"><value>Why can't you complete this cleanup?</value></data>
+  <data name="FlagReasonPlaceholder" xml:space="preserve"><value>Select a reason…</value></data>
+  <data name="FlagReasonNoDumpsiteFound" xml:space="preserve"><value>No dumpsite found at this location</value></data>
+  <data name="FlagReasonAlreadyClean" xml:space="preserve"><value>Site already clean</value></data>
+  <data name="FlagReasonOutsideJurisdiction" xml:space="preserve"><value>Outside our jurisdiction (private land, etc.)</value></data>
+  <data name="FlagReasonPhotoMismatch" xml:space="preserve"><value>Citizen's photo does not match the location</value></data>
+  <data name="FlagReasonOther" xml:space="preserve"><value>Other (specify below)</value></data>
+  <data name="FlagNotesLabel" xml:space="preserve"><value>Additional notes</value></data>
+  <data name="FlagNotesHelp" xml:space="preserve"><value>10–500 characters. Required when reason is "Other".</value></data>
+  <data name="FlagPhotosLabel" xml:space="preserve"><value>Evidence photos</value></data>
+  <data name="FlagPhotosHelp" xml:space="preserve"><value>At least 1, max 5. Show the situation on site.</value></data>
+  <data name="FlagSubmitButton" xml:space="preserve"><value>Submit flag</value></data>
+
+  <data name="CompleteModalTitle" xml:space="preserve"><value>Mark cleanup done</value></data>
+  <data name="CompleteModalBody" xml:space="preserve"><value>Upload "after" photos and leave a short note for the inspector.</value></data>
+  <data name="CompletePhotosLabel" xml:space="preserve"><value>After photos</value></data>
+  <data name="CompleteNotesLabel" xml:space="preserve"><value>Notes (optional)</value></data>
+  <data name="CompleteNotesPlaceholder" xml:space="preserve"><value>What did you do? Any issues?</value></data>
+  <data name="CompleteSubmitButton" xml:space="preserve"><value>Submit for verification</value></data>
+</root>

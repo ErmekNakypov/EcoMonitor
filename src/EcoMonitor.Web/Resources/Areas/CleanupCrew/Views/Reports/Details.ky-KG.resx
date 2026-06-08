@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Тазалоонун чоо-жайы</value></data>
+  <data name="BreadcrumbReport" xml:space="preserve"><value>Билдирүү</value></data>
+  <data name="ReportedAt" xml:space="preserve"><value>Берилген {0} ({1})</value></data>
+
+  <data name="ChannelTelegramTitle" xml:space="preserve"><value>Telegram-бот аркылуу жөнөтүлгөн</value></data>
+  <data name="ChannelTelegramUserIdSuffix" xml:space="preserve"><value>Telegram ID: {0}</value></data>
+  <data name="ChannelWebTitle" xml:space="preserve"><value>Сайт аркылуу жөнөтүлгөн</value></data>
+  <data name="ChannelWebBy" xml:space="preserve"><value>Берген: {0}</value></data>
+  <data name="AnonymousFallback" xml:space="preserve"><value>(аноним)</value></data>
+  <data name="UnknownFallback" xml:space="preserve"><value>(белгисиз)</value></data>
+
+  <data name="TriageAutoTitle" xml:space="preserve"><value>Системa тарабынан автоматтуу тастыкталды</value></data>
+  <data name="TriageAutoBody" xml:space="preserve"><value>Бардык автотриаж эрежелеринен өтүп, кол менен текшерүүсүз тазалоо кезегине түштү.</value></data>
+  <data name="TriageManualTitle" xml:space="preserve"><value>Текшерилгенден кийин инспектор тарабынан тастыкталды</value></data>
+  <data name="TriageManualBody" xml:space="preserve"><value>Триаждын себеби: {0}</value></data>
+
+  <data name="ReporterLabel" xml:space="preserve"><value>Билдирүүчү</value></data>
+  <data name="ReporterStatTotal" xml:space="preserve"><value>Баары</value></data>
+  <data name="ReporterStatInProgress" xml:space="preserve"><value>Иштеп жатат</value></data>
+  <data name="ReporterStatResolved" xml:space="preserve"><value>Чечилген</value></data>
+  <data name="ReporterStatRejected" xml:space="preserve"><value>Четке кагылган</value></data>
+
+  <data name="ConfirmedByInspectorHeading" xml:space="preserve"><value>Инспектор тарабынан тастыкталды</value></data>
+  <data name="InspectorFallback" xml:space="preserve"><value>Инспектор</value></data>
+
+  <data name="RecheckOnSiteTitle" xml:space="preserve"><value>Инспектор сиздин белгилөөңүздү четке какты — жайында кайра текшериңиз</value></data>
+  <data name="RecheckOnSiteBody" xml:space="preserve"><value>Инспектор таштандынын бар экенин тастыктады. Экинчи жолу белгилөөдөн мурун кайра карап чыгыңыз.</value></data>
+
+  <data name="PreviouslyFlaggedTitle" xml:space="preserve"><value>Мурда башка бригада тарабынан белгиленген</value></data>
+  <data name="PreviouslyFlaggedBody" xml:space="preserve"><value>Инспектор белгилөөнү карап чыкты жана таштанды чыныгы деп тапты. Иш-аракет баштаардан мурун кылдат текшериңиз.</value></data>
+
+  <data name="ReworkRequired" xml:space="preserve"><value>Кайра тазалоо талап кылынат (аракет №{0})</value></data>
+  <data name="ReworkReturnedAt" xml:space="preserve"><value>Тургундун даттануусу боюнча кайтарылды {0} UTC</value></data>
+  <data name="InspectorNotePrefix" xml:space="preserve"><value>Инспектордун эскертүүсү:</value></data>
+  <data name="CitizenReasonPrefix" xml:space="preserve"><value>Тургундун себеби:</value></data>
+
+  <data name="DescriptionHeading" xml:space="preserve"><value>Тургундун сүрөттөмөсү</value></data>
+  <data name="CleanupNotesHeading" xml:space="preserve"><value>Тазалоо боюнча эскертүүлөр</value></data>
+  <data name="CitizenAppealHeading" xml:space="preserve"><value>Тургундун даттануусу</value></data>
+  <data name="AppealedAt" xml:space="preserve"><value>Даттануу берилген {0} UTC</value></data>
+  <data name="InspectorAppealDecisionHeading" xml:space="preserve"><value>Инспектордун даттануу боюнча чечими</value></data>
+  <data name="AppealUpheld" xml:space="preserve"><value>Даттануу канааттандырылды</value></data>
+  <data name="AppealDismissed" xml:space="preserve"><value>Даттануу четке кагылды</value></data>
+  <data name="AppealReviewedAtSuffix" xml:space="preserve"><value> · {0} UTC</value></data>
+
+  <data name="CitizenPhotosHeading" xml:space="preserve"><value>Тургундун сүрөттөрү ({0})</value></data>
+  <data name="CitizenPhotoAlt" xml:space="preserve"><value>Тургундун сүрөтү</value></data>
+  <data name="InspectorPhotosHeading" xml:space="preserve"><value>Инспектордун текшерүү сүрөттөрү ({0})</value></data>
+  <data name="InspectorPhotoAlt" xml:space="preserve"><value>Инспектор сүрөтү</value></data>
+  <data name="BeforeCleanupHeading" xml:space="preserve"><value>Тазалоого чейин ({0})</value></data>
+  <data name="BeforeCleanupAlt" xml:space="preserve"><value>Тазалоого чейин</value></data>
+  <data name="AfterCleanupHeading" xml:space="preserve"><value>Тазалоодон кийин ({0})</value></data>
+  <data name="AfterCleanupAlt" xml:space="preserve"><value>Тазалоодон кийин</value></data>
+  <data name="AppealPhotosHeading" xml:space="preserve"><value>Тургундун даттануу сүрөттөрү ({0})</value></data>
+  <data name="AppealPhotosCaption" xml:space="preserve"><value>Тургун даттануусун ырастоо үчүн тиркеген сүрөттөр.</value></data>
+  <data name="AppealPhotoAlt" xml:space="preserve"><value>Даттануу сүрөтү</value></data>
+
+  <data name="LocationHeading" xml:space="preserve"><value>Жайгашкан жери</value></data>
+  <data name="ActionsHeading" xml:space="preserve"><value>Аракеттер</value></data>
+  <data name="TakeReportButton" xml:space="preserve"><value>Билдирүүнү алуу</value></data>
+  <data name="StartCleanupButton" xml:space="preserve"><value>Тазалоону баштоо</value></data>
+  <data name="FlagButton" xml:space="preserve"><value>Аткара албайм — инспекторго белгилөө</value></data>
+  <data name="MarkDoneButton" xml:space="preserve"><value>Тазалоо аяктады деп белгилөө</value></data>
+  <data name="FlagWaitingMessage" xml:space="preserve"><value>Сиз бул билдирүүнү белгиледиңиз. Инспектордун кароосун күтөт.</value></data>
+  <data name="AwaitingVerificationMessage" xml:space="preserve"><value>Инспектордун тазалоону текшерүүсү күтүлүүдө.</value></data>
+  <data name="HandledByOtherCrewMessage" xml:space="preserve"><value>Бул билдирүүнү тазалоо бригадасынын башка мүчөсү иштеп жатат.</value></data>
+  <data name="ActivityTimelineHeading" xml:space="preserve"><value>Аракеттер тарыхы</value></data>
+  <data name="PhotoModalAlt" xml:space="preserve"><value>Сүрөт</value></data>
+
+  <data name="StartModalTitle" xml:space="preserve"><value>Тазалоону баштоо</value></data>
+  <data name="StartModalBody" xml:space="preserve"><value>Жайдын абалын каттоо үчүн «чейинки» бир же бир нече сүрөт жүктөңүз.</value></data>
+  <data name="StartModalPhotosLabel" xml:space="preserve"><value>«Чейинки» сүрөттөр</value></data>
+  <data name="StartModalSubmit" xml:space="preserve"><value>Баштоо</value></data>
+
+  <data name="FlagModalTitle" xml:space="preserve"><value>Бул билдирүүнү инспекторго белгилөө</value></data>
+  <data name="FlagModalBody" xml:space="preserve"><value>Эгер таштандыны кандайдыр бир себеп менен тазалоого болбосо, ушуну колдонуңуз. Инспектор далилдериңизди карап, чечим кабыл алат.</value></data>
+  <data name="FlagReasonLabel" xml:space="preserve"><value>Эмне үчүн тазалоону аяктай албайсыз?</value></data>
+  <data name="FlagReasonPlaceholder" xml:space="preserve"><value>Себебин тандаңыз…</value></data>
+  <data name="FlagReasonNoDumpsiteFound" xml:space="preserve"><value>Бул жерден таштанды табылган жок</value></data>
+  <data name="FlagReasonAlreadyClean" xml:space="preserve"><value>Жер мурдатан таза</value></data>
+  <data name="FlagReasonOutsideJurisdiction" xml:space="preserve"><value>Биздин зонадан тышкары (жеке менчик ж.б.)</value></data>
+  <data name="FlagReasonPhotoMismatch" xml:space="preserve"><value>Тургундун сүрөтү жайга дал келбейт</value></data>
+  <data name="FlagReasonOther" xml:space="preserve"><value>Башка (төмөндө көрсөтүңүз)</value></data>
+  <data name="FlagNotesLabel" xml:space="preserve"><value>Кошумча эскертүүлөр</value></data>
+  <data name="FlagNotesHelp" xml:space="preserve"><value>10–500 символ. Эгер «Башка» тандалса, милдеттүү.</value></data>
+  <data name="FlagPhotosLabel" xml:space="preserve"><value>Далил сүрөттөр</value></data>
+  <data name="FlagPhotosHelp" xml:space="preserve"><value>Эң аз 1, эң көп 5. Жайдагы абалды көрсөтүңүз.</value></data>
+  <data name="FlagSubmitButton" xml:space="preserve"><value>Белгилөөнү жөнөтүү</value></data>
+
+  <data name="CompleteModalTitle" xml:space="preserve"><value>Тазалоо аяктады деп белгилөө</value></data>
+  <data name="CompleteModalBody" xml:space="preserve"><value>«Кийинки» сүрөттөрдү жүктөңүз жана инспекторго кыска эскертүү калтырыңыз.</value></data>
+  <data name="CompletePhotosLabel" xml:space="preserve"><value>«Кийинки» сүрөттөр</value></data>
+  <data name="CompleteNotesLabel" xml:space="preserve"><value>Эскертүүлөр (милдеттүү эмес)</value></data>
+  <data name="CompleteNotesPlaceholder" xml:space="preserve"><value>Эмне иштедиңиз? Кыйынчылыктар болдубу?</value></data>
+  <data name="CompleteSubmitButton" xml:space="preserve"><value>Текшерүүгө жөнөтүү</value></data>
+</root>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="LocationBadge" xml:space="preserve"><value>Бишкек, Кыргызстан</value></data>
+  <data name="Headline" xml:space="preserve"><value>Тазараак аба. Тазараак көчөлөр.</value></data>
+  <data name="Lead" xml:space="preserve"><value>Бишкек тургундары үчүн реалдуу убакыттагы экологиялык мониторинг жана таштанды башкаруу.</value></data>
+  <data name="LearnMoreButton" xml:space="preserve"><value>Көбүрөөк билүү</value></data>
+
+  <data name="FeaturesHeading" xml:space="preserve"><value>Биз эмне кылабыз</value></data>
+  <data name="FeaturesSubtitle" xml:space="preserve"><value>Шаар экологиясынын үч таяныч багыты</value></data>
+
+  <data name="Feature1Title" xml:space="preserve"><value>Аба сапатын көзөмөлдөө</value></data>
+  <data name="Feature1Body" xml:space="preserve"><value>Бишкек боюнча станциялардан PM2.5, PM10, температура жана нымдуулук үзгүлтүксүз ченелет.</value></data>
+
+  <data name="Feature2Title" xml:space="preserve"><value>Акылдуу таштанды эсеби</value></data>
+  <data name="Feature2Body" xml:space="preserve"><value>Контейнерлердин толтурулушу реалдуу убакытта, оптималдуу чыгаруу маршруттары жана шаар кызматтары үчүн аналитика.</value></data>
+
+  <data name="Feature3Title" xml:space="preserve"><value>Жарандардын катышуусу</value></data>
+  <data name="Feature3Body" xml:space="preserve"><value>Уруксатсыз таштандылар жөнүндө сүрөт жана координат менен билдириңиз да, инспекторлордун тазалаганын байкаңыз.</value></data>
+
+  <data name="TelegramTitle" xml:space="preserve"><value>Telegram аркылуу билдирүү</value></data>
+  <data name="TelegramBody" xml:space="preserve"><value>Кирүүнү каалабайсызбы? Биздин Telegram-бот аркылуу түз эле билдирүү жөнөтүңүз — сүрөттөмө, сүрөттөр, координат, бүттү.</value></data>
+
+  <data name="StatSensorStations" xml:space="preserve"><value>сенсордук станция</value></data>
+  <data name="StatTrackedContainers" xml:space="preserve"><value>көзөмөлдөгү контейнер</value></data>
+  <data name="StatCitizenReporting" xml:space="preserve"><value>билдирүүлөрдү кабыл алуу</value></data>
+</root>

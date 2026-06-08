@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="LocationBadge" xml:space="preserve"><value>Бишкек, Кыргызстан</value></data>
+  <data name="Headline" xml:space="preserve"><value>Чище воздух. Чище улицы.</value></data>
+  <data name="Lead" xml:space="preserve"><value>Мониторинг окружающей среды и управление отходами для жителей Бишкека в реальном времени.</value></data>
+  <data name="LearnMoreButton" xml:space="preserve"><value>Узнать больше</value></data>
+
+  <data name="FeaturesHeading" xml:space="preserve"><value>Что мы делаем</value></data>
+  <data name="FeaturesSubtitle" xml:space="preserve"><value>Три столпа городской экологии</value></data>
+
+  <data name="Feature1Title" xml:space="preserve"><value>Мониторинг качества воздуха</value></data>
+  <data name="Feature1Body" xml:space="preserve"><value>Постоянное измерение PM2.5, PM10, температуры и влажности со станций по всему Бишкеку.</value></data>
+
+  <data name="Feature2Title" xml:space="preserve"><value>Умный учёт отходов</value></data>
+  <data name="Feature2Body" xml:space="preserve"><value>Заполнение контейнеров в реальном времени, оптимальные маршруты вывоза и аналитика для городских служб.</value></data>
+
+  <data name="Feature3Title" xml:space="preserve"><value>Участие горожан</value></data>
+  <data name="Feature3Body" xml:space="preserve"><value>Сообщайте о несанкционированных свалках с фото и координатами и следите, как инспекторы их устраняют.</value></data>
+
+  <data name="TelegramTitle" xml:space="preserve"><value>Сообщайте через Telegram</value></data>
+  <data name="TelegramBody" xml:space="preserve"><value>Не хочется входить? Отправьте заявку прямо через наш Telegram-бот — описание, фото, координаты, и готово.</value></data>
+
+  <data name="StatSensorStations" xml:space="preserve"><value>станций датчиков</value></data>
+  <data name="StatTrackedContainers" xml:space="preserve"><value>отслеживаемых контейнеров</value></data>
+  <data name="StatCitizenReporting" xml:space="preserve"><value>приём заявок</value></data>
+</root>

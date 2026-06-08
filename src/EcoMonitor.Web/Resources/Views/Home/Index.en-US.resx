@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="LocationBadge" xml:space="preserve"><value>Bishkek, Kyrgyzstan</value></data>
+  <data name="Headline" xml:space="preserve"><value>Cleaner air. Cleaner streets.</value></data>
+  <data name="Lead" xml:space="preserve"><value>Real-time environmental monitoring and waste management for the citizens of Bishkek.</value></data>
+  <data name="LearnMoreButton" xml:space="preserve"><value>Learn more</value></data>
+
+  <data name="FeaturesHeading" xml:space="preserve"><value>What we do</value></data>
+  <data name="FeaturesSubtitle" xml:space="preserve"><value>Three pillars of urban environmental management</value></data>
+
+  <data name="Feature1Title" xml:space="preserve"><value>Air Quality Monitoring</value></data>
+  <data name="Feature1Body" xml:space="preserve"><value>Continuous tracking of PM2.5, PM10, temperature and humidity from sensor stations across Bishkek.</value></data>
+
+  <data name="Feature2Title" xml:space="preserve"><value>Smart Waste Tracking</value></data>
+  <data name="Feature2Body" xml:space="preserve"><value>Real-time container fill levels, optimized collection routes, and operational analytics for city services.</value></data>
+
+  <data name="Feature3Title" xml:space="preserve"><value>Citizen Engagement</value></data>
+  <data name="Feature3Body" xml:space="preserve"><value>Report unauthorized dumpsites with photo and location, then watch as inspectors resolve them.</value></data>
+
+  <data name="TelegramTitle" xml:space="preserve"><value>Report from Telegram</value></data>
+  <data name="TelegramBody" xml:space="preserve"><value>Don't want to log in? Send dumpsite reports directly through our Telegram bot — description, photos, location, and you're done.</value></data>
+
+  <data name="StatSensorStations" xml:space="preserve"><value>sensor stations</value></data>
+  <data name="StatTrackedContainers" xml:space="preserve"><value>tracked containers</value></data>
+  <data name="StatCitizenReporting" xml:space="preserve"><value>citizen reporting</value></data>
+</root>

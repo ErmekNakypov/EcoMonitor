@@ -1,6 +1,9 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Home";
+    // Page title doubles as the navbar's "Home" link — single source via Nav.Home.
+    ViewData["Title"] = SharedLocalizer["Nav.Home"].Value;
     var botUsername = Configuration["Telegram:BotUsername"];
 }
 
@@ -8,18 +11,18 @@
     <div class="container py-md-5 text-center">
         <span class="hero-badge mb-4">
             <i class="bi bi-geo-alt"></i>
-            <span>Bishkek, Kyrgyzstan</span>
+            <span>@Localizer["LocationBadge"]</span>
         </span>
-        <h1 class="display-3 fw-800 mb-3 mt-3">Cleaner air. Cleaner streets.</h1>
+        <h1 class="display-3 fw-800 mb-3 mt-3">@Localizer["Headline"]</h1>
         <p class="lead text-muted mx-auto mb-4" style="max-width: 700px;">
-            Real-time environmental monitoring and waste management for the citizens of Bishkek.
+            @Localizer["Lead"]
         </p>
         <div class="d-flex flex-wrap justify-content-center gap-3">
             <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">
-                <span>Get started</span>
+                <span>@SharedLocalizer["Nav.GetStarted"]</span>
                 <i class="bi bi-arrow-right ms-2"></i>
             </a>
-            <a href="#features" class="btn btn-outline-secondary btn-lg">Learn more</a>
+            <a href="#features" class="btn btn-outline-secondary btn-lg">@Localizer["LearnMoreButton"]</a>
         </div>
     </div>
 </section>
@@ -27,29 +30,29 @@
 <section id="features" class="py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-700 mb-2">What we do</h2>
-            <p class="text-muted mb-0">Three pillars of urban environmental management</p>
+            <h2 class="fw-700 mb-2">@Localizer["FeaturesHeading"]</h2>
+            <p class="text-muted mb-0">@Localizer["FeaturesSubtitle"]</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="bi bi-wind"></i></div>
-                    <h3 class="h5 fw-700 mb-2">Air Quality Monitoring</h3>
-                    <p class="text-muted mb-0">Continuous tracking of PM2.5, PM10, temperature and humidity from sensor stations across Bishkek.</p>
+                    <h3 class="h5 fw-700 mb-2">@Localizer["Feature1Title"]</h3>
+                    <p class="text-muted mb-0">@Localizer["Feature1Body"]</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="bi bi-trash3"></i></div>
-                    <h3 class="h5 fw-700 mb-2">Smart Waste Tracking</h3>
-                    <p class="text-muted mb-0">Real-time container fill levels, optimized collection routes, and operational analytics for city services.</p>
+                    <h3 class="h5 fw-700 mb-2">@Localizer["Feature2Title"]</h3>
+                    <p class="text-muted mb-0">@Localizer["Feature2Body"]</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="bi bi-pin-map-fill"></i></div>
-                    <h3 class="h5 fw-700 mb-2">Citizen Engagement</h3>
-                    <p class="text-muted mb-0">Report unauthorized dumpsites with photo and location, then watch as inspectors resolve them.</p>
+                    <h3 class="h5 fw-700 mb-2">@Localizer["Feature3Title"]</h3>
+                    <p class="text-muted mb-0">@Localizer["Feature3Body"]</p>
                 </div>
             </div>
         </div>
@@ -63,9 +66,9 @@
             <div class="auth-card d-flex flex-column flex-md-row align-items-md-center gap-3">
                 <i class="bi bi-telegram" style="font-size: 2.5rem; color: #0088cc;"></i>
                 <div class="flex-grow-1">
-                    <h3 class="h6 fw-700 mb-1">Report from Telegram</h3>
+                    <h3 class="h6 fw-700 mb-1">@Localizer["TelegramTitle"]</h3>
                     <p class="text-muted small mb-0">
-                        Don't want to log in? Send dumpsite reports directly through our Telegram bot — description, photos, location, and you're done.
+                        @Localizer["TelegramBody"]
                     </p>
                 </div>
                 <a href="https://t.me/@botUsername" target="_blank" rel="noopener" class="btn btn-primary">
@@ -81,15 +84,15 @@
         <div class="row text-center g-3">
             <div class="col-md-4">
                 <div class="stats-number h2 mb-1">12</div>
-                <div class="stats-label">sensor stations</div>
+                <div class="stats-label">@Localizer["StatSensorStations"]</div>
             </div>
             <div class="col-md-4">
                 <div class="stats-number h2 mb-1">850+</div>
-                <div class="stats-label">tracked containers</div>
+                <div class="stats-label">@Localizer["StatTrackedContainers"]</div>
             </div>
             <div class="col-md-4">
                 <div class="stats-number h2 mb-1">24/7</div>
-                <div class="stats-label">citizen reporting</div>
+                <div class="stats-label">@Localizer["StatCitizenReporting"]</div>
             </div>
         </div>
     </div>

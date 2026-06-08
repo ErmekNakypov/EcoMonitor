@@ -4,6 +4,7 @@ using EcoMonitor.Infrastructure.Persistence.Seeders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace EcoMonitor.Web.Areas.Admin.Controllers;
@@ -18,19 +19,22 @@ public class DiagnosticsController : Controller
     private readonly IApplicationDbContext _db;
     private readonly IDistrictResolver _districts;
     private readonly ILogger<DiagnosticsController> _logger;
+    private readonly IStringLocalizer<DiagnosticsController> _localizer;
 
     public DiagnosticsController(
         IAirQualityIngestionRunner runner,
         IContainerImportService containerImporter,
         IApplicationDbContext db,
         IDistrictResolver districts,
-        ILogger<DiagnosticsController> logger)
+        ILogger<DiagnosticsController> logger,
+        IStringLocalizer<DiagnosticsController> localizer)
     {
         _runner = runner;
         _containerImporter = containerImporter;
         _db = db;
         _districts = districts;
         _logger = logger;
+        _localizer = localizer;
     }
 
     [HttpGet("")]
@@ -43,23 +47,28 @@ public class DiagnosticsController : Controller
         var result = await _runner.RunOnceAsync();
         if (result.Error is null)
         {
+            // Provider names like "OpenAQ" are literal product names — they
+            // stay in English regardless of locale. Only the "no providers
+            // contributed" fallback phrase + the failure-suffix label are
+            // routed through the controller bundle.
             var breakdown = string.Join(" + ",
                 result.ProviderResults
                     .Where(p => p.Saved > 0)
                     .Select(p => $"{p.Saved} {p.ProviderName}"));
-            if (string.IsNullOrEmpty(breakdown)) breakdown = "no providers contributed";
+            if (string.IsNullOrEmpty(breakdown)) breakdown = _localizer["IngestionNoProviders"].Value;
 
             var failed = result.ProviderResults.Where(p => p.Error is not null).ToList();
             var failedSuffix = failed.Count == 0
                 ? string.Empty
-                : $" Failed: {string.Join(", ", failed.Select(p => $"{p.ProviderName} ({p.Error})"))}";
+                : _localizer["IngestionFailedSuffixFormat",
+                    string.Join(", ", failed.Select(p => $"{p.ProviderName} ({p.Error})"))].Value;
 
-            TempData["SuccessMessage"] =
-                $"Ingestion ok: {result.TotalReadingsSaved} new readings ({breakdown}, {result.DuplicatesSkipped} duplicates skipped).{failedSuffix}";
+            TempData["SuccessMessage"] = _localizer["IngestionSuccessFormat",
+                result.TotalReadingsSaved, breakdown, result.DuplicatesSkipped, failedSuffix].Value;
         }
         else
         {
-            TempData["ErrorMessage"] = $"Ingestion problem: {result.Error}";
+            TempData["ErrorMessage"] = _localizer["IngestionErrorFormat", result.Error].Value;
         }
 
         return RedirectToAction(nameof(Index));
@@ -87,8 +96,7 @@ public class DiagnosticsController : Controller
             await _db.SaveChangesAsync(ct);
         }
 
-        TempData["SuccessMessage"] =
-            $"District backfill complete: {matched} of {unassigned.Count} reports matched a district.";
+        TempData["SuccessMessage"] = _localizer["BackfillReportsSuccessFormat", matched, unassigned.Count].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -114,8 +122,7 @@ public class DiagnosticsController : Controller
             await _db.SaveChangesAsync(ct);
         }
 
-        TempData["SuccessMessage"] =
-            $"Container district backfill complete: {matched} of {unassigned.Count} containers matched a district.";
+        TempData["SuccessMessage"] = _localizer["BackfillContainersSuccessFormat", matched, unassigned.Count].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -125,8 +132,7 @@ public class DiagnosticsController : Controller
     {
         var rewritten = await BishkekDistrictsSeeder.ReseedBoundariesAsync(
             _db, _districts, _logger, ct);
-        TempData["SuccessMessage"] =
-            $"Reseeded boundary points for {rewritten} of 4 districts. Map polygons and point-in-polygon resolution use the new shapes.";
+        TempData["SuccessMessage"] = _localizer["ReseedBoundariesSuccessFormat", rewritten].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -138,16 +144,15 @@ public class DiagnosticsController : Controller
         {
             var rewritten = await BishkekDistrictsSeeder.ReseedFromGeoJsonAsync(
                 _db, _districts, _logger, ct);
-            TempData["SuccessMessage"] =
-                $"Reseeded boundary points for {rewritten} of 4 districts from the bundled GeoJSON snapshot (real OSM-derived polygons).";
+            TempData["SuccessMessage"] = _localizer["ReseedFromGeoJsonSuccessFormat", rewritten].Value;
         }
         catch (FileNotFoundException ex)
         {
-            TempData["ErrorMessage"] = $"GeoJSON snapshot missing: {ex.Message}";
+            TempData["ErrorMessage"] = _localizer["GeoJsonMissingErrorFormat", ex.Message].Value;
         }
         catch (InvalidDataException ex)
         {
-            TempData["ErrorMessage"] = $"GeoJSON snapshot rejected by validation: {ex.Message}";
+            TempData["ErrorMessage"] = _localizer["GeoJsonInvalidErrorFormat", ex.Message].Value;
         }
         return RedirectToAction(nameof(Index));
     }
@@ -159,13 +164,15 @@ public class DiagnosticsController : Controller
         var result = await _containerImporter.ImportFromOsmAsync();
         if (result.Error is null)
         {
-            var sourceLabel = result.Source == "live" ? "live OSM" : "bundled snapshot";
-            TempData["SuccessMessage"] =
-                $"OSM import complete (source: {sourceLabel}): {result.Created} created, {result.Updated} updated, {result.Skipped} skipped (out of {result.TotalFetched} fetched).";
+            var sourceLabel = result.Source == "live"
+                ? _localizer["OsmSourceLive"].Value
+                : _localizer["OsmSourceSnapshot"].Value;
+            TempData["SuccessMessage"] = _localizer["OsmImportSuccessFormat",
+                sourceLabel, result.Created, result.Updated, result.Skipped, result.TotalFetched].Value;
         }
         else
         {
-            TempData["ErrorMessage"] = $"Import failed: {result.Error}";
+            TempData["ErrorMessage"] = _localizer["OsmImportErrorFormat", result.Error].Value;
         }
 
         return RedirectToAction(nameof(Index));

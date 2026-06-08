@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="InvalidAddressError" xml:space="preserve"><value>Enter a valid recipient address.</value></data>
+  <!-- {0} = address. -->
+  <data name="QueuedSuccessFormat" xml:space="preserve"><value>Test email queued for {0}. The worker will pick it up within ~15 seconds.</value></data>
+  <!-- {0} = exception message; left untranslated by design. -->
+  <data name="QueueErrorFormat" xml:space="preserve"><value>Failed to queue test email: {0}</value></data>
+
+  <data name="NoFailedToRetry" xml:space="preserve"><value>No failed messages to retry.</value></data>
+  <!-- {0} = count. -->
+  <data name="RequeuedFormat" xml:space="preserve"><value>Re-queued {0} previously failed message(s).</value></data>
+</root>

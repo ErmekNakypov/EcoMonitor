@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Диагностика email</value></data>
+  <data name="Heading" xml:space="preserve"><value>Исходящие email</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Конфигурация, активность очереди и недавние сообщения.</value></data>
+
+  <data name="SmtpConfigured" xml:space="preserve"><value>SMTP настроен</value></data>
+  <data name="SmtpNotConfigured" xml:space="preserve"><value>SMTP не настроен</value></data>
+
+  <data name="HostLabel" xml:space="preserve"><value>Хост</value></data>
+  <data name="NotSetFallback" xml:space="preserve"><value>(не задано)</value></data>
+  <data name="SslSuffix" xml:space="preserve"><value>(SSL)</value></data>
+  <data name="UsernameLabel" xml:space="preserve"><value>Пользователь</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Пароль</value></data>
+  <data name="FromLabel" xml:space="preserve"><value>Отправитель</value></data>
+  <data name="RetriesLabel" xml:space="preserve"><value>Повторы</value></data>
+  <data name="RetriesFormat" xml:space="preserve"><value>{0} попыток, базовая задержка {1} мин. (линейная)</value></data>
+  <data name="ConfigHelp" xml:space="preserve"><value>Задайте &lt;code&gt;Email:Host&lt;/code&gt;, &lt;code&gt;Email:Username&lt;/code&gt; и &lt;code&gt;Email:Password&lt;/code&gt; в user-secrets (разработка) или переменных окружения (продакшен).</value></data>
+
+  <data name="StatPendingLabel" xml:space="preserve"><value>В очереди (7 дн.)</value></data>
+  <data name="StatPendingDesc" xml:space="preserve"><value>Ожидают отправки</value></data>
+  <data name="StatSentLabel" xml:space="preserve"><value>Отправлено (7 дн.)</value></data>
+  <data name="StatSentDesc" xml:space="preserve"><value>Успешно доставлены</value></data>
+  <data name="StatFailedLabel" xml:space="preserve"><value>Ошибки (7 дн.)</value></data>
+  <data name="StatFailedDesc" xml:space="preserve"><value>Превышено число попыток</value></data>
+  <data name="StatFailedAllLabel" xml:space="preserve"><value>Ошибки (за всё время)</value></data>
+  <data name="StatFailedAllDesc" xml:space="preserve"><value>По всей таблице</value></data>
+
+  <data name="ActionsHeading" xml:space="preserve"><value>Действия</value></data>
+  <data name="SendTestLabel" xml:space="preserve"><value>Отправить тестовое письмо</value></data>
+  <data name="SendTestPlaceholder" xml:space="preserve"><value>recipient@example.com</value></data>
+  <data name="SendTestButton" xml:space="preserve"><value>Поставить в очередь</value></data>
+  <data name="RetryFailedButton" xml:space="preserve"><value>Повторить сбойные сообщения</value></data>
+  <data name="NoFailedButton" xml:space="preserve"><value>Нет сбойных сообщений</value></data>
+
+  <data name="RecentHeading" xml:space="preserve"><value>Недавние сообщения</value></data>
+  <data name="RecentSubtitle" xml:space="preserve"><value>Последние 50 записей, новые сверху.</value></data>
+  <data name="EmptyMessage" xml:space="preserve"><value>Письма пока не зафиксированы.</value></data>
+
+  <data name="TableStatus" xml:space="preserve"><value>Статус</value></data>
+  <data name="TableSubject" xml:space="preserve"><value>Тема</value></data>
+  <data name="TableTo" xml:space="preserve"><value>Кому</value></data>
+  <data name="TableRole" xml:space="preserve"><value>Роль</value></data>
+  <data name="TableTemplate" xml:space="preserve"><value>Шаблон</value></data>
+  <data name="TableAttempts" xml:space="preserve"><value>Попыток</value></data>
+  <data name="TableCreated" xml:space="preserve"><value>Создано</value></data>
+  <data name="TableSentNextRetry" xml:space="preserve"><value>Отправлено / следующая попытка</value></data>
+
+  <data name="SentAgo" xml:space="preserve"><value>Отправлено {0}</value></data>
+  <data name="RetryAgo" xml:space="preserve"><value>Повтор {0}</value></data>
+
+  <data name="ModalTitle" xml:space="preserve"><value>Повторить сбойные сообщения</value></data>
+  <data name="ModalBody" xml:space="preserve"><value>Поставить в очередь все &lt;strong&gt;{0}&lt;/strong&gt; сбойных сообщений? Счётчики попыток будут сброшены.</value></data>
+  <data name="ModalConfirmButton" xml:space="preserve"><value>Повторить все</value></data>
+</root>

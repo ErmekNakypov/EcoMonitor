@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Ingestion: success body assembled in 4 parts (one provider per "{count} {name}"
+       piece joined with " + ") because provider names like "OpenAQ" are literal. -->
+  <!-- {0} = total readings saved, {1} = breakdown ("12 OpenAQ"), {2} = duplicates skipped, {3} = failed suffix. -->
+  <data name="IngestionSuccessFormat" xml:space="preserve"><value>Ingestion ok: {0} new readings ({1}, {2} duplicates skipped).{3}</value></data>
+  <data name="IngestionNoProviders" xml:space="preserve"><value>no providers contributed</value></data>
+  <!-- {0} = joined "ProviderName (error)" list. Leading space lets us
+       concat into the success message without re-thinking spacing. -->
+  <data name="IngestionFailedSuffixFormat" xml:space="preserve"><value> Failed: {0}</value></data>
+  <!-- {0} = error message. -->
+  <data name="IngestionErrorFormat" xml:space="preserve"><value>Ingestion problem: {0}</value></data>
+
+  <!-- {0} = matched count, {1} = total unassigned. -->
+  <data name="BackfillReportsSuccessFormat" xml:space="preserve"><value>District backfill complete: {0} of {1} reports matched a district.</value></data>
+  <data name="BackfillContainersSuccessFormat" xml:space="preserve"><value>Container district backfill complete: {0} of {1} containers matched a district.</value></data>
+
+  <!-- {0} = number of districts rewritten (0..4). -->
+  <data name="ReseedBoundariesSuccessFormat" xml:space="preserve"><value>Reseeded boundary points for {0} of 4 districts. Map polygons and point-in-polygon resolution use the new shapes.</value></data>
+  <data name="ReseedFromGeoJsonSuccessFormat" xml:space="preserve"><value>Reseeded boundary points for {0} of 4 districts from the bundled GeoJSON snapshot (real OSM-derived polygons).</value></data>
+  <!-- {0} = OS error / validation message; left untranslated by design. -->
+  <data name="GeoJsonMissingErrorFormat" xml:space="preserve"><value>GeoJSON snapshot missing: {0}</value></data>
+  <data name="GeoJsonInvalidErrorFormat" xml:space="preserve"><value>GeoJSON snapshot rejected by validation: {0}</value></data>
+
+  <!-- {0} = sourceLabel (OsmSourceLive / OsmSourceSnapshot), {1} = created,
+       {2} = updated, {3} = skipped, {4} = total fetched. -->
+  <data name="OsmImportSuccessFormat" xml:space="preserve"><value>OSM import complete (source: {0}): {1} created, {2} updated, {3} skipped (out of {4} fetched).</value></data>
+  <data name="OsmSourceLive" xml:space="preserve"><value>live OSM</value></data>
+  <data name="OsmSourceSnapshot" xml:space="preserve"><value>bundled snapshot</value></data>
+  <!-- {0} = error message. -->
+  <data name="OsmImportErrorFormat" xml:space="preserve"><value>Import failed: {0}</value></data>
+</root>

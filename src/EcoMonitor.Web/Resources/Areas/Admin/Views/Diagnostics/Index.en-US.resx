@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Page title doubles as breadcrumb leaf so we only need one key. -->
+  <data name="Title" xml:space="preserve"><value>Diagnostics</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Diagnostics</value></data>
+  <data name="Heading" xml:space="preserve"><value>System diagnostics</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Tools for testing and verifying system components.</value></data>
+
+  <!-- Air-quality ingestion card -->
+  <data name="IngestionHeading" xml:space="preserve"><value>Air quality ingestion</value></data>
+  <data name="IngestionBody" xml:space="preserve"><value>Trigger one ingestion cycle right now. Normally this runs automatically every 30 minutes.</value></data>
+  <data name="IngestionFootnote" xml:space="preserve"><value>OpenAQ fetches up to 50 stations within 25 km of Bishkek center, then drops readings older than 7 days before saving.</value></data>
+  <data name="IngestionButton" xml:space="preserve"><value>Run ingestion now</value></data>
+
+  <!-- Container import card -->
+  <data name="ContainerImportHeading" xml:space="preserve"><value>Container import from OpenStreetMap</value></data>
+  <data name="ContainerImportBody" xml:space="preserve"><value>Imports waste containers from OpenStreetMap via the Overpass API for Bishkek bounding box.</value></data>
+  <!-- Inline <code> markup is preserved verbatim (literal OSM code prefix). -->
+  <data name="ContainerImportFootnote" xml:space="preserve"><value>Existing imported containers are updated in place by their OSM id; new ones are added with a generated &lt;code&gt;OSM-XXXXX&lt;/code&gt; code. Manually-added containers are not touched.</value></data>
+  <data name="ContainerImportButton" xml:space="preserve"><value>Import from OpenStreetMap</value></data>
+
+  <!-- Backfill reports card -->
+  <data name="BackfillReportsHeading" xml:space="preserve"><value>Backfill districts on existing reports</value></data>
+  <!-- Inline <code>district_id</code> is a literal column name. -->
+  <data name="BackfillReportsBody" xml:space="preserve"><value>Resolves the district for every report with a null &lt;code&gt;district_id&lt;/code&gt; using the point-in-polygon algorithm and the seeded district boundaries. Reports outside every polygon stay null.</value></data>
+  <data name="BackfillReportsButton" xml:space="preserve"><value>Backfill districts</value></data>
+
+  <!-- Backfill containers card -->
+  <data name="BackfillContainersHeading" xml:space="preserve"><value>Backfill districts on existing containers</value></data>
+  <data name="BackfillContainersBody" xml:space="preserve"><value>Resolves the district for every waste container with a null &lt;code&gt;district_id&lt;/code&gt; so future "container is full" IoT tasks auto-route to the right district inspector. Containers outside every polygon stay null and fall back to the broadcast notification path.</value></data>
+  <data name="BackfillContainersButton" xml:space="preserve"><value>Backfill container districts</value></data>
+
+  <!-- Reseed boundaries (hand-tuned) card -->
+  <data name="ReseedBoundariesHeading" xml:space="preserve"><value>Reseed district boundaries</value></data>
+  <!-- Inline <code>BishkekDistrictsSeeder</code> is a literal class name. -->
+  <data name="ReseedBoundariesBody" xml:space="preserve"><value>Rewrites the polygon points of all four Bishkek districts in place using the current spec in &lt;code&gt;BishkekDistrictsSeeder&lt;/code&gt;. Preserves district IDs and inspector assignments — only the boundary points are replaced.</value></data>
+  <data name="ReseedBoundariesFootnote" xml:space="preserve"><value>Run this after editing the boundary spec (e.g. to switch from simplified rectangles to irregular polygons). The in-memory cache is invalidated automatically; existing reports keep their &lt;code&gt;district_id&lt;/code&gt; values, so consider running "Backfill districts" afterwards if the new shapes substantially reassign coordinates.</value></data>
+  <data name="ReseedBoundariesButton" xml:space="preserve"><value>Reseed district boundaries</value></data>
+
+  <!-- Reseed boundaries (GeoJSON) card -->
+  <data name="ReseedFromGeoJsonHeading" xml:space="preserve"><value>Reseed district boundaries from GeoJSON (real OSM)</value></data>
+  <data name="ReseedFromGeoJsonBody" xml:space="preserve"><value>Replaces all four district polygons with the real OSM-derived boundaries shipped as &lt;code&gt;Districts/Snapshots/bishkek-districts.geojson&lt;/code&gt;. Same idempotent transactional write path as the hand-tuned reseed above — district IDs and inspector assignments are preserved.</value></data>
+  <!-- District codes (LENIN/PERVOMAY/SVERDLOV/OKTYABR) are literal identifiers
+       and stay in English. The <em>Backfill districts</em> emphasis is a
+       cross-reference to the card above. -->
+  <data name="ReseedFromGeoJsonFootnote" xml:space="preserve"><value>The file is validated strictly before any DB write: exactly 4 Polygon features with codes &lt;code&gt;LENIN&lt;/code&gt;, &lt;code&gt;PERVOMAY&lt;/code&gt;, &lt;code&gt;SVERDLOV&lt;/code&gt;, &lt;code&gt;OKTYABR&lt;/code&gt;; if validation fails the existing boundaries stay intact. After running, consider &lt;em&gt;Backfill districts&lt;/em&gt; so historic reports near a moved edge re-resolve.</value></data>
+  <data name="ReseedFromGeoJsonButton" xml:space="preserve"><value>Reseed from GeoJSON (real OSM)</value></data>
+</root>

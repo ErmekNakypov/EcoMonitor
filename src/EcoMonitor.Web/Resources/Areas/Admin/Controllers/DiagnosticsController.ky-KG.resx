@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="IngestionSuccessFormat" xml:space="preserve"><value>Жүктөө аткарылды: {0} жаңы өлчөө ({1}, өткөрүлүп жиберилген кайталануулар: {2}).{3}</value></data>
+  <data name="IngestionNoProviders" xml:space="preserve"><value>провайдерлер маалымат бербеди</value></data>
+  <data name="IngestionFailedSuffixFormat" xml:space="preserve"><value> Каталар: {0}</value></data>
+  <data name="IngestionErrorFormat" xml:space="preserve"><value>Жүктөөдө көйгөй: {0}</value></data>
+
+  <data name="BackfillReportsSuccessFormat" xml:space="preserve"><value>Райондорду толтуруу аяктады: {1} кайрылуунун {0}-си район менен дал келди.</value></data>
+  <data name="BackfillContainersSuccessFormat" xml:space="preserve"><value>Контейнерлердин райондорун толтуруу аяктады: {1} контейнердин {0}-си район менен дал келди.</value></data>
+
+  <data name="ReseedBoundariesSuccessFormat" xml:space="preserve"><value>4 райондун {0}-си үчүн чек чекиттери кайра жазылды. Карта жана «чекит-полигондо» аныктоосу жаңы формаларды колдонот.</value></data>
+  <data name="ReseedFromGeoJsonSuccessFormat" xml:space="preserve"><value>4 райондун {0}-си үчүн чек чекиттери жөнөтүлгөн GeoJSON-снимоктон кайра жазылды (OSM'дан алынган реалдуу полигондор).</value></data>
+  <data name="GeoJsonMissingErrorFormat" xml:space="preserve"><value>GeoJSON-снимок табылган жок: {0}</value></data>
+  <data name="GeoJsonInvalidErrorFormat" xml:space="preserve"><value>GeoJSON-снимок текшерүүдөн өттү: {0}</value></data>
+
+  <data name="OsmImportSuccessFormat" xml:space="preserve"><value>OSM-импорт аяктады (булагы: {0}): {1} түзүлдү, {2} жаңыланды, {3} өткөрүлүп жиберилди ({4} алынгандан).</value></data>
+  <data name="OsmSourceLive" xml:space="preserve"><value>реалдуу убакыттагы OSM</value></data>
+  <data name="OsmSourceSnapshot" xml:space="preserve"><value>жөнөтүлгөн снимок</value></data>
+  <data name="OsmImportErrorFormat" xml:space="preserve"><value>Импорт ийгиликсиз: {0}</value></data>
+</root>

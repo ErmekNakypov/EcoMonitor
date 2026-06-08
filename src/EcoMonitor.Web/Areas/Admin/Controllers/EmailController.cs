@@ -6,6 +6,7 @@ using EcoMonitor.Web.Models.Admin.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
 namespace EcoMonitor.Web.Areas.Admin.Controllers;
@@ -19,17 +20,20 @@ public class EmailController : Controller
     private readonly EmailOptions _options;
     private readonly IEmailQueue _queue;
     private readonly ILogger<EmailController> _logger;
+    private readonly IStringLocalizer<EmailController> _localizer;
 
     public EmailController(
         IApplicationDbContext db,
         IOptions<EmailOptions> options,
         IEmailQueue queue,
-        ILogger<EmailController> logger)
+        ILogger<EmailController> logger,
+        IStringLocalizer<EmailController> localizer)
     {
         _db = db;
         _options = options.Value;
         _queue = queue;
         _logger = logger;
+        _localizer = localizer;
     }
 
     [HttpGet("")]
@@ -96,7 +100,7 @@ public class EmailController : Controller
     {
         if (string.IsNullOrWhiteSpace(toAddress) || !toAddress.Contains('@'))
         {
-            TempData["ErrorMessage"] = "Enter a valid recipient address.";
+            TempData["ErrorMessage"] = _localizer["InvalidAddressError"].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -113,12 +117,12 @@ public class EmailController : Controller
         try
         {
             await _queue.EnqueueAsync(toAddress.Trim(), string.Empty, "EcoMonitor test email", html, "TestEmail", null, ct);
-            TempData["SuccessMessage"] = $"Test email queued for {toAddress}. The worker will pick it up within ~15 seconds.";
+            TempData["SuccessMessage"] = _localizer["QueuedSuccessFormat", toAddress].Value;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to enqueue test email to {To}", toAddress);
-            TempData["ErrorMessage"] = $"Failed to queue test email: {ex.Message}";
+            TempData["ErrorMessage"] = _localizer["QueueErrorFormat", ex.Message].Value;
         }
 
         return RedirectToAction(nameof(Index));
@@ -144,8 +148,8 @@ public class EmailController : Controller
         await _db.SaveChangesAsync(ct);
 
         TempData["SuccessMessage"] = failed.Count == 0
-            ? "No failed messages to retry."
-            : $"Re-queued {failed.Count} previously failed message(s).";
+            ? _localizer["NoFailedToRetry"].Value
+            : _localizer["RequeuedFormat", failed.Count].Value;
 
         return RedirectToAction(nameof(Index));
     }

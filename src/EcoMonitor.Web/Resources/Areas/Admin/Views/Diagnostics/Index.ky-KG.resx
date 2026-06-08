@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Диагностика</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Диагностика</value></data>
+  <data name="Heading" xml:space="preserve"><value>Системалык диагностика</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Системанын компоненттерин текшерүү жана тастыктоо үчүн куралдар.</value></data>
+
+  <data name="IngestionHeading" xml:space="preserve"><value>Аба сапаты боюнча маалыматтарды жүктөө</value></data>
+  <data name="IngestionBody" xml:space="preserve"><value>Бир жүктөө циклин азыр иштетүү. Адатта бул автоматтык түрдө ар 30 мүнөт сайын аткарылат.</value></data>
+  <data name="IngestionFootnote" xml:space="preserve"><value>OpenAQ Бишкектин борборунан 25 км радиуска чейин 50 станцияга чейин жүктөйт, андан кийин сактоо алдында 7 күндөн эски өлчөөлөрдү алып салат.</value></data>
+  <data name="IngestionButton" xml:space="preserve"><value>Жүктөөнү азыр иштетүү</value></data>
+
+  <data name="ContainerImportHeading" xml:space="preserve"><value>OpenStreetMap'тан контейнерлерди импорттоо</value></data>
+  <data name="ContainerImportBody" xml:space="preserve"><value>OpenStreetMap'тан Overpass API аркылуу Бишкектин чегиндеги таштанды контейнерлерин импорттойт.</value></data>
+  <data name="ContainerImportFootnote" xml:space="preserve"><value>Учурдагы импорттолгон контейнерлер OSM ID боюнча жаңыланат; жаңылары автоматтык түрдө түзүлгөн &lt;code&gt;OSM-XXXXX&lt;/code&gt; коду менен кошулат. Кол менен кошулган контейнерлер тийгизилбейт.</value></data>
+  <data name="ContainerImportButton" xml:space="preserve"><value>OpenStreetMap'тан импорттоо</value></data>
+
+  <data name="BackfillReportsHeading" xml:space="preserve"><value>Учурдагы кайрылуулар үчүн райондорду толтуруу</value></data>
+  <data name="BackfillReportsBody" xml:space="preserve"><value>&lt;code&gt;district_id&lt;/code&gt; бош болгон ар бир кайрылуу үчүн «чекит-полигондо» алгоритми жана сакталган район чектери аркылуу районду аныктайт. Бардык полигондон тышкары калган кайрылуулар бош бойдон калат.</value></data>
+  <data name="BackfillReportsButton" xml:space="preserve"><value>Райондорду толтуруу</value></data>
+
+  <data name="BackfillContainersHeading" xml:space="preserve"><value>Учурдагы контейнерлер үчүн райондорду толтуруу</value></data>
+  <data name="BackfillContainersBody" xml:space="preserve"><value>&lt;code&gt;district_id&lt;/code&gt; бош болгон ар бир таштанды контейнери үчүн районду аныктайт, ушунун натыйжасында келечектеги «контейнер толду» IoT тапшырмалары туура райондук инспекторго багытталат. Бардык полигондон тышкары калган контейнерлер бош бойдон калат жана кең таркалуу билдирүү жолуна өтөт.</value></data>
+  <data name="BackfillContainersButton" xml:space="preserve"><value>Контейнерлердин райондорун толтуруу</value></data>
+
+  <data name="ReseedBoundariesHeading" xml:space="preserve"><value>Райондордун чектерин кайра түзүү</value></data>
+  <data name="ReseedBoundariesBody" xml:space="preserve"><value>&lt;code&gt;BishkekDistrictsSeeder&lt;/code&gt; ичиндеги учурдагы спецификацияны колдонуп Бишкектин төрт районунун полигон чекиттерин ордунда кайра жазат. Райондордун ID-лери жана инспекторлордун дайындалуусу сакталат — чек чекиттери гана алмаштырылат.</value></data>
+  <data name="ReseedBoundariesFootnote" xml:space="preserve"><value>Чек спецификациясын өзгөрткөндөн кийин (мисалы, жөнөкөй тик бурчтуктардан туура эмес полигондорго өтүү) иштетиңиз. Эс-тутумдагы кэш автоматтык түрдө тазаланат; учурдагы кайрылуулардын &lt;code&gt;district_id&lt;/code&gt; маанилери сакталат, ошондуктан жаңы формалар координаталарды бир кыйла кайра белгилеген учурда андан кийин «Райондорду толтуруу» иштеткен жакшы.</value></data>
+  <data name="ReseedBoundariesButton" xml:space="preserve"><value>Райондордун чектерин кайра түзүү</value></data>
+
+  <data name="ReseedFromGeoJsonHeading" xml:space="preserve"><value>GeoJSON'дон (реалдуу OSM) чектерди кайра түзүү</value></data>
+  <data name="ReseedFromGeoJsonBody" xml:space="preserve"><value>Төрт райондун полигондорун &lt;code&gt;Districts/Snapshots/bishkek-districts.geojson&lt;/code&gt; катары жөнөтүлгөн OSM'дан алынган реалдуу чектер менен алмаштырат. Жогорудагы кол менен жазылган кайра түзүүгө окшош идемпотенттик транзакциялык жазуу жолу — райондордун ID-лери жана инспекторлордун дайындалуусу сакталат.</value></data>
+  <data name="ReseedFromGeoJsonFootnote" xml:space="preserve"><value>Файл базага жазуудан мурда катуу текшерилет: &lt;code&gt;LENIN&lt;/code&gt;, &lt;code&gt;PERVOMAY&lt;/code&gt;, &lt;code&gt;SVERDLOV&lt;/code&gt;, &lt;code&gt;OKTYABR&lt;/code&gt; коддору менен дал төрт Polygon өзгөчөлүгү болушу керек; текшерүү ийгиликсиз болгондо учурдагы чектер тийгизилбейт. Иштеткенден кийин жылдырылган чектердин жанындагы тарыхый кайрылуулар кайра аныкталышы үчүн &lt;em&gt;Райондорду толтуруу&lt;/em&gt; иштетүүнү ойлонуп көрүңүз.</value></data>
+  <data name="ReseedFromGeoJsonButton" xml:space="preserve"><value>GeoJSON'дон (реалдуу OSM) кайра түзүү</value></data>
+</root>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="InvalidAddressError" xml:space="preserve"><value>Алуучунун туура дарегин киргизиңиз.</value></data>
+  <data name="QueuedSuccessFormat" xml:space="preserve"><value>{0} үчүн сыноо каты кезекке коюлду. Воркер аны болжол менен 15 секунддун ичинде алат.</value></data>
+  <data name="QueueErrorFormat" xml:space="preserve"><value>Сыноо катын кезекке коюу мүмкүн болбоду: {0}</value></data>
+
+  <data name="NoFailedToRetry" xml:space="preserve"><value>Кайра жөнөтүү үчүн каталуу билдирүүлөр жок.</value></data>
+  <data name="RequeuedFormat" xml:space="preserve"><value>Мурда каталуу болгон {0} билдирүү кайра кезекке коюлду.</value></data>
+</root>

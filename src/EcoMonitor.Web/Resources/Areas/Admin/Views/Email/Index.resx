@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Email diagnostics</value></data>
+  <data name="Heading" xml:space="preserve"><value>Outbound email</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Configuration, queue activity, and recent messages.</value></data>
+
+  <!-- SMTP config pill -->
+  <data name="SmtpConfigured" xml:space="preserve"><value>SMTP configured</value></data>
+  <data name="SmtpNotConfigured" xml:space="preserve"><value>SMTP not configured</value></data>
+
+  <!-- Config card labels -->
+  <data name="HostLabel" xml:space="preserve"><value>Host</value></data>
+  <data name="NotSetFallback" xml:space="preserve"><value>(not set)</value></data>
+  <!-- Standalone "(SSL)" annotation appended after Host:Port. -->
+  <data name="SslSuffix" xml:space="preserve"><value>(SSL)</value></data>
+  <data name="UsernameLabel" xml:space="preserve"><value>Username</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Password</value></data>
+  <data name="FromLabel" xml:space="preserve"><value>From</value></data>
+  <data name="RetriesLabel" xml:space="preserve"><value>Retries</value></data>
+  <!-- {0} = MaxRetryAttempts, {1} = RetryDelayMinutes. -->
+  <data name="RetriesFormat" xml:space="preserve"><value>{0} attempts, {1}-minute base delay (linear backoff)</value></data>
+  <!-- Inline <code>Email:Host</code> etc. are literal configuration keys. -->
+  <data name="ConfigHelp" xml:space="preserve"><value>Set &lt;code&gt;Email:Host&lt;/code&gt;, &lt;code&gt;Email:Username&lt;/code&gt;, and &lt;code&gt;Email:Password&lt;/code&gt; in user-secrets (development) or environment variables (production).</value></data>
+
+  <!-- 4-stat strip -->
+  <data name="StatPendingLabel" xml:space="preserve"><value>Pending (7d)</value></data>
+  <data name="StatPendingDesc" xml:space="preserve"><value>Waiting to send</value></data>
+  <data name="StatSentLabel" xml:space="preserve"><value>Sent (7d)</value></data>
+  <data name="StatSentDesc" xml:space="preserve"><value>Successfully delivered</value></data>
+  <data name="StatFailedLabel" xml:space="preserve"><value>Failed (7d)</value></data>
+  <data name="StatFailedDesc" xml:space="preserve"><value>Max retries exceeded</value></data>
+  <data name="StatFailedAllLabel" xml:space="preserve"><value>Failed (all time)</value></data>
+  <data name="StatFailedAllDesc" xml:space="preserve"><value>Across the whole table</value></data>
+
+  <!-- Actions card -->
+  <data name="ActionsHeading" xml:space="preserve"><value>Actions</value></data>
+  <data name="SendTestLabel" xml:space="preserve"><value>Send test email</value></data>
+  <data name="SendTestPlaceholder" xml:space="preserve"><value>recipient@example.com</value></data>
+  <data name="SendTestButton" xml:space="preserve"><value>Queue test</value></data>
+  <data name="RetryFailedButton" xml:space="preserve"><value>Retry failed messages</value></data>
+  <data name="NoFailedButton" xml:space="preserve"><value>No failed messages to retry</value></data>
+
+  <!-- Recent-messages card -->
+  <data name="RecentHeading" xml:space="preserve"><value>Recent messages</value></data>
+  <data name="RecentSubtitle" xml:space="preserve"><value>Last 50 entries, newest first.</value></data>
+  <data name="EmptyMessage" xml:space="preserve"><value>No emails recorded yet.</value></data>
+
+  <!-- Table headers -->
+  <data name="TableStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="TableSubject" xml:space="preserve"><value>Subject</value></data>
+  <data name="TableTo" xml:space="preserve"><value>To</value></data>
+  <data name="TableRole" xml:space="preserve"><value>Role</value></data>
+  <data name="TableTemplate" xml:space="preserve"><value>Template</value></data>
+  <data name="TableAttempts" xml:space="preserve"><value>Attempts</value></data>
+  <data name="TableCreated" xml:space="preserve"><value>Created</value></data>
+  <data name="TableSentNextRetry" xml:space="preserve"><value>Sent / Next retry</value></data>
+
+  <!-- Per-row sent/retry cell. {0} = relative time. -->
+  <data name="SentAgo" xml:space="preserve"><value>Sent {0}</value></data>
+  <data name="RetryAgo" xml:space="preserve"><value>Retry {0}</value></data>
+
+  <!-- Retry confirmation modal -->
+  <data name="ModalTitle" xml:space="preserve"><value>Retry failed messages</value></data>
+  <!-- {0} = failedTotal — wrapped in <strong> in the resource so the count
+       is emphasised regardless of locale ordering. -->
+  <data name="ModalBody" xml:space="preserve"><value>Re-queue all &lt;strong&gt;{0}&lt;/strong&gt; failed message(s)? Their attempt counters will be reset.</value></data>
+  <data name="ModalConfirmButton" xml:space="preserve"><value>Retry all</value></data>
+</root>

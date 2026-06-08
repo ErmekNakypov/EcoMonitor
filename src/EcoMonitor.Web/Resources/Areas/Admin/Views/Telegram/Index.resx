@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Telegram bot</value></data>
+  <data name="Heading" xml:space="preserve"><value>Bot status</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Health and usage of the citizen reporting bot.</value></data>
+
+  <!-- Status pill text -->
+  <data name="StatusNotConfigured" xml:space="preserve"><value>Not configured</value></data>
+  <data name="StatusConnected" xml:space="preserve"><value>Connected</value></data>
+  <data name="StatusDisconnected" xml:space="preserve"><value>Disconnected</value></data>
+
+  <!-- {0} = bot ID. -->
+  <data name="BotIdFormat" xml:space="preserve"><value>ID: {0}</value></data>
+
+  <!-- Inline <code>Telegram:BotToken</code> is a literal configuration key. -->
+  <data name="NotConfiguredHelp" xml:space="preserve"><value>Set &lt;code&gt;Telegram:BotToken&lt;/code&gt; in user-secrets (development) or environment variables (production) to enable the bot.</value></data>
+
+  <!-- 2-stat strip -->
+  <data name="StatReportsLabel" xml:space="preserve"><value>Reports via Telegram</value></data>
+  <data name="StatReportsDesc" xml:space="preserve"><value>Total submitted from the bot</value></data>
+  <data name="StatUniqueLabel" xml:space="preserve"><value>Unique reporters</value></data>
+  <data name="StatUniqueDesc" xml:space="preserve"><value>Distinct Telegram user IDs</value></data>
+
+  <!-- Recent users card -->
+  <data name="RecentHeading" xml:space="preserve"><value>Recent users</value></data>
+  <data name="RecentSubtitle" xml:space="preserve"><value>Last 10 conversations, most recent first.</value></data>
+  <data name="EmptyMessage" xml:space="preserve"><value>No bot conversations yet.</value></data>
+
+  <!-- Table headers -->
+  <data name="TableUser" xml:space="preserve"><value>Telegram user</value></data>
+  <data name="TableId" xml:space="preserve"><value>ID</value></data>
+  <data name="TableLast" xml:space="preserve"><value>Last interaction</value></data>
+  <data name="TableReports" xml:space="preserve"><value>Reports submitted</value></data>
+
+  <data name="NoHandleFallback" xml:space="preserve"><value>(no handle)</value></data>
+</root>

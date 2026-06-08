@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Диагностика</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Диагностика</value></data>
+  <data name="Heading" xml:space="preserve"><value>Системная диагностика</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Инструменты для тестирования и проверки компонентов системы.</value></data>
+
+  <data name="IngestionHeading" xml:space="preserve"><value>Загрузка данных о качестве воздуха</value></data>
+  <data name="IngestionBody" xml:space="preserve"><value>Запустить один цикл загрузки прямо сейчас. Обычно это происходит автоматически каждые 30 минут.</value></data>
+  <data name="IngestionFootnote" xml:space="preserve"><value>OpenAQ загружает до 50 станций в радиусе 25 км от центра Бишкека, затем перед сохранением отбрасывает измерения старше 7 дней.</value></data>
+  <data name="IngestionButton" xml:space="preserve"><value>Запустить загрузку сейчас</value></data>
+
+  <data name="ContainerImportHeading" xml:space="preserve"><value>Импорт контейнеров из OpenStreetMap</value></data>
+  <data name="ContainerImportBody" xml:space="preserve"><value>Импортирует мусорные контейнеры из OpenStreetMap через Overpass API в границах Бишкека.</value></data>
+  <data name="ContainerImportFootnote" xml:space="preserve"><value>Существующие импортированные контейнеры обновляются по их OSM-идентификатору; новые добавляются с автоматически сгенерированным кодом &lt;code&gt;OSM-XXXXX&lt;/code&gt;. Контейнеры, добавленные вручную, не затрагиваются.</value></data>
+  <data name="ContainerImportButton" xml:space="preserve"><value>Импортировать из OpenStreetMap</value></data>
+
+  <data name="BackfillReportsHeading" xml:space="preserve"><value>Заполнить районы для существующих обращений</value></data>
+  <data name="BackfillReportsBody" xml:space="preserve"><value>Определяет район для каждого обращения с пустым &lt;code&gt;district_id&lt;/code&gt; с помощью алгоритма «точка в полигоне» и засеянных границ районов. Обращения вне всех полигонов остаются пустыми.</value></data>
+  <data name="BackfillReportsButton" xml:space="preserve"><value>Заполнить районы</value></data>
+
+  <data name="BackfillContainersHeading" xml:space="preserve"><value>Заполнить районы для существующих контейнеров</value></data>
+  <data name="BackfillContainersBody" xml:space="preserve"><value>Определяет район для каждого мусорного контейнера с пустым &lt;code&gt;district_id&lt;/code&gt;, чтобы будущие IoT-задачи «контейнер переполнен» автоматически направлялись нужному районному инспектору. Контейнеры вне всех полигонов остаются пустыми и идут по широковещательному маршруту уведомлений.</value></data>
+  <data name="BackfillContainersButton" xml:space="preserve"><value>Заполнить районы контейнеров</value></data>
+
+  <data name="ReseedBoundariesHeading" xml:space="preserve"><value>Пересоздать границы районов</value></data>
+  <data name="ReseedBoundariesBody" xml:space="preserve"><value>Перезаписывает точки полигонов всех четырёх районов Бишкека по текущей спецификации в &lt;code&gt;BishkekDistrictsSeeder&lt;/code&gt;. Сохраняет идентификаторы районов и закрепления за инспекторами — заменяются только точки границ.</value></data>
+  <data name="ReseedBoundariesFootnote" xml:space="preserve"><value>Запускайте после изменения спецификации границ (например, при переходе от упрощённых прямоугольников к произвольным полигонам). Кэш в памяти сбрасывается автоматически; значения &lt;code&gt;district_id&lt;/code&gt; у существующих обращений сохраняются, поэтому при существенном переотнесении координат имеет смысл затем запустить «Заполнить районы».</value></data>
+  <data name="ReseedBoundariesButton" xml:space="preserve"><value>Пересоздать границы районов</value></data>
+
+  <data name="ReseedFromGeoJsonHeading" xml:space="preserve"><value>Пересоздать границы из GeoJSON (реальный OSM)</value></data>
+  <data name="ReseedFromGeoJsonBody" xml:space="preserve"><value>Заменяет полигоны всех четырёх районов на реальные границы из OSM, поставляемые в &lt;code&gt;Districts/Snapshots/bishkek-districts.geojson&lt;/code&gt;. Используется тот же идемпотентный транзакционный путь записи, что и при пересоздании выше — идентификаторы районов и закрепления инспекторов сохраняются.</value></data>
+  <data name="ReseedFromGeoJsonFootnote" xml:space="preserve"><value>Файл проходит строгую валидацию перед любой записью в БД: ровно 4 объекта типа Polygon с кодами &lt;code&gt;LENIN&lt;/code&gt;, &lt;code&gt;PERVOMAY&lt;/code&gt;, &lt;code&gt;SVERDLOV&lt;/code&gt;, &lt;code&gt;OKTYABR&lt;/code&gt;; при ошибке валидации текущие границы остаются нетронутыми. После запуска подумайте над запуском &lt;em&gt;Заполнить районы&lt;/em&gt;, чтобы исторические обращения возле сдвинутых краёв переопределились.</value></data>
+  <data name="ReseedFromGeoJsonButton" xml:space="preserve"><value>Пересоздать из GeoJSON (реальный OSM)</value></data>
+</root>

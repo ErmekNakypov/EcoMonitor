@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Email диагностикасы</value></data>
+  <data name="Heading" xml:space="preserve"><value>Чыгуучу каттар</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Конфигурация, кезек активдүүлүгү жана акыркы билдирүүлөр.</value></data>
+
+  <data name="SmtpConfigured" xml:space="preserve"><value>SMTP жөндөлгөн</value></data>
+  <data name="SmtpNotConfigured" xml:space="preserve"><value>SMTP жөндөлгөн эмес</value></data>
+
+  <data name="HostLabel" xml:space="preserve"><value>Хост</value></data>
+  <data name="NotSetFallback" xml:space="preserve"><value>(коюлган эмес)</value></data>
+  <data name="SslSuffix" xml:space="preserve"><value>(SSL)</value></data>
+  <data name="UsernameLabel" xml:space="preserve"><value>Колдонуучу</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Сырсөз</value></data>
+  <data name="FromLabel" xml:space="preserve"><value>Жөнөтүүчү</value></data>
+  <data name="RetriesLabel" xml:space="preserve"><value>Кайталоолор</value></data>
+  <data name="RetriesFormat" xml:space="preserve"><value>{0} аракет, негизги кечигүү {1} мүн. (сызыктуу)</value></data>
+  <data name="ConfigHelp" xml:space="preserve"><value>&lt;code&gt;Email:Host&lt;/code&gt;, &lt;code&gt;Email:Username&lt;/code&gt; жана &lt;code&gt;Email:Password&lt;/code&gt; маанилерин user-secrets'те (өнүктүрүү) же чөйрө өзгөрмөлөрүндө (өндүрүш) коюңуз.</value></data>
+
+  <data name="StatPendingLabel" xml:space="preserve"><value>Күтүүдө (7 күн)</value></data>
+  <data name="StatPendingDesc" xml:space="preserve"><value>Жөнөтүүнү күтүүдө</value></data>
+  <data name="StatSentLabel" xml:space="preserve"><value>Жөнөтүлдү (7 күн)</value></data>
+  <data name="StatSentDesc" xml:space="preserve"><value>Ийгиликтүү жеткирилди</value></data>
+  <data name="StatFailedLabel" xml:space="preserve"><value>Каталар (7 күн)</value></data>
+  <data name="StatFailedDesc" xml:space="preserve"><value>Аракеттер чегинен өттү</value></data>
+  <data name="StatFailedAllLabel" xml:space="preserve"><value>Каталар (бардыгы)</value></data>
+  <data name="StatFailedAllDesc" xml:space="preserve"><value>Бүт таблица боюнча</value></data>
+
+  <data name="ActionsHeading" xml:space="preserve"><value>Аракеттер</value></data>
+  <data name="SendTestLabel" xml:space="preserve"><value>Сыноо катын жөнөтүү</value></data>
+  <data name="SendTestPlaceholder" xml:space="preserve"><value>recipient@example.com</value></data>
+  <data name="SendTestButton" xml:space="preserve"><value>Кезекке коюу</value></data>
+  <data name="RetryFailedButton" xml:space="preserve"><value>Каталуу билдирүүлөрдү кайталоо</value></data>
+  <data name="NoFailedButton" xml:space="preserve"><value>Каталуу билдирүүлөр жок</value></data>
+
+  <data name="RecentHeading" xml:space="preserve"><value>Акыркы билдирүүлөр</value></data>
+  <data name="RecentSubtitle" xml:space="preserve"><value>Акыркы 50 жазуу, жаңылары жогоруда.</value></data>
+  <data name="EmptyMessage" xml:space="preserve"><value>Каттар азырынча катталган эмес.</value></data>
+
+  <data name="TableStatus" xml:space="preserve"><value>Статусу</value></data>
+  <data name="TableSubject" xml:space="preserve"><value>Тема</value></data>
+  <data name="TableTo" xml:space="preserve"><value>Кимге</value></data>
+  <data name="TableRole" xml:space="preserve"><value>Ролу</value></data>
+  <data name="TableTemplate" xml:space="preserve"><value>Шаблон</value></data>
+  <data name="TableAttempts" xml:space="preserve"><value>Аракеттер</value></data>
+  <data name="TableCreated" xml:space="preserve"><value>Түзүлдү</value></data>
+  <data name="TableSentNextRetry" xml:space="preserve"><value>Жөнөтүлдү / кийинки аракет</value></data>
+
+  <data name="SentAgo" xml:space="preserve"><value>{0} жөнөтүлгөн</value></data>
+  <data name="RetryAgo" xml:space="preserve"><value>{0} кайталанат</value></data>
+
+  <data name="ModalTitle" xml:space="preserve"><value>Каталуу билдирүүлөрдү кайталоо</value></data>
+  <data name="ModalBody" xml:space="preserve"><value>Бардык &lt;strong&gt;{0}&lt;/strong&gt; каталуу билдирүүнү кайра кезекке коюу керекпи? Аракет санагычтары нөлгө түшүрүлөт.</value></data>
+  <data name="ModalConfirmButton" xml:space="preserve"><value>Баарын кайталоо</value></data>
+</root>

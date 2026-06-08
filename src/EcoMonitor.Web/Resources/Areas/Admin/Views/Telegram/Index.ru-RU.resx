@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="BadgeRole" xml:space="preserve"><value>Telegram-бот</value></data>
+  <data name="Heading" xml:space="preserve"><value>Состояние бота</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Состояние и использование бота для приёма сообщений от граждан.</value></data>
+
+  <data name="StatusNotConfigured" xml:space="preserve"><value>Не настроен</value></data>
+  <data name="StatusConnected" xml:space="preserve"><value>Подключён</value></data>
+  <data name="StatusDisconnected" xml:space="preserve"><value>Отключён</value></data>
+
+  <data name="BotIdFormat" xml:space="preserve"><value>ID: {0}</value></data>
+
+  <data name="NotConfiguredHelp" xml:space="preserve"><value>Чтобы включить бота, задайте &lt;code&gt;Telegram:BotToken&lt;/code&gt; в user-secrets (разработка) или переменных окружения (продакшен).</value></data>
+
+  <data name="StatReportsLabel" xml:space="preserve"><value>Обращений через Telegram</value></data>
+  <data name="StatReportsDesc" xml:space="preserve"><value>Всего подано из бота</value></data>
+  <data name="StatUniqueLabel" xml:space="preserve"><value>Уникальных заявителей</value></data>
+  <data name="StatUniqueDesc" xml:space="preserve"><value>Уникальные Telegram-ID</value></data>
+
+  <data name="RecentHeading" xml:space="preserve"><value>Недавние пользователи</value></data>
+  <data name="RecentSubtitle" xml:space="preserve"><value>Последние 10 диалогов, новые сверху.</value></data>
+  <data name="EmptyMessage" xml:space="preserve"><value>Диалогов с ботом пока нет.</value></data>
+
+  <data name="TableUser" xml:space="preserve"><value>Пользователь Telegram</value></data>
+  <data name="TableId" xml:space="preserve"><value>ID</value></data>
+  <data name="TableLast" xml:space="preserve"><value>Последняя активность</value></data>
+  <data name="TableReports" xml:space="preserve"><value>Подано обращений</value></data>
+
+  <data name="NoHandleFallback" xml:space="preserve"><value>(без ника)</value></data>
+</root>

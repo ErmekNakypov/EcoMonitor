@@ -1,8 +1,10 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Diagnostics";
+    ViewData["Title"] = Localizer["Title"].Value;
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "Diagnostics" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = Localizer["Title"].Value });
 }
 
 <section class="py-5">
@@ -12,118 +14,72 @@
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-tools"></i>
-                <span>Diagnostics</span>
+                <span>@Localizer["BadgeRole"]</span>
             </span>
-            <h1 class="h2 fw-700 mt-3 mb-1">System diagnostics</h1>
-            <p class="text-muted mb-0">Tools for testing and verifying system components.</p>
+            <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+            <p class="text-muted mb-0">@Localizer["Subtitle"]</p>
         </div>
 
         <div class="auth-card mb-4" style="max-width: 720px;">
-            <h2 class="h5 fw-700 mb-2">Air quality ingestion</h2>
-            <p class="text-muted mb-2">
-                Trigger one ingestion cycle right now. Normally this runs automatically every 30 minutes.
-            </p>
-            <p class="text-muted small mb-4">
-                OpenAQ fetches up to 50 stations within 25 km of Bishkek center, then drops readings older than 7 days before saving.
-            </p>
+            <h2 class="h5 fw-700 mb-2">@Localizer["IngestionHeading"]</h2>
+            <p class="text-muted mb-2">@Localizer["IngestionBody"]</p>
+            <p class="text-muted small mb-4">@Localizer["IngestionFootnote"]</p>
             <form asp-area="Admin" asp-controller="Diagnostics" asp-action="RunIngest" method="post" class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-arrow-clockwise me-2"></i>Run ingestion now
+                    <i class="bi bi-arrow-clockwise me-2"></i>@Localizer["IngestionButton"]
                 </button>
             </form>
         </div>
 
         <div class="auth-card" style="max-width: 720px;">
-            <h2 class="h5 fw-700 mb-2">Container import from OpenStreetMap</h2>
-            <p class="text-muted mb-2">
-                Imports waste containers from OpenStreetMap via the Overpass API for Bishkek bounding box.
-            </p>
-            <p class="text-muted small mb-4">
-                Existing imported containers are updated in place by their OSM id; new ones are added with a generated <code>OSM-XXXXX</code> code. Manually-added containers are not touched.
-            </p>
+            <h2 class="h5 fw-700 mb-2">@Localizer["ContainerImportHeading"]</h2>
+            <p class="text-muted mb-2">@Localizer["ContainerImportBody"]</p>
+            <p class="text-muted small mb-4">@Localizer["ContainerImportFootnote"]</p>
             <form asp-area="Admin" asp-controller="Diagnostics" asp-action="ImportContainers" method="post" class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-cloud-download me-2"></i>Import from OpenStreetMap
+                    <i class="bi bi-cloud-download me-2"></i>@Localizer["ContainerImportButton"]
                 </button>
             </form>
         </div>
 
         <div class="auth-card mt-4" style="max-width: 720px;">
-            <h2 class="h5 fw-700 mb-2">Backfill districts on existing reports</h2>
-            <p class="text-muted mb-4">
-                Resolves the district for every report with a null
-                <code>district_id</code> using the point-in-polygon algorithm
-                and the seeded district boundaries. Reports outside every
-                polygon stay null.
-            </p>
+            <h2 class="h5 fw-700 mb-2">@Localizer["BackfillReportsHeading"]</h2>
+            <p class="text-muted mb-4">@Localizer["BackfillReportsBody"]</p>
             <form asp-area="Admin" asp-controller="Diagnostics" asp-action="BackfillDistricts" method="post" class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-bounding-box me-2"></i>Backfill districts
+                    <i class="bi bi-bounding-box me-2"></i>@Localizer["BackfillReportsButton"]
                 </button>
             </form>
         </div>
 
         <div class="auth-card mt-4" style="max-width: 720px;">
-            <h2 class="h5 fw-700 mb-2">Backfill districts on existing containers</h2>
-            <p class="text-muted mb-4">
-                Resolves the district for every waste container with a null
-                <code>district_id</code> so future "container is full" IoT
-                tasks auto-route to the right district inspector. Containers
-                outside every polygon stay null and fall back to the broadcast
-                notification path.
-            </p>
+            <h2 class="h5 fw-700 mb-2">@Localizer["BackfillContainersHeading"]</h2>
+            <p class="text-muted mb-4">@Localizer["BackfillContainersBody"]</p>
             <form asp-area="Admin" asp-controller="Diagnostics" asp-action="BackfillContainerDistricts" method="post" class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-trash3 me-2"></i>Backfill container districts
+                    <i class="bi bi-trash3 me-2"></i>@Localizer["BackfillContainersButton"]
                 </button>
             </form>
         </div>
 
         <div class="auth-card mt-4" style="max-width: 720px;">
-            <h2 class="h5 fw-700 mb-2">Reseed district boundaries</h2>
-            <p class="text-muted mb-2">
-                Rewrites the polygon points of all four Bishkek districts in
-                place using the current spec in <code>BishkekDistrictsSeeder</code>.
-                Preserves district IDs and inspector assignments — only the
-                boundary points are replaced.
-            </p>
-            <p class="text-muted small mb-4">
-                Run this after editing the boundary spec (e.g. to switch from
-                simplified rectangles to irregular polygons). The in-memory
-                cache is invalidated automatically; existing reports keep
-                their <code>district_id</code> values, so consider running
-                "Backfill districts" afterwards if the new shapes substantially
-                reassign coordinates.
-            </p>
+            <h2 class="h5 fw-700 mb-2">@Localizer["ReseedBoundariesHeading"]</h2>
+            <p class="text-muted mb-2">@Localizer["ReseedBoundariesBody"]</p>
+            <p class="text-muted small mb-4">@Localizer["ReseedBoundariesFootnote"]</p>
             <form asp-area="Admin" asp-controller="Diagnostics" asp-action="ReseedDistrictBoundaries" method="post" class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-bounding-box-circles me-2"></i>Reseed district boundaries
+                    <i class="bi bi-bounding-box-circles me-2"></i>@Localizer["ReseedBoundariesButton"]
                 </button>
             </form>
         </div>
 
         <div class="auth-card mt-4" style="max-width: 720px;">
-            <h2 class="h5 fw-700 mb-2">Reseed district boundaries from GeoJSON (real OSM)</h2>
-            <p class="text-muted mb-2">
-                Replaces all four district polygons with the real OSM-derived
-                boundaries shipped as
-                <code>Districts/Snapshots/bishkek-districts.geojson</code>.
-                Same idempotent transactional write path as the hand-tuned
-                reseed above — district IDs and inspector assignments are
-                preserved.
-            </p>
-            <p class="text-muted small mb-4">
-                The file is validated strictly before any DB write: exactly 4
-                Polygon features with codes
-                <code>LENIN</code>, <code>PERVOMAY</code>, <code>SVERDLOV</code>,
-                <code>OKTYABR</code>; if validation fails the existing
-                boundaries stay intact. After running, consider
-                <em>Backfill districts</em> so historic reports near a moved
-                edge re-resolve.
-            </p>
+            <h2 class="h5 fw-700 mb-2">@Localizer["ReseedFromGeoJsonHeading"]</h2>
+            <p class="text-muted mb-2">@Localizer["ReseedFromGeoJsonBody"]</p>
+            <p class="text-muted small mb-4">@Localizer["ReseedFromGeoJsonFootnote"]</p>
             <form asp-area="Admin" asp-controller="Diagnostics" asp-action="ReseedDistrictBoundariesFromGeoJson" method="post" class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-globe2 me-2"></i>Reseed from GeoJSON (real OSM)
+                    <i class="bi bi-globe2 me-2"></i>@Localizer["ReseedFromGeoJsonButton"]
                 </button>
             </form>
         </div>

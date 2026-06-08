@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="IngestionSuccessFormat" xml:space="preserve"><value>Загрузка выполнена: {0} новых измерений ({1}, дубликатов пропущено: {2}).{3}</value></data>
+  <data name="IngestionNoProviders" xml:space="preserve"><value>провайдеры данных не предоставили</value></data>
+  <data name="IngestionFailedSuffixFormat" xml:space="preserve"><value> Ошибки: {0}</value></data>
+  <data name="IngestionErrorFormat" xml:space="preserve"><value>Проблема при загрузке: {0}</value></data>
+
+  <data name="BackfillReportsSuccessFormat" xml:space="preserve"><value>Заполнение районов завершено: {0} из {1} обращений сопоставлены с районом.</value></data>
+  <data name="BackfillContainersSuccessFormat" xml:space="preserve"><value>Заполнение районов контейнеров завершено: {0} из {1} контейнеров сопоставлены с районом.</value></data>
+
+  <data name="ReseedBoundariesSuccessFormat" xml:space="preserve"><value>Перезаписаны точки границ для {0} из 4 районов. Карта и определение «точка в полигоне» используют новые формы.</value></data>
+  <data name="ReseedFromGeoJsonSuccessFormat" xml:space="preserve"><value>Перезаписаны точки границ для {0} из 4 районов из встроенного GeoJSON-снимка (реальные полигоны из OSM).</value></data>
+  <data name="GeoJsonMissingErrorFormat" xml:space="preserve"><value>GeoJSON-снимок не найден: {0}</value></data>
+  <data name="GeoJsonInvalidErrorFormat" xml:space="preserve"><value>GeoJSON-снимок отклонён валидацией: {0}</value></data>
+
+  <data name="OsmImportSuccessFormat" xml:space="preserve"><value>OSM-импорт завершён (источник: {0}): создано — {1}, обновлено — {2}, пропущено — {3} (из {4} полученных).</value></data>
+  <data name="OsmSourceLive" xml:space="preserve"><value>OSM в реальном времени</value></data>
+  <data name="OsmSourceSnapshot" xml:space="preserve"><value>встроенный снимок</value></data>
+  <data name="OsmImportErrorFormat" xml:space="preserve"><value>Импорт не удался: {0}</value></data>
+</root>

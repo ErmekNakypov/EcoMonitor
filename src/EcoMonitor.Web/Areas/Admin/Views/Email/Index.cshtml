@@ -1,10 +1,12 @@
 @model EmailDiagnosticsViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Email diagnostics";
+    ViewData["Title"] = SharedLocalizer["Nav.System.EmailDiagnostics"].Value;
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Dashboard", Url = Url.Action("Index", "Dashboard", new { area = "" }) },
-        new BreadcrumbItem { Label = "Email diagnostics" });
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Dashboard"].Value, Url = Url.Action("Index", "Dashboard", new { area = "" }) },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.System.EmailDiagnostics"].Value });
 
     string StatusPill(EmailStatus s) => s switch
     {
@@ -17,7 +19,9 @@
 
     var configClass = Model.IsConfigured ? "status-pill status-resolved" : "status-pill status-rejected";
     var configIcon  = Model.IsConfigured ? "bi-check-circle-fill" : "bi-x-circle-fill";
-    var configText  = Model.IsConfigured ? "SMTP configured" : "SMTP not configured";
+    var configText  = Model.IsConfigured ? Localizer["SmtpConfigured"].Value : Localizer["SmtpNotConfigured"].Value;
+
+    var notSetFallback = Localizer["NotSetFallback"].Value;
 }
 
 <section class="py-5">
@@ -28,10 +32,10 @@
             <div>
                 <span class="hero-badge mb-2">
                     <i class="bi bi-envelope-paper"></i>
-                    <span>Email diagnostics</span>
+                    <span>@Localizer["BadgeRole"]</span>
                 </span>
-                <h1 class="h2 fw-700 mt-3 mb-1">Outbound email</h1>
-                <p class="text-muted mb-0">Configuration, queue activity, and recent messages.</p>
+                <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+                <p class="text-muted mb-0">@Localizer["Subtitle"]</p>
             </div>
         </div>
 
@@ -40,26 +44,26 @@
                 <span class="@configClass"><i class="bi @configIcon"></i>@configText</span>
             </div>
             <dl class="row mb-0 small">
-                <dt class="col-sm-3 col-md-2 text-muted fw-500">Host</dt>
-                <dd class="col-sm-9 col-md-10 mb-1">@(string.IsNullOrEmpty(Model.Host) ? "(not set)" : Model.Host):@Model.Port @(Model.UseSsl ? "(SSL)" : "")</dd>
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">@Localizer["HostLabel"]</dt>
+                <dd class="col-sm-9 col-md-10 mb-1">@(string.IsNullOrEmpty(Model.Host) ? notSetFallback : Model.Host):@Model.Port @(Model.UseSsl ? Localizer["SslSuffix"].Value : "")</dd>
 
-                <dt class="col-sm-3 col-md-2 text-muted fw-500">Username</dt>
-                <dd class="col-sm-9 col-md-10 mb-1">@(string.IsNullOrEmpty(Model.Username) ? "(not set)" : Model.Username)</dd>
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">@Localizer["UsernameLabel"]</dt>
+                <dd class="col-sm-9 col-md-10 mb-1">@(string.IsNullOrEmpty(Model.Username) ? notSetFallback : Model.Username)</dd>
 
-                <dt class="col-sm-3 col-md-2 text-muted fw-500">Password</dt>
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">@Localizer["PasswordLabel"]</dt>
                 <dd class="col-sm-9 col-md-10 mb-1">@Model.MaskedPassword</dd>
 
-                <dt class="col-sm-3 col-md-2 text-muted fw-500">From</dt>
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">@Localizer["FromLabel"]</dt>
                 <dd class="col-sm-9 col-md-10 mb-1">@Model.FromName &lt;@Model.FromAddress&gt;</dd>
 
-                <dt class="col-sm-3 col-md-2 text-muted fw-500">Retries</dt>
-                <dd class="col-sm-9 col-md-10 mb-0">@Model.MaxRetryAttempts attempts, @Model.RetryDelayMinutes-minute base delay (linear backoff)</dd>
+                <dt class="col-sm-3 col-md-2 text-muted fw-500">@Localizer["RetriesLabel"]</dt>
+                <dd class="col-sm-9 col-md-10 mb-0">@Localizer["RetriesFormat", Model.MaxRetryAttempts, Model.RetryDelayMinutes]</dd>
             </dl>
             @if (!Model.IsConfigured)
             {
                 <p class="text-muted small mb-0 mt-3">
                     <i class="bi bi-info-circle me-1"></i>
-                    Set <code>Email:Host</code>, <code>Email:Username</code>, and <code>Email:Password</code> in user-secrets (development) or environment variables (production).
+                    @Localizer["ConfigHelp"]
                 </p>
             }
         </div>
@@ -68,55 +72,55 @@
             <div class="col-md-3">
                 <div class="stat-card">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Pending (7d)</span>
+                        <span class="stat-label">@Localizer["StatPendingLabel"]</span>
                         <i class="bi bi-hourglass-split stat-icon"></i>
                     </div>
                     <div class="stat-value">@Model.PendingCount7d</div>
-                    <span class="text-muted small">Waiting to send</span>
+                    <span class="text-muted small">@Localizer["StatPendingDesc"]</span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-card">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Sent (7d)</span>
+                        <span class="stat-label">@Localizer["StatSentLabel"]</span>
                         <i class="bi bi-check2-circle stat-icon"></i>
                     </div>
                     <div class="stat-value">@Model.SentCount7d</div>
-                    <span class="text-muted small">Successfully delivered</span>
+                    <span class="text-muted small">@Localizer["StatSentDesc"]</span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-card">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Failed (7d)</span>
+                        <span class="stat-label">@Localizer["StatFailedLabel"]</span>
                         <i class="bi bi-x-circle stat-icon"></i>
                     </div>
                     <div class="stat-value">@Model.FailedCount7d</div>
-                    <span class="text-muted small">Max retries exceeded</span>
+                    <span class="text-muted small">@Localizer["StatFailedDesc"]</span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-card">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="stat-label">Failed (all time)</span>
+                        <span class="stat-label">@Localizer["StatFailedAllLabel"]</span>
                         <i class="bi bi-archive stat-icon"></i>
                     </div>
                     <div class="stat-value">@Model.FailedTotal</div>
-                    <span class="text-muted small">Across the whole table</span>
+                    <span class="text-muted small">@Localizer["StatFailedAllDesc"]</span>
                 </div>
             </div>
         </div>
 
         <div class="auth-card mb-4">
-            <h2 class="h6 fw-700 mb-3">Actions</h2>
+            <h2 class="h6 fw-700 mb-3">@Localizer["ActionsHeading"]</h2>
             <form asp-area="Admin" asp-controller="Email" asp-action="SendTest" method="post" class="row g-2 align-items-end mb-3">
                 <div class="col-sm-6">
-                    <label class="form-label fw-500" for="toAddress">Send test email</label>
-                    <input id="toAddress" name="toAddress" type="email" class="form-control" placeholder="recipient@example.com" required />
+                    <label class="form-label fw-500" for="toAddress">@Localizer["SendTestLabel"]</label>
+                    <input id="toAddress" name="toAddress" type="email" class="form-control" placeholder="@Localizer["SendTestPlaceholder"]" required />
                 </div>
                 <div class="col-sm-3">
                     <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-send me-2"></i>Queue test
+                        <i class="bi bi-send me-2"></i>@Localizer["SendTestButton"]
                     </button>
                 </div>
             </form>
@@ -125,26 +129,26 @@
             {
                 <button type="button" class="btn btn-outline-secondary"
                         data-bs-toggle="modal" data-bs-target="#confirmRetryModal">
-                    <i class="bi bi-arrow-clockwise me-2"></i>Retry failed messages
+                    <i class="bi bi-arrow-clockwise me-2"></i>@Localizer["RetryFailedButton"]
                 </button>
             }
             else
             {
                 <button type="button" class="btn btn-outline-secondary" disabled>
-                    <i class="bi bi-arrow-clockwise me-2"></i>No failed messages to retry
+                    <i class="bi bi-arrow-clockwise me-2"></i>@Localizer["NoFailedButton"]
                 </button>
             }
         </div>
 
         <div class="auth-card p-0 overflow-hidden">
             <div class="p-4 pb-0">
-                <h2 class="h6 fw-700 mb-1">Recent messages</h2>
-                <p class="text-muted small mb-3">Last 50 entries, newest first.</p>
+                <h2 class="h6 fw-700 mb-1">@Localizer["RecentHeading"]</h2>
+                <p class="text-muted small mb-3">@Localizer["RecentSubtitle"]</p>
             </div>
             @if (Model.Recent.Count == 0)
             {
                 <div class="p-4 pt-0">
-                    <p class="text-muted mb-0">No emails recorded yet.</p>
+                    <p class="text-muted mb-0">@Localizer["EmptyMessage"]</p>
                 </div>
             }
             else
@@ -153,14 +157,14 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>Status</th>
-                                <th>Subject</th>
-                                <th>To</th>
-                                <th>Role</th>
-                                <th>Template</th>
-                                <th class="text-center">Attempts</th>
-                                <th>Created</th>
-                                <th>Sent / Next retry</th>
+                                <th>@Localizer["TableStatus"]</th>
+                                <th>@Localizer["TableSubject"]</th>
+                                <th>@Localizer["TableTo"]</th>
+                                <th>@Localizer["TableRole"]</th>
+                                <th>@Localizer["TableTemplate"]</th>
+                                <th class="text-center">@Localizer["TableAttempts"]</th>
+                                <th>@Localizer["TableCreated"]</th>
+                                <th>@Localizer["TableSentNextRetry"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,11 +181,11 @@
                                     <td class="text-muted small">
                                         @if (m.SentAt.HasValue)
                                         {
-                                            <text>Sent @DateHelpers.FormatRelative(m.SentAt.Value)</text>
+                                            <text>@Localizer["SentAgo", DateHelpers.FormatRelative(m.SentAt.Value)]</text>
                                         }
                                         else if (m.NextAttemptAt.HasValue)
                                         {
-                                            <text>Retry @DateHelpers.FormatRelative(m.NextAttemptAt.Value)</text>
+                                            <text>@Localizer["RetryAgo", DateHelpers.FormatRelative(m.NextAttemptAt.Value)]</text>
                                         }
                                         else
                                         {
@@ -210,16 +214,16 @@
             <form asp-area="Admin" asp-controller="Email" asp-action="RetryFailed" method="post">
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
-                    <h2 class="h5 fw-700 modal-title mb-0">Retry failed messages</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h2 class="h5 fw-700 modal-title mb-0">@Localizer["ModalTitle"]</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@SharedLocalizer["Common.Close"]"></button>
                 </div>
                 <div class="modal-body">
-                    Re-queue all <strong>@Model.FailedTotal</strong> failed message(s)? Their attempt counters will be reset.
+                    @Localizer["ModalBody", Model.FailedTotal]
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@SharedLocalizer["Common.Cancel"]</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-arrow-clockwise me-2"></i>Retry all
+                        <i class="bi bi-arrow-clockwise me-2"></i>@Localizer["ModalConfirmButton"]
                     </button>
                 </div>
             </form>

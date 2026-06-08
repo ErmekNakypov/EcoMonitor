@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="DefaultTitle" xml:space="preserve"><value>Текшерүү маршруту</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Гаверсин аралыктары боюнча эң жакын кошуна эвристикасы менен оптималдаштырылды.</value></data>
+  <data name="OriginHintGeo" xml:space="preserve"><value>Маршрут азыркы жайыңыздан.</value></data>
+  <data name="OriginHintFallback" xml:space="preserve"><value>Биринчи тандалган токтоодон маршрут (геолокация жеткиликсиз).</value></data>
+  <data name="BackToQueueButton" xml:space="preserve"><value>Кезекке кайтуу</value></data>
+
+  <data name="StatStopsLabel" xml:space="preserve"><value>Токтоолор</value></data>
+  <data name="StatStopsCaption" xml:space="preserve"><value>Бул маршрут үчүн тандалган</value></data>
+  <data name="StatDistanceLabel" xml:space="preserve"><value>Жалпы аралык</value></data>
+  <data name="StatDistanceUnit" xml:space="preserve"><value>км</value></data>
+  <data name="StatDistanceCaption" xml:space="preserve"><value>Чоң тегерек жаасы, эң жакын кошуна тартиби</value></data>
+  <data name="StatTimeLabel" xml:space="preserve"><value>Болжолдуу убакыт</value></data>
+  <data name="StatTimeUnit" xml:space="preserve"><value>мин</value></data>
+  <data name="StatTimeCaption" xml:space="preserve"><value>Шаар боюнча 25 км/с орточо</value></data>
+
+  <data name="VisitOrderHeading" xml:space="preserve"><value>Барып келүү тартиби</value></data>
+  <data name="OriginRowTitle" xml:space="preserve"><value>Старт: азыркы жайыңыз</value></data>
+  <data name="OpenButton" xml:space="preserve"><value>Ачуу</value></data>
+</root>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- DefaultTitle is the Inspector context — the controller sets
+       ViewBag.PageTitle to the localised "Inspection route" string;
+       this key is the safety-net fallback when ViewBag.PageTitle is
+       not set on unusual entry paths. -->
+  <data name="DefaultTitle" xml:space="preserve"><value>Inspection route</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Optimized via nearest-neighbor heuristic over Haversine distances.</value></data>
+  <data name="OriginHintGeo" xml:space="preserve"><value>Route from your current location.</value></data>
+  <data name="OriginHintFallback" xml:space="preserve"><value>Route from first selected stop (location unavailable).</value></data>
+  <data name="BackToQueueButton" xml:space="preserve"><value>Back to queue</value></data>
+
+  <!-- Stat strip -->
+  <data name="StatStopsLabel" xml:space="preserve"><value>Stops</value></data>
+  <data name="StatStopsCaption" xml:space="preserve"><value>Selected for this route</value></data>
+  <data name="StatDistanceLabel" xml:space="preserve"><value>Total distance</value></data>
+  <data name="StatDistanceUnit" xml:space="preserve"><value>km</value></data>
+  <data name="StatDistanceCaption" xml:space="preserve"><value>Great-circle, nearest-neighbour order</value></data>
+  <data name="StatTimeLabel" xml:space="preserve"><value>Estimated time</value></data>
+  <data name="StatTimeUnit" xml:space="preserve"><value>min</value></data>
+  <data name="StatTimeCaption" xml:space="preserve"><value>At 25 km/h urban average</value></data>
+
+  <!-- Visit-order list -->
+  <data name="VisitOrderHeading" xml:space="preserve"><value>Visit order</value></data>
+  <!-- Emitted into the inline Leaflet script via JSON i18n bridge for
+       the origin-marker tooltip; also rendered server-side as the
+       origin-row title. -->
+  <data name="OriginRowTitle" xml:space="preserve"><value>Start: your current location</value></data>
+  <data name="OpenButton" xml:space="preserve"><value>Open</value></data>
+</root>

@@ -1,7 +1,15 @@
 @using EcoMonitor.Application.Features.Routing.Queries
 @model RouteResult
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    var title = (string?)ViewBag.PageTitle ?? "Inspection route";
+    // ViewBag.PageTitle is set by the controller; the InspectorController
+    // commit retargets it through IStringLocalizer<InspectorController>
+    // so the heading flips with the culture cookie. Until then, the
+    // English controller string stays — falling back to the localised
+    // DefaultTitle keeps any code path that forgets to set ViewBag in
+    // the right language.
+    var title = (string?)ViewBag.PageTitle ?? Localizer["DefaultTitle"].Value;
     ViewData["Title"] = title;
     var backUrl = (string?)ViewBag.BackUrl ?? "#";
     var detailsController = (string?)ViewBag.DetailsController ?? "Inspector";
@@ -22,8 +30,8 @@
         : System.Text.Json.JsonSerializer.Serialize(new { lat = Model.Origin.Latitude, lng = Model.Origin.Longitude });
 
     var breadcrumbs = Breadcrumbs.Build(
-        new BreadcrumbItem { Label = "Home", Url = Url.Action("Index", "Home") },
-        new BreadcrumbItem { Label = "Queue", Url = backUrl },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Home"].Value,  Url = Url.Action("Index", "Home") },
+        new BreadcrumbItem { Label = SharedLocalizer["Nav.Queue"].Value, Url = backUrl },
         new BreadcrumbItem { Label = title });
 }
 
@@ -38,22 +46,22 @@
                     <span>@title</span>
                 </span>
                 <h1 class="h2 fw-700 mt-3 mb-1">@title</h1>
-                <p class="text-muted mb-0">Optimized via nearest-neighbor heuristic over Haversine distances.</p>
+                <p class="text-muted mb-0">@Localizer["Subtitle"]</p>
                 @if (hasOrigin)
                 {
                     <p class="small mt-2 mb-0" style="color:#1D4ED8;">
-                        <i class="bi bi-geo-fill me-1"></i>Route from your current location.
+                        <i class="bi bi-geo-fill me-1"></i>@Localizer["OriginHintGeo"]
                     </p>
                 }
                 else
                 {
                     <p class="small text-muted mt-2 mb-0">
-                        <i class="bi bi-info-circle me-1"></i>Route from first selected stop (location unavailable).
+                        <i class="bi bi-info-circle me-1"></i>@Localizer["OriginHintFallback"]
                     </p>
                 }
             </div>
             <a href="@backUrl" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-1"></i>Back to queue
+                <i class="bi bi-arrow-left me-1"></i>@Localizer["BackToQueueButton"]
             </a>
         </div>
 
@@ -64,19 +72,19 @@
            stats (anti-AI patterns)". *@
         <div class="stat-strip mb-3">
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Stops</span>
+                <span class="stat-strip__label">@Localizer["StatStopsLabel"]</span>
                 <div class="stat-strip__value">@Model.Stops.Count</div>
-                <span class="stat-strip__caption">Selected for this route</span>
+                <span class="stat-strip__caption">@Localizer["StatStopsCaption"]</span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Total distance</span>
-                <div class="stat-strip__value">@Model.TotalDistanceKm.ToString("F1") <span class="stat-strip__unit">km</span></div>
-                <span class="stat-strip__caption">Great-circle, nearest-neighbour order</span>
+                <span class="stat-strip__label">@Localizer["StatDistanceLabel"]</span>
+                <div class="stat-strip__value">@Model.TotalDistanceKm.ToString("F1") <span class="stat-strip__unit">@Localizer["StatDistanceUnit"]</span></div>
+                <span class="stat-strip__caption">@Localizer["StatDistanceCaption"]</span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Estimated time</span>
-                <div class="stat-strip__value">~@Model.EstimatedMinutes <span class="stat-strip__unit">min</span></div>
-                <span class="stat-strip__caption">At 25 km/h urban average</span>
+                <span class="stat-strip__label">@Localizer["StatTimeLabel"]</span>
+                <div class="stat-strip__value">~@Model.EstimatedMinutes <span class="stat-strip__unit">@Localizer["StatTimeUnit"]</span></div>
+                <span class="stat-strip__caption">@Localizer["StatTimeCaption"]</span>
             </div>
         </div>
 
@@ -85,14 +93,14 @@
         </div>
 
         <div class="auth-card">
-            <h2 class="h6 fw-700 mb-3">Visit order</h2>
+            <h2 class="h6 fw-700 mb-3">@Localizer["VisitOrderHeading"]</h2>
             <ol class="route-list">
                 @if (hasOrigin)
                 {
                     <li class="route-list-item">
                         <div class="route-list-bullet" style="background:#1D4ED8;">S</div>
                         <div class="route-list-content">
-                            <div class="fw-600">Start: your current location</div>
+                            <div class="fw-600">@Localizer["OriginRowTitle"]</div>
                             <div class="text-muted small d-flex flex-wrap align-items-center gap-2 mt-1">
                                 <span><i class="bi bi-geo-alt me-1"></i>@Model.Origin!.Latitude.ToString("F4"), @Model.Origin.Longitude.ToString("F4")</span>
                             </div>
@@ -121,13 +129,13 @@
                             @if (string.IsNullOrEmpty(detailsArea))
                             {
                                 <a asp-controller="@detailsController" asp-action="Details" asp-route-id="@stop.ReportId" class="btn btn-sm btn-outline-secondary">
-                                    Open <i class="bi bi-arrow-right ms-1"></i>
+                                    @Localizer["OpenButton"] <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
                             }
                             else
                             {
                                 <a asp-area="@detailsArea" asp-controller="@detailsController" asp-action="Details" asp-route-id="@stop.ReportId" class="btn btn-sm btn-outline-secondary">
-                                    Open <i class="bi bi-arrow-right ms-1"></i>
+                                    @Localizer["OpenButton"] <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
                             }
                         </div>
@@ -140,8 +148,17 @@
 
 @section Scripts {
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    @* JSON i18n bridge for the single localised string used inside the
+       Leaflet origin-marker tooltip. The <strong> markup is kept in the
+       JS template literal (constant, not translator-controlled). *@
+    <script>
+        window.__routeI18n = {
+            originTooltip: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["OriginRowTitle"].Value))
+        };
+    </script>
     <script>
         (function () {
+            const i18n = window.__routeI18n;
             const stops = @Html.Raw(stopsJson);
             const origin = @Html.Raw(originJson);
             if (stops.length === 0) return;
@@ -173,7 +190,7 @@
                 });
                 L.marker([origin.lat, origin.lng], { icon: originIcon })
                     .addTo(map)
-                    .bindTooltip('<strong>Start: your current location</strong>', { permanent: false });
+                    .bindTooltip('<strong>' + i18n.originTooltip + '</strong>', { permanent: false });
             }
 
             stops.forEach((s, idx) => {

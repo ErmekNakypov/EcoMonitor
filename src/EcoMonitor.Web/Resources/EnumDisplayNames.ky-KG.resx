@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- DumpsiteStatus (10 values) -->
+  <data name="DumpsiteStatus.New" xml:space="preserve"><value>Жаңы</value></data>
+  <data name="DumpsiteStatus.InReview" xml:space="preserve"><value>Текшерүүдө</value></data>
+  <data name="DumpsiteStatus.Confirmed" xml:space="preserve"><value>Ырасталды</value></data>
+  <data name="DumpsiteStatus.Resolved" xml:space="preserve"><value>Чечилди</value></data>
+  <data name="DumpsiteStatus.Rejected" xml:space="preserve"><value>Четке кагылды</value></data>
+  <data name="DumpsiteStatus.CleanupInProgress" xml:space="preserve"><value>Тазалоо жүрүп жатат</value></data>
+  <data name="DumpsiteStatus.AwaitingVerification" xml:space="preserve"><value>Текшерүүнү күтүүдө</value></data>
+  <data name="DumpsiteStatus.Appealed" xml:space="preserve"><value>Даттанылды</value></data>
+  <data name="DumpsiteStatus.Closed" xml:space="preserve"><value>Жабылды</value></data>
+  <data name="DumpsiteStatus.FlaggedByCleanupCrew" xml:space="preserve"><value>Бригада белгиледи</value></data>
+
+  <!-- ContainerType (5 values) -->
+  <data name="ContainerType.General" xml:space="preserve"><value>Жалпы калдыктар</value></data>
+  <data name="ContainerType.Plastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="ContainerType.Glass" xml:space="preserve"><value>Айнек</value></data>
+  <data name="ContainerType.Paper" xml:space="preserve"><value>Кагаз</value></data>
+  <data name="ContainerType.Organic" xml:space="preserve"><value>Органика</value></data>
+
+  <!-- ContainerStatus (3 values) -->
+  <data name="ContainerStatus.Active" xml:space="preserve"><value>Активдүү</value></data>
+  <data name="ContainerStatus.Maintenance" xml:space="preserve"><value>Тейлөөдө</value></data>
+  <data name="ContainerStatus.Removed" xml:space="preserve"><value>Алынып салынды</value></data>
+
+  <!-- IotDeviceStatus (3 values) -->
+  <data name="IotDeviceStatus.Active" xml:space="preserve"><value>Активдүү</value></data>
+  <data name="IotDeviceStatus.Suspended" xml:space="preserve"><value>Токтотулду</value></data>
+  <data name="IotDeviceStatus.Decommissioned" xml:space="preserve"><value>Иштен чыгарылды</value></data>
+
+  <!-- AirQualitySource (2 values) -->
+  <data name="AirQualitySource.OwnSensor" xml:space="preserve"><value>Өзүбүздүн сенсор</value></data>
+  <data name="AirQualitySource.External" xml:space="preserve"><value>Тышкы провайдер</value></data>
+</root>

@@ -2,12 +2,14 @@ using System.Globalization;
 using System.Text;
 using EcoMonitor.Application;
 using EcoMonitor.Application.Common.Interfaces;
+using EcoMonitor.Domain.Common;
 using EcoMonitor.Infrastructure;
 using EcoMonitor.Infrastructure.Persistence;
 using EcoMonitor.Web.Hubs;
 using EcoMonitor.Web.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -157,6 +159,22 @@ try
         .WithStaticAssets();
 
     app.MapHub<SensorHub>("/hubs/sensors");
+
+    // Wire the Domain-layer enum-display resolver to a request-culture-aware
+    // IStringLocalizer over Resources/EnumDisplayNames.{culture}.resx. Keys
+    // are "{EnumType}.{Value}" (e.g. "DumpsiteStatus.New"). If a key is
+    // missing the helper returns null and GetDisplayName() falls back to
+    // the English [Display(Name)] attribute.
+    var enumLocalizerFactory = app.Services.GetRequiredService<IStringLocalizerFactory>();
+    var enumLocalizer = enumLocalizerFactory.Create(
+        baseName: "EnumDisplayNames",
+        location: typeof(Program).Assembly.GetName().Name!);
+    EnumDisplayLocalization.Resolver = enumValue =>
+    {
+        var key = $"{enumValue.GetType().Name}.{enumValue}";
+        var localized = enumLocalizer[key];
+        return localized.ResourceNotFound ? null : localized.Value;
+    };
 
     using (var scope = app.Services.CreateScope())
     {

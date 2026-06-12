@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- DumpsiteStatus (10 values) -->
+  <data name="DumpsiteStatus.New" xml:space="preserve"><value>Новое</value></data>
+  <data name="DumpsiteStatus.InReview" xml:space="preserve"><value>На проверке</value></data>
+  <data name="DumpsiteStatus.Confirmed" xml:space="preserve"><value>Подтверждено</value></data>
+  <data name="DumpsiteStatus.Resolved" xml:space="preserve"><value>Решено</value></data>
+  <data name="DumpsiteStatus.Rejected" xml:space="preserve"><value>Отклонено</value></data>
+  <data name="DumpsiteStatus.CleanupInProgress" xml:space="preserve"><value>Уборка ведётся</value></data>
+  <data name="DumpsiteStatus.AwaitingVerification" xml:space="preserve"><value>Ожидает проверки</value></data>
+  <data name="DumpsiteStatus.Appealed" xml:space="preserve"><value>Обжаловано</value></data>
+  <data name="DumpsiteStatus.Closed" xml:space="preserve"><value>Закрыто</value></data>
+  <data name="DumpsiteStatus.FlaggedByCleanupCrew" xml:space="preserve"><value>Помечено бригадой</value></data>
+
+  <!-- ContainerType (5 values) -->
+  <data name="ContainerType.General" xml:space="preserve"><value>Общие отходы</value></data>
+  <data name="ContainerType.Plastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="ContainerType.Glass" xml:space="preserve"><value>Стекло</value></data>
+  <data name="ContainerType.Paper" xml:space="preserve"><value>Бумага</value></data>
+  <data name="ContainerType.Organic" xml:space="preserve"><value>Органика</value></data>
+
+  <!-- ContainerStatus (3 values) -->
+  <data name="ContainerStatus.Active" xml:space="preserve"><value>Активен</value></data>
+  <data name="ContainerStatus.Maintenance" xml:space="preserve"><value>На обслуживании</value></data>
+  <data name="ContainerStatus.Removed" xml:space="preserve"><value>Списан</value></data>
+
+  <!-- IotDeviceStatus (3 values) -->
+  <data name="IotDeviceStatus.Active" xml:space="preserve"><value>Активен</value></data>
+  <data name="IotDeviceStatus.Suspended" xml:space="preserve"><value>Приостановлен</value></data>
+  <data name="IotDeviceStatus.Decommissioned" xml:space="preserve"><value>Списан</value></data>
+
+  <!-- AirQualitySource (2 values) -->
+  <data name="AirQualitySource.OwnSensor" xml:space="preserve"><value>Свой сенсор</value></data>
+  <data name="AirQualitySource.External" xml:space="preserve"><value>Внешний провайдер</value></data>
+</root>

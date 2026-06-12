@@ -13,6 +13,11 @@ public enum AqiLevel
 
 public static class AqiHelper
 {
+    // Host-supplied resolver wired in Program.cs to an IStringLocalizer
+    // over SharedResource. Returns null when no resource hit, in which
+    // case GetLabel falls back to the English switch below.
+    public static Func<AqiLevel, string?>? LabelResolver { get; set; }
+
     public static AqiLevel ClassifyAqiUs(double? aqi)
     {
         if (aqi is null) return AqiLevel.Unknown;
@@ -48,14 +53,20 @@ public static class AqiHelper
         _ => "#9CA3AF"
     };
 
-    public static string GetLabel(AqiLevel level) => level switch
+    public static string GetLabel(AqiLevel level)
     {
-        AqiLevel.Good => "Good",
-        AqiLevel.Moderate => "Moderate",
-        AqiLevel.UnhealthyForSensitive => "Unhealthy for sensitive groups",
-        AqiLevel.Unhealthy => "Unhealthy",
-        AqiLevel.VeryUnhealthy => "Very unhealthy",
-        AqiLevel.Hazardous => "Hazardous",
-        _ => "No data"
-    };
+        var localized = LabelResolver?.Invoke(level);
+        if (!string.IsNullOrEmpty(localized)) return localized;
+
+        return level switch
+        {
+            AqiLevel.Good => "Good",
+            AqiLevel.Moderate => "Moderate",
+            AqiLevel.UnhealthyForSensitive => "Unhealthy for sensitive groups",
+            AqiLevel.Unhealthy => "Unhealthy",
+            AqiLevel.VeryUnhealthy => "Very unhealthy",
+            AqiLevel.Hazardous => "Hazardous",
+            _ => "No data"
+        };
+    }
 }

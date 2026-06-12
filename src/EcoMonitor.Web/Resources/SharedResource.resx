@@ -57,4 +57,38 @@
   <data name="Common.Next" xml:space="preserve"><value>Next</value></data>
   <data name="Common.TogglePasswordVisibility" xml:space="preserve"><value>Toggle password visibility</value></data>
   <data name="Common.Apply" xml:space="preserve"><value>Apply</value></data>
+
+  <!-- AqiHelper.GetLabel reads these. Same labels are reused in the Map
+       page's "Air quality (AQI US)" legend and on station details. -->
+  <data name="Aqi.Label.Good" xml:space="preserve"><value>Good</value></data>
+  <data name="Aqi.Label.Moderate" xml:space="preserve"><value>Moderate</value></data>
+  <data name="Aqi.Label.UnhealthyForSensitive" xml:space="preserve"><value>Unhealthy for sensitive groups</value></data>
+  <data name="Aqi.Label.Unhealthy" xml:space="preserve"><value>Unhealthy</value></data>
+  <data name="Aqi.Label.VeryUnhealthy" xml:space="preserve"><value>Very unhealthy</value></data>
+  <data name="Aqi.Label.Hazardous" xml:space="preserve"><value>Hazardous</value></data>
+  <data name="Aqi.Label.Unknown" xml:space="preserve"><value>No data</value></data>
+
+  <!-- DateHelpers.FormatRelative reads these. Singular vs. plural forms
+       are split so translators control morphology; format args take {0}
+       = absolute count where applicable. -->
+  <data name="Time.JustNow" xml:space="preserve"><value>just now</value></data>
+  <data name="Time.Yesterday" xml:space="preserve"><value>yesterday</value></data>
+  <data name="Time.MinuteAgo" xml:space="preserve"><value>1 minute ago</value></data>
+  <data name="Time.MinutesAgoFormat" xml:space="preserve"><value>{0} minutes ago</value></data>
+  <data name="Time.HourAgo" xml:space="preserve"><value>1 hour ago</value></data>
+  <data name="Time.HoursAgoFormat" xml:space="preserve"><value>{0} hours ago</value></data>
+  <data name="Time.DaysAgoFormat" xml:space="preserve"><value>{0} days ago</value></data>
+  <data name="Time.WeekAgo" xml:space="preserve"><value>1 week ago</value></data>
+  <data name="Time.WeeksAgoFormat" xml:space="preserve"><value>{0} weeks ago</value></data>
+  <data name="Time.MonthAgo" xml:space="preserve"><value>1 month ago</value></data>
+  <data name="Time.MonthsAgoFormat" xml:space="preserve"><value>{0} months ago</value></data>
+  <data name="Time.YearAgo" xml:space="preserve"><value>1 year ago</value></data>
+  <data name="Time.YearsAgoFormat" xml:space="preserve"><value>{0} years ago</value></data>
+
+  <!-- DateHelpers.FormatDate (calendar-date variant) and the "no data"
+       fallback used by /api/map/air-quality when MeasuredAt is null. -->
+  <data name="Time.Today" xml:space="preserve"><value>Today</value></data>
+  <data name="Time.Tomorrow" xml:space="preserve"><value>Tomorrow</value></data>
+  <data name="Time.DayAgo" xml:space="preserve"><value>1 day ago</value></data>
+  <data name="Time.NoData" xml:space="preserve"><value>no data</value></data>
 </root>

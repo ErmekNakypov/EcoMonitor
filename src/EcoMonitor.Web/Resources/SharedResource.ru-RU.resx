@@ -54,4 +54,31 @@
   <data name="Common.Next" xml:space="preserve"><value>Вперёд</value></data>
   <data name="Common.TogglePasswordVisibility" xml:space="preserve"><value>Показать или скрыть пароль</value></data>
   <data name="Common.Apply" xml:space="preserve"><value>Применить</value></data>
+
+  <data name="Aqi.Label.Good" xml:space="preserve"><value>Хороший</value></data>
+  <data name="Aqi.Label.Moderate" xml:space="preserve"><value>Умеренный</value></data>
+  <data name="Aqi.Label.UnhealthyForSensitive" xml:space="preserve"><value>Вреден для чувствительных групп</value></data>
+  <data name="Aqi.Label.Unhealthy" xml:space="preserve"><value>Вредный</value></data>
+  <data name="Aqi.Label.VeryUnhealthy" xml:space="preserve"><value>Очень вредный</value></data>
+  <data name="Aqi.Label.Hazardous" xml:space="preserve"><value>Опасный</value></data>
+  <data name="Aqi.Label.Unknown" xml:space="preserve"><value>Нет данных</value></data>
+
+  <data name="Time.JustNow" xml:space="preserve"><value>только что</value></data>
+  <data name="Time.Yesterday" xml:space="preserve"><value>вчера</value></data>
+  <data name="Time.MinuteAgo" xml:space="preserve"><value>1 минуту назад</value></data>
+  <data name="Time.MinutesAgoFormat" xml:space="preserve"><value>{0} мин. назад</value></data>
+  <data name="Time.HourAgo" xml:space="preserve"><value>1 час назад</value></data>
+  <data name="Time.HoursAgoFormat" xml:space="preserve"><value>{0} ч. назад</value></data>
+  <data name="Time.DaysAgoFormat" xml:space="preserve"><value>{0} дн. назад</value></data>
+  <data name="Time.WeekAgo" xml:space="preserve"><value>1 неделю назад</value></data>
+  <data name="Time.WeeksAgoFormat" xml:space="preserve"><value>{0} нед. назад</value></data>
+  <data name="Time.MonthAgo" xml:space="preserve"><value>1 месяц назад</value></data>
+  <data name="Time.MonthsAgoFormat" xml:space="preserve"><value>{0} мес. назад</value></data>
+  <data name="Time.YearAgo" xml:space="preserve"><value>1 год назад</value></data>
+  <data name="Time.YearsAgoFormat" xml:space="preserve"><value>{0} г. назад</value></data>
+
+  <data name="Time.Today" xml:space="preserve"><value>Сегодня</value></data>
+  <data name="Time.Tomorrow" xml:space="preserve"><value>Завтра</value></data>
+  <data name="Time.DayAgo" xml:space="preserve"><value>1 день назад</value></data>
+  <data name="Time.NoData" xml:space="preserve"><value>нет данных</value></data>
 </root>

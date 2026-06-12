@@ -54,4 +54,31 @@
   <data name="Common.Next" xml:space="preserve"><value>Алдыга</value></data>
   <data name="Common.TogglePasswordVisibility" xml:space="preserve"><value>Сырсөздү көрсөтүү же жашыруу</value></data>
   <data name="Common.Apply" xml:space="preserve"><value>Колдонуу</value></data>
+
+  <data name="Aqi.Label.Good" xml:space="preserve"><value>Жакшы</value></data>
+  <data name="Aqi.Label.Moderate" xml:space="preserve"><value>Орточо</value></data>
+  <data name="Aqi.Label.UnhealthyForSensitive" xml:space="preserve"><value>Сезгич топторго зыяндуу</value></data>
+  <data name="Aqi.Label.Unhealthy" xml:space="preserve"><value>Зыяндуу</value></data>
+  <data name="Aqi.Label.VeryUnhealthy" xml:space="preserve"><value>Абдан зыяндуу</value></data>
+  <data name="Aqi.Label.Hazardous" xml:space="preserve"><value>Коркунучтуу</value></data>
+  <data name="Aqi.Label.Unknown" xml:space="preserve"><value>Маалымат жок</value></data>
+
+  <data name="Time.JustNow" xml:space="preserve"><value>азыр эле</value></data>
+  <data name="Time.Yesterday" xml:space="preserve"><value>кечээ</value></data>
+  <data name="Time.MinuteAgo" xml:space="preserve"><value>1 мүнөт мурун</value></data>
+  <data name="Time.MinutesAgoFormat" xml:space="preserve"><value>{0} мүн. мурун</value></data>
+  <data name="Time.HourAgo" xml:space="preserve"><value>1 саат мурун</value></data>
+  <data name="Time.HoursAgoFormat" xml:space="preserve"><value>{0} с. мурун</value></data>
+  <data name="Time.DaysAgoFormat" xml:space="preserve"><value>{0} күн мурун</value></data>
+  <data name="Time.WeekAgo" xml:space="preserve"><value>1 жума мурун</value></data>
+  <data name="Time.WeeksAgoFormat" xml:space="preserve"><value>{0} жума мурун</value></data>
+  <data name="Time.MonthAgo" xml:space="preserve"><value>1 ай мурун</value></data>
+  <data name="Time.MonthsAgoFormat" xml:space="preserve"><value>{0} ай мурун</value></data>
+  <data name="Time.YearAgo" xml:space="preserve"><value>1 жыл мурун</value></data>
+  <data name="Time.YearsAgoFormat" xml:space="preserve"><value>{0} ж. мурун</value></data>
+
+  <data name="Time.Today" xml:space="preserve"><value>Бүгүн</value></data>
+  <data name="Time.Tomorrow" xml:space="preserve"><value>Эртең</value></data>
+  <data name="Time.DayAgo" xml:space="preserve"><value>1 күн мурун</value></data>
+  <data name="Time.NoData" xml:space="preserve"><value>маалымат жок</value></data>
 </root>

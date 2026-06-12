@@ -5,6 +5,8 @@ using EcoMonitor.Application.Common.Interfaces;
 using EcoMonitor.Domain.Common;
 using EcoMonitor.Infrastructure;
 using EcoMonitor.Infrastructure.Persistence;
+using EcoMonitor.Web;
+using EcoMonitor.Web.Helpers;
 using EcoMonitor.Web.Hubs;
 using EcoMonitor.Web.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -174,6 +176,60 @@ try
         var key = $"{enumValue.GetType().Name}.{enumValue}";
         var localized = enumLocalizer[key];
         return localized.ResourceNotFound ? null : localized.Value;
+    };
+
+    // AqiHelper.GetLabel + DateHelpers.FormatRelative + DateHelpers.FormatDate
+    // are static helpers consumed both from Razor views and from API JSON
+    // payloads (Controllers/Api/MapDataController.cs). Wire each to the
+    // SharedResource bundle via the same hook pattern as the enum resolver
+    // so the JSON values follow the request culture too.
+    var sharedLocalizer = enumLocalizerFactory.Create(typeof(SharedResource));
+
+    AqiHelper.LabelResolver = level =>
+    {
+        var key = $"Aqi.Label.{level}";
+        var s = sharedLocalizer[key];
+        return s.ResourceNotFound ? null : s.Value;
+    };
+
+    DateHelpers.RelativeResolver = (unit, count) =>
+    {
+        var key = unit switch
+        {
+            RelativeTimeUnit.JustNow      => "Time.JustNow",
+            RelativeTimeUnit.MinuteAgo    => "Time.MinuteAgo",
+            RelativeTimeUnit.MinutesAgo   => "Time.MinutesAgoFormat",
+            RelativeTimeUnit.HourAgo      => "Time.HourAgo",
+            RelativeTimeUnit.HoursAgo     => "Time.HoursAgoFormat",
+            RelativeTimeUnit.Yesterday    => "Time.Yesterday",
+            RelativeTimeUnit.DayAgo       => "Time.DayAgo",
+            RelativeTimeUnit.DaysAgo      => "Time.DaysAgoFormat",
+            RelativeTimeUnit.WeekAgo      => "Time.WeekAgo",
+            RelativeTimeUnit.WeeksAgo     => "Time.WeeksAgoFormat",
+            RelativeTimeUnit.MonthAgo     => "Time.MonthAgo",
+            RelativeTimeUnit.MonthsAgo    => "Time.MonthsAgoFormat",
+            RelativeTimeUnit.YearAgo      => "Time.YearAgo",
+            RelativeTimeUnit.YearsAgo     => "Time.YearsAgoFormat",
+            _ => null
+        };
+        if (key is null) return null;
+        var s = sharedLocalizer[key];
+        if (s.ResourceNotFound) return null;
+        return s.Value.Contains("{0}") ? string.Format(s.Value, count) : s.Value;
+    };
+
+    DateHelpers.CalendarMarkerResolver = marker =>
+    {
+        var key = marker switch
+        {
+            CalendarDayMarker.Today     => "Time.Today",
+            CalendarDayMarker.Yesterday => "Time.Yesterday",
+            CalendarDayMarker.Tomorrow  => "Time.Tomorrow",
+            _ => null
+        };
+        if (key is null) return null;
+        var s = sharedLocalizer[key];
+        return s.ResourceNotFound ? null : s.Value;
     };
 
     using (var scope = app.Services.CreateScope())

@@ -3,10 +3,12 @@ using EcoMonitor.Application.Features.DumpsiteReports.Public;
 using EcoMonitor.Application.Features.WasteContainers.Queries.GetContainersForMap;
 using EcoMonitor.Domain.Common;
 using EcoMonitor.Domain.Enums;
+using EcoMonitor.Web;
 using EcoMonitor.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace EcoMonitor.Web.Controllers.Api;
 
@@ -16,10 +18,12 @@ namespace EcoMonitor.Web.Controllers.Api;
 public class MapDataController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
-    public MapDataController(IMediator mediator)
+    public MapDataController(IMediator mediator, IStringLocalizer<SharedResource> localizer)
     {
         _mediator = mediator;
+        _localizer = localizer;
     }
 
     [HttpGet("containers")]
@@ -59,7 +63,7 @@ public class MapDataController : ControllerBase
                 pressure = s.Pressure,
                 aqiUs = s.AqiUs,
                 measuredAt = s.MeasuredAt,
-                measuredRelative = s.MeasuredAt.HasValue ? DateHelpers.FormatRelative(s.MeasuredAt.Value) : "no data",
+                measuredRelative = s.MeasuredAt.HasValue ? DateHelpers.FormatRelative(s.MeasuredAt.Value) : _localizer["Time.NoData"].Value,
                 aqiLabel = AqiHelper.GetLabel(aqiLevel),
                 color,
                 isStale = freshness == ReadingFreshness.Stale || freshness == ReadingFreshness.VeryStale,

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Карта города</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Обзор города</value></data>
+  <data name="Heading" xml:space="preserve"><value>Экологическая карта Бишкека</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Качество воздуха, мусорные контейнеры и активные сообщения о свалках — всё на одной карте.</value></data>
+  <data name="DataSourcesLabel" xml:space="preserve"><value>Источники данных:</value></data>
+
+  <data name="FilterAirQuality" xml:space="preserve"><value>Качество воздуха</value></data>
+  <data name="FilterContainers" xml:space="preserve"><value>Контейнеры</value></data>
+  <data name="FilterReports" xml:space="preserve"><value>Обращения</value></data>
+  <data name="FilterDistricts" xml:space="preserve"><value>Районы</value></data>
+  <data name="FilterRefresh" xml:space="preserve"><value>Обновить</value></data>
+  <data name="FilterRefreshTitle" xml:space="preserve"><value>Перезагрузить контейнеры и обращения</value></data>
+  <data name="SubOwnSensors" xml:space="preserve"><value>Свои сенсоры</value></data>
+
+  <data name="LegendWhatHeading" xml:space="preserve"><value>Что на карте</value></data>
+  <data name="LegendAirStationFormat" xml:space="preserve"><value>&lt;strong&gt;Станция качества воздуха&lt;/strong&gt; — цветной круг со значением AQI.</value></data>
+  <data name="LegendOwnSensorFormat" xml:space="preserve"><value>&lt;strong&gt;Свой IoT-сенсор&lt;/strong&gt; — то же самое с зелёным кольцом и точкой передачи.</value></data>
+  <data name="LegendContainerFormat" xml:space="preserve"><value>&lt;strong&gt;Мусорный контейнер&lt;/strong&gt; — маленький значок бака, цвет по типу.</value></data>
+  <data name="LegendDumpsiteFormat" xml:space="preserve"><value>&lt;strong&gt;Сообщение о свалке&lt;/strong&gt; — флажок (красный = подтверждено, зелёный = решено).</value></data>
+
+  <data name="LegendAqiHeading" xml:space="preserve"><value>Качество воздуха (AQI US)</value></data>
+  <data name="LegendAqiRangeGood" xml:space="preserve"><value>Хороший 0–50</value></data>
+  <data name="LegendAqiRangeModerate" xml:space="preserve"><value>Умеренный 51–100</value></data>
+  <data name="LegendAqiRangeUSG" xml:space="preserve"><value>Вреден для чувствительных 101–150</value></data>
+  <data name="LegendAqiRangeUnhealthy" xml:space="preserve"><value>Вредный 151–200</value></data>
+  <data name="LegendAqiRangeVeryUnhealthy" xml:space="preserve"><value>Очень вредный 201–300</value></data>
+  <data name="LegendAqiRangeHazardous" xml:space="preserve"><value>Опасный 300+</value></data>
+
+  <data name="LegendContainerTypesHeading" xml:space="preserve"><value>Типы контейнеров</value></data>
+  <data name="LegendContainerGeneral" xml:space="preserve"><value>Общие</value></data>
+  <data name="LegendContainerPlastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="LegendContainerGlass" xml:space="preserve"><value>Стекло</value></data>
+  <data name="LegendContainerPaper" xml:space="preserve"><value>Бумага</value></data>
+  <data name="LegendContainerOrganic" xml:space="preserve"><value>Органика</value></data>
+
+  <data name="LegendDumpsiteStatusHeading" xml:space="preserve"><value>Статус свалок</value></data>
+  <data name="LegendDumpsiteConfirmedActive" xml:space="preserve"><value>Подтверждено (активно)</value></data>
+  <data name="LegendDumpsiteResolved" xml:space="preserve"><value>Решено</value></data>
+
+  <data name="StationsDataNote" xml:space="preserve"><value>Данные станций: &lt;strong&gt;OpenAQ&lt;/strong&gt; (загрузка из веба), &lt;strong&gt;IQAir&lt;/strong&gt; (загрузка из веба), &lt;strong&gt;Свои сенсоры&lt;/strong&gt; (отправка). Данные в реальном времени с зарегистрированных IoT-устройств.</value></data>
+
+  <data name="StatAirLabel" xml:space="preserve"><value>Качество воздуха</value></data>
+  <data name="StatAirCaptionFormat" xml:space="preserve"><value>Среднее AQI US · {0} станций за 24 ч</value></data>
+  <data name="StatContainersLabel" xml:space="preserve"><value>Контейнеры</value></data>
+  <data name="StatContainersCaption" xml:space="preserve"><value>Активны по городу</value></data>
+  <data name="StatConfirmedLabel" xml:space="preserve"><value>Подтверждённые обращения</value></data>
+  <data name="StatLinkReportDumpsite" xml:space="preserve"><value>Сообщить о свалке</value></data>
+  <data name="StatLinkInspectorQueue" xml:space="preserve"><value>Очередь инспектора</value></data>
+  <data name="StatLinkAllActiveReports" xml:space="preserve"><value>Все активные обращения</value></data>
+  <data name="StatLinkActiveDumpsiteReports" xml:space="preserve"><value>Активные сообщения о свалках</value></data>
+  <data name="StatResolvedLabel" xml:space="preserve"><value>Решено</value></data>
+  <data name="StatResolvedCaption" xml:space="preserve"><value>Убранные обращения</value></data>
+
+  <data name="TabAirStations" xml:space="preserve"><value>Станции качества воздуха</value></data>
+  <data name="TabContainers" xml:space="preserve"><value>Контейнеры</value></data>
+  <data name="TabReports" xml:space="preserve"><value>Обращения</value></data>
+
+  <data name="SearchAirPlaceholder" xml:space="preserve"><value>Поиск по названию или местности...</value></data>
+  <data name="SearchContainersPlaceholder" xml:space="preserve"><value>Поиск по коду или адресу...</value></data>
+  <data name="SearchReportsPlaceholder" xml:space="preserve"><value>Поиск по описанию...</value></data>
+
+  <data name="FilterAllSources" xml:space="preserve"><value>Все источники</value></data>
+  <data name="FilterAllTypes" xml:space="preserve"><value>Все типы</value></data>
+  <data name="FilterAllStatuses" xml:space="preserve"><value>Все статусы</value></data>
+
+  <data name="FilterSourceOwnSensors" xml:space="preserve"><value>Свои сенсоры</value></data>
+
+  <data name="FilterTypeGeneral" xml:space="preserve"><value>Общие отходы</value></data>
+  <data name="FilterTypePlastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="FilterTypeGlass" xml:space="preserve"><value>Стекло</value></data>
+  <data name="FilterTypePaper" xml:space="preserve"><value>Бумага</value></data>
+  <data name="FilterTypeOrganic" xml:space="preserve"><value>Органика</value></data>
+
+  <data name="FilterStatusConfirmed" xml:space="preserve"><value>Подтверждено</value></data>
+  <data name="FilterStatusResolved" xml:space="preserve"><value>Решено</value></data>
+
+  <data name="TableAirName" xml:space="preserve"><value>Название</value></data>
+  <data name="TableAirLocality" xml:space="preserve"><value>Местность</value></data>
+  <data name="TableAirUpdated" xml:space="preserve"><value>Обновлено</value></data>
+  <data name="TableAirSource" xml:space="preserve"><value>Источник</value></data>
+  <data name="TableContainerCode" xml:space="preserve"><value>Код</value></data>
+  <data name="TableContainerAddress" xml:space="preserve"><value>Адрес</value></data>
+  <data name="TableContainerType" xml:space="preserve"><value>Тип</value></data>
+  <data name="TableContainerCapacity" xml:space="preserve"><value>Объём</value></data>
+  <data name="TableContainerStatus" xml:space="preserve"><value>Статус</value></data>
+  <data name="TableReportDescription" xml:space="preserve"><value>Описание</value></data>
+  <data name="TableReportStatus" xml:space="preserve"><value>Статус</value></data>
+  <data name="TableReportReported" xml:space="preserve"><value>Подано</value></data>
+  <data name="TableReportPhotos" xml:space="preserve"><value>Фото</value></data>
+
+  <data name="EmptyAir" xml:space="preserve"><value>Нет станций, соответствующих фильтру.</value></data>
+  <data name="EmptyContainers" xml:space="preserve"><value>Нет контейнеров, соответствующих фильтру.</value></data>
+  <data name="EmptyReports" xml:space="preserve"><value>Нет обращений, соответствующих фильтру.</value></data>
+
+  <data name="JsDetailsButton" xml:space="preserve"><value>Подробнее</value></data>
+  <data name="JsNoAqi" xml:space="preserve"><value>Нет AQI</value></data>
+  <data name="JsLastSeenPrefix" xml:space="preserve"><value>Последние данные</value></data>
+  <data name="JsPopupReportedPrefix" xml:space="preserve"><value>Подано</value></data>
+  <data name="JsPopupDumpsiteSuffix" xml:space="preserve"><value>свалка</value></data>
+  <data name="JsPopupPm25Prefix" xml:space="preserve"><value>PM2.5:</value></data>
+  <data name="JsPhotoCountSingular" xml:space="preserve"><value>{0} фото</value></data>
+  <data name="JsPhotoCountPlural" xml:space="preserve"><value>{0} фото</value></data>
+  <data name="JsShapeOwnSensor" xml:space="preserve"><value>Свой сенсор</value></data>
+</root>

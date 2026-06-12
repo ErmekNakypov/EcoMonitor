@@ -1,5 +1,7 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "City map";
+    ViewData["Title"] = Localizer["Title"].Value;
 
     var isCitizen = User.IsInRole(RoleNames.Citizen);
     var isInspector = User.IsInRole(RoleNames.Inspector);
@@ -11,12 +13,12 @@
         <div class="mb-4">
             <span class="hero-badge mb-2">
                 <i class="bi bi-geo-alt-fill"></i>
-                <span>City overview</span>
+                <span>@Localizer["BadgeRole"]</span>
             </span>
-            <h1 class="h2 fw-700 mt-3 mb-1">Bishkek environmental map</h1>
-            <p class="text-muted mb-1">Air quality, waste containers, and active dumpsite reports — all in one view.</p>
+            <h1 class="h2 fw-700 mt-3 mb-1">@Localizer["Heading"]</h1>
+            <p class="text-muted mb-1">@Localizer["Subtitle"]</p>
             <p class="text-muted small mb-0">
-                Data sources: <a href="https://openaq.org" target="_blank" rel="noopener">OpenAQ</a>,
+                @Localizer["DataSourcesLabel"] <a href="https://openaq.org" target="_blank" rel="noopener">OpenAQ</a>,
                 <a href="https://www.iqair.com" target="_blank" rel="noopener">IQAir AirVisual</a>.
             </p>
         </div>
@@ -24,26 +26,26 @@
         <div class="map-filters mb-1">
             <button id="toggle-air" type="button" class="filter-pill active">
                 <i class="bi bi-wind"></i>
-                <span>Air quality</span>
+                <span>@Localizer["FilterAirQuality"]</span>
                 <span class="filter-count" id="air-count">0</span>
             </button>
             <button id="toggle-containers" type="button" class="filter-pill active">
                 <i class="bi bi-trash3"></i>
-                <span>Containers</span>
+                <span>@Localizer["FilterContainers"]</span>
                 <span class="filter-count" id="container-count">0</span>
             </button>
             <button id="toggle-dumpsites" type="button" class="filter-pill active">
                 <i class="bi bi-flag-fill"></i>
-                <span>Reports</span>
+                <span>@Localizer["FilterReports"]</span>
                 <span class="filter-count" id="dumpsite-count">0</span>
             </button>
             <button id="toggle-districts" type="button" class="filter-pill">
                 <i class="bi bi-bounding-box"></i>
-                <span>Districts</span>
+                <span>@Localizer["FilterDistricts"]</span>
             </button>
-            <button id="refresh-static" type="button" class="filter-pill ms-auto" title="Reload containers and reports">
+            <button id="refresh-static" type="button" class="filter-pill ms-auto" title="@Localizer["FilterRefreshTitle"]">
                 <i class="bi bi-arrow-clockwise"></i>
-                <span>Refresh</span>
+                <span>@Localizer["FilterRefresh"]</span>
             </button>
         </div>
         <div class="map-subfilters mb-3">
@@ -56,7 +58,7 @@
                 <span class="filter-count" id="iqair-count">0</span>
             </button>
             <button id="toggle-own" type="button" class="subfilter-pill active">
-                <span>★ Own sensors</span>
+                <span>★ @Localizer["SubOwnSensors"]</span>
                 <span class="filter-count" id="own-count">0</span>
             </button>
         </div>
@@ -65,60 +67,59 @@
 
         <div class="map-legend-grid mt-3">
             <div class="legend-section">
-                <div class="legend-title">What's on the map</div>
+                <div class="legend-title">@Localizer["LegendWhatHeading"]</div>
                 <div class="legend-items legend-items-vertical">
                     <div class="legend-row">
                         <div class="legend-sample air-sample"><span>42</span></div>
-                        <div><strong>Air quality station</strong> — colored circle with AQI value.</div>
+                        <div>@Localizer["LegendAirStationFormat"]</div>
                     </div>
                     <div class="legend-row">
                         <div class="legend-sample air-sample air-sample-own"><span>42</span></div>
-                        <div><strong>Own IoT sensor</strong> — same as above with a green ring + broadcast dot.</div>
+                        <div>@Localizer["LegendOwnSensorFormat"]</div>
                     </div>
                     <div class="legend-row">
                         <div class="legend-sample container-sample"><i class="bi bi-trash3-fill"></i></div>
-                        <div><strong>Waste container</strong> — small bin icon, color by type.</div>
+                        <div>@Localizer["LegendContainerFormat"]</div>
                     </div>
                     <div class="legend-row">
                         <div class="legend-sample dumpsite-sample-red"></div>
-                        <div><strong>Dumpsite report</strong> — flag pin (red = confirmed, green = resolved).</div>
+                        <div>@Localizer["LegendDumpsiteFormat"]</div>
                     </div>
                 </div>
             </div>
             <div class="legend-section">
-                <div class="legend-title">Air quality (AQI US)</div>
+                <div class="legend-title">@Localizer["LegendAqiHeading"]</div>
                 <div class="legend-items">
-                    <span class="aqi-pill" style="background:#10B981">Good 0–50</span>
-                    <span class="aqi-pill" style="background:#FCD34D;color:#78350F">Moderate 51–100</span>
-                    <span class="aqi-pill" style="background:#FB923C">USG 101–150</span>
-                    <span class="aqi-pill" style="background:#EF4444">Unhealthy 151–200</span>
-                    <span class="aqi-pill" style="background:#A855F7">Very unhealthy 201–300</span>
-                    <span class="aqi-pill" style="background:#7F1D1D">Hazardous 300+</span>
+                    <span class="aqi-pill" style="background:#10B981">@Localizer["LegendAqiRangeGood"]</span>
+                    <span class="aqi-pill" style="background:#FCD34D;color:#78350F">@Localizer["LegendAqiRangeModerate"]</span>
+                    <span class="aqi-pill" style="background:#FB923C">@Localizer["LegendAqiRangeUSG"]</span>
+                    <span class="aqi-pill" style="background:#EF4444">@Localizer["LegendAqiRangeUnhealthy"]</span>
+                    <span class="aqi-pill" style="background:#A855F7">@Localizer["LegendAqiRangeVeryUnhealthy"]</span>
+                    <span class="aqi-pill" style="background:#7F1D1D">@Localizer["LegendAqiRangeHazardous"]</span>
                 </div>
             </div>
             <div class="legend-section">
-                <div class="legend-title">Container types</div>
+                <div class="legend-title">@Localizer["LegendContainerTypesHeading"]</div>
                 <div class="legend-items">
-                    <span class="aqi-pill" style="background:#6B7280">General</span>
-                    <span class="aqi-pill" style="background:#3B82F6">Plastic</span>
-                    <span class="aqi-pill" style="background:#14B8A6">Glass</span>
-                    <span class="aqi-pill" style="background:#D97706">Paper</span>
-                    <span class="aqi-pill" style="background:#16A34A">Organic</span>
+                    <span class="aqi-pill" style="background:#6B7280">@Localizer["LegendContainerGeneral"]</span>
+                    <span class="aqi-pill" style="background:#3B82F6">@Localizer["LegendContainerPlastic"]</span>
+                    <span class="aqi-pill" style="background:#14B8A6">@Localizer["LegendContainerGlass"]</span>
+                    <span class="aqi-pill" style="background:#D97706">@Localizer["LegendContainerPaper"]</span>
+                    <span class="aqi-pill" style="background:#16A34A">@Localizer["LegendContainerOrganic"]</span>
                 </div>
             </div>
             <div class="legend-section">
-                <div class="legend-title">Dumpsite status</div>
+                <div class="legend-title">@Localizer["LegendDumpsiteStatusHeading"]</div>
                 <div class="legend-items">
-                    <span class="aqi-pill" style="background:#EF4444">Confirmed (active)</span>
-                    <span class="aqi-pill" style="background:#10B981">Resolved</span>
+                    <span class="aqi-pill" style="background:#EF4444">@Localizer["LegendDumpsiteConfirmedActive"]</span>
+                    <span class="aqi-pill" style="background:#10B981">@Localizer["LegendDumpsiteResolved"]</span>
                 </div>
             </div>
         </div>
 
         <p class="text-muted small mt-3 mb-0">
             <i class="bi bi-info-circle me-1"></i>
-            Stations data: <strong>OpenAQ</strong> (web pull), <strong>IQAir</strong> (web pull),
-            <strong>Own sensors</strong> (push). Real-time data from registered IoT devices.
+            @Localizer["StationsDataNote"]
         </p>
 
         @* Stat strip — replaces the three .map-stat-card boxes with one
@@ -131,52 +132,60 @@
            Skill section "Dashboards and KPI stats (anti-AI patterns)". *@
         <div class="stat-strip mt-3">
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Air quality</span>
+                <span class="stat-strip__label">@Localizer["StatAirLabel"]</span>
                 <div class="stat-strip__value" id="stat-air">—</div>
                 <span class="stat-strip__caption">
-                    AQI US average · <span id="stat-air-stations">0</span> stations in last 24h
+                    @* {0} is a server-injected <span> so the stations
+                       count stays live-updatable by the JS below. The
+                       format string is split around the placeholder
+                       and joined with the <span> in the middle. *@
+                    @{
+                        var statAirCaption = Localizer["StatAirCaptionFormat"].Value;
+                        var captionParts = statAirCaption.Split("{0}", 2);
+                    }
+                    @captionParts[0]<span id="stat-air-stations">0</span>@(captionParts.Length > 1 ? captionParts[1] : "")
                 </span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Containers</span>
+                <span class="stat-strip__label">@Localizer["StatContainersLabel"]</span>
                 <div class="stat-strip__value" id="stat-containers">—</div>
                 <span class="stat-strip__caption">
                     @if (isAdmin)
                     {
-                        <a asp-area="Admin" asp-controller="Containers" asp-action="Index">Active across the city</a>
+                        <a asp-area="Admin" asp-controller="Containers" asp-action="Index">@Localizer["StatContainersCaption"]</a>
                     }
                     else
                     {
-                        <text>Active across the city</text>
+                        <text>@Localizer["StatContainersCaption"]</text>
                     }
                 </span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Confirmed reports</span>
+                <span class="stat-strip__label">@Localizer["StatConfirmedLabel"]</span>
                 <div class="stat-strip__value" id="stat-confirmed">—</div>
                 <span class="stat-strip__caption">
                     @if (isCitizen)
                     {
-                        <a asp-controller="Citizen" asp-action="Create">Report a dumpsite</a>
+                        <a asp-controller="Citizen" asp-action="Create">@Localizer["StatLinkReportDumpsite"]</a>
                     }
                     else if (isInspector)
                     {
-                        <a asp-controller="Inspector" asp-action="Queue">Inspector queue</a>
+                        <a asp-controller="Inspector" asp-action="Queue">@Localizer["StatLinkInspectorQueue"]</a>
                     }
                     else if (isAdmin)
                     {
-                        <a asp-area="Admin" asp-controller="Reports" asp-action="Index">All active reports</a>
+                        <a asp-area="Admin" asp-controller="Reports" asp-action="Index">@Localizer["StatLinkAllActiveReports"]</a>
                     }
                     else
                     {
-                        <text>Active dumpsite reports</text>
+                        <text>@Localizer["StatLinkActiveDumpsiteReports"]</text>
                     }
                 </span>
             </div>
             <div class="stat-strip__item">
-                <span class="stat-strip__label">Resolved</span>
+                <span class="stat-strip__label">@Localizer["StatResolvedLabel"]</span>
                 <div class="stat-strip__value" id="stat-resolved">—</div>
-                <span class="stat-strip__caption">Cleaned-up reports</span>
+                <span class="stat-strip__caption">@Localizer["StatResolvedCaption"]</span>
             </div>
         </div>
 
@@ -185,21 +194,21 @@
                 <li class="nav-item">
                     <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-air" type="button" role="tab">
                         <i class="bi bi-wind me-1"></i>
-                        Air quality stations
+                        @Localizer["TabAirStations"]
                         <span class="badge bg-light text-dark" id="tab-air-count">0</span>
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-containers" type="button" role="tab">
                         <i class="bi bi-trash3 me-1"></i>
-                        Containers
+                        @Localizer["TabContainers"]
                         <span class="badge bg-light text-dark" id="tab-containers-count">0</span>
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-reports" type="button" role="tab">
                         <i class="bi bi-flag-fill me-1"></i>
-                        Reports
+                        @Localizer["TabReports"]
                         <span class="badge bg-light text-dark" id="tab-reports-count">0</span>
                     </button>
                 </li>
@@ -208,12 +217,12 @@
                 <div class="tab-pane fade show active" id="tab-air" role="tabpanel">
                     <div class="data-table-card">
                         <div class="data-table-toolbar">
-                            <input type="search" id="air-search" placeholder="Search by name or locality..." class="form-control form-control-sm" style="max-width:280px" />
+                            <input type="search" id="air-search" placeholder="@Localizer["SearchAirPlaceholder"]" class="form-control form-control-sm" style="max-width:280px" />
                             <select id="air-source-filter" class="form-select form-select-sm" style="max-width:200px">
-                                <option value="">All sources</option>
+                                <option value="">@Localizer["FilterAllSources"]</option>
                                 <option value="openaq">OpenAQ</option>
                                 <option value="iqair">IQAir</option>
-                                <option value="own">Own sensors</option>
+                                <option value="own">@Localizer["FilterSourceOwnSensors"]</option>
                             </select>
                         </div>
                         <div class="table-responsive" style="max-height:480px; overflow-y:auto">
@@ -221,32 +230,32 @@
                                 <thead class="sticky-top">
                                     <tr>
                                         <th style="width:40px"></th>
-                                        <th>Name</th>
-                                        <th>Locality</th>
+                                        <th>@Localizer["TableAirName"]</th>
+                                        <th>@Localizer["TableAirLocality"]</th>
                                         <th class="text-end">AQI</th>
                                         <th class="text-end">PM2.5</th>
-                                        <th>Updated</th>
-                                        <th>Source</th>
+                                        <th>@Localizer["TableAirUpdated"]</th>
+                                        <th>@Localizer["TableAirSource"]</th>
                                     </tr>
                                 </thead>
                                 <tbody id="air-tbody"></tbody>
                             </table>
                         </div>
-                        <div id="air-empty" class="empty-table-state d-none">No stations match the filter.</div>
+                        <div id="air-empty" class="empty-table-state d-none">@Localizer["EmptyAir"]</div>
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="tab-containers" role="tabpanel">
                     <div class="data-table-card">
                         <div class="data-table-toolbar">
-                            <input type="search" id="container-search" placeholder="Search by code or address..." class="form-control form-control-sm" style="max-width:280px" />
+                            <input type="search" id="container-search" placeholder="@Localizer["SearchContainersPlaceholder"]" class="form-control form-control-sm" style="max-width:280px" />
                             <select id="container-type-filter" class="form-select form-select-sm" style="max-width:200px">
-                                <option value="">All types</option>
-                                <option value="General">General waste</option>
-                                <option value="Plastic">Plastic</option>
-                                <option value="Glass">Glass</option>
-                                <option value="Paper">Paper</option>
-                                <option value="Organic">Organic</option>
+                                <option value="">@Localizer["FilterAllTypes"]</option>
+                                <option value="General">@Localizer["FilterTypeGeneral"]</option>
+                                <option value="Plastic">@Localizer["FilterTypePlastic"]</option>
+                                <option value="Glass">@Localizer["FilterTypeGlass"]</option>
+                                <option value="Paper">@Localizer["FilterTypePaper"]</option>
+                                <option value="Organic">@Localizer["FilterTypeOrganic"]</option>
                             </select>
                         </div>
                         <div class="table-responsive" style="max-height:480px; overflow-y:auto">
@@ -254,28 +263,28 @@
                                 <thead class="sticky-top">
                                     <tr>
                                         <th style="width:40px"></th>
-                                        <th>Code</th>
-                                        <th>Address</th>
-                                        <th>Type</th>
-                                        <th class="text-end">Capacity</th>
-                                        <th>Status</th>
+                                        <th>@Localizer["TableContainerCode"]</th>
+                                        <th>@Localizer["TableContainerAddress"]</th>
+                                        <th>@Localizer["TableContainerType"]</th>
+                                        <th class="text-end">@Localizer["TableContainerCapacity"]</th>
+                                        <th>@Localizer["TableContainerStatus"]</th>
                                     </tr>
                                 </thead>
                                 <tbody id="container-tbody"></tbody>
                             </table>
                         </div>
-                        <div id="container-empty" class="empty-table-state d-none">No containers match the filter.</div>
+                        <div id="container-empty" class="empty-table-state d-none">@Localizer["EmptyContainers"]</div>
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="tab-reports" role="tabpanel">
                     <div class="data-table-card">
                         <div class="data-table-toolbar">
-                            <input type="search" id="report-search" placeholder="Search by description..." class="form-control form-control-sm" style="max-width:280px" />
+                            <input type="search" id="report-search" placeholder="@Localizer["SearchReportsPlaceholder"]" class="form-control form-control-sm" style="max-width:280px" />
                             <select id="report-status-filter" class="form-select form-select-sm" style="max-width:200px">
-                                <option value="">All statuses</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Resolved">Resolved</option>
+                                <option value="">@Localizer["FilterAllStatuses"]</option>
+                                <option value="Confirmed">@Localizer["FilterStatusConfirmed"]</option>
+                                <option value="Resolved">@Localizer["FilterStatusResolved"]</option>
                             </select>
                         </div>
                         <div class="table-responsive" style="max-height:480px; overflow-y:auto">
@@ -283,16 +292,16 @@
                                 <thead class="sticky-top">
                                     <tr>
                                         <th style="width:40px"></th>
-                                        <th>Description</th>
-                                        <th>Status</th>
-                                        <th>Reported</th>
-                                        <th class="text-end">Photos</th>
+                                        <th>@Localizer["TableReportDescription"]</th>
+                                        <th>@Localizer["TableReportStatus"]</th>
+                                        <th>@Localizer["TableReportReported"]</th>
+                                        <th class="text-end">@Localizer["TableReportPhotos"]</th>
                                     </tr>
                                 </thead>
                                 <tbody id="report-tbody"></tbody>
                             </table>
                         </div>
-                        <div id="report-empty" class="empty-table-state d-none">No reports match the filter.</div>
+                        <div id="report-empty" class="empty-table-state d-none">@Localizer["EmptyReports"]</div>
                     </div>
                 </div>
             </div>
@@ -304,8 +313,26 @@
     <script src="https://unpkg.com/leaflet@@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="~/js/districts-overlay.js" asp-append-version="true"></script>
+    @* JSON i18n bridge — every literal string the Leaflet popup/tooltip
+       and dynamic table HTML below sets on the DOM is rendered server-
+       side here. JSON-encoded so embedded apostrophes / quotes survive
+       transit. OpenAQ / IQAir stay literal as brand names. *@
+    <script>
+        window.__mapI18n = {
+            detailsButton:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsDetailsButton"].Value)),
+            noAqi:            @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsNoAqi"].Value)),
+            lastSeen:         @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsLastSeenPrefix"].Value)),
+            reportedPrefix:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsPopupReportedPrefix"].Value)),
+            dumpsiteSuffix:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsPopupDumpsiteSuffix"].Value)),
+            pm25Prefix:       @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsPopupPm25Prefix"].Value)),
+            photoSingular:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsPhotoCountSingular"].Value)),
+            photoPlural:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsPhotoCountPlural"].Value)),
+            shapeOwnSensor:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["JsShapeOwnSensor"].Value))
+        };
+    </script>
     <script>
         (function () {
+            const i18n = window.__mapI18n;
             const map = L.map('city-map', {
                 center: [42.8746, 74.5698],
                 zoom: 12,
@@ -393,6 +420,15 @@
                 return str.length > max ? str.slice(0, max) + '…' : str;
             }
 
+            // "{0} photo" / "{0} photos" — i18n strings include the count
+            // placeholder so translators handle their plural rules in the
+            // value itself. English ships with explicit singular/plural;
+            // ru / ky collapse to one form (audit-documented gap).
+            function formatPhotoCount(n) {
+                const tpl = (n === 1 ? i18n.photoSingular : i18n.photoPlural) || '{0}';
+                return tpl.replace('{0}', n);
+            }
+
             // Unified air-station marker: large filled circle with the AQI value
             // as text. Own sensors get a brand-green ring + broadcast indicator.
             function createAirMarker(s) {
@@ -451,12 +487,12 @@
 
                         const aqiPart = s.aqiUs != null
                             ? '<strong>AQI ' + Math.round(s.aqiUs) + '</strong> <span class="badge" style="background:' + s.color + ';color:#fff">' + escapeHtml(s.aqiLabel) + '</span>'
-                            : '<em class="text-muted">No AQI</em>';
+                            : '<em class="text-muted">' + escapeHtml(i18n.noAqi) + '</em>';
                         const pmPart = s.pm25 != null
-                            ? '<div class="text-muted small">PM2.5: ' + s.pm25.toFixed(1) + ' µg/m³</div>'
+                            ? '<div class="text-muted small">' + escapeHtml(i18n.pm25Prefix) + ' ' + s.pm25.toFixed(1) + ' µg/m³</div>'
                             : '';
                         const stalePart = s.isStale
-                            ? '<div class="text-warning small mt-1"><i class="bi bi-exclamation-triangle"></i> Last seen ' + escapeHtml(s.measuredRelative) + '</div>'
+                            ? '<div class="text-warning small mt-1"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(i18n.lastSeen) + ' ' + escapeHtml(s.measuredRelative) + '</div>'
                             : '';
 
                         marker.bindPopup(
@@ -467,7 +503,7 @@
                                 pmPart +
                                 '<div class="text-muted small mt-1">' + escapeHtml(s.measuredRelative) + '</div>' +
                                 stalePart +
-                                '<div class="mt-2"><a href="/Air/Station/' + s.id + '" class="btn btn-sm btn-outline-primary">Details</a></div>' +
+                                '<div class="mt-2"><a href="/Air/Station/' + s.id + '" class="btn btn-sm btn-outline-primary">' + escapeHtml(i18n.detailsButton) + '</a></div>' +
                             '</div>'
                         );
                         airSubLayers[bucket].addLayer(marker);
@@ -570,19 +606,19 @@
                             iconAnchor: [14, 28]
                         });
                         const marker = L.marker([d.latitude, d.longitude], { icon: icon });
-                        const photoText = d.photoCount + ' photo' + (d.photoCount === 1 ? '' : 's');
+                        const photoText = formatPhotoCount(d.photoCount);
                         marker.bindTooltip(
-                            escapeHtml(d.statusLabel) + ' dumpsite<br>' +
+                            escapeHtml(d.statusLabel) + ' ' + escapeHtml(i18n.dumpsiteSuffix) + '<br>' +
                             escapeHtml(truncate(d.shortDescription, 60)) + '<br>' +
-                            '<span style="opacity:0.7">' + escapeHtml(d.createdRelative) + ' · ' + photoText + '</span>',
+                            '<span style="opacity:0.7">' + escapeHtml(d.createdRelative) + ' · ' + escapeHtml(photoText) + '</span>',
                             { direction: 'top', offset: [0, -25], sticky: false, className: 'map-tooltip' }
                         );
                         marker.bindPopup(
                             '<div style="min-width:240px">' +
                                 '<span class="badge" style="background:' + d.color + ';color:#fff">' + escapeHtml(d.statusLabel) + '</span>' +
                                 '<div class="fw-700 mt-2">' + escapeHtml(d.shortDescription) + '</div>' +
-                                '<div class="text-muted small mt-1">Reported ' + escapeHtml(d.createdRelative) + '</div>' +
-                                '<div class="text-muted small">' + photoText + '</div>' +
+                                '<div class="text-muted small mt-1">' + escapeHtml(i18n.reportedPrefix) + ' ' + escapeHtml(d.createdRelative) + '</div>' +
+                                '<div class="text-muted small">' + escapeHtml(photoText) + '</div>' +
                             '</div>'
                         );
                         dumpsiteLayer.addLayer(marker);
@@ -603,9 +639,11 @@
             // Data tables: render + filter + click-to-focus
             // ----------------------------------------------------------------
 
+            // Shape-icon titles: OpenAQ / IQAir stay literal as brand names.
+            // "Own sensor" comes through the bridge so it follows culture.
             function shapeIconHtml(s) {
                 if (s.source === 'OwnSensor') {
-                    return '<span class="shape-icon shape-star" title="Own sensor">★</span>';
+                    return '<span class="shape-icon shape-star" title="' + escapeHtml(i18n.shapeOwnSensor) + '">★</span>';
                 }
                 if ((s.providerName || '').toLowerCase().startsWith('iqair')) {
                     return '<span class="shape-icon shape-square" style="background:' + s.color + '" title="IQAir"></span>';

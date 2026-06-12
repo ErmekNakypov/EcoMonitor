@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Title" xml:space="preserve"><value>Шаардын картасы</value></data>
+  <data name="BadgeRole" xml:space="preserve"><value>Шаардын обзору</value></data>
+  <data name="Heading" xml:space="preserve"><value>Бишкектин экологиялык картасы</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Аба сапаты, таштанды контейнерлери жана активдүү таштанды кайрылуулары — баары бир картада.</value></data>
+  <data name="DataSourcesLabel" xml:space="preserve"><value>Маалыматтын булактары:</value></data>
+
+  <data name="FilterAirQuality" xml:space="preserve"><value>Аба сапаты</value></data>
+  <data name="FilterContainers" xml:space="preserve"><value>Контейнерлер</value></data>
+  <data name="FilterReports" xml:space="preserve"><value>Кайрылуулар</value></data>
+  <data name="FilterDistricts" xml:space="preserve"><value>Райондор</value></data>
+  <data name="FilterRefresh" xml:space="preserve"><value>Жаңылоо</value></data>
+  <data name="FilterRefreshTitle" xml:space="preserve"><value>Контейнерлерди жана кайрылууларды кайра жүктөө</value></data>
+  <data name="SubOwnSensors" xml:space="preserve"><value>Өзүбүздүн сенсорлор</value></data>
+
+  <data name="LegendWhatHeading" xml:space="preserve"><value>Картада эмне бар</value></data>
+  <data name="LegendAirStationFormat" xml:space="preserve"><value>&lt;strong&gt;Аба сапаты станциясы&lt;/strong&gt; — AQI мааниси менен түстүү тегерек.</value></data>
+  <data name="LegendOwnSensorFormat" xml:space="preserve"><value>&lt;strong&gt;Өзүбүздүн IoT-сенсор&lt;/strong&gt; — ошол эле, бирок жашыл тегерек жана берүү чекити менен.</value></data>
+  <data name="LegendContainerFormat" xml:space="preserve"><value>&lt;strong&gt;Таштанды контейнери&lt;/strong&gt; — кичинекей контейнер белгиси, түсү түрүнө жараша.</value></data>
+  <data name="LegendDumpsiteFormat" xml:space="preserve"><value>&lt;strong&gt;Таштанды кайрылуусу&lt;/strong&gt; — желек (кызыл = ырасталды, жашыл = чечилди).</value></data>
+
+  <data name="LegendAqiHeading" xml:space="preserve"><value>Аба сапаты (AQI US)</value></data>
+  <data name="LegendAqiRangeGood" xml:space="preserve"><value>Жакшы 0–50</value></data>
+  <data name="LegendAqiRangeModerate" xml:space="preserve"><value>Орточо 51–100</value></data>
+  <data name="LegendAqiRangeUSG" xml:space="preserve"><value>Сезгичтерге зыяндуу 101–150</value></data>
+  <data name="LegendAqiRangeUnhealthy" xml:space="preserve"><value>Зыяндуу 151–200</value></data>
+  <data name="LegendAqiRangeVeryUnhealthy" xml:space="preserve"><value>Абдан зыяндуу 201–300</value></data>
+  <data name="LegendAqiRangeHazardous" xml:space="preserve"><value>Коркунучтуу 300+</value></data>
+
+  <data name="LegendContainerTypesHeading" xml:space="preserve"><value>Контейнер түрлөрү</value></data>
+  <data name="LegendContainerGeneral" xml:space="preserve"><value>Жалпы</value></data>
+  <data name="LegendContainerPlastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="LegendContainerGlass" xml:space="preserve"><value>Айнек</value></data>
+  <data name="LegendContainerPaper" xml:space="preserve"><value>Кагаз</value></data>
+  <data name="LegendContainerOrganic" xml:space="preserve"><value>Органика</value></data>
+
+  <data name="LegendDumpsiteStatusHeading" xml:space="preserve"><value>Таштандылардын статусу</value></data>
+  <data name="LegendDumpsiteConfirmedActive" xml:space="preserve"><value>Ырасталды (активдүү)</value></data>
+  <data name="LegendDumpsiteResolved" xml:space="preserve"><value>Чечилди</value></data>
+
+  <data name="StationsDataNote" xml:space="preserve"><value>Станциялардын маалыматы: &lt;strong&gt;OpenAQ&lt;/strong&gt; (вебден алуу), &lt;strong&gt;IQAir&lt;/strong&gt; (вебден алуу), &lt;strong&gt;Өзүбүздүн сенсорлор&lt;/strong&gt; (жөнөтүү). Катталган IoT-түзмөктөрдөн реалдуу убакыттагы маалымат.</value></data>
+
+  <data name="StatAirLabel" xml:space="preserve"><value>Аба сапаты</value></data>
+  <data name="StatAirCaptionFormat" xml:space="preserve"><value>Орточо AQI US · акыркы 24 с. ичинде {0} станция</value></data>
+  <data name="StatContainersLabel" xml:space="preserve"><value>Контейнерлер</value></data>
+  <data name="StatContainersCaption" xml:space="preserve"><value>Шаар боюнча активдүү</value></data>
+  <data name="StatConfirmedLabel" xml:space="preserve"><value>Ырасталган кайрылуулар</value></data>
+  <data name="StatLinkReportDumpsite" xml:space="preserve"><value>Таштанды жөнүндө билдирүү</value></data>
+  <data name="StatLinkInspectorQueue" xml:space="preserve"><value>Инспектордун кезеги</value></data>
+  <data name="StatLinkAllActiveReports" xml:space="preserve"><value>Бардык активдүү кайрылуулар</value></data>
+  <data name="StatLinkActiveDumpsiteReports" xml:space="preserve"><value>Активдүү таштанды кайрылуулары</value></data>
+  <data name="StatResolvedLabel" xml:space="preserve"><value>Чечилди</value></data>
+  <data name="StatResolvedCaption" xml:space="preserve"><value>Тазаланган кайрылуулар</value></data>
+
+  <data name="TabAirStations" xml:space="preserve"><value>Аба сапаты станциялары</value></data>
+  <data name="TabContainers" xml:space="preserve"><value>Контейнерлер</value></data>
+  <data name="TabReports" xml:space="preserve"><value>Кайрылуулар</value></data>
+
+  <data name="SearchAirPlaceholder" xml:space="preserve"><value>Аталышы же жайгашкан жери боюнча издөө...</value></data>
+  <data name="SearchContainersPlaceholder" xml:space="preserve"><value>Коду же дареги боюнча издөө...</value></data>
+  <data name="SearchReportsPlaceholder" xml:space="preserve"><value>Сүрөттөмө боюнча издөө...</value></data>
+
+  <data name="FilterAllSources" xml:space="preserve"><value>Бардык булактар</value></data>
+  <data name="FilterAllTypes" xml:space="preserve"><value>Бардык түрлөр</value></data>
+  <data name="FilterAllStatuses" xml:space="preserve"><value>Бардык статустар</value></data>
+
+  <data name="FilterSourceOwnSensors" xml:space="preserve"><value>Өзүбүздүн сенсорлор</value></data>
+
+  <data name="FilterTypeGeneral" xml:space="preserve"><value>Жалпы калдыктар</value></data>
+  <data name="FilterTypePlastic" xml:space="preserve"><value>Пластик</value></data>
+  <data name="FilterTypeGlass" xml:space="preserve"><value>Айнек</value></data>
+  <data name="FilterTypePaper" xml:space="preserve"><value>Кагаз</value></data>
+  <data name="FilterTypeOrganic" xml:space="preserve"><value>Органика</value></data>
+
+  <data name="FilterStatusConfirmed" xml:space="preserve"><value>Ырасталды</value></data>
+  <data name="FilterStatusResolved" xml:space="preserve"><value>Чечилди</value></data>
+
+  <data name="TableAirName" xml:space="preserve"><value>Аталышы</value></data>
+  <data name="TableAirLocality" xml:space="preserve"><value>Жайгашкан жери</value></data>
+  <data name="TableAirUpdated" xml:space="preserve"><value>Жаңыланды</value></data>
+  <data name="TableAirSource" xml:space="preserve"><value>Булагы</value></data>
+  <data name="TableContainerCode" xml:space="preserve"><value>Коду</value></data>
+  <data name="TableContainerAddress" xml:space="preserve"><value>Дареги</value></data>
+  <data name="TableContainerType" xml:space="preserve"><value>Түрү</value></data>
+  <data name="TableContainerCapacity" xml:space="preserve"><value>Көлөмү</value></data>
+  <data name="TableContainerStatus" xml:space="preserve"><value>Статусу</value></data>
+  <data name="TableReportDescription" xml:space="preserve"><value>Сүрөттөмө</value></data>
+  <data name="TableReportStatus" xml:space="preserve"><value>Статусу</value></data>
+  <data name="TableReportReported" xml:space="preserve"><value>Жөнөтүлдү</value></data>
+  <data name="TableReportPhotos" xml:space="preserve"><value>Сүрөттөр</value></data>
+
+  <data name="EmptyAir" xml:space="preserve"><value>Чыпкага туура келген станциялар жок.</value></data>
+  <data name="EmptyContainers" xml:space="preserve"><value>Чыпкага туура келген контейнерлер жок.</value></data>
+  <data name="EmptyReports" xml:space="preserve"><value>Чыпкага туура келген кайрылуулар жок.</value></data>
+
+  <data name="JsDetailsButton" xml:space="preserve"><value>Чоо-жайы</value></data>
+  <data name="JsNoAqi" xml:space="preserve"><value>AQI жок</value></data>
+  <data name="JsLastSeenPrefix" xml:space="preserve"><value>Акыркы маалымат</value></data>
+  <data name="JsPopupReportedPrefix" xml:space="preserve"><value>Жөнөтүлдү</value></data>
+  <data name="JsPopupDumpsiteSuffix" xml:space="preserve"><value>таштанды</value></data>
+  <data name="JsPopupPm25Prefix" xml:space="preserve"><value>PM2.5:</value></data>
+  <data name="JsPhotoCountSingular" xml:space="preserve"><value>{0} сүрөт</value></data>
+  <data name="JsPhotoCountPlural" xml:space="preserve"><value>{0} сүрөт</value></data>
+  <data name="JsShapeOwnSensor" xml:space="preserve"><value>Өзүбүздүн сенсор</value></data>
+</root>

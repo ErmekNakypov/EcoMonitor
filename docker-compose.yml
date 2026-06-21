@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15
+    container_name: ecomonitor-db
+    environment:
+      POSTGRES_DB: ecomonitor
+      POSTGRES_USER: ecomonitor_app
+      POSTGRES_PASSWORD: ecomonitor_pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecomonitor_app -d ecomonitor"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecomonitor-web
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5108
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=ecomonitor;Username=ecomonitor_app;Password=ecomonitor_pass"
+      DefaultAdmin__Email: "admin@ecomonitor.kg"
+      DefaultAdmin__Password: "Admin#2026!"
+      App__BaseUrl: "http://localhost:5108"
+    ports:
+      - "5108:5108"
+    restart: unless-stopped
+
+volumes:
+  pgdata:

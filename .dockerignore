@@ -1,0 +1,8 @@
+**/bin
+**/obj
+**/.vs
+**/.idea
+**/.git
+**/*.user
+**/appsettings.*.local.json
+**/.DS_Store

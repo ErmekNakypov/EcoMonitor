@@ -64,3 +64,6 @@ src/EcoMonitor.Web/wwwroot/uploads/flags/*
 # Local user secrets / overrides
 appsettings.*.local.json
 **/appsettings.Development.json
+
+# Local API test scratch files
+tools/EcoMonitor_API_tests.http
